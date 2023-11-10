@@ -19,7 +19,7 @@
 ---- Ajouter ces variables a la fin du .env ----
 - WWWUSER=1000
 - WWWGROUP=1000
-- PWD=c/laragon/www/residat-back-end
+- PWD=chemin_au_projet
 
 ## Configurer docker
 
