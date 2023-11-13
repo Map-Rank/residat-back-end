@@ -6,7 +6,6 @@
 
 3. php artisan key:generate
 
-##fi
 
 ## Configuration du fichier .env
 
