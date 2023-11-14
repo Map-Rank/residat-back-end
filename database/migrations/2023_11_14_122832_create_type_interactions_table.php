@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('type_interactions', function (Blueprint $table) {
             $table->id();
-            $table->string('url')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
             $table->softDeletes();
         });

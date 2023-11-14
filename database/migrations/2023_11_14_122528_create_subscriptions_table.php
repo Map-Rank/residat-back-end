@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('periodicity');
-            $table->double('price');
+            $table->double('price')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
