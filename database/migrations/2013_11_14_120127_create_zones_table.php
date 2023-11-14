@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('parent_id');
+            $table->foreignId('parent_id')->references('id')->on('zones')->onDelete('cascade');
             $table->foreignId('level_id')->references('id')->on('levels')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
