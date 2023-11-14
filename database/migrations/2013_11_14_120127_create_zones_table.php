@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zones', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->foreignId('parent_id')->references('id')->on('zones')->onDelete('cascade');
-            $table->foreignId('level_id')->references('id')->on('levels')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('zones')) {
+            Schema::create('zones', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->foreignId('parent_id')->references('id')->on('zones')->onDelete('cascade');
+                $table->foreignId('level_id')->references('id')->on('levels')->onDelete('cascade');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
