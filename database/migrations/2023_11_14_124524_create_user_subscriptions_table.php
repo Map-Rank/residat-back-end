@@ -16,10 +16,8 @@ return new class extends Migration
             $table->double('price');
             $table->timestamp('start_at');
             $table->timestamp('end_at')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('subscription_id');
-            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
