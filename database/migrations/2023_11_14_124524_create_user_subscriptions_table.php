@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_subscriptions', function (Blueprint $table) {
-            $table->id();
-            $table->double('price');
-            $table->timestamp('start_at');
-            $table->timestamp('end_at')->nullable();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('user_subscriptions'))        {
+            Schema::create('user_subscriptions', function (Blueprint $table) {
+                $table->id();
+                $table->double('price');
+                $table->timestamp('start_at');
+                $table->timestamp('end_at')->nullable();
+                $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->foreignId('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
