@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->string('content');
-            $table->timestamp('published_at');
-            $table->foreignId('zone_id')->references('id')->on('zones')->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('posts')) {
+            Schema::create('posts', function (Blueprint $table) {
+                $table->id();
+                $table->string('content');
+                $table->timestamp('published_at');
+                $table->foreignId('zone_id')->references('id')->on('zones')->onDelete('cascade');
+                $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

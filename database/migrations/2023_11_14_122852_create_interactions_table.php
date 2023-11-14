@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('interactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('text')->unique();
-            $table->foreignId('type_interaction_id')->references('id')->on('type_interactions')->onDelete('cascade');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('interactions')) {
+            Schema::create('interactions', function (Blueprint $table) {
+                $table->id();
+                $table->string('text')->unique();
+                $table->foreignId('type_interaction_id')->references('id')->on('type_interactions')->onDelete('cascade');
+                $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
