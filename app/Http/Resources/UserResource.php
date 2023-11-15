@@ -30,6 +30,7 @@ class UserResource extends JsonResource
             'activated_at' => $this['activated_at'],
             'verified_at' => $this['verified_at'],
             'gender' => $this['gender'],
+            'created_at' => $this['created_at'],
         ];
     }
 }
