@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
+use JsonSerializable;
+
+class UserResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array|Arrayable|JsonSerializable
+     */
+    public function toArray($request)
+    {
+        return [
+            'id' => Auth::id(),
+            'first_name' => $this->name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'avatar' => $this->avatar,
+            'date_birth' => $this->date_birth,
+            'gender' => $this->gender,
+            'zone_id' => $this->zone_id,
+            'role' => $this->roles,
+            'active' => $this->active,
+            'verified' => $this->verified,
+            'activated_at' => $this->activated_at,
+            'email_verified_at' => $this->email_verified_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
+        ];
+    }
+}
