@@ -10,10 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 /**
  * App/Models/Subscription
  * @property int $id
- * @property string $content
- * @property datetime $type_intpublished_ateraction_id
- * @property int $zone_id
- * @property int $user_id
+ * @property string $name
+ * @property string $periodicity
+ * @property double $price
  * @mixin \Eloquent
  */
 
