@@ -21,9 +21,25 @@ class Post extends Model
         return $this->belongsTo(Zone::class);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'interactions', 'post_id')
+            ->withPivotValue('price', 'type_interaction_id', 'text');
+    }
+
+    public function creator() {
+        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+            ->wherePivot('type_interaction_id', 1);
+    }
+
+    public function likes(){
+        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+            ->wherePivot('type_interaction_id', 2);
+    }
+
+    public function comments(){
+        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+            ->wherePivot('type_interaction_id', 3);
     }
 
     public function interactions()

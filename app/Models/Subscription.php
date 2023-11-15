@@ -13,8 +13,8 @@ class Subscription extends Model
 
     protected $fillable = ['name', 'periodicity', 'price'];
 
-    public function userSubscriptions()
+    public function subscription()
     {
-        return $this->hasMany(UserSubscription::class);
+        return $this->belongsToMany(User::class, 'user_subscription', 'subscription_id');
     }
 }
