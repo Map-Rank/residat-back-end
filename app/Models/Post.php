@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * App/Models/Post
  * @property int $id
  * @property string $content
- * @property datetime $type_intpublished_ateraction_id
+ * @property datetime $published_at
  * @property int $zone_id
  * @property int $user_id
  * @mixin \Eloquent
