@@ -14,6 +14,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * App/Models/User
+ * @property int $id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $email
+ * @property string $gender
+ * @property boolean $active
+ * @property boolean $verified
+ * @property datetime $verified_at
+ * @property datetime $activated_at
+ * @mixin \Eloquent
+ */
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
@@ -61,9 +75,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
+        'active',
+        'activated_at',
+        'verified',
+        'verified_at',
+        'gender',
+        'zone_id',
     ];
 
     /**

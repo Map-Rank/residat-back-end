@@ -10,6 +10,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+
+/**
+ * App/Models/Interaction
+ * @property int $id
+ * @property string $text
+ * @property int $type_interaction_id
+ * @property int $user_id
+ * @property int $post_id
+ * @mixin \Eloquent
+ */
 class Interaction extends Pivot
 {
     use HasFactory, SoftDeletes;

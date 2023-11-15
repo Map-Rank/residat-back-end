@@ -10,6 +10,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * App/Models/Post
+ * @property int $id
+ * @property string $content
+ * @property datetime $type_intpublished_ateraction_id
+ * @property int $zone_id
+ * @property int $user_id
+ * @mixin \Eloquent
+ */
+
 class Post extends Model
 {
     use HasFactory, SoftDeletes;
