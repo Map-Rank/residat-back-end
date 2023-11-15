@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_interactions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('type_interactions')) {
+            Schema::create('type_interactions', function (Blueprint $table) {
+                $table->id();
+                $table->string('name')->unique();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**

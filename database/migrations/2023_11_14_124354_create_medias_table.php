@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('medias', function (Blueprint $table) {
-            $table->id();
-            $table->string('url');
-            $table->string('type');
-            $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasTable('medias')) {
+            Schema::create('medias', function (Blueprint $table) {
+                $table->id();
+                $table->string('url');
+                $table->string('type');
+                $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
