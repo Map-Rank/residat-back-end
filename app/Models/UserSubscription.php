@@ -9,6 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+
+/**
+ * App/Models/UserSubscription
+ * @property int $id
+ * @property double $price
+ * @property datetime $start_at
+ * @property datetime $end_at
+ * @property int $user_id
+ * @property int $subscription_id
+ * @mixin \Eloquent
+ */
+
 class UserSubscription extends Pivot
 {
     use HasFactory, SoftDeletes;
