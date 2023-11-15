@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,10 +23,12 @@ class UserResource extends JsonResource
             'id' => Auth::id(),
             'first_name' => $this->name,
             'last_name' => $this->last_name,
+            'code' => $this->code,
             'email' => $this->email,
             'phone' => $this->phone,
+            'address' => $this->address,
             'avatar' => $this->avatar,
-            'date_birth' => $this->date_birth,
+            'date_of_birth' => $this->date_of_birth,
             'gender' => $this->gender,
             'zone_id' => $this->zone_id,
             'role' => $this->roles,
@@ -35,7 +38,7 @@ class UserResource extends JsonResource
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
+
         ];
     }
 }

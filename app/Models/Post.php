@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property datetime $published_at
  * @property int $zone_id
  * @property int $user_id
+ * @property int $topic_id
  * @mixin \Eloquent
  */
 
@@ -24,11 +25,16 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['content', 'published_at', 'zone_id', 'user_id'];
+    protected $fillable = ['content', 'published_at', 'zone_id', 'user_id', 'topic_id'];
 
     public function zone()
     {
         return $this->belongsTo(Zone::class);
+    }
+
+    public function topic()
+    {
+        return $this->belongsTo(Topic::class);
     }
 
     public function users()
@@ -39,7 +45,7 @@ class Post extends Model
 
     public function creator() {
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
-            ->wherePivot('type_interaction_id', 1);
+            ->wherePivot('type_interaction_id', 1)->first();
     }
 
     public function likes(){
@@ -50,6 +56,11 @@ class Post extends Model
     public function comments(){
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 3);
+    }
+
+    public function shares(){
+        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+            ->wherePivot('type_interaction_id', 4);
     }
 
     public function interactions()

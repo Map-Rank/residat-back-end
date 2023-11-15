@@ -46,7 +46,7 @@ class User extends Authenticatable
             ->withPivotValue('type_interaction_id', 'text', 'created_at');
     }
 
-    public function creator() {
+    public function myPosts() {
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 1);
     }
@@ -69,6 +69,12 @@ class User extends Authenticatable
     public function subscriptions()
     {
         return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id');
+    }
+
+    public function activeSubscription()
+    {
+        return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id')
+            ->wherePivotNull('end_at');
     }
 
     /**
