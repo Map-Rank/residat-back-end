@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * App/Models/Subscription
+ * @property int $id
+ * @property string $name
+ * @property string $periodicity
+ * @property double $price
+ * @mixin \Eloquent
+ */
+
 class Subscription extends Model
 {
     use HasFactory, SoftDeletes;
