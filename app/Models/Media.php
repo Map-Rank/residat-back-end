@@ -15,6 +15,8 @@ class Media extends Model
 
     public function post()
     {
+        $level = new Level();
+
         return $this->belongsTo(Post::class);
     }
 
