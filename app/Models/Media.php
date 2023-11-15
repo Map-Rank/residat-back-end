@@ -17,4 +17,6 @@ class Media extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
+    protected $table = 'medias';
 }
