@@ -24,4 +24,6 @@ class UserSubscription extends Pivot
     {
         return $this->belongsTo(Subscription::class);
     }
+
+    protected $table = 'user_subscription';
 }

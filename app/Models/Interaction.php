@@ -8,8 +8,9 @@ use App\Models\TypeInteraction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class Interaction extends Model
+class Interaction extends Pivot
 {
     use HasFactory, SoftDeletes;
 
@@ -29,4 +30,6 @@ class Interaction extends Model
     {
         return $this->belongsTo(Post::class);
     }
+
+    protected $table = 'interactions';
 }
