@@ -23,7 +23,7 @@ return new class extends Migration
                 $table->timestamp('activated_at')->nullable();
                 $table->boolean('verified')->default(0);
                 $table->timestamp('verified_at')->nullable();
-                $table->string('gender')->nullable();
+                $table->enum('gender', ['male', 'female'])->nullable();
                 $table->foreignId('zone_id')->references('id')->on('zones')->onDelete('cascade');
                 $table->rememberToken();
                 $table->timestamps();

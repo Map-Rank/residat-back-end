@@ -20,7 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
- * @property string $gender
+ * @property enum $gender
  * @property boolean $active
  * @property boolean $verified
  * @property datetime $verified_at
