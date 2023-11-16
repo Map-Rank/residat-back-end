@@ -44,7 +44,7 @@ class AuthController extends Controller
             return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         }
 
-        return response()->json(
+        return response()->success(
             [
                 'status' => true,
                 'message' => __('You are Logged'),
