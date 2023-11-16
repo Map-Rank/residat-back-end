@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     /**
      * Manages user registration.
-     * 
+     *
      * @param RegisterRequest $request
      * @return JsonResponse
      * @unauthenticated
@@ -42,7 +42,7 @@ class AuthController extends Controller
 
     /**
      * Handles the user's login attempt.
-     * 
+     *
      * @param LoginRequest $request
      * @return JsonResponse
      * @throws ValidationException
@@ -73,7 +73,7 @@ class AuthController extends Controller
 
     /**
      * Logs out the user
-     * 
+     *
      * @return JsonResponse
      */
     public function logout()
