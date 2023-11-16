@@ -52,7 +52,7 @@ class AuthController extends Controller
         );
     }
     /**
-     * Tentative de connexion avec les informations d'identification fournies.
+     * Attempting to log in with the credentials provided.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return bool
@@ -63,7 +63,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Vérifie si l'e-mail de l'utilisateur a été vérifié.
+     * Checks if the user's email has been verified.
      *
      * @return mixed
      */
@@ -73,7 +73,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Vérifie si le compte de l'utilisateur est activé.
+     * Checks if the user's account is activated.
      *
      * @return mixed
      */
@@ -83,6 +83,8 @@ class AuthController extends Controller
     }
 
     /**
+     * Logs out the user
+     * 
      * @return JsonResponse
      */
     public function logout()
@@ -92,12 +94,12 @@ class AuthController extends Controller
     }
 
     /**
-     * Vérifie la validité du jeton d'authentification Sanctum.
+     * Checks the validity of the Sanctum authentication token.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    
+
     public function verifyToken(Request $request)
     {
         // Vérifiez si l'utilisateur est authentifié via Sanctum
