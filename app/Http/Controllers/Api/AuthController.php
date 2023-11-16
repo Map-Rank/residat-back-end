@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Services\User\UserCreate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,26 @@ use Illuminate\Validation\ValidationException;
  */
 class AuthController extends Controller
 {
+
+    /**
+     * Manages user registration.
+     * 
+     * @param RegisterRequest $request
+     * @return JsonResponse
+     * @unauthenticated
+     */
+    public function register(RegisterRequest $request)
+    {
+        $user = User::create($request->all());
+
+        $token = $user->createToken('authtoken');
+
+        $userData = UserResource::make($user)->toArray($request);
+        $userData['token'] = $token->plainTextToken;
+
+        return response()->success($userData, __('User registered. Please check your email'), 201);
+    }
+
     /**
      * Handles the user's login attempt.
      * 

@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Zone;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * Class LoginManagementTest
@@ -47,10 +48,9 @@ class AuthControllerTest extends TestCase
          * we attest that we have this structure in the response Json
          */
         $response->assertJsonStructure([
-            "status",
+            "data", 
             "message",
-            "user",
-            "token"
+            "status",
         ]);
     }
 
@@ -81,22 +81,22 @@ class AuthControllerTest extends TestCase
 
     }
 
-    // public function testRegister()
-    // {
-    //     $this->withoutExceptionHandling();
-    //     $this->postJson('/api/register', $this->dataRegister())
-    //         ->assertStatus(201)
-    //         ->assertSessionHasNoErrors();
+    public function testRegister()
+    {
+        $this->withoutExceptionHandling();
+        $this->postJson('/api/register', $this->dataRegister())
+            ->assertStatus(201)
+            ->assertSessionHasNoErrors();
 
-    //     // We check if we have a user on the database
-    //     $this->assertDatabaseHas(User::class, ['email' => 'stevyjoe@gmail.com']);
+        // We check if we have a user on the database
+        $this->assertDatabaseHas(User::class, ['email' => 'users@user.com']);
 
-    // }
+    }
 
     public function testLogout()
     {
 
-        // $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         /**
          * Create a user
@@ -110,8 +110,11 @@ class AuthControllerTest extends TestCase
          */
         $response = $this->postJson('api/login', $payload);
 
+        $token = $response['data']['token'];
+
+
         // Now we logout the user just login
-        $logout = $this->withHeader('Authorization', 'Bearer ' . $response['token'])
+        $logout = $this->withHeader('Authorization', 'Bearer ' . $token)
             ->postJson('api/logout')
         ->assertStatus(200);
 
@@ -124,9 +127,10 @@ class AuthControllerTest extends TestCase
         /**
          * we attest that we have this structure in the response Json
          */
-        $logout->assertJsonStructure([
-            "status",
+        $response->assertJsonStructure([
+            "data", 
             "message",
+            "status",
         ]);
 
     }
@@ -145,20 +149,22 @@ class AuthControllerTest extends TestCase
 
     private function dataRegister()
     {
+        $zone = Zone::factory()->create();
+        
         return [
             'first_name' => 'users',
             'last_name' => 'last name',
             'phone' => '237698803159',
-            'date_birth' => '1996-03-11',
+            'date_of_birth' => '1996-03-11',
             'email' => 'users@user.com',
             'password' => bcrypt('password'),
             'gender' => 'male',
-            'zone_id' => 2,
+            'zone_id' => $zone->id,
             'active' => 1,
             'verified' => 1,
-            'email_verified_at' => Carbon::now(),
-            'activated_at' => Carbon::now(),
-            'verified_at' => Carbon::now(),
+            'email_verified_at' => Carbon::now()->toDateTimeString(),
+            'activated_at' => Carbon::now()->toDateTimeString(),
+            'verified_at' => Carbon::now()->toDateTimeString(),
         ];
     }
 }
