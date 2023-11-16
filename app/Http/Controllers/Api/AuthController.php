@@ -44,10 +44,10 @@ class AuthController extends Controller
             return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         }
 
-        $userData = UserResource::make(Auth::user())->toArray($request);
-        $userData['token'] = $token->plainTextToken;
+        $user = UserResource::make(Auth::user())->toArray($request);
+        $user['token'] = $token->plainTextToken;
 
-        return response()->success($userData, __('You are logged in'), 200);
+        return response()->success($user, __('You are logged in'), 200);
     }
 
     /**
