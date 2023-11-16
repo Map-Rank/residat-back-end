@@ -20,6 +20,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
+ * @property string $phone
+ * @property string $avatar
  * @property enum $gender
  * @property boolean $active
  * @property boolean $verified
@@ -84,6 +86,10 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'code',
+        'date_of_birth',
+        'phone',
+        'avatar',
         'password',
         'active',
         'activated_at',
