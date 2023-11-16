@@ -38,10 +38,6 @@ class RegisterRequest extends FormRequest
             'date_of_birth' => 'required|date',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'required|string|min:6',
-            'active' => 'boolean',
-            'activated_at' => 'nullable|date',
-            'verified' => 'boolean',
-            'verified_at' => 'nullable|date',
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'required|exists:zones,id',
         ];
