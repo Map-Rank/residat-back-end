@@ -36,7 +36,7 @@ class UserFactory extends Factory
             'first_name' => 'users',
             'last_name' => 'last name',
             'phone' => '237698803159',
-            'date_birth' => '1996-03-11',
+            'date_of_birth' => '1996-03-11',
             'email' => 'users@user.com',
             'password' => bcrypt('password'),
             'gender' => 'male',
