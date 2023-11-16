@@ -20,6 +20,8 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
+     * Handles the user's login attempt.
+     * 
      * @param LoginRequest $request
      * @return JsonResponse
      * @throws ValidationException
@@ -28,17 +30,17 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $request->authenticate();
-        $token = $request->user()->createToken('authtokensag');
+        $token = $request->user()->createToken('authtoken');
 
-        if (!$this->InvalidCredential($request)) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->success([], __('Invalid login credentials') , 200);
         }
 
-        if (!$this->emailIsVerified()) {
+        if (!Auth::user()->email_verified_at) {
             return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
         }
 
-        if (!$this->accountIsActived()) {
+        if (!Auth::user()->active) {
             return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         }
 
@@ -46,40 +48,10 @@ class AuthController extends Controller
             [
                 'status' => true,
                 'message' => __('You are Logged'),
-                'user' => new UserResource(Auth::user()),
+                'user' => UserResource::make(Auth::user()),
                 'token' => $token->plainTextToken
             ],200
         );
-    }
-    /**
-     * Attempting to log in with the credentials provided.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    private function InvalidCredential($request)
-    {
-        return Auth::attempt($request->only('email', 'password'));
-    }
-
-    /**
-     * Checks if the user's email has been verified.
-     *
-     * @return mixed
-     */
-    private function emailIsVerified()
-    {
-        return Auth::user()->email_verified_at;
-    }
-
-    /**
-     * Checks if the user's account is activated.
-     *
-     * @return mixed
-     */
-    private function accountIsActived()
-    {
-        return Auth::user()->active;
     }
 
     /**

@@ -20,7 +20,7 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => Auth::id(),
+            'id' => $this->id,
             'first_name' => $this->name,
             'last_name' => $this->last_name,
             'code' => $this->code,
