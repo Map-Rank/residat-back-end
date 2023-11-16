@@ -162,9 +162,6 @@ class AuthControllerTest extends TestCase
             'zone_id' => $zone->id,
             'active' => 1,
             'verified' => 1,
-            'email_verified_at' => Carbon::now()->toDateTimeString(),
-            'activated_at' => Carbon::now()->toDateTimeString(),
-            'verified_at' => Carbon::now()->toDateTimeString(),
         ];
     }
 }
