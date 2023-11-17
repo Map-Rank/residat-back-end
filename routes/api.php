@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\EmailVerificationController;
 
 /*
@@ -30,3 +31,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
+Route::post('reset-password', [PasswordController::class, 'reset']);
