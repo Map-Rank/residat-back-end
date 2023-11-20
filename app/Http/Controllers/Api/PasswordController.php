@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\ForgotPasswordRequest;
-use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Mail\ResetPasswordWithOtp;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\JsonResponse;
+use App\Mail\ResetPasswordWithOtp;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Password as RulesPassword;
+use Illuminate\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Http\Requests\Auth\ForgotPasswordRequest;
+use Illuminate\Validation\Rules\Password as RulesPassword;
 
 /**
  * Class PasswordController
@@ -34,20 +35,28 @@ class PasswordController extends Controller
      * @throws ValidationException
      * @unauthenticated
      */
-    public function forgotPassword(ForgotPasswordRequest $request)
+    public function forgotPassword(Request $request)
     {
         
+        $request->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+        // We will send the password reset link to this user. Once we have attempted
+        // to send the link, we will examine the response then see the message we
+        // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink(
             $request->only('email')
         );
-        
+
         if ($status != Password::RESET_LINK_SENT) {
             throw ValidationException::withMessages([
                 'email' => [__($status)],
             ]);
         }
 
-        return response()->success([], __($status) , 200);
+        return response()->json(['status' => __($status)]);
+
     }
 
 
@@ -56,19 +65,36 @@ class PasswordController extends Controller
      * @return JsonResponse
      * @unauthenticated
      */
-    public function reset(ResetPasswordRequest $request)
+    public function reset(Request $request): JsonResponse
     {
-        $request->only('email', 'password');
-
-        $user = User::where('email',$request->email);
-        $user->update([
-            'password'=>Hash::make($request->password),
-            'remember_token' => Str::random(60),
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        event(new PasswordReset($user));
+        // Here we will attempt to reset the user's password. If it is successful we
+        // will update the password on an actual user model and persist it to the
+        // database. Otherwise we will parse the error and return the response.
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
 
-        return response()->success([], __("Your password has been reset"), 200);
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status != Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages([
+                'email' => [__($status)],
+            ]);
+        }
+
+        return response()->json(['status' => __($status)]);
     }
 }
 

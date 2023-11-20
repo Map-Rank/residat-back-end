@@ -89,7 +89,7 @@ class AuthControllerTest extends TestCase
             ->assertSessionHasNoErrors();
 
         // We check if we have a user on the database
-        $this->assertDatabaseHas(User::class, ['email' => 'users@user.com']);
+        $this->assertDatabaseHas(User::class, ['email' => 'test@gmail.com']);
 
     }
 
@@ -152,13 +152,14 @@ class AuthControllerTest extends TestCase
         $zone = Zone::factory()->create();
         
         return [
-            'first_name' => 'users',
-            'last_name' => 'last name',
-            'phone' => '237698803159',
-            'date_of_birth' => '1996-03-11',
-            'email' => 'users@user.com',
-            'password' => bcrypt('password'),
-            'gender' => 'male',
+            'id' => 1,
+            'first_name' => 'users 2',
+            'last_name' => 'last name 2',
+            'phone' => '237698803158',
+            'date_of_birth' => '1996-03-12',
+            'email' => 'test@gmail.com',
+            'password' => bcrypt('password!'),
+            'gender' => 'female',
             'zone_id' => $zone->id,
             'active' => 1,
             'verified' => 1,

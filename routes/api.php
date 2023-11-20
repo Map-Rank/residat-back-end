@@ -26,10 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
     Route::post('/email/resend-verification-notification', [EmailVerificationController::class, 'resend'])->name('verification.resend');
+    Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
 });
 
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::post('forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
-Route::post('reset-password', [PasswordController::class, 'reset']);
+
+Route::post('/reset-password', [PasswordController::class, 'reset']);
