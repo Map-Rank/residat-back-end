@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 
@@ -35,5 +37,24 @@ class AppServiceProvider extends ServiceProvider
                 'message' => $message,
             ], $status_code);
         });
+
+        Response::macro('notFoundId',
+        function ($message=null) {
+            Log::warning(Route::currentRouteAction()." ID not found");
+            return response()->json([
+                'status' => false,
+                'message' => $message?:"Unknown ID",
+            ], 404);
+        });
+
+        Response::macro('notFound',
+            function ($message) {
+                Log::warning(Route::currentRouteAction()." failed, Not found");
+                return response()->json([
+                    'success' => false,
+                    'message' => $message,
+                ], 404);
+            });
     }
+
 }
