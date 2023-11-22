@@ -12,10 +12,20 @@
         onclick="coreui.Sidebar.getInstance(document.querySelector(&quot;#sidebar&quot;)).toggle()"></button>
 </div>
 <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
-    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
             <svg class="nav-icon">
                 <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-speedometer') }}"></use>
             </svg> Dashboard<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+    </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+        </svg> Users<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+    </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('permission') ? 'active' : '' }}" href="">  {{-- {{ route('permission.index') }} --}}
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-beach-access') }}"></use>
+        </svg> Permissions<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
     </li>
 </ul>
 <div class="sidebar-footer border-top d-none d-md-flex">
