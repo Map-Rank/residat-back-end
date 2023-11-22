@@ -1,11 +1,6 @@
 <div class="sidebar-header border-bottom">
     <div class="sidebar-brand">
-        <svg class="sidebar-brand-full" width="88" height="32" alt="CoreUI Logo">
-            <use xlink:href="{{ asset('assets/brand/coreui.svg#full') }}"></use>
-        </svg>
-        <svg class="sidebar-brand-narrow" width="32" height="32" alt="CoreUI Logo">
-            <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use>
-        </svg>
+        <img class="img-fluid" width="88" height="32" src="{{ asset('assets/brand/logo.jpg') }}" alt="LOGO" srcset="">
     </div>
     <button class="btn-close d-lg-none" type="button" data-coreui-dismiss="offcanvas" data-coreui-theme="dark"
         aria-label="Close"
@@ -22,7 +17,7 @@
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
         </svg> Users<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
     </li>
-    <li class="nav-item"><a class="nav-link {{ request()->routeIs('permission') ? 'active' : '' }}" href="">  {{-- {{ route('permission.index') }} --}}
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : '' }}" href="{{ route('permissions.index') }}">  
         <svg class="nav-icon">
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-beach-access') }}"></use>
         </svg> Permissions<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
