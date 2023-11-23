@@ -45,7 +45,7 @@ class Post extends Model
 
     public function creator() {
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
-            ->wherePivot('type_interaction_id', 1)->first();
+            ->wherePivot('type_interaction_id', 1);
     }
 
     public function likes(){
