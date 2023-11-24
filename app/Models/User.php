@@ -8,11 +8,12 @@ use App\Models\Zone;
 use App\Models\Interaction;
 use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App/Models/User
@@ -20,6 +21,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
+ * @property string $phone
+ * @property string $avatar
  * @property enum $gender
  * @property boolean $active
  * @property boolean $verified
@@ -84,6 +87,10 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'code',
+        'date_of_birth',
+        'phone',
+        'avatar',
         'password',
         'active',
         'activated_at',
