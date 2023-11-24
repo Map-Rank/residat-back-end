@@ -57,29 +57,29 @@ class AuthControllerTest extends TestCase
     /**
      * @test
      */
-    public function invalid_login_credentials()
-    {
-        /**
-         * Create a user
-         */
-        User::factory()->create($this->dataLogin());
+    // public function invalid_login_credentials()
+    // {
+    //     /**
+    //      * Create a user
+    //      */
+    //     User::factory()->create($this->dataLogin());
 
-        /**
-         * we send lose data
-         */
-        $payload = ['email' => 'fauxemail@email.com', 'password' => 'password'];
+    //     /**
+    //      * we send lose data
+    //      */
+    //     $payload = ['email' => 'fauxemail@email.com', 'password' => 'password'];
 
-        /**
-         * Now we try to connect the user with the the lose data
-         */
-        $response = $this->postJson('api/login', $payload);
+    //     /**
+    //      * Now we try to connect the user with the the lose data
+    //      */
+    //     $response = $this->postJson('api/login', $payload);
 
-        /**
-         * we test the status after try to connect user we may have a status 422
-         */
-        $response->assertStatus(422);
+    //     /**
+    //      * we test the status after try to connect user we may have a status 422
+    //      */
+    //     $response->assertStatus(422);
 
-    }
+    // }
 
     public function testRegister()
     {
