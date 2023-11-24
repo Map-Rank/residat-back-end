@@ -13,7 +13,7 @@ class LevelFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             // Ajoutez d'autres champs et valeurs au besoin
         ];
     }
