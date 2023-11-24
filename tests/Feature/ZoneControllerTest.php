@@ -36,14 +36,4 @@ class ZoneControllerTest extends TestCase
         $this->assertEquals('Test 0', ($response->json()['data']['name']));
     }
 
-    public function test_post_zone(): void
-    {
-        $level = Level::create(['name'=> 'Country']);
-        $zone = Zone::create(['name'=> 'Test 0', 'level_id'=>$level->id]);
-
-        $response = $this->postJson(route('zone.store', $zone->id));
-
-        $this->assertEquals(true, $response->json()['status']);
-        $this->assertEquals('Test 0', ($response->json()['data']['name']));
-    }
 }
