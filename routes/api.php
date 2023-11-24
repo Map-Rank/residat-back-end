@@ -23,12 +23,9 @@ use App\Http\Controllers\Api\ZoneController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/verify-token', [AuthController::class, 'verifyToken']);
     Route::post('logout', [AuthController::class, 'logout']);
-    Route::post('zone', [ZoneController::class, 'store']);
-    Route::put('zone', [ZoneController::class, 'update']);
-    Route::delete('zone', [ZoneController::class, 'delete']);
 });
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::get('zone', [ZoneController::class, 'index']);
-Route::get('zone/{id}', [ZoneController::class, 'update']);
+Route::get('zone', [ZoneController::class, 'index'])->name('zone.index');
+Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
