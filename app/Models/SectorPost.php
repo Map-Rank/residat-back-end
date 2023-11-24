@@ -19,4 +19,6 @@ class SectorPost extends Pivot
     public function sector() : BelongsTo{
         return $this->belongsTo(Sector::class);
     }
+
+    protected $table = 'sector_post';
 }
