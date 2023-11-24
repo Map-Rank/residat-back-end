@@ -9,6 +9,7 @@ use App\Models\Interaction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App/Models/Post
@@ -71,5 +72,9 @@ class Post extends Model
     public function medias()
     {
         return $this->hasMany(Media::class);
+    }
+
+    public function sectors() : BelongsToMany{
+        return $this->belongsToMany(Sector::class, 'sector_post', 'post_id');
     }
 }
