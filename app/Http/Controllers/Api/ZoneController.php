@@ -51,7 +51,7 @@ class ZoneController extends Controller
 
         $datum = Zone::query()->find($id);
         return (!$datum)
-            ? response()->error([], __('Zone not found'), 404)
+            ? response()->errors([], __('Zone not found'), 404)
             : response()->success(ZoneResource::make($datum->loadMissing(['parent']),__('Values found')));
     }
 
