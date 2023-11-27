@@ -32,9 +32,9 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
-       Post::factory()->count(10)->create();
+        Post::factory()->count(10)->create();
 
-       $response = $this->getJson('api/posts?page=0&size=5');
+        $response = $this->getJson('api/posts?page=0&size=5');
 
         $this->assertEquals(true, $response->json()['status']);
         $this->assertEquals(5, count($response->json()['data']));
