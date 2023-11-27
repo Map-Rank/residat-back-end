@@ -15,9 +15,15 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $posts = Post::with('creator','likes', 'comments', 'shares')->withCount('likes', 'comments', 'shares')->latest()->paginate(10);
+        $pageSize = $request->input('pageSize', 10);
+
+        $posts = Post::with('creator', 'likes', 'comments', 'shares')
+            ->withCount('likes', 'comments', 'shares')
+            ->latest()
+            ->paginate($pageSize);
+
         return response()->success($posts, __('Posts retrieved successfully'), 200);
     }
 
