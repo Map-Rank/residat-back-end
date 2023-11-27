@@ -38,12 +38,6 @@ class Post extends Model
         return $this->belongsTo(Topic::class);
     }
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'interactions', 'post_id')
-            ->withPivotValue('price', 'type_interaction_id', 'text');
-    }
-
     public function creator() {
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 1);
