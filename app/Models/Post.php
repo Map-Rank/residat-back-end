@@ -17,8 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string $content
  * @property datetime $published_at
  * @property int $zone_id
- * @property int $user_id
- * @property int $topic_id
  * @mixin \Eloquent
  */
 
@@ -26,7 +24,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['content', 'published_at', 'zone_id', 'user_id', 'topic_id'];
+    protected $fillable = ['content', 'published_at', 'zone_id', 'sector_id'];
 
     public function zone()
     {

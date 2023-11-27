@@ -9,6 +9,9 @@ use App\Models\Zone;
 use App\Models\Topic;
 use Laravel\Sanctum\Sanctum;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
+use App\Models\Interaction;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,6 +24,7 @@ class PostControllerTest extends TestCase
     {
         parent::setUp();
 
+        $this->seed();
         Sanctum::actingAs(
             User::factory()->create($this->dataLogin())
         );
@@ -28,14 +32,12 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
-        // $posts = factory(Post::class, 10)->create();
+       Post::factory()->count(10)->create();
 
-        Post::factory()->count(10)->create();
-
-        $response = $this->getJson('api/posts?page=1&size=5');
+       $response = $this->getJson('api/posts?page=0&size=5');
 
         $this->assertEquals(true, $response->json()['status']);
-        $this->assertEquals(1, count($response->json()['data']));
+        $this->assertEquals(5, count($response->json()['data']));
     }
 
     public function test_store()
@@ -44,8 +46,6 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
-            'user_id' => auth()->user()->id,
-            'topic_id' => Topic::factory()->create()->id,
         ];
 
         $response = $this->postJson('api/create', $data);
