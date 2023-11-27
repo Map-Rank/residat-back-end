@@ -17,7 +17,7 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'published_at' => now(),
             'zone_id' => function () {
                 // Retourne un ID de zone existant ou crée un nouveau
