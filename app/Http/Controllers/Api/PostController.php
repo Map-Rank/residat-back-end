@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Post;
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
@@ -17,14 +19,28 @@ class PostController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $pageSize = $request->input('pageSize', 10);
+
+        $validator = Validator::make($request->all(), [
+            'page' => ['sometimes','numeric'],
+            'size'=> ['sometimes', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
+
+        $validated = $validator->validated();
+
+        $page = $validated['page'] ?? 0;
+        $size = $validated['size'] ?? 10;
+        
 
         $posts = Post::with('creator', 'likes', 'comments', 'shares')
-            ->withCount('likes', 'comments', 'shares')
+            ->offSet($page * $size)->take($size)
             ->latest()
-            ->paginate($pageSize);
+            ->get();
 
-        return response()->success($posts, __('Posts retrieved successfully'), 200);
+        return response()->success(PostResource::collection($posts), __('Posts retrieved successfully'), 200);
     }
 
     /**
@@ -33,6 +49,22 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $post = Post::create($request->all());
+        // Ajout du média
+        if ($request->hasFile('media')) {
+            $mediaFile = $request->file('media');
+            $mediaPath = $mediaFile->store('media'); // Le dossier 'media' peut être ajusté selon votre structure
+            $mediaType = $mediaFile->getClientMimeType();
+
+            // Création du média associé au post
+            $media = Media::create([
+                'url' => Storage::url($mediaPath),
+                'type' => $mediaType,
+                'post_id' => $post->id,
+            ]);
+
+            // Vous pouvez également lier le média au post via la relation
+            $post->media()->save($media);
+        }
         return response()->success($post, __('Post created successfully'), 200);
     }
 

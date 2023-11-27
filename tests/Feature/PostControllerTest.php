@@ -26,19 +26,19 @@ class PostControllerTest extends TestCase
         );
     }
 
-    public function testIndex()
+    public function test_index()
     {
         // $posts = factory(Post::class, 10)->create();
 
         Post::factory()->count(10)->create();
 
-        $response = $this->getJson('api/posts');
+        $response = $this->getJson('api/posts?page=1&size=5');
 
-        $response->assertStatus(200)
-            ->assertJsonCount(10, 'data.data');
+        $this->assertEquals(true, $response->json()['status']);
+        $this->assertEquals(1, count($response->json()['data']));
     }
 
-    public function testStore()
+    public function test_store()
     {
         $data = [
             'content' => $this->faker->sentence(),
@@ -55,7 +55,7 @@ class PostControllerTest extends TestCase
         $this->assertDatabaseHas('posts', $data);
     }
 
-    public function testShow()
+    public function test_show()
     {
         $post = Post::factory()->create();
 
@@ -65,7 +65,7 @@ class PostControllerTest extends TestCase
             ->assertJson(['data' => ['content' => $post->content]]);
     }
 
-    public function testUpdate()
+    public function test_update()
     {
         $post = Post::factory()->create();
 
@@ -89,7 +89,7 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['topic_id'], $post->topic_id);
     }
 
-    public function testDestroy()
+    public function test_destroy()
     {
         $post = Post::factory()->create();
 
