@@ -6,15 +6,17 @@ use Exception;
 use App\Models\Post;
 use App\Models\Media;
 use App\Models\Interaction;
-use App\Service\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use Illuminate\Support\Facades\Auth;
+use App\Models\TypeInteraction;
+use App\Service\UtilService;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -85,13 +87,21 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'create');
+
+        if($typeInteraction == null){
+            return response()->errors([], __('Project configuration error'), 500);
+        }
+
+        DB::beginTransaction();
+
         $post = Post::create($request->all());
 
         if ($request->hasFile('media')) {
             $mediaFiles = $request->file('media');
-    
+
             $mediaPaths = [];
-    
+
             foreach ($mediaFiles as $mediaFile) {
                 $mediaPath = $mediaFile->store('media');
                 $mediaPaths[] = [
@@ -99,9 +109,18 @@ class PostController extends Controller
                     'type' => $mediaFile->getClientMimeType(),
                 ];
             }
-    
+
             $post->medias()->createMany($mediaPaths);
         }
+
+        $post->users()->attach($request->user(), ['type_interaction_id'=> $typeInteraction->id]);
+
+        if(!$post->save()){
+            DB::rollBack();
+            return response()->errors([], __('Post was\'nt saved error', 400));
+        }
+
+        DB::commit();
 
         return response()->success($post, __('Post created successfully'), 200);
     }
@@ -125,13 +144,25 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, string $id)
     {
-        $post = Post::find($id);
+        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'create');
+
+        if($typeInteraction == null){
+            return response()->errors([], __('Project configuration error'), 500);
+        }
+
+        $post = Post::with('creator')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $post->update($request->all());
+        if($post->creator->first()->id != $request->user()->id){
+            return response()->errors([], __('Unauthorized access to this resource'), 401);
+        }
+
+        if(!$post->update($request->all())){
+            return response()->errors([], __('Unable to update the resource'), 400);
+        }
 
         // Mettez à jour les médias si de nouveaux fichiers sont fournis
         if ($request->hasFile('media')) {
@@ -160,15 +191,28 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        $post = Post::find($id);
+        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'create');
+
+        if($typeInteraction == null){
+            return response()->errors([], __('Project configuration error'), 500);
+        }
+
+        $post = Post::with('creator')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $post->delete();
+        if($post->creator->first()->id != $request->user()->id){
+            return response()->errors([], __('Unauthorized access to this resource'), 401);
+        }
+
+
+        if(!$post->delete()){
+            return response()->errors([], __('Unable to update the resource'), 400);
+        }
 
         return response()->success([], __('Post deleted successfully'), 200);
     }
@@ -223,7 +267,7 @@ class PostController extends Controller
         $user = auth()->user();
 
         $interaction = new Interaction([
-            'text' => $commentText, 
+            'text' => $commentText,
             'type_interaction_id' => 3,
             'user_id' => $user->id,
         ]);
