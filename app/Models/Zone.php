@@ -21,6 +21,10 @@ class Zone extends Model
         return $this->belongsTo(Zone::class, 'parent_id');
     }
 
+    public function children(){
+        return $this->hasMany(Zone::class, 'parent_id');
+    }
+
     public function level()
     {
         return $this->belongsTo(Level::class);
