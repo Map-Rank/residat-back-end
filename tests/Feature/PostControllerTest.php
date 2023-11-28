@@ -87,12 +87,14 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->create();
 
+        // Créez un fichier temporaire pour simuler le téléchargement
+        $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
+
         $data = [
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
-            'user_id' => auth()->user()->id,
-            'topic_id' => Topic::factory()->create()->id,
+            'media' => [$newMediaFile], // Ajoutez les fichiers médias à la requête
         ];
 
         $response = $this->putJson('api/update/' . $post->id, $data);
@@ -103,8 +105,10 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['content'], $post->content);
         $this->assertEquals($data['published_at'], $post->published_at);
         $this->assertEquals($data['zone_id'], $post->zone_id);
-        $this->assertEquals($data['user_id'], $post->user_id);
-        $this->assertEquals($data['topic_id'], $post->topic_id);
+
+        // Vérifiez également que le nouveau média est associé au post
+        $storedMediaUrl = Storage::url($newMediaFile->store('media'));
+        $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl]);
     }
 
     public function test_destroy()

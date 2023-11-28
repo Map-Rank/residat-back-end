@@ -132,6 +132,27 @@ class PostController extends Controller
 
         $post->update($request->all());
 
+        // Mettez à jour les médias si de nouveaux fichiers sont fournis
+        if ($request->hasFile('media')) {
+            $mediaFiles = $request->file('media');
+
+            $mediaPaths = [];
+
+            foreach ($mediaFiles as $mediaFile) {
+                $mediaPath = $mediaFile->store('media');
+                $mediaPaths[] = [
+                    'url' => Storage::url($mediaPath),
+                    'type' => $mediaFile->getClientMimeType(),
+                ];
+            }
+
+            // Supprimez les anciens médias associés au post
+            $post->medias()->delete();
+
+            // Créez les nouveaux médias associés au post
+            $post->medias()->createMany($mediaPaths);
+        }
+
         return response()->success($post, __('Post updated successfully'), 200);
     }
 
