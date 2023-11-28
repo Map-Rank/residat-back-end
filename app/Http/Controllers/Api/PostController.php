@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
+use App\Service\UtilService;
 use Exception;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -40,18 +41,20 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'likes', 'comments', 'shares');
+        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias');
 
         if(Auth::user() != null){
             $zone =  Auth::user()->loadMissing('zone.children')->zone;
             // Get all the descendants of the user's zone.
-            $descendants = collect();
-            $descendants->push($zone);
-            if ($zone->children != null){
-                $descendants =  $this->get_descendants($zone->children, $descendants);
+            if($zone != null){
+                $descendants = collect();
+                $descendants->push($zone);
+                if ($zone->children != null){
+                    $descendants =  UtilService::get_descendants($zone->children, $descendants);
+                }
+                $descendantIds = $descendants->pluck('id');
+                $data = $data->whereIn('zone_id',  $descendantIds);
             }
-            $descendantIds = $descendants->pluck('id');
-            $data = $data->whereIn('zone_id',  $descendantIds);
         }
 
         if(isset($validated['zone_id'])){
