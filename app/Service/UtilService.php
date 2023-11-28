@@ -6,19 +6,15 @@ namespace App\Models;
 class UtilService
 {
 
-    public static int $success = 1;
-    public static int $bad_params = 0;
-    public static int $ERROR = -1;
-
-    public static function showResponse(mixed $data, int $code, String $message, int $type){
-        if($type == UtilService::$success){
-            return response()->json(['data'=> $data, 'message'=> $message, 'code'=> $code, 'success'=> true], 200);
+    public static function get_descendants ($children, $descendants)
+    {
+        foreach ($children as $child) {
+            $child = $child->load('children');
+            $descendants->push($child);
+            if ($child->children != null) {
+                $descendants = UtilService::get_descendants($child->children, $descendants);
+            }
         }
-        else if($type == UtilService::$bad_params){
-            return response()->json(['data'=> $data, 'message'=> $message, 'code'=> $code, 'success'=> false], 400);
-        }
-        else{
-            return response()->json(['data'=> $data, 'message'=> $message, 'code'=> $code, 'success'=> false], 500);
-        }
+        return $descendants;
     }
 }
