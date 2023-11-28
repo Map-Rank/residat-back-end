@@ -128,6 +128,68 @@ class PostControllerTest extends TestCase
     }
 
     /**
+     * Test liking a post.
+     */
+    public function testLike()
+    {
+        $post = Post::factory()->create();
+
+        $response = $this->postJson('api/like/' . $post->id);
+
+        $response->assertStatus(200);
+
+        $user = auth()->user();
+        $this->assertDatabaseHas('interactions', [
+            'type_interaction_id' => 2,
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
+    }
+
+    /**
+     * Test commenting on a post.
+     */
+    public function testComment()
+    {
+        $post = Post::factory()->create();
+
+        $data = [
+            'text' => $this->faker->sentence(), // Ajoutez le texte du commentaire ici
+        ];
+
+        $response = $this->postJson('api/comment/' . $post->id, $data);
+
+        $response->assertStatus(200);
+
+        $user = auth()->user();
+        $this->assertDatabaseHas('interactions', [
+            'type_interaction_id' => 3,
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+            'text' => $data['text'],
+        ]);
+    }
+
+    /**
+     * Test sharing a post.
+     */
+    public function testShare()
+    {
+        $post = Post::factory()->create();
+
+        $response = $this->postJson('api/share/' . $post->id);
+
+        $response->assertStatus(200);
+
+        $user = auth()->user();
+        $this->assertDatabaseHas('interactions', [
+            'type_interaction_id' => 4,
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
+    }
+
+    /**
      * @return array
      */
     private function dataLogin()

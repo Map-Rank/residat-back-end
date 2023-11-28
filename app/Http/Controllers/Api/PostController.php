@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
 use App\Models\Post;
 use App\Models\Media;
+use App\Models\Interaction;
+use App\Service\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
-use App\Service\UtilService;
-use Exception;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -170,5 +171,88 @@ class PostController extends Controller
         $post->delete();
 
         return response()->success([], __('Post deleted successfully'), 200);
+    }
+
+
+    /**
+     * Like the specified post.
+     */
+    public function like(string $id): JsonResponse
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->errors([], __('Post not found'), 404);
+        }
+
+        $user = auth()->user();
+
+        $interaction = new Interaction([
+            'type_interaction_id' => 2,
+            'user_id' => $user->id,
+        ]);
+
+        $post->interactions()->save($interaction);
+
+        return response()->success($post, __('Post liked successfully'), 200);
+    }
+
+    /**
+     * Comment on the specified post.
+     */
+    public function comment(Request $request, string $id): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'text' => ['string','required'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->errors($validator->failed(),  __('Insert comment'), 400);
+        }
+
+        $validated = $validator->validated();
+
+        $commentText = $validated['text'];
+
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->errors([], __('Post not found'), 404);
+        }
+
+        $user = auth()->user();
+
+        $interaction = new Interaction([
+            'text' => $commentText, 
+            'type_interaction_id' => 3,
+            'user_id' => $user->id,
+        ]);
+
+        $post->interactions()->save($interaction);
+
+        return response()->success($post, __('Comment added successfully'), 200);
+    }
+
+    /**
+     * Share the specified post.
+     */
+    public function share(string $id): JsonResponse
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->errors([], __('Post not found'), 404);
+        }
+
+        $user = auth()->user();
+
+        $interaction = new Interaction([
+            'type_interaction_id' => 4,
+            'user_id' => $user->id,
+        ]);
+
+        $post->interactions()->save($interaction);
+
+        return response()->success($post, __('Post shared successfully'), 200);
     }
 }

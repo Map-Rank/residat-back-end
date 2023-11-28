@@ -38,6 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/update/{id}', [PostController::class, 'update']);
     Route::delete('/delete/{id}', [PostController::class, 'destroy']);
 
+    //interactions
+    Route::post('/like/{id}', [PostController::class, 'like']);
+    Route::post('/comment/{id}', [PostController::class, 'comment']);
+    Route::post('/share/{id}', [PostController::class, 'share']);
+
     
 });
 
