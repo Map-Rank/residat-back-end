@@ -49,22 +49,23 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $post = Post::create($request->all());
-        // Ajout du média
+
         if ($request->hasFile('media')) {
-            $mediaFile = $request->file('media');
-            $mediaPath = $mediaFile->store('media'); // Le dossier 'media' peut être ajusté selon votre structure
-            $mediaType = $mediaFile->getClientMimeType();
-
-            // Création du média associé au post
-            $media = Media::create([
-                'url' => Storage::url($mediaPath),
-                'type' => $mediaType,
-                'post_id' => $post->id,
-            ]);
-
-            // Vous pouvez également lier le média au post via la relation
-            $post->media()->save($media);
+            $mediaFiles = $request->file('media');
+    
+            $mediaPaths = [];
+    
+            foreach ($mediaFiles as $mediaFile) {
+                $mediaPath = $mediaFile->store('media');
+                $mediaPaths[] = [
+                    'url' => Storage::url($mediaPath),
+                    'type' => $mediaFile->getClientMimeType(),
+                ];
+            }
+    
+            $post->medias()->createMany($mediaPaths);
         }
+
         return response()->success($post, __('Post created successfully'), 200);
     }
 

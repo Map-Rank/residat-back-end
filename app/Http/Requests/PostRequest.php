@@ -25,8 +25,6 @@ class PostRequest extends FormRequest
             'content' => 'required',
             'published_at' => 'required|date',
             'zone_id' => 'required|exists:zones,id',
-            'user_id' => 'required|exists:users,id',
-            'topic_id' => 'required|exists:topics,id',
         ];
     }
 }
