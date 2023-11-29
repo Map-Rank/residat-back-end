@@ -132,7 +132,7 @@ class PostControllerTest extends TestCase
      */
     public function testLike()
     {
-        $post = Post::factory()->create();
+        $post = Post::factory()->creator()->create();
 
         $response = $this->postJson('api/like/' . $post->id);
 
@@ -151,7 +151,7 @@ class PostControllerTest extends TestCase
      */
     public function testComment()
     {
-        $post = Post::factory()->create();
+        $post = Post::factory()->creator()->create();
 
         $data = [
             'text' => $this->faker->sentence(), // Ajoutez le texte du commentaire ici
@@ -175,7 +175,7 @@ class PostControllerTest extends TestCase
      */
     public function testShare()
     {
-        $post = Post::factory()->create();
+        $post = Post::factory()->creator()->create();
 
         $response = $this->postJson('api/share/' . $post->id);
 
