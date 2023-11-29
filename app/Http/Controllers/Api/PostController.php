@@ -217,7 +217,7 @@ class PostController extends Controller
      */
     public function like(string $id): JsonResponse
     {
-        $post = Post::find($id);
+        $post = Post::with('creator')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
@@ -244,7 +244,7 @@ class PostController extends Controller
 
         $validated = $validator->validated();
 
-        $post = Post::find($id);
+        $post = Post::with('creator')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
@@ -260,7 +260,7 @@ class PostController extends Controller
      */
     public function share(string $id): JsonResponse
     {
-        $post = Post::find($id);
+        $post = Post::with('creator')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);

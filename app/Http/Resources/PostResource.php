@@ -21,7 +21,7 @@ class PostResource extends JsonResource
             'id' => $this['id'],
             'text' => $this['text'],
             'images' => ImageResource::collection($this->whenLoaded('medias')),
-            'creator' => UserResource::make($this->whenLoaded('creator')),
+            'creator' => UserResource::make($this->whenLoaded('creator')->first()),
             'topic' => TopicResource::make($this->whenLoaded('topic')),
             'like_count' => $this->likes()->count(),
             'comment_count' => $this->comments()->count(),

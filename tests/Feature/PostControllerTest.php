@@ -15,6 +15,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\PostController;
+use App\Models\TypeInteraction;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -44,6 +45,7 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
+        TypeInteraction::factory()->count(4)->create();
         // Créez des fichiers temporaires pour simuler le téléchargement
         $file1 = UploadedFile::fake()->image('image1.jpg');
         $file2 = UploadedFile::fake()->image('image2.jpg');
@@ -52,7 +54,7 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
-            'media' => [$file1, $file2], // Ajoutez les fichiers médias à la requête
+            'media' => [$file1, $file2], 
         ];
 
         $response = $this->postJson('api/create', $data);
@@ -85,7 +87,10 @@ class PostControllerTest extends TestCase
 
     public function test_update()
     {
-        $post = Post::factory()->create();
+
+        TypeInteraction::factory()->count(4)->create();
+
+        $post = Post::factory()->creator()->create();
 
         // Créez un fichier temporaire pour simuler le téléchargement
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
@@ -113,7 +118,7 @@ class PostControllerTest extends TestCase
 
     public function test_destroy()
     {
-        $post = Post::factory()->create();
+        $post = Post::factory()->creator()->create();
 
         $response = $this->deleteJson('api/delete/' . $post->id);
 
