@@ -193,12 +193,6 @@ class PostController extends Controller
      */
     public function destroy(Request $request, string $id)
     {
-        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'create');
-
-        if($typeInteraction == null){
-            return response()->errors([], __('Project configuration error'), 500);
-        }
-
         $post = Post::with('creator')->find($id);
 
         if (!$post) {
@@ -229,16 +223,10 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $user = auth()->user();
+        $post->users()->attach(auth()->user(), ['type_interaction_id'=> 2]);
 
-        $interaction = new Interaction([
-            'type_interaction_id' => 2,
-            'user_id' => $user->id,
-        ]);
 
-        $post->interactions()->save($interaction);
-
-        return response()->success($post, __('Post liked successfully'), 200);
+        return response()->success(PostResource::make($post), __('Post liked successfully'), 200);
     }
 
     /**
@@ -256,25 +244,15 @@ class PostController extends Controller
 
         $validated = $validator->validated();
 
-        $commentText = $validated['text'];
-
         $post = Post::find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $user = auth()->user();
+        $post->users()->attach(auth()->user(), ['type_interaction_id'=> 3, 'text' => $validated['text']]);
 
-        $interaction = new Interaction([
-            'text' => $commentText,
-            'type_interaction_id' => 3,
-            'user_id' => $user->id,
-        ]);
-
-        $post->interactions()->save($interaction);
-
-        return response()->success($post, __('Comment added successfully'), 200);
+        return response()->success(PostResource::make($post), __('Comment added successfully'), 200);
     }
 
     /**
@@ -288,15 +266,8 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $user = auth()->user();
+        $post->users()->attach(auth()->user(), ['type_interaction_id'=> 4]);
 
-        $interaction = new Interaction([
-            'type_interaction_id' => 4,
-            'user_id' => $user->id,
-        ]);
-
-        $post->interactions()->save($interaction);
-
-        return response()->success($post, __('Post shared successfully'), 200);
+        return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }
 }
