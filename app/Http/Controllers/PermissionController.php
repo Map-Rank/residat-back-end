@@ -45,9 +45,7 @@ class PermissionController extends Controller
 
     public function updatePermissions(Request $request, $id)
     {
-        $role = Role::where('guard_name','web')->where('id',$id)
-        ->first();
-        dd($role);
+        $role = Role::where('guard_name','web')->where('id',$id)->first();
 
         if (!$role) {
             return abort(404); // Ou une autre gestion d'erreur appropriée
