@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "9b867126-4b4c-4f37-ad20-8af69152604f",
+        "_postman_id": "ca01eec4-7611-4f7f-9042-0636765cf85e",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -48,7 +48,7 @@
                     "response": []
                 },
                 {
-                    "name": "Logs out the user",
+                    "name": "Logout users",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -87,13 +87,13 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "perferendis",
+                                    "value": "magni",
                                     "description": "The ID of the verify email."
                                 },
                                 {
                                     "id": "hash",
                                     "key": "hash",
-                                    "value": "et",
+                                    "value": "a",
                                     "description": ""
                                 }
                             ]
@@ -187,7 +187,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"token\":\"maxime\",\"email\":\"agleichner@example.net\",\"password\":\"mollitia\"}"
+                            "raw": "{\"token\":\"eveniet\",\"email\":\"magnus19@example.org\",\"password\":\"similique\"}"
                         },
                         "description": "",
                         "auth": {
@@ -197,7 +197,7 @@
                     "response": []
                 },
                 {
-                    "name": "Handles the user's login attempt.",
+                    "name": "Login users",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -218,7 +218,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"jaylan63@example.net\",\"password\":\"_j)Q`=r\"}"
+                            "raw": "{\"email\":\"minnie.weber@example.org\",\"password\":\"}8DA4^8wY|@b>\\\"vwJ\"}"
                         },
                         "description": "",
                         "auth": {
@@ -228,7 +228,7 @@
                     "response": []
                 },
                 {
-                    "name": "Manages user registration.",
+                    "name": "Register users",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -252,37 +252,37 @@
                             "formdata": [
                                 {
                                     "key": "first_name",
-                                    "value": "tkwrszkqjdpwmpqlp",
+                                    "value": "rpsbjxapxk",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "last_name",
-                                    "value": "hvaodpelbharsqdqfhc",
+                                    "value": "ptvjltxstjqmzyvfdycixdga",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "email",
-                                    "value": "phudson@example.com",
+                                    "value": "dickinson.dario@example.net",
                                     "type": "text",
                                     "description": "Must be a valid email address. Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "phone",
-                                    "value": "zlpgrnnzzhiukwzpw",
+                                    "value": "bqyjuncaglgway",
                                     "type": "text",
                                     "description": "Must not be greater than 20 characters."
                                 },
                                 {
                                     "key": "date_of_birth",
-                                    "value": "2023-12-04T07:41:41",
+                                    "value": "2023-12-04T08:02:57",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
                                 {
                                     "key": "password",
-                                    "value": "c`\\oow",
+                                    "value": "'Q5{`2*!W(>e6'*SU*",
                                     "type": "text",
                                     "description": "Must be at least 6 characters."
                                 },
@@ -294,7 +294,7 @@
                                 },
                                 {
                                     "key": "zone_id",
-                                    "value": "omnis",
+                                    "value": "deserunt",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -334,7 +334,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"etreutel@example.net\"}"
+                            "raw": "{\"email\":\"padberg.ofelia@example.net\"}"
                         },
                         "description": "",
                         "auth": {
@@ -371,7 +371,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"page\":2407.751,\"size\":250687.718,\"zone_id\":19,\"sectors\":\"tempora\"}"
+                            "raw": "{\"page\":132406560,\"size\":295419688.3,\"zone_id\":17,\"sectors\":\"nulla\"}"
                         },
                         "description": "",
                         "auth": {
@@ -422,7 +422,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-04T07:41:41.435209Z\",\"zone_id\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-04T08:02:57.827520Z\",\"zone_id\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -443,7 +443,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "magni",
+                                    "value": "dolores",
                                     "description": "The ID of the show."
                                 }
                             ]
@@ -499,7 +499,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "eos",
+                                    "value": "quas",
                                     "description": "The ID of the update."
                                 }
                             ]
@@ -517,7 +517,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-04T07:41:41.442692Z\",\"zone_id\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-04T08:02:57.836346Z\",\"zone_id\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -538,7 +538,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "quis",
+                                    "value": "alias",
                                     "description": "The ID of the delete."
                                 }
                             ]
@@ -574,7 +574,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "beatae",
+                                    "value": "assumenda",
                                     "description": "The ID of the like."
                                 }
                             ]
@@ -610,7 +610,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "quam",
+                                    "value": "occaecati",
                                     "description": "The ID of the comment."
                                 }
                             ]
@@ -628,7 +628,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"text\":\"dolorum\"}"
+                            "raw": "{\"text\":\"expedita\"}"
                         },
                         "description": "",
                         "auth": {
@@ -649,7 +649,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "quam",
+                                    "value": "est",
                                     "description": "The ID of the share."
                                 }
                             ]
@@ -701,7 +701,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"dicta\"}"
+                            "raw": "{\"name\":\"labore\"}"
                         },
                         "description": "",
                         "auth": {
@@ -750,7 +750,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "10",
                                     "description": "The ID of the sector."
                                 }
                             ]
@@ -830,7 +830,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"asperiores\"}"
+                            "raw": "{\"name\":\"et\"}"
                         },
                         "description": "",
                         "auth": {
@@ -862,7 +862,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":true,\"data\":[],\"message\":\"Values found\"}",
+                            "body": "{\"status\":true,\"data\":[{\"id\":1,\"name\":\"consectetur\",\"created_at\":\"2023-11-30T08:59:36.000000Z\"}],\"message\":\"Values found\"}",
                             "name": ""
                         }
                     ]

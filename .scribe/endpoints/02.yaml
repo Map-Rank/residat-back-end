@@ -26,18 +26,18 @@ endpoints:
         name: name
         description: ''
         required: false
-        example: asperiores
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: asperiores
+      name: et
     fileParameters: []
     responses:
       -
         status: 200
-        content: '{"status":true,"data":[],"message":"Values found"}'
+        content: '{"status":true,"data":[{"id":1,"name":"consectetur","created_at":"2023-11-30T08:59:36.000000Z"}],"message":"Values found"}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

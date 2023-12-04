@@ -28,13 +28,13 @@ endpoints:
         name: name
         description: ''
         required: false
-        example: dicta
+        example: labore
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: dicta
+      name: labore
     fileParameters: []
     responses:
       -
@@ -75,13 +75,13 @@ endpoints:
         name: id
         description: 'The ID of the sector.'
         required: true
-        example: 19
+        example: 10
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

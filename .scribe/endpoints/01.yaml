@@ -26,7 +26,7 @@ endpoints:
         name: page
         description: ''
         required: false
-        example: 2407.751
+        example: 132406560.0
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -35,7 +35,7 @@ endpoints:
         name: size
         description: ''
         required: false
-        example: 250687.718
+        example: 295419688.3
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -44,7 +44,7 @@ endpoints:
         name: zone_id
         description: ''
         required: false
-        example: 19
+        example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -53,16 +53,16 @@ endpoints:
         name: sectors
         description: ''
         required: false
-        example: tempora
+        example: nulla
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      page: 2407.751
-      size: 250687.718
-      zone_id: 19
-      sectors: tempora
+      page: 132406560.0
+      size: 295419688.3
+      zone_id: 17
+      sectors: nulla
     fileParameters: []
     responses:
       -
@@ -114,7 +114,7 @@ endpoints:
         name: published_at
         description: 'date publication of post. Must be a valid date.'
         required: true
-        example: 2023-12-04T07:41:41.435209+00:00
+        example: 2023-12-04T08:02:57.827520+00:00
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -130,7 +130,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       content: 'New Post'
-      published_at: 2023-12-04T07:41:41.435209+00:00
+      published_at: 2023-12-04T08:02:57.827520+00:00
       zone_id: 1
     fileParameters: []
     responses: []
@@ -161,13 +161,13 @@ endpoints:
         name: id
         description: 'The ID of the show.'
         required: true
-        example: magni
+        example: dolores
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: magni
+      id: dolores
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -210,13 +210,13 @@ endpoints:
         name: id
         description: 'The ID of the update.'
         required: true
-        example: eos
+        example: quas
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: eos
+      id: quas
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -233,7 +233,7 @@ endpoints:
         name: published_at
         description: 'date publication of post. Must be a valid date.'
         required: true
-        example: 2023-12-04T07:41:41.442692+00:00
+        example: 2023-12-04T08:02:57.836346+00:00
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -249,7 +249,7 @@ endpoints:
         custom: []
     cleanBodyParameters:
       content: 'New Post'
-      published_at: 2023-12-04T07:41:41.442692+00:00
+      published_at: 2023-12-04T08:02:57.836346+00:00
       zone_id: 1
     fileParameters: []
     responses: []
@@ -280,13 +280,13 @@ endpoints:
         name: id
         description: 'The ID of the delete.'
         required: true
-        example: quis
+        example: alias
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: quis
+      id: alias
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -320,13 +320,13 @@ endpoints:
         name: id
         description: 'The ID of the like.'
         required: true
-        example: beatae
+        example: assumenda
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: beatae
+      id: assumenda
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -360,13 +360,13 @@ endpoints:
         name: id
         description: 'The ID of the comment.'
         required: true
-        example: quam
+        example: occaecati
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: quam
+      id: occaecati
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -374,13 +374,13 @@ endpoints:
         name: text
         description: ''
         required: true
-        example: dolorum
+        example: expedita
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      text: dolorum
+      text: expedita
     fileParameters: []
     responses: []
     responseFields: []
@@ -410,13 +410,13 @@ endpoints:
         name: id
         description: 'The ID of the share.'
         required: true
-        example: quam
+        example: est
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: quam
+      id: est
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
