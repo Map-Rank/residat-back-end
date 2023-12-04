@@ -1,0 +1,651 @@
+openapi: 3.0.3
+info:
+  title: Laravel
+  description: ''
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000'
+paths:
+  /api/verify-token:
+    post:
+      summary: 'Checks the validity of the Sanctum authentication token.'
+      operationId: checksTheValidityOfTheSanctumAuthenticationToken
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      security: []
+  /api/logout:
+    post:
+      summary: 'Logs out the user'
+      operationId: logsOutTheUser
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      security: []
+  '/api/verify-email/{id}/{hash}':
+    get:
+      summary: 'Verify email'
+      operationId: verifyEmail
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Module Authentification'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the verify email.'
+        example: perferendis
+        required: true
+        schema:
+          type: string
+      -
+        in: path
+        name: hash
+        description: ''
+        example: et
+        required: true
+        schema:
+          type: string
+  /api/email/resend-verification-notification:
+    post:
+      summary: 'Resend email verification'
+      operationId: resendEmailVerification
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      security: []
+  /api/reset-password:
+    post:
+      summary: ''
+      operationId: postApiResetPassword
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: ''
+                  example: maxime
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: agleichner@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: mollitia
+              required:
+                - token
+                - email
+                - password
+      security: []
+  /api/login:
+    post:
+      summary: "Handles the user's login attempt."
+      operationId: handlesTheUsersLoginAttempt
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: jaylan63@example.net
+                password:
+                  type: string
+                  description: ''
+                  example: _j)Q`=r
+              required:
+                - email
+                - password
+      security: []
+  /api/register:
+    post:
+      summary: 'Manages user registration.'
+      operationId: managesUserRegistration
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: tkwrszkqjdpwmpqlp
+                last_name:
+                  type: string
+                  description: 'Must not be greater than 255 characters.'
+                  example: hvaodpelbharsqdqfhc
+                email:
+                  type: string
+                  description: 'Must be a valid email address. Must not be greater than 255 characters.'
+                  example: phudson@example.com
+                phone:
+                  type: string
+                  description: 'Must not be greater than 20 characters.'
+                  example: zlpgrnnzzhiukwzpw
+                date_of_birth:
+                  type: string
+                  description: 'Must be a valid date.'
+                  example: '2023-12-04T07:41:41'
+                avatar:
+                  type: string
+                  format: binary
+                  description: 'Must be an image. Must not be greater than 2048 kilobytes.'
+                password:
+                  type: string
+                  description: 'Must be at least 6 characters.'
+                  example: c`\oow
+                gender:
+                  type: string
+                  description: ''
+                  example: male
+                  enum:
+                    - male
+                    - female
+                zone_id:
+                  type: string
+                  description: ''
+                  example: omnis
+              required:
+                - first_name
+                - last_name
+                - email
+                - phone
+                - date_of_birth
+                - password
+                - zone_id
+      security: []
+  /api/forgot-password:
+    post:
+      summary: ''
+      operationId: postApiForgotPassword
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Authentification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'Must be a valid email address.'
+                  example: etreutel@example.net
+              required:
+                - email
+      security: []
+  /api/posts:
+    get:
+      summary: 'Get all posts'
+      operationId: getAllPosts
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Module Posts'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: number
+                  description: ''
+                  example: 2407.751
+                size:
+                  type: number
+                  description: ''
+                  example: 250687.718
+                zone_id:
+                  type: integer
+                  description: ''
+                  example: 19
+                sectors:
+                  type: string
+                  description: ''
+                  example: tempora
+      security: []
+  /api/create:
+    post:
+      summary: 'Store the specified post'
+      operationId: storeTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'Content of the post.'
+                  example: 'New Post'
+                published_at:
+                  type: string
+                  description: 'date publication of post. Must be a valid date.'
+                  example: 2023-12-04T07:41:41.435209+00:00
+                zone_id:
+                  type: string
+                  description: 'id of concern zone of post.'
+                  example: 1
+              required:
+                - content
+                - published_at
+                - zone_id
+      security: []
+  '/api/show/{id}':
+    get:
+      summary: 'Show the specified post'
+      operationId: showTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Module Posts'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the show.'
+        example: magni
+        required: true
+        schema:
+          type: string
+  '/api/update/{id}':
+    put:
+      summary: 'Update the specified post'
+      operationId: updateTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: 'Content of the post.'
+                  example: 'New Post'
+                published_at:
+                  type: string
+                  description: 'date publication of post. Must be a valid date.'
+                  example: 2023-12-04T07:41:41.442692+00:00
+                zone_id:
+                  type: string
+                  description: 'id of concern zone of post.'
+                  example: 1
+              required:
+                - content
+                - published_at
+                - zone_id
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the update.'
+        example: eos
+        required: true
+        schema:
+          type: string
+  '/api/delete/{id}':
+    delete:
+      summary: 'Delete the specified post'
+      operationId: deleteTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the delete.'
+        example: quis
+        required: true
+        schema:
+          type: string
+  '/api/like/{id}':
+    post:
+      summary: 'Like the specified post.'
+      operationId: likeTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the like.'
+        example: beatae
+        required: true
+        schema:
+          type: string
+  '/api/comment/{id}':
+    post:
+      summary: 'Comment on the specified post.'
+      operationId: commentOnTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: ''
+                  example: dolorum
+              required:
+                - text
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the comment.'
+        example: quam
+        required: true
+        schema:
+          type: string
+  '/api/share/{id}':
+    post:
+      summary: 'Share the specified post.'
+      operationId: shareTheSpecifiedPost
+      description: ''
+      parameters: []
+      responses: {  }
+      tags:
+        - 'Module Posts'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the share.'
+        example: quam
+        required: true
+        schema:
+          type: string
+  /api/sector:
+    get:
+      summary: 'Get all sector'
+      operationId: getAllSector
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: true
+                  data: []
+                  message: 'Values found'
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    example: []
+                  message:
+                    type: string
+                    example: 'Values found'
+      tags:
+        - 'Module Sector'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: dicta
+      security: []
+  '/api/sector/{id}':
+    get:
+      summary: 'Show the specified sector'
+      operationId: showTheSpecifiedSector
+      description: ''
+      parameters: []
+      responses:
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: false
+                  errors: []
+                  message: 'Zone not found'
+                properties:
+                  status:
+                    type: boolean
+                    example: false
+                  errors:
+                    type: array
+                    example: []
+                  message:
+                    type: string
+                    example: 'Zone not found'
+      tags:
+        - 'Module Sector'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the sector.'
+        example: 19
+        required: true
+        schema:
+          type: integer
+  /api/zone:
+    get:
+      summary: 'Get all zones'
+      operationId: getAllZones
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: true
+                  data: []
+                  message: 'Values found'
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    example: []
+                  message:
+                    type: string
+                    example: 'Values found'
+      tags:
+        - 'Module Zone'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ''
+                  example: asperiores
+      security: []
+  '/api/zone/{id}':
+    get:
+      summary: 'Show the specified zone'
+      operationId: showTheSpecifiedZone
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: true
+                  data:
+                    id: 1
+                    name: consectetur
+                    created_at: '2023-11-30T08:59:36.000000Z'
+                  message: ''
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      name:
+                        type: string
+                        example: consectetur
+                      created_at:
+                        type: string
+                        example: '2023-11-30T08:59:36.000000Z'
+                  message:
+                    type: string
+                    example: ''
+      tags:
+        - 'Module Zone'
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the zone.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+tags:
+  -
+    name: 'Module Authentification'
+    description: ''
+  -
+    name: 'Module Posts'
+    description: ''
+  -
+    name: 'Module Sector'
+    description: ''
+  -
+    name: 'Module Zone'
+    description: ''

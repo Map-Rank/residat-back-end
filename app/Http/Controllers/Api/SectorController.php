@@ -10,11 +10,14 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group Module Sector
+ */
 class SectorController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
+     * Get all sector
+     * 
      * @param Request $request
      * @return JsonResponse
      */
@@ -40,7 +43,7 @@ class SectorController extends Controller
 
 
     /**
-     * Display the resource.
+     * Show the specified sector
      *
      * @param int $id Id of the resource entity
      * @return JsonResponse

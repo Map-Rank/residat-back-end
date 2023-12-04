@@ -20,10 +20,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group Module Posts
+ */
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get all posts
      */
     public function index(Request $request): JsonResponse
     {
@@ -83,7 +86,7 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store the specified post
      */
     public function store(PostRequest $request)
     {
@@ -126,7 +129,7 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show the specified post
      */
     public function show(string $id)
     {
@@ -140,7 +143,7 @@ class PostController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified post
      */
     public function update(PostRequest $request, string $id)
     {
@@ -189,7 +192,7 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete the specified post
      */
     public function destroy(Request $request, string $id)
     {

@@ -22,7 +22,7 @@ class AuthController extends Controller
 {
 
     /**
-     * Manages user registration.
+     * Register users
      *
      * @param RegisterRequest $request
      * @return JsonResponse
@@ -41,7 +41,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handles the user's login attempt.
+     * Login users
      *
      * @param LoginRequest $request
      * @return JsonResponse
@@ -72,7 +72,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logs out the user
+     * Logout users
      *
      * @return JsonResponse
      */

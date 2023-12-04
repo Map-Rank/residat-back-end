@@ -14,6 +14,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('creator')->withCount('likes', 'comments', 'shares')->latest()->paginate(10);
+        // Post::with('creator', 'likes', 'comments', 'shares', 'medias')
         return view('posts.index', compact('posts'));
     }
 
