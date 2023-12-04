@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
@@ -25,8 +26,29 @@ class PostRequest extends FormRequest
             'content' => 'required',
             'published_at' => 'required|date',
             'zone_id' => 'required|exists:zones,id',
-            'user_id' => 'required|exists:users,id',
-            'topic_id' => 'required|exists:topics,id',
+        ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'content' => [
+                'description' => 'Content of the post',
+                'example' => 'New Post'
+            ],
+            'published_at' => [
+                'description' => 'date publication of post',
+                'example' => Carbon::now()
+            ],
+            'zone_id' => [
+                'description' => 'id of concern zone of post',
+                'example' => 1
+            ],
+            'sector_id' => [
+                'description' => 'Sector of post',
+                'example' => 1
+            ],
+            
         ];
     }
 }

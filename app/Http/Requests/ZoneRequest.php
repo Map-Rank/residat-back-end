@@ -32,4 +32,6 @@ class ZoneRequest extends FormRequest
             'parent_id' => ['required|exists:zones,id',],
         ];
     }
+
+    
 }

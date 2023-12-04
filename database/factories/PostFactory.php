@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
+use App\Models\User;
+use App\Models\Interaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,22 +20,34 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'content' => $this->faker->sentence,
+            'content' => $this->faker->sentence(),
             'published_at' => now(),
             'zone_id' => function () {
                 // Retourne un ID de zone existant ou crée un nouveau
                 return \App\Models\Zone::inRandomOrder()->first()->id ?? \App\Models\Zone::factory()->create()->id;
             },
-            'user_id' => function () {
-                // Retourne un ID d'utilisateur existant ou crée un nouveau
-                return \App\Models\User::inRandomOrder()->first()->id ?? \App\Models\User::factory()->create()->id;
-            },
-            'topic_id' => function () {
-                // Retourne un ID de topic existant ou crée un nouveau
-                return \App\Models\Topic::inRandomOrder()->first()->id ?? \App\Models\Topic::factory()->create()->id;
-            },
             'created_at' => now(),
             'updated_at' => now(),
         ];
+    }
+
+    /**
+     * Indicate that the post was created by the currently authenticated user.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function creator(): PostFactory
+    {
+        $user = auth()->user();
+
+        return $this->afterCreating(function (Post $post) use ($user) {
+            // Créez une interaction de type 'creator' pour l'utilisateur actuellement authentifié
+            $interaction = new Interaction([
+                'type_interaction_id' => 1,
+                'user_id' => $user->id,
+            ]);
+
+            $post->interactions()->save($interaction);
+        });
     }
 }

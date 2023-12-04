@@ -17,8 +17,6 @@ return new class extends Migration
                 $table->string('content');
                 $table->timestamp('published_at');
                 $table->foreignId('zone_id')->references('id')->on('zones')->onDelete('cascade');
-                $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-                $table->foreignId('topic_id')->references('id')->on('topics')->onDelete('cascade');
                 $table->timestamps();
                 $table->softDeletes();
             });
