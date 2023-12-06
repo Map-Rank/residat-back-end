@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Interaction;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -36,10 +37,12 @@ class PostFactory extends Factory
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    public function creator(User $user): PostFactory
+    public function creator(): PostFactory
     {
-        $user = auth()->user();
-
+        $user = Sanctum::actingAs(
+            User::factory()->create($this->dataLogin())
+        );
+        
         return $this->afterCreating(function (Post $post) use ($user) {
             // Créez une interaction de type 'creator' pour l'utilisateur actuellement authentifié
             $interaction = new Interaction([
@@ -62,10 +65,10 @@ class PostFactory extends Factory
     //     );
     // }
 
-    private function dataLogin()
+    private static function dataLogin()
     {
         return [
-            'email' => 'users@user.com',
+            'email' => 'simpleusers@user.com',
             'password' => bcrypt('password'),
             'email_verified_at' => now(),
         ];

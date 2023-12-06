@@ -17,7 +17,7 @@ class TypeInteractionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['create', 'likes', 'comments', 'shares']),
+            'name' => $this->faker->unique()->randomElement(['created', 'like', 'comment', 'share']),
         ];
     }
 }

@@ -31,6 +31,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{dd($posts)}}
                     @foreach ($posts as $post)
                         <tr class="align-middle">
                             <td class="text-center">
