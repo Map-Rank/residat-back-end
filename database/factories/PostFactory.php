@@ -36,18 +36,39 @@ class PostFactory extends Factory
      *
      * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    public function creator(): PostFactory
+    public function creator(User $user): PostFactory
     {
         $user = auth()->user();
 
         return $this->afterCreating(function (Post $post) use ($user) {
             // Créez une interaction de type 'creator' pour l'utilisateur actuellement authentifié
             $interaction = new Interaction([
-                'type_interaction_id' => 1,
+                'type_interaction_id' => 3,
                 'user_id' => $user->id,
+                'post_id' => $post->id,
             ]);
 
             $post->interactions()->save($interaction);
         });
     }
+
+    // public function setUp(): void
+    // {
+    //     parent::setUp();
+
+    //     $this->seed();
+    //     Sanctum::actingAs(
+    //         User::factory()->create($this->dataLogin())
+    //     );
+    // }
+
+    private function dataLogin()
+    {
+        return [
+            'email' => 'users@user.com',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+        ];
+    }
+
 }

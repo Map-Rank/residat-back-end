@@ -22,7 +22,7 @@
                 <tr class="">
                     <th class="bg-body-secondary">Roles</th>
                     <th class="bg-body-secondary">Number of Users</th>
-                    <th class="bg-body-secondary">Permission</th>
+                    {{-- <th class="bg-body-secondary">Permission</th> --}}
                     <th class="bg-body-secondary"></th>
                 </tr>
             </thead>

@@ -53,6 +53,10 @@ class PermissionController extends Controller
 
         $role->syncPermissions($request->input('permissions', []));
 
-        return redirect()->route('permissions.show', ['id' => $role->id])->with('success', 'Role permissions updated successfully.');
+        $permissions = Permission::all();
+
+        return view('permissions.show', compact('role', 'permissions'));
+
+        // return redirect()->route('permissions.show', ['id' => $role->id])->with('success', 'Role permissions updated successfully.');
     }
 }
