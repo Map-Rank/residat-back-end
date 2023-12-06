@@ -31,8 +31,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{dd($posts)}}
+                    
                     @foreach ($posts as $post)
+                    {{-- {{dd($post->creator[0]->avatar)}} --}}
                         <tr class="align-middle">
                             <td class="text-center">
                                 <div class="avatar avatar-md">

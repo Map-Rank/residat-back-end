@@ -16,8 +16,17 @@ class TypeInteractionFactory extends Factory
      */
     public function definition(): array
     {
+        $types = ['created', 'like', 'comment', 'share'];
+
+        // Mélanger le tableau aléatoirement
+        shuffle($types);
+
         return [
-            'name' => $this->faker->unique()->randomElement(['created', 'like', 'comment', 'share']),
+            'name' => function () use ($types) {
+                // Utiliser une closure pour garantir l'ordre fixe dans le tableau mélangé
+                static $index = 0;
+                return $types[$index++];
+            },
         ];
     }
 }

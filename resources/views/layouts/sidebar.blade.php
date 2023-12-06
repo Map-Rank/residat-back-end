@@ -10,17 +10,17 @@
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
             <svg class="nav-icon">
                 <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-speedometer') }}"></use>
-            </svg> Dashboard<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+            </svg> Dashboard</a>
     </li>
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}" href="{{ route('users.index') }}">
         <svg class="nav-icon">
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
-        </svg> Users<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+        </svg> Users</a>
     </li>
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : '' }}" href="{{ route('permissions.index') }}">  
         <svg class="nav-icon">
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-beach-access') }}"></use>
-        </svg> Permissions<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+        </svg>Roles & Permissions </a>
     </li>
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" href="{{ route('posts.index') }}">
         <svg class="nav-icon">
