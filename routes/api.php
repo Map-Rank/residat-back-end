@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\ZoneController;
 use App\Http\Controllers\Api\EmailVerificationController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\SectorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +29,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
     Route::post('/email/resend-verification-notification', [EmailVerificationController::class, 'resend'])->name('verification.resend');
-    Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
+    Route::post('/reset-password', [PasswordController::class, 'reset']);
+
+
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::post('/create', [PostController::class, 'store']);
+    Route::get('/show/{id}', [PostController::class, 'show']);
+    Route::put('/update/{id}', [PostController::class, 'update']);
+    Route::delete('/delete/{id}', [PostController::class, 'destroy']);
+
+    //interactions
+    Route::post('/like/{id}', [PostController::class, 'like']);
+    Route::post('/comment/{id}', [PostController::class, 'comment']);
+    Route::post('/share/{id}', [PostController::class, 'share']);
+
+    
 });
 
 
@@ -35,4 +51,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::get('zone', [ZoneController::class, 'index'])->name('zone.index');
 Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
-Route::post('/reset-password', [PasswordController::class, 'reset']);
+Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
+Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
+Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');

@@ -15,7 +15,7 @@ class ZoneFactory extends Factory
         $parentZone = Zone::inRandomOrder()->first();
 
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->word(),
             'parent_id' => $parentZone ? $parentZone->id : null,
             'level_id' => Level::factory(), // Utilisation de la factory pour créer un niveau
         ];

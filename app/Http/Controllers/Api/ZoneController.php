@@ -12,11 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group Module Zone
+ */
 class ZoneController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * Get all zones
      *
      * @param Request $request
      * @return JsonResponse
@@ -42,7 +45,7 @@ class ZoneController extends Controller
     }
 
     /**
-     * Display the resource.
+     * Show the specified zone
      *
      * @param int $id Id of the resource entity
      * @return JsonResponse
@@ -56,7 +59,7 @@ class ZoneController extends Controller
     }
 
     /**
-     * Create and store a zone entity.
+     * Create and store a zone
      *
      * @param ZoneRequest $request List of elements used to save a zone entity.
      * @return JsonResponse
@@ -71,7 +74,7 @@ class ZoneController extends Controller
     }
 
     /**
-     * Update the specified resource entity.
+     * Update the specified zone
      *
      * @param ZoneRequest $request
      * @param int $id
@@ -89,7 +92,7 @@ class ZoneController extends Controller
     }
 
     /**
-     * Remove the specified resource entity.
+     * Delete the specified zone.
      *
      * @param int $id
      * @return JsonResponse
