@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Database\Seeder;
@@ -16,8 +17,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $zone = Zone::factory()->create();
-        
-        User::query()->create([
+        $user = User::query()->create([
             'id' => 1,
             'first_name' => 'users 1',
             'last_name' => 'last name 1',
@@ -29,6 +29,13 @@ class UserSeeder extends Seeder
             'zone_id' => $zone->id,
             'active' => 1,
             'verified' => 1,
+            'email_verified_at' => Carbon::now(),
+            'activated_at' => Carbon::now(),
+            'verified_at' => Carbon::now(),
         ]);
+
+        // Attribuer le rôle par défaut (par exemple, 'admin') à l'utilisateur
+        $adminRole = Role::where('name', 'admin')->first();
+        $user->assignRole($adminRole);
     }
 }
