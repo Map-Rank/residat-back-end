@@ -26,13 +26,13 @@ endpoints:
         name: name
         description: ''
         required: false
-        example: labore
+        example: nulla
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: labore
+      name: nulla
     fileParameters: []
     responses:
       -
@@ -73,13 +73,13 @@ endpoints:
         name: id
         description: 'The ID of the sector.'
         required: true
-        example: 10
+        example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 10
+      id: 17
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

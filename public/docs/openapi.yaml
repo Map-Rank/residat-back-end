@@ -54,7 +54,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the verify email.'
-        example: magni
+        example: cum
         required: true
         schema:
           type: string
@@ -62,7 +62,7 @@ paths:
         in: path
         name: hash
         description: ''
-        example: a
+        example: nulla
         required: true
         schema:
           type: string
@@ -95,15 +95,15 @@ paths:
                 token:
                   type: string
                   description: ''
-                  example: eveniet
+                  example: perspiciatis
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: magnus19@example.org
+                  example: qrutherford@example.net
                 password:
                   type: string
                   description: ''
-                  example: similique
+                  example: sunt
               required:
                 - token
                 - email
@@ -128,11 +128,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: minnie.weber@example.org
+                  example: llewellyn83@example.net
                 password:
                   type: string
                   description: ''
-                  example: '}8DA4^8wY|@b>"vwJ'
+                  example: 'a[aC#g1xKRz~@qvUX~&Q'
               required:
                 - email
                 - password
@@ -156,23 +156,23 @@ paths:
                 first_name:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: rpsbjxapxk
+                  example: qz
                 last_name:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: ptvjltxstjqmzyvfdycixdga
+                  example: uvmpbsuddgqrypxu
                 email:
                   type: string
                   description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: dickinson.dario@example.net
+                  example: allen08@example.org
                 phone:
                   type: string
                   description: 'Must not be greater than 20 characters.'
-                  example: bqyjuncaglgway
+                  example: sn
                 date_of_birth:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2023-12-04T08:02:57'
+                  example: '2023-12-08T09:16:44'
                 avatar:
                   type: string
                   format: binary
@@ -180,18 +180,18 @@ paths:
                 password:
                   type: string
                   description: 'Must be at least 6 characters.'
-                  example: "'Q5{`2*!W(>e6'*SU*"
+                  example: "'uD?${<G^Tv0+*'?"
                 gender:
                   type: string
                   description: ''
-                  example: male
+                  example: female
                   enum:
                     - male
                     - female
                 zone_id:
                   type: string
                   description: ''
-                  example: deserunt
+                  example: laudantium
               required:
                 - first_name
                 - last_name
@@ -220,7 +220,7 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: padberg.ofelia@example.net
+                  example: uwunsch@example.com
               required:
                 - email
       security: []
@@ -255,19 +255,19 @@ paths:
                 page:
                   type: number
                   description: ''
-                  example: 132406560.0
+                  example: 42809.35
                 size:
                   type: number
                   description: ''
-                  example: 295419688.3
+                  example: 112163.6950146
                 zone_id:
                   type: integer
                   description: ''
-                  example: 17
+                  example: 10
                 sectors:
                   type: string
                   description: ''
-                  example: nulla
+                  example: ipsam
       security: []
   /api/create:
     post:
@@ -292,7 +292,7 @@ paths:
                 published_at:
                   type: string
                   description: 'date publication of post. Must be a valid date.'
-                  example: 2023-12-04T08:02:57.827520+00:00
+                  example: 2023-12-08T09:16:44.296811+00:00
                 zone_id:
                   type: string
                   description: 'id of concern zone of post.'
@@ -329,7 +329,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the show.'
-        example: dolores
+        example: pariatur
         required: true
         schema:
           type: string
@@ -356,7 +356,7 @@ paths:
                 published_at:
                   type: string
                   description: 'date publication of post. Must be a valid date.'
-                  example: 2023-12-04T08:02:57.836346+00:00
+                  example: 2023-12-08T09:16:44.303517+00:00
                 zone_id:
                   type: string
                   description: 'id of concern zone of post.'
@@ -371,7 +371,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the update.'
-        example: quas
+        example: corporis
         required: true
         schema:
           type: string
@@ -390,7 +390,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the delete.'
-        example: alias
+        example: quidem
         required: true
         schema:
           type: string
@@ -409,7 +409,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the like.'
-        example: assumenda
+        example: optio
         required: true
         schema:
           type: string
@@ -432,7 +432,7 @@ paths:
                 text:
                   type: string
                   description: ''
-                  example: expedita
+                  example: aperiam
               required:
                 - text
       security: []
@@ -441,7 +441,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the comment.'
-        example: occaecati
+        example: molestias
         required: true
         schema:
           type: string
@@ -460,7 +460,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the share.'
-        example: est
+        example: earum
         required: true
         schema:
           type: string
@@ -503,7 +503,7 @@ paths:
                 name:
                   type: string
                   description: ''
-                  example: labore
+                  example: nulla
       security: []
   '/api/sector/{id}':
     get:
@@ -540,7 +540,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the sector.'
-        example: 10
+        example: 17
         required: true
         schema:
           type: integer
@@ -559,11 +559,7 @@ paths:
                 type: object
                 example:
                   status: true
-                  data:
-                    -
-                      id: 1
-                      name: consectetur
-                      created_at: '2023-11-30T08:59:36.000000Z'
+                  data: []
                   message: 'Values found'
                 properties:
                   status:
@@ -571,23 +567,7 @@ paths:
                     example: true
                   data:
                     type: array
-                    example:
-                      -
-                        id: 1
-                        name: consectetur
-                        created_at: '2023-11-30T08:59:36.000000Z'
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 1
-                        name:
-                          type: string
-                          example: consectetur
-                        created_at:
-                          type: string
-                          example: '2023-11-30T08:59:36.000000Z'
+                    example: []
                   message:
                     type: string
                     example: 'Values found'
@@ -603,7 +583,7 @@ paths:
                 name:
                   type: string
                   description: ''
-                  example: et
+                  example: architecto
       security: []
   '/api/zone/{id}':
     get:
@@ -622,8 +602,8 @@ paths:
                   status: true
                   data:
                     id: 1
-                    name: consectetur
-                    created_at: '2023-11-30T08:59:36.000000Z'
+                    name: quas
+                    created_at: '2023-12-06T09:52:43.000000Z'
                   message: ''
                 properties:
                   status:
@@ -637,10 +617,10 @@ paths:
                         example: 1
                       name:
                         type: string
-                        example: consectetur
+                        example: quas
                       created_at:
                         type: string
-                        example: '2023-11-30T08:59:36.000000Z'
+                        example: '2023-12-06T09:52:43.000000Z'
                   message:
                     type: string
                     example: ''

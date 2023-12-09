@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,10 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
-    Route::get('permissions', [UserController::class, 'permissions'])->name('permissions.index');
+    Route::get('roles', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
+    Route::get('permissions', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
+    Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
+    Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
 
 
