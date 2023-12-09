@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserRequest extends FormRequest
 {
@@ -45,5 +48,56 @@ class UserRequest extends FormRequest
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'exists:zones,id',
         ];
+    }
+
+    public function bodyParameters()
+    {
+        return [
+            'first_name' => [
+                'description' => 'first Name',
+                'example' => 'Joe'
+            ],
+            'last_name' => [
+                'description' => 'last name',
+                'example' => 'Bernard'
+            ],
+            'email' => [
+                'description' => 'email',
+                'example' => 'tests@example.com'
+            ],
+            'phone' => [
+                'description' => 'phone number',
+                'example' => '002376698803159'
+            ],
+            'date_of_birth' => [
+                'description' => 'date of birth',
+                'example' => Carbon::now()
+            ],
+            'avatar' => [
+                'description' => 'profil picture',
+                'example' => 'image.jpg'
+            ],
+            'password' => [
+                'description' => 'password',
+                'example' => 'password!'
+            ],
+            'gender' => [
+                'description' => 'gender',
+                'example' => 'Male'
+            ],
+            'zone_id' => [
+                'description' => 'id of zone',
+                'example' => 1
+            ]
+            
+        ];
+    }
+
+    /**
+     * @param Validator $validator
+     */
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->errors($validator->errors(), 'Validation errors', 422));
     }
 }

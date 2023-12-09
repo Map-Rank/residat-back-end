@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\User\UserCreate;
 use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
 
 /**
@@ -22,7 +23,7 @@ class AuthController extends Controller
 {
 
     /**
-     * Manages user registration.
+     * Register users
      *
      * @param RegisterRequest $request
      * @return JsonResponse
@@ -31,6 +32,13 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->all());
+
+        // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
+        $defaultRole = Role::where('name', 'default')->first();
+        
+        if ($defaultRole) {
+            $user->assignRole($defaultRole);
+        }
 
         $token = $user->createToken('authtoken');
 
@@ -41,7 +49,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handles the user's login attempt.
+     * Login users
      *
      * @param LoginRequest $request
      * @return JsonResponse
@@ -72,7 +80,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Logs out the user
+     * Logout users
      *
      * @return JsonResponse
      */

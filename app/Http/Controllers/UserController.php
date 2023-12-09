@@ -17,11 +17,6 @@ class UserController extends Controller
         return view('users.index', ['users' => $users]);
     }
 
-    public function permissions()
-    {
-        return view('permissions.index');
-    }
-
     /**
      * Show the form for creating a new resource.
      */
