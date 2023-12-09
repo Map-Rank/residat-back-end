@@ -90,7 +90,7 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'create');
+        $typeInteraction =  TypeInteraction::query()->firstWhere('name', 'created');
 
         if($typeInteraction == null){
             return response()->errors([], __('Project configuration error'), 500);
