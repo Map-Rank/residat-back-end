@@ -50,7 +50,7 @@
                             <img src="{{ $user->avatar }}" alt="{{ $user->email }}" style="width: 50px; height: 50px; border-radius: 50%;">
                         </td> --}}
                             <td>{{ $user->gender }}</td>
-                            <td>{{ $user->zone_id }}</td>
+                            <td>{{ $user->zone->name }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
@@ -62,9 +62,11 @@
                                         </svg>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#">Info</a>
+                                        <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#bannedModal-{{$user->id}}" data-coreui-whatever="@mdo">Bannish</a>
+                                        <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
+                                        {{-- <a class="dropdown-item" href="#" >Info</a>
                                         <a class="dropdown-item" href="#">Edit</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a> --}}
                                     </div>
                                 </div>
                             </td>
@@ -93,6 +95,7 @@
             </div>
         </div>
     </div>
+    <!-- Modal add user -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -122,5 +125,78 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
+    <!-- Modal End -->
+
+    <!-- Modal ban user -->
+    @foreach ($users as $user)
+        <div class="modal fade" id="bannedModal-{{$user->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
+                        Ban a user
+                    </h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{route('ban.user',$user->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <h3>
+                                Do you want to ban this user?
+                            </h3>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
+                            </p>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
+    <!-- Modal end -->
+
+    <!-- Modal active user -->
+    @foreach ($users as $user)
+        <div class="modal fade" id="activateModal-{{$user->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
+                        Activate a user
+                    </h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{route('active.user',$user->id)}}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <h3>
+                                Do you want to activate this user?
+                            </h3>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
+                            </p>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
+    <!-- Modal end -->
 @endsection

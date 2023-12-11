@@ -33,6 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
 
+    //ban user
+    Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');
+    //active user
+    Route::post('/users/{id}/active', [UserController::class, 'activeUser'])->name('active.user');
+
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
