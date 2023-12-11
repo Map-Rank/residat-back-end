@@ -47,7 +47,7 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias')->select('id', 'content', 'published_at', 'zone_id', 'sector_id');
+        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias');
 
         if(Auth::user() != null){
             $zone =  Auth::user()->loadMissing('zone.children')->zone;
