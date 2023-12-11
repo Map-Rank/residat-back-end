@@ -19,6 +19,7 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this['id'],
+            'content' => $this['content'],
             'text' => $this['text'],
             'images' => ImageResource::collection($this->whenLoaded('medias')),
             'creator' => UserResource::make($this->whenLoaded('creator')->first()),
