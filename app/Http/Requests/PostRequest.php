@@ -28,6 +28,7 @@ class PostRequest extends FormRequest
             'content' => 'required',
             'published_at' => 'required|date',
             'zone_id' => 'required|exists:zones,id',
+            'media' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3', // Ajoute la règle pour le media
         ];
     }
 
@@ -57,6 +58,10 @@ class PostRequest extends FormRequest
             'sector_id' => [
                 'description' => 'Sector of post',
                 'example' => 1
+            ],
+            'media' => [
+                'description' => 'Images of the post (jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3)',
+                'example' => 'path/image.jpg'
             ],
             
         ];
