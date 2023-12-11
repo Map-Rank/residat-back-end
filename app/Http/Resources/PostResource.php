@@ -29,6 +29,9 @@ class PostResource extends JsonResource
             'share_count' => $this->shares()->count(),
             'published_at' => $this['published_at'],
             'created_at' => $this['created_at'],
+            'like' => $this->likes,
+            'comment' => $this->comments,
+            'share' => $this->shares,
         ];
     }
 }
