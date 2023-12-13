@@ -52,7 +52,8 @@ class Post extends Model
 
     public function comments(){
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
-            ->wherePivot('type_interaction_id', 3);
+            ->wherePivot('type_interaction_id', 3)
+            ->withPivotValue('text', 'id');
     }
 
     public function shares(){
