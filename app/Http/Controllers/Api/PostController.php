@@ -116,6 +116,12 @@ class PostController extends Controller
             $post->medias()->createMany($mediaPaths);
         }
 
+        // Récupérer les secteurs à partir de la requête
+        $sectors = $request->input('sectors', []);
+
+        // Attacher les secteurs au post nouvellement créé
+        $post->sectors()->attach($sectors);
+
         $post->users()->attach($request->user(), ['type_interaction_id'=> $typeInteraction->id]);
 
         if(!$post->save()){
