@@ -47,7 +47,7 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias');
+        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias', 'postComments');
 
         if(Auth::user() != null){
             $zone =  Auth::user()->loadMissing('zone.children')->zone;
@@ -145,7 +145,7 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        return response()->success($post, __('Post retrieved successfully'), 200);
+        return response()->success($post->loadMissing('postComments', 'creator'), __('Post retrieved successfully'), 200);
     }
 
     /**
@@ -159,7 +159,7 @@ class PostController extends Controller
             return response()->errors([], __('Project configuration error'), 500);
         }
 
-        $post = Post::with('creator')->find($id);
+        $post = Post::with('creator', 'postComments')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
@@ -261,7 +261,7 @@ class PostController extends Controller
 
         $post->users()->attach(auth()->user(), ['type_interaction_id'=> 3, 'text' => $validated['text']]);
 
-        return response()->success(PostResource::make($post), __('Comment added successfully'), 200);
+        return response()->success(PostResource::make($post->loadMissing('postComments')), __('Comment added successfully'), 200);
     }
 
     /**
