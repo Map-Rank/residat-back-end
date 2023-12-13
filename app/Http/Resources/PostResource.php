@@ -30,8 +30,7 @@ class PostResource extends JsonResource
             'published_at' => $this['published_at'],
             'created_at' => $this['created_at'],
             'likes' => $this->likes,
-            // 'comments' => CommentResource::collection($this->whenLoaded('comments')),
-            'comments' => $this->comments,
+            'comments' => CommentResource::collection($this->whenLoaded('postComments')),
             'shares' => $this->shares,
             'sectors' => $this->sectors,
 

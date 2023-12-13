@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App/Models/Post
@@ -56,6 +57,11 @@ class Post extends Model
             ->withPivotValue('text', 'id');
     }
 
+    public function postComments() : HasMany {
+        return $this->hasMany(Interaction::class, 'post_id')
+            ->where('type_interaction_id', 3)
+            ->with('user');
+    }
     public function shares(){
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 4);
