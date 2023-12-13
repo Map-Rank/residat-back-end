@@ -16,21 +16,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([
-        //     RoleSeeder::class,
-        // ]);
+        $this->call([
+            RoleSeeder::class,
+        ]);
 
-        // $this->call([
-        //     PermissionSeeder::class,
-        // ]);
+        $this->call([
+            PermissionSeeder::class,
+        ]);
 
-        // $this->call([
-        //     UserSeeder::class,
-        // ]);
+        $this->call([
+            UserSeeder::class,
+        ]);
 
-        // $this->call([
-        //     TypeInteractionSeeder::class,
-        // ]);
+        $this->call([
+            TypeInteractionSeeder::class,
+        ]);
 
          $this->call([
             SectorSeeder::class,
