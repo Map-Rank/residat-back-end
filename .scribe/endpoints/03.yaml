@@ -26,13 +26,13 @@ endpoints:
         name: name
         description: ''
         required: false
-        example: nulla
+        example: repellendus
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: nulla
+      name: repellendus
     fileParameters: []
     responses:
       -
@@ -73,13 +73,13 @@ endpoints:
         name: id
         description: 'The ID of the sector.'
         required: true
-        example: 17
+        example: 1
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: 17
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -87,8 +87,8 @@ endpoints:
     fileParameters: []
     responses:
       -
-        status: 404
-        content: '{"status":false,"errors":[],"message":"Zone not found"}'
+        status: 200
+        content: '{"status":true,"data":{"id":1,"name":"Centre","post_count":0,"created_at":"2023-12-13T12:40:30.000000Z"},"message":""}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "d9607b1c-028d-4d50-b346-b6ffa9532a66",
+        "_postman_id": "af49e8a7-41ba-458d-97f0-4ee996d7c52f",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -87,13 +87,13 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "cum",
+                                    "value": "ut",
                                     "description": "The ID of the verify email."
                                 },
                                 {
                                     "id": "hash",
                                     "key": "hash",
-                                    "value": "nulla",
+                                    "value": "consequuntur",
                                     "description": ""
                                 }
                             ]
@@ -187,7 +187,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"token\":\"perspiciatis\",\"email\":\"qrutherford@example.net\",\"password\":\"sunt\"}"
+                            "raw": "{\"token\":\"numquam\",\"email\":\"jasen.ullrich@example.net\",\"password\":\"id\"}"
                         },
                         "description": "",
                         "auth": {
@@ -218,7 +218,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"llewellyn83@example.net\",\"password\":\"a[aC#g1xKRz~@qvUX~&Q\"}"
+                            "raw": "{\"email\":\"adrienne31@example.com\",\"password\":\",bvk,|fjjsN,z\"}"
                         },
                         "description": "",
                         "auth": {
@@ -252,49 +252,49 @@
                             "formdata": [
                                 {
                                     "key": "first_name",
-                                    "value": "qz",
+                                    "value": "iurjbborcwcfpnz",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "last_name",
-                                    "value": "uvmpbsuddgqrypxu",
+                                    "value": "xpvwyinovzuqelmozqypdjj",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "email",
-                                    "value": "allen08@example.org",
+                                    "value": "owill@example.org",
                                     "type": "text",
                                     "description": "Must be a valid email address. Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "phone",
-                                    "value": "sn",
+                                    "value": "wgetodmetyjmixxpinri",
                                     "type": "text",
                                     "description": "Must not be greater than 20 characters."
                                 },
                                 {
                                     "key": "date_of_birth",
-                                    "value": "2023-12-08T09:16:44",
+                                    "value": "2023-12-13T12:41:05",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
                                 {
                                     "key": "password",
-                                    "value": "'uD?${<G^Tv0+*'?",
+                                    "value": "^r^k#yI=]0<FpD",
                                     "type": "text",
                                     "description": "Must be at least 6 characters."
                                 },
                                 {
                                     "key": "gender",
-                                    "value": "female",
+                                    "value": "male",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "zone_id",
-                                    "value": "laudantium",
+                                    "value": "voluptatem",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -334,7 +334,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"uwunsch@example.com\"}"
+                            "raw": "{\"email\":\"reinger.hassie@example.net\"}"
                         },
                         "description": "",
                         "auth": {
@@ -371,7 +371,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"page\":42809.35,\"size\":112163.6950146,\"zone_id\":10,\"sectors\":\"ipsam\"}"
+                            "raw": "{\"page\":12.9324554,\"size\":1984,\"zone_id\":14,\"sectors\":\"qui\"}"
                         },
                         "description": "",
                         "auth": {
@@ -422,7 +422,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-08T09:16:44.296811Z\",\"zone_id\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-13T12:41:05.230958Z\",\"zone_id\":1,\"media\":[\"ihbjjt\"],\"sectors\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -443,7 +443,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "pariatur",
+                                    "value": "aperiam",
                                     "description": "The ID of the show."
                                 }
                             ]
@@ -499,7 +499,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "corporis",
+                                    "value": "dignissimos",
                                     "description": "The ID of the update."
                                 }
                             ]
@@ -517,7 +517,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-08T09:16:44.303517Z\",\"zone_id\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-13T12:41:05.249591Z\",\"zone_id\":1,\"media\":[\"gtgnxncaxclqlsbuyqtehax\"],\"sectors\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -538,7 +538,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "quidem",
+                                    "value": "eos",
                                     "description": "The ID of the delete."
                                 }
                             ]
@@ -574,7 +574,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "optio",
+                                    "value": "in",
                                     "description": "The ID of the like."
                                 }
                             ]
@@ -610,7 +610,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "molestias",
+                                    "value": "et",
                                     "description": "The ID of the comment."
                                 }
                             ]
@@ -628,7 +628,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"text\":\"aperiam\"}"
+                            "raw": "{\"text\":\"eveniet\"}"
                         },
                         "description": "",
                         "auth": {
@@ -649,7 +649,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "earum",
+                                    "value": "accusamus",
                                     "description": "The ID of the share."
                                 }
                             ]
@@ -701,7 +701,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"nulla\"}"
+                            "raw": "{\"name\":\"repellendus\"}"
                         },
                         "description": "",
                         "auth": {
@@ -750,7 +750,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "1",
                                     "description": "The ID of the sector."
                                 }
                             ]
@@ -796,8 +796,8 @@
                                     "value": "*"
                                 }
                             ],
-                            "code": 404,
-                            "body": "{\"status\":false,\"errors\":[],\"message\":\"Zone not found\"}",
+                            "code": 200,
+                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"Centre\",\"post_count\":0,\"created_at\":\"2023-12-13T12:40:30.000000Z\"},\"message\":\"\"}",
                             "name": ""
                         }
                     ]
@@ -830,7 +830,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"architecto\"}"
+                            "raw": "{\"name\":\"eaque\"}"
                         },
                         "description": "",
                         "auth": {
@@ -926,7 +926,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"quas\",\"created_at\":\"2023-12-06T09:52:43.000000Z\"},\"message\":\"\"}",
+                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"aut\",\"created_at\":\"2023-12-09T09:14:01.000000Z\"},\"message\":\"\"}",
                             "name": ""
                         }
                     ]

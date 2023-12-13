@@ -32,6 +32,8 @@ class PostResource extends JsonResource
             'likes' => $this->likes,
             'comments' => $this->comments,
             'shares' => $this->shares,
+            'sectors' => $this->sectors,
+            
         ];
     }
 }
