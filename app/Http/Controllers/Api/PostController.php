@@ -106,7 +106,7 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media');
+                $mediaPath = $mediaFile->store('media/'.auth()->user()->email);
                 $mediaPaths[] = [
                     'url' => Storage::url($mediaPath),
                     'type' => $mediaFile->getClientMimeType(),
