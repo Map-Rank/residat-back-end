@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comment/{id}', [PostController::class, 'comment']);
     Route::post('/share/{id}', [PostController::class, 'share']);
 
-    
+    Route::get('/profile', [PostController::class, 'profile']);
 });
 
 

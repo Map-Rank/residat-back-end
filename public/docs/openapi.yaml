@@ -54,7 +54,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the verify email.'
-        example: ut
+        example: sed
         required: true
         schema:
           type: string
@@ -62,7 +62,7 @@ paths:
         in: path
         name: hash
         description: ''
-        example: consequuntur
+        example: sint
         required: true
         schema:
           type: string
@@ -95,15 +95,15 @@ paths:
                 token:
                   type: string
                   description: ''
-                  example: numquam
+                  example: dolorem
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: jasen.ullrich@example.net
+                  example: hgoldner@example.org
                 password:
                   type: string
                   description: ''
-                  example: id
+                  example: vel
               required:
                 - token
                 - email
@@ -128,11 +128,11 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: adrienne31@example.com
+                  example: lucious04@example.net
                 password:
                   type: string
                   description: ''
-                  example: ',bvk,|fjjsN,z'
+                  example: 'p4>o^#('
               required:
                 - email
                 - password
@@ -156,23 +156,23 @@ paths:
                 first_name:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: iurjbborcwcfpnz
+                  example: ku
                 last_name:
                   type: string
                   description: 'Must not be greater than 255 characters.'
-                  example: xpvwyinovzuqelmozqypdjj
+                  example: caegpdayznjbadt
                 email:
                   type: string
                   description: 'Must be a valid email address. Must not be greater than 255 characters.'
-                  example: owill@example.org
+                  example: dakota.ferry@example.net
                 phone:
                   type: string
                   description: 'Must not be greater than 20 characters.'
-                  example: wgetodmetyjmixxpinri
+                  example: c
                 date_of_birth:
                   type: string
                   description: 'Must be a valid date.'
-                  example: '2023-12-13T12:41:05'
+                  example: '2023-12-15T09:20:34'
                 avatar:
                   type: string
                   format: binary
@@ -180,18 +180,18 @@ paths:
                 password:
                   type: string
                   description: 'Must be at least 6 characters.'
-                  example: '^r^k#yI=]0<FpD'
+                  example: '>B?+<I:Y)n#_&*'
                 gender:
                   type: string
                   description: ''
-                  example: male
+                  example: female
                   enum:
                     - male
                     - female
                 zone_id:
                   type: string
                   description: ''
-                  example: voluptatem
+                  example: debitis
               required:
                 - first_name
                 - last_name
@@ -220,7 +220,7 @@ paths:
                 email:
                   type: string
                   description: 'Must be a valid email address.'
-                  example: reinger.hassie@example.net
+                  example: annetta27@example.com
               required:
                 - email
       security: []
@@ -255,19 +255,19 @@ paths:
                 page:
                   type: number
                   description: ''
-                  example: 12.9324554
+                  example: 1.0
                 size:
                   type: number
                   description: ''
-                  example: 1984.0
+                  example: 1.92637
                 zone_id:
                   type: integer
                   description: ''
-                  example: 14
+                  example: 20
                 sectors:
                   type: string
                   description: ''
-                  example: qui
+                  example: quisquam
       security: []
   /api/create:
     post:
@@ -292,7 +292,7 @@ paths:
                 published_at:
                   type: string
                   description: 'date publication of post. Must be a valid date.'
-                  example: 2023-12-13T12:41:05.230958+00:00
+                  example: 2023-12-15T09:20:33.995846+00:00
                 zone_id:
                   type: string
                   description: 'id of concern zone of post.'
@@ -301,7 +301,7 @@ paths:
                   type: array
                   description: 'Must not be greater than 2048 characters.'
                   example:
-                    - ihbjjt
+                    - zbegtaifnsf
                   items:
                     type: string
                 sectors:
@@ -340,7 +340,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the show.'
-        example: aperiam
+        example: rerum
         required: true
         schema:
           type: string
@@ -367,7 +367,7 @@ paths:
                 published_at:
                   type: string
                   description: 'date publication of post. Must be a valid date.'
-                  example: 2023-12-13T12:41:05.249591+00:00
+                  example: 2023-12-15T09:20:34.004143+00:00
                 zone_id:
                   type: string
                   description: 'id of concern zone of post.'
@@ -376,7 +376,7 @@ paths:
                   type: array
                   description: 'Must not be greater than 2048 characters.'
                   example:
-                    - gtgnxncaxclqlsbuyqtehax
+                    - ottweehyfaxzchunmmnmpgnlr
                   items:
                     type: string
                 sectors:
@@ -393,7 +393,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the update.'
-        example: dignissimos
+        example: voluptatem
         required: true
         schema:
           type: string
@@ -412,7 +412,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the delete.'
-        example: eos
+        example: ipsa
         required: true
         schema:
           type: string
@@ -431,7 +431,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the like.'
-        example: in
+        example: et
         required: true
         schema:
           type: string
@@ -454,7 +454,7 @@ paths:
                 text:
                   type: string
                   description: ''
-                  example: eveniet
+                  example: magni
               required:
                 - text
       security: []
@@ -463,7 +463,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the comment.'
-        example: et
+        example: aut
         required: true
         schema:
           type: string
@@ -486,6 +486,28 @@ paths:
         required: true
         schema:
           type: string
+  /api/profile:
+    get:
+      summary: 'Get user profile information including posts.'
+      operationId: getUserProfileInformationIncludingPosts
+      description: ''
+      parameters: []
+      responses:
+        401:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Unauthenticated.
+                properties:
+                  message:
+                    type: string
+                    example: Unauthenticated.
+      tags:
+        - 'Module Posts'
+      security: []
   /api/sector:
     get:
       summary: 'Get all sector'
@@ -525,7 +547,7 @@ paths:
                 name:
                   type: string
                   description: ''
-                  example: repellendus
+                  example: qui
       security: []
   '/api/sector/{id}':
     get:
@@ -544,9 +566,9 @@ paths:
                   status: true
                   data:
                     id: 1
-                    name: Centre
+                    name: Agriculture
                     post_count: 0
-                    created_at: '2023-12-13T12:40:30.000000Z'
+                    created_at: '2023-12-14T15:30:51.000000Z'
                   message: ''
                 properties:
                   status:
@@ -560,13 +582,13 @@ paths:
                         example: 1
                       name:
                         type: string
-                        example: Centre
+                        example: Agriculture
                       post_count:
                         type: integer
                         example: 0
                       created_at:
                         type: string
-                        example: '2023-12-13T12:40:30.000000Z'
+                        example: '2023-12-14T15:30:51.000000Z'
                   message:
                     type: string
                     example: ''
@@ -621,7 +643,7 @@ paths:
                 name:
                   type: string
                   description: ''
-                  example: eaque
+                  example: voluptate
       security: []
   '/api/zone/{id}':
     get:
@@ -640,8 +662,8 @@ paths:
                   status: true
                   data:
                     id: 1
-                    name: aut
-                    created_at: '2023-12-09T09:14:01.000000Z'
+                    name: et
+                    created_at: '2023-12-14T15:30:51.000000Z'
                   message: ''
                 properties:
                   status:
@@ -655,10 +677,10 @@ paths:
                         example: 1
                       name:
                         type: string
-                        example: aut
+                        example: et
                       created_at:
                         type: string
-                        example: '2023-12-09T09:14:01.000000Z'
+                        example: '2023-12-14T15:30:51.000000Z'
                   message:
                     type: string
                     example: ''

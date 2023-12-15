@@ -12,6 +12,7 @@ use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostResource;
 use App\Models\TypeInteraction;
+use App\Models\User;
 use App\Service\UtilService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -279,4 +280,16 @@ class PostController extends Controller
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }
+
+    /**
+     * Get user profile information including posts.
+     */
+    public function profile(Request $request): JsonResponse
+    {
+        $user = $request->user()->myPosts;
+
+        return response()->success($user, __('User profile retrieved successfully'), 200);
+    }
+
+
 }
