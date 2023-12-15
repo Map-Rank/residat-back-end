@@ -39,7 +39,7 @@ class PostFactory extends Factory
      */
     public function creator(): PostFactory
     {
-        $user = User::factory()->create($this->dataLogin());
+        $user = User::first();
         
         return $this->afterCreating(function (Post $post) use ($user) {
             // Créez une interaction de type 'creator' pour l'utilisateur actuellement authentifié
@@ -51,25 +51,6 @@ class PostFactory extends Factory
 
             $post->interactions()->save($interaction);
         });
-    }
-
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
-
-    //     $this->seed();
-    //     Sanctum::actingAs(
-    //         User::factory()->create($this->dataLogin())
-    //     );
-    // }
-
-    private static function dataLogin()
-    {
-        return [
-            'email' => 'simpleusers7@user.com',
-            'password' => bcrypt('password'),
-            'email_verified_at' => now(),
-        ];
     }
 
 }
