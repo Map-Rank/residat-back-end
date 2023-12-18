@@ -28,7 +28,7 @@ endpoints:
         name: page
         description: ''
         required: false
-        example: 12.9324554
+        example: 1.0
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -37,7 +37,7 @@ endpoints:
         name: size
         description: ''
         required: false
-        example: 1984.0
+        example: 1.92637
         type: number
         enumValues: []
         exampleWasSpecified: false
@@ -46,7 +46,7 @@ endpoints:
         name: zone_id
         description: ''
         required: false
-        example: 14
+        example: 20
         type: integer
         enumValues: []
         exampleWasSpecified: false
@@ -55,16 +55,16 @@ endpoints:
         name: sectors
         description: ''
         required: false
-        example: qui
+        example: quisquam
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      page: 12.9324554
-      size: 1984.0
-      zone_id: 14
-      sectors: qui
+      page: 1.0
+      size: 1.92637
+      zone_id: 20
+      sectors: quisquam
     fileParameters: []
     responses:
       -
@@ -116,7 +116,7 @@ endpoints:
         name: published_at
         description: 'date publication of post. Must be a valid date.'
         required: true
-        example: 2023-12-13T12:41:05.230958+00:00
+        example: 2023-12-15T09:20:33.995846+00:00
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -135,7 +135,7 @@ endpoints:
         description: 'Must not be greater than 2048 characters.'
         required: false
         example:
-          - ihbjjt
+          - zbegtaifnsf
         type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
@@ -151,10 +151,10 @@ endpoints:
         custom: []
     cleanBodyParameters:
       content: 'New Post'
-      published_at: 2023-12-13T12:41:05.230958+00:00
+      published_at: 2023-12-15T09:20:33.995846+00:00
       zone_id: 1
       media:
-        - ihbjjt
+        - zbegtaifnsf
       sectors: 1
     fileParameters: []
     responses: []
@@ -185,13 +185,13 @@ endpoints:
         name: id
         description: 'The ID of the show.'
         required: true
-        example: aperiam
+        example: rerum
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: aperiam
+      id: rerum
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -234,13 +234,13 @@ endpoints:
         name: id
         description: 'The ID of the update.'
         required: true
-        example: dignissimos
+        example: voluptatem
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: dignissimos
+      id: voluptatem
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -257,7 +257,7 @@ endpoints:
         name: published_at
         description: 'date publication of post. Must be a valid date.'
         required: true
-        example: 2023-12-13T12:41:05.249591+00:00
+        example: 2023-12-15T09:20:34.004143+00:00
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -276,7 +276,7 @@ endpoints:
         description: 'Must not be greater than 2048 characters.'
         required: false
         example:
-          - gtgnxncaxclqlsbuyqtehax
+          - ottweehyfaxzchunmmnmpgnlr
         type: 'string[]'
         enumValues: []
         exampleWasSpecified: false
@@ -292,10 +292,10 @@ endpoints:
         custom: []
     cleanBodyParameters:
       content: 'New Post'
-      published_at: 2023-12-13T12:41:05.249591+00:00
+      published_at: 2023-12-15T09:20:34.004143+00:00
       zone_id: 1
       media:
-        - gtgnxncaxclqlsbuyqtehax
+        - ottweehyfaxzchunmmnmpgnlr
       sectors: 1
     fileParameters: []
     responses: []
@@ -326,13 +326,13 @@ endpoints:
         name: id
         description: 'The ID of the delete.'
         required: true
-        example: eos
+        example: ipsa
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: eos
+      id: ipsa
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -366,13 +366,13 @@ endpoints:
         name: id
         description: 'The ID of the like.'
         required: true
-        example: in
+        example: et
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: in
+      id: et
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -406,13 +406,13 @@ endpoints:
         name: id
         description: 'The ID of the comment.'
         required: true
-        example: et
+        example: aut
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanUrlParameters:
-      id: et
+      id: aut
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -420,13 +420,13 @@ endpoints:
         name: text
         description: ''
         required: true
-        example: eveniet
+        example: magni
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      text: eveniet
+      text: magni
     fileParameters: []
     responses: []
     responseFields: []
@@ -469,6 +469,45 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/profile
+    metadata:
+      groupName: 'Module Posts'
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get user profile information including posts.'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+        custom: []
     responseFields: []
     auth: []
     controller: null

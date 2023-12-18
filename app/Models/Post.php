@@ -25,7 +25,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['content', 'published_at', 'zone_id', 'sector_id'];
+    protected $fillable = ['content', 'published_at', 'zone_id', 'sector_id', 'active'];
 
     public function zone()
     {

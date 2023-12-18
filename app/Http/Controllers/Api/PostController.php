@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InteractionResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserFullResource;
 use App\Models\TypeInteraction;
+use App\Models\User;
 use App\Service\UtilService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -208,7 +211,7 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        if($post->creator->first()->id != $request->user()->id){
+        if($post->creator->first()->id != auth()->user()->id){
             return response()->errors([], __('Unauthorized access to this resource'), 401);
         }
 
@@ -279,4 +282,7 @@ class PostController extends Controller
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }
+
+
+
 }

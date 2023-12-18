@@ -16,6 +16,7 @@ return new class extends Migration
                 $table->id();
                 $table->string('content');
                 $table->timestamp('published_at');
+                $table->boolean('active')->default(1);
                 $table->foreignId('zone_id')->references('id')->on('zones')->onDelete('cascade');
                 $table->timestamps();
                 $table->softDeletes();

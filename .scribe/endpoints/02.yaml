@@ -26,13 +26,13 @@ endpoints:
         name: name
         description: ''
         required: false
-        example: eaque
+        example: voluptate
         type: string
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      name: eaque
+      name: voluptate
     fileParameters: []
     responses:
       -
@@ -88,7 +88,7 @@ endpoints:
     responses:
       -
         status: 200
-        content: '{"status":true,"data":{"id":1,"name":"aut","created_at":"2023-12-09T09:14:01.000000Z"},"message":""}'
+        content: '{"status":true,"data":{"id":1,"name":"et","created_at":"2023-12-14T15:30:51.000000Z"},"message":""}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
