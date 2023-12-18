@@ -39,6 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/{id}/active', [UserController::class, 'activeUser'])->name('active.user');
 
 
+    Route::post('/posts/{id}/allow', [PostController::class, 'allowPost'])->name('allow.post');
+
+    // allowPost
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

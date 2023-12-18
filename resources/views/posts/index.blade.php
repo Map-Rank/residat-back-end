@@ -61,6 +61,10 @@
                                         </svg>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
+                                        {{-- <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">Active</a> --}}
+                                        <a class="dropdown-item btn {{ $post->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">
+                                            {{ $post->active ? 'Deactivate' : 'Activate' }}
+                                        </a>
                                         <a class="dropdown-item" href="#">Info</a>
                                         <a class="dropdown-item" href="#">Edit</a>
                                         <a class="dropdown-item text-danger" href="#">Delete</a>
@@ -122,4 +126,42 @@
           </div>
         </div>
       </div>
+
+    <!-- Modal active an desactive post -->
+    @foreach ($posts as $post)
+    <div class="modal fade" id="activatePostModal-{{$post->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header {{ $post->active ? 'bg-warning' : 'bg-success' }}">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
+                        {{ $post->active ? 'Deactivate' : 'Activate' }} Post
+                    </h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('allow.post', $post->id) }}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <h3>
+                                Do you want to {{ $post->active ? 'deactivate' : 'activate' }} this post?
+                            </h3>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label">{{ $post->content }}</h4>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            {{ $post->active ? 'Deactivate' : 'Activate' }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endforeach
+    <!-- Modal end -->
 @endsection
+

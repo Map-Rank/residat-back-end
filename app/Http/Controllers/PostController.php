@@ -68,4 +68,25 @@ class PostController extends Controller
     {
         //
     }
+
+    /**
+     * Allow a post
+     */
+    public function allowPost($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return redirect()->back()->with('error', 'Post not found');
+        }
+
+        // Inversez directement la valeur du booléen
+        $post->update([
+            'active' => !$post->active,
+        ]);
+
+        $message = $post->active ? 'Post activated successfully' : 'Post deactivated successfully';
+
+        return redirect()->back()->with('success', $message);
+    }
 }
