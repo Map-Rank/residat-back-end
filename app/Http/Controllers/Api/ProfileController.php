@@ -22,6 +22,9 @@ class ProfileController extends Controller
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
 
+    /**
+     * Get interactons posts.
+     */
     public function interactions(Request $request) : JsonResponse {
         $validator = Validator::make($request->all(), [
             'type_id'=> ['sometimes', 'integer', 'exists:TypeInteractions,id'],

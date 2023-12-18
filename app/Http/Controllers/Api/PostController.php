@@ -211,7 +211,7 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        if($post->creator->first()->id != $request->user()->id){
+        if($post->creator->first()->id != auth()->user()->id){
             return response()->errors([], __('Unauthorized access to this resource'), 401);
         }
 
