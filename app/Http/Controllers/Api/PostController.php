@@ -109,7 +109,7 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media/'.auth()->user()->email);
+                $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 'public');
                 $mediaPaths[] = [
                     'url' => Storage::url($mediaPath),
                     'type' => $mediaFile->getClientMimeType(),
@@ -183,7 +183,7 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media');
+                $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 'public');
                 $mediaPaths[] = [
                     'url' => Storage::url($mediaPath),
                     'type' => $mediaFile->getClientMimeType(),
