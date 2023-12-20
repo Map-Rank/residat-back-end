@@ -39,9 +39,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/users/{id}/active', [UserController::class, 'activeUser'])->name('active.user');
 
 
+
     Route::post('/posts/{id}/allow', [PostController::class, 'allowPost'])->name('allow.post');
 
-    // allowPost
+    //post detail
+    Route::post('/post/detail/{id}', [PostController::class, 'show'])->name('post.detail');
+
+    //user detail
+    Route::post('/user/detail/{id}', [UserController::class, 'show'])->name('user.detail');
 
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
