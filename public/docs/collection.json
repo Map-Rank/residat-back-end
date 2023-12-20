@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "Laravel",
-        "_postman_id": "762f72b2-43aa-4963-9044-9116a6019ec2",
+        "_postman_id": "1d24d4b6-bbbe-4048-9e13-c8e62fb00a91",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -87,13 +87,13 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "sed",
+                                    "value": "nulla",
                                     "description": "The ID of the verify email."
                                 },
                                 {
                                     "id": "hash",
                                     "key": "hash",
-                                    "value": "sint",
+                                    "value": "eum",
                                     "description": ""
                                 }
                             ]
@@ -187,7 +187,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"token\":\"dolorem\",\"email\":\"hgoldner@example.org\",\"password\":\"vel\"}"
+                            "raw": "{\"token\":\"voluptates\",\"email\":\"ursula96@example.org\",\"password\":\"consectetur\"}"
                         },
                         "description": "",
                         "auth": {
@@ -218,7 +218,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"lucious04@example.net\",\"password\":\"p4>o^#(\"}"
+                            "raw": "{\"email\":\"iwisoky@example.net\",\"password\":\"m\\\/,|!X\"}"
                         },
                         "description": "",
                         "auth": {
@@ -252,49 +252,49 @@
                             "formdata": [
                                 {
                                     "key": "first_name",
-                                    "value": "ku",
+                                    "value": "onbhaangsnoiemwjoprtqjvnv",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "last_name",
-                                    "value": "caegpdayznjbadt",
+                                    "value": "mv",
                                     "type": "text",
                                     "description": "Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "email",
-                                    "value": "dakota.ferry@example.net",
+                                    "value": "davonte.macejkovic@example.com",
                                     "type": "text",
                                     "description": "Must be a valid email address. Must not be greater than 255 characters."
                                 },
                                 {
                                     "key": "phone",
-                                    "value": "c",
+                                    "value": "nyv",
                                     "type": "text",
                                     "description": "Must not be greater than 20 characters."
                                 },
                                 {
                                     "key": "date_of_birth",
-                                    "value": "2023-12-15T09:20:34",
+                                    "value": "2023-12-20T14:45:24",
                                     "type": "text",
                                     "description": "Must be a valid date."
                                 },
                                 {
                                     "key": "password",
-                                    "value": ">B?+<I:Y)n#_&*",
+                                    "value": "pq{[nT\/3@SlE7Ok:lxPN",
                                     "type": "text",
                                     "description": "Must be at least 6 characters."
                                 },
                                 {
                                     "key": "gender",
-                                    "value": "female",
+                                    "value": "male",
                                     "type": "text",
                                     "description": ""
                                 },
                                 {
                                     "key": "zone_id",
-                                    "value": "debitis",
+                                    "value": "impedit",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -334,7 +334,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"email\":\"annetta27@example.com\"}"
+                            "raw": "{\"email\":\"zgraham@example.com\"}"
                         },
                         "description": "",
                         "auth": {
@@ -371,7 +371,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"page\":1,\"size\":1.92637,\"zone_id\":20,\"sectors\":\"quisquam\"}"
+                            "raw": "{\"page\":310605.7,\"size\":895834.468304,\"zone_id\":13,\"sectors\":\"quidem\"}"
                         },
                         "description": "",
                         "auth": {
@@ -422,7 +422,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-15T09:20:33.995846Z\",\"zone_id\":1,\"media\":[\"zbegtaifnsf\"],\"sectors\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-20T14:45:24.357331Z\",\"zone_id\":1,\"media\":[\"bzqxtiueqreclrl\"],\"sectors\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -443,7 +443,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "rerum",
+                                    "value": "qui",
                                     "description": "The ID of the show."
                                 }
                             ]
@@ -499,7 +499,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "voluptatem",
+                                    "value": "hic",
                                     "description": "The ID of the update."
                                 }
                             ]
@@ -517,7 +517,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-15T09:20:34.004143Z\",\"zone_id\":1,\"media\":[\"ottweehyfaxzchunmmnmpgnlr\"],\"sectors\":1}"
+                            "raw": "{\"content\":\"New Post\",\"published_at\":\"2023-12-20T14:45:24.386380Z\",\"zone_id\":1,\"media\":[\"u\"],\"sectors\":1}"
                         },
                         "description": "",
                         "auth": {
@@ -538,7 +538,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "ipsa",
+                                    "value": "enim",
                                     "description": "The ID of the delete."
                                 }
                             ]
@@ -574,7 +574,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "et",
+                                    "value": "voluptatem",
                                     "description": "The ID of the like."
                                 }
                             ]
@@ -610,7 +610,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "aut",
+                                    "value": "laboriosam",
                                     "description": "The ID of the comment."
                                 }
                             ]
@@ -628,7 +628,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"text\":\"magni\"}"
+                            "raw": "{\"text\":\"quod\"}"
                         },
                         "description": "",
                         "auth": {
@@ -649,7 +649,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "accusamus",
+                                    "value": "doloremque",
                                     "description": "The ID of the share."
                                 }
                             ]
@@ -672,7 +672,13 @@
                         }
                     },
                     "response": []
-                },
+                }
+            ]
+        },
+        {
+            "name": "Module Profile",
+            "description": "",
+            "item": [
                 {
                     "name": "Get user profile information including posts.",
                     "request": {
@@ -694,6 +700,57 @@
                             }
                         ],
                         "body": null,
+                        "description": "",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [
+                                {
+                                    "key": "cache-control",
+                                    "value": "no-cache, private"
+                                },
+                                {
+                                    "key": "content-type",
+                                    "value": "application\/json"
+                                },
+                                {
+                                    "key": "access-control-allow-origin",
+                                    "value": "*"
+                                }
+                            ],
+                            "code": 401,
+                            "body": "{\"message\":\"Unauthenticated.\"}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Get interactons posts.",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/profile-interaction",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/profile-interaction"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"type_id\":7}"
+                        },
                         "description": "",
                         "auth": {
                             "type": "noauth"
@@ -749,7 +806,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"qui\"}"
+                            "raw": "{\"name\":\"eius\"}"
                         },
                         "description": "",
                         "auth": {
@@ -845,7 +902,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"Agriculture\",\"post_count\":0,\"created_at\":\"2023-12-14T15:30:51.000000Z\"},\"message\":\"\"}",
+                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"Agriculture\",\"post_count\":4,\"created_at\":\"2023-12-18T15:15:18.000000Z\"},\"message\":\"\"}",
                             "name": ""
                         }
                     ]
@@ -878,7 +935,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"name\":\"voluptate\"}"
+                            "raw": "{\"name\":\"optio\"}"
                         },
                         "description": "",
                         "auth": {
@@ -974,7 +1031,7 @@
                                 }
                             ],
                             "code": 200,
-                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"et\",\"created_at\":\"2023-12-14T15:30:51.000000Z\"},\"message\":\"\"}",
+                            "body": "{\"status\":true,\"data\":{\"id\":1,\"name\":\"nemo\",\"created_at\":\"2023-12-18T15:15:18.000000Z\"},\"message\":\"\"}",
                             "name": ""
                         }
                     ]

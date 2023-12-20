@@ -10,6 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group Module Profile
+ */
 class ProfileController extends Controller
 {
     /**
@@ -17,7 +20,7 @@ class ProfileController extends Controller
      */
     public function profile(Request $request): JsonResponse
     {
-        $user = $request->user()->loadMissing('myPosts', 'interactions.typeInteraction', 'zone');
+        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
