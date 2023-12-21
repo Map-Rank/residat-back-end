@@ -34,10 +34,6 @@
                             </p>
                         </div>
                     </div>
-                    {{-- <div class="tab-content" id="nav-tabContent"> --}}
-                        <!-- Utiliser la même structure que la page de détails de l'utilisateur -->
-                        <!-- ... (restez le même) ... -->
-                      {{-- <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-posts-tab"> --}}
                         <!-- Contenu de l'onglet Posts -->
                         <div class="card shadow mb-4">
                             <div class="card-body">
@@ -45,9 +41,7 @@
 
                                 <!-- Section 1 -->
                                 <div class="media mb-4">
-                                    {{-- <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image"> --}}
                                     <div class="media-body">
-                                        {{-- <h5 class="mt-0">Post Title 1</h5> --}}
                                         <p>Post content goes here...</p>
                                         <div class="row">
                                             <div class="image-group">
@@ -59,30 +53,8 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Section 2 (Ajoutez plus de sections au besoin) -->
-                                {{-- <div class="media mb-4">
-                                    <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Post Title 2</h5>
-                                        <p>Post content goes here...</p>
-                                        <div class="row">
-                                            <div class="image-group">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 1">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 2">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 3">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 4">
-                                              </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-
-                                <!-- Ajoutez plus de sections au besoin -->
                             </div>
                         </div>
-                        <!-- Ajoutez d'autres contenus pour l'onglet Posts au besoin -->
-                      {{-- </div> --}}
-                    {{-- </div> --}}
                   </div>
                 </div>
             </div>
