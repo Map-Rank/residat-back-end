@@ -32,6 +32,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->all());
+        $user['avatar'] = '/storage/media/profile.png';
 
         // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
         $defaultRole = Role::where('name', 'default')->first();
