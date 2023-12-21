@@ -28,6 +28,7 @@ class UserSeeder extends Seeder
             'gender' => 'male',
             'zone_id' => $zone->id,
             'active' => 1,
+            'avatar'=> '/storage/media/profile.png',
             'verified' => 1,
             'email_verified_at' => Carbon::now(),
             'activated_at' => Carbon::now(),
