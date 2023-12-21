@@ -65,7 +65,7 @@
                                         <a class="dropdown-item btn {{ $post->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">
                                             {{ $post->active ? 'Deactivate' : 'Activate' }}
                                         </a>
-                                        <a class="dropdown-item" href="#">Info</a>
+                                        <a class="dropdown-item" href="{{route('post.detail',$post->id)}}" >View</a>
                                         <a class="dropdown-item" href="#">Edit</a>
                                         <a class="dropdown-item text-danger" href="#">Delete</a>
                                     </div>
