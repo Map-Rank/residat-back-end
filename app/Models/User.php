@@ -49,7 +49,7 @@ class User extends Authenticatable
 
     public function myPosts() {
         return $this->belongsToMany(Post::class,  'interactions', 'user_id')
-            ->wherePivot('type_interaction_id', 1);
+            ->wherePivot('type_interaction_id', 1)->latest();
     }
 
     public function likes(){
