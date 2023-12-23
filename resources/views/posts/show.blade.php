@@ -13,7 +13,7 @@
                     <div class="card-body text-center">
                         
                         <!-- Utiliser les informations de l'utilisateur qui a créé le post -->
-                        <img src="https://via.placeholder.com/150x150" alt="User Image" class="img-fluid rounded-circle mb-3">
+                        <img src="{{$post->creator[0]->avatar}}" alt="User Image" class="img-fluid rounded-circle mb-3">
                         <p class="card-subtitle text-muted"><strong>Creator</strong> </p>
                         <h2 class="card-title">{{$post->creator[0]->first_name}}</h2>
                         <p class="card-subtitle mb-2 text-muted">{{$post->creator[0]->last_name}}</p>

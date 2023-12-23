@@ -12,7 +12,7 @@
                 <div class="card shadow">
                     <div class="card-body text-center">
                         {{-- {{dd($user->myPosts)}} --}}
-                        <img src="https://via.placeholder.com/150x150" alt="John Doe" class="img-fluid rounded-circle mb-3">
+                        <img src="{{$user->avatar}}" alt="John Doe" class="img-fluid rounded-circle mb-3">
                         <h2 class="card-title">{{$user->first_name}}</h2>
                         <h2 class="card-title">{{$user->last_name}}</h2>
                     </div>
