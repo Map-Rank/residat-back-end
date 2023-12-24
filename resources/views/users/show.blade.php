@@ -11,10 +11,10 @@
             <div class="col-md-3">
                 <div class="card shadow">
                     <div class="card-body text-center">
-                        <img src="https://via.placeholder.com/150x150" alt="John Doe" class="img-fluid rounded-circle mb-3">
-                        <h2 class="card-title">John Doe</h2>
-                        <p class="card-subtitle mb-2 text-muted">Software Engineer</p>
-                        <p class="card-subtitle text-muted">Yaoundé, Cameroon</p>
+                        {{-- {{dd($user->myPosts)}} --}}
+                        <img src="{{$user->avatar}}" alt="John Doe" class="img-fluid rounded-circle mb-3">
+                        <h2 class="card-title">{{$user->first_name}}</h2>
+                        <h2 class="card-title">{{$user->last_name}}</h2>
                     </div>
                 </div>
             </div>
@@ -34,23 +34,20 @@
                             <div class="card-body">
                                 <h3 class="card-title">Personnels Informations</h3>
                                 <p class="card-text">
-                                    Experienced software engineer with a passion for building innovative solutions.
-                                    Proven track record of success in leading and delivering complex projects.
-                                    Strong technical skills in web development, machine learning, and data science.
+                                    Email: <strong>{{$user->date_of_birth}}</strong> 
                                 </p>
                                 <p class="card-text">
-                                    Experienced software engineer with a passion for building innovative solutions.
-                                    Proven track record of success in leading and delivering complex projects.
-                                    Strong technical skills in web development, machine learning, and data science.
+                                    Phone: <strong>{{$user->phone}}</strong> 
                                 </p>
                                 <p class="card-text">
-                                    Experienced software engineer with a passion for building innovative solutions.
-                                    Proven track record of success in leading and delivering complex projects.
-                                    Strong technical skills in web development, machine learning, and data science.
+                                    Zone: <strong>{{$user->zone->name}}</strong> 
+                                </p>
+                                <p class="card-text">
+                                    Gender: <strong>{{$user->gender}}</strong> 
                                 </p>
                             </div>
                         </div>
-                        <div class="card shadow mb-4">
+                        {{-- <div class="card shadow mb-4">
                             <div class="card-body">
                                 <h3 class="card-title">Complementary Informations</h3>
                                 <ul class="list-unstyled">
@@ -89,7 +86,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- <div class="card shadow mb-4">
                             <div class="card-body">
                                 <h3 class="card-title">Education</h3>
@@ -131,21 +128,15 @@
                             <div class="card-body">
                                 <h3 class="card-title">Gallery</h3>
                                 <div class="row">
-                                    <div class="col-md-2 mb-3">
-                                        <img src="https://via.placeholder.com/150x100" class="img-fluid rounded" alt="Image 1">
-                                    </div>
-                                    <div class="col-md-2 mb-3">
-                                        <img src="https://via.placeholder.com/150x100" class="img-fluid rounded" alt="Image 2">
-                                    </div>
-                                    <div class="col-md-2 mb-3">
-                                        <img src="https://via.placeholder.com/150x100" class="img-fluid rounded" alt="Image 3">
-                                    </div>
-                                    <div class="col-md-2 mb-3">
-                                        <img src="https://via.placeholder.com/150x100" class="img-fluid rounded" alt="Image 4">
-                                    </div>
-                                    <div class="col-md-2 mb-3">
-                                        <img src="https://via.placeholder.com/150x100" class="img-fluid rounded" alt="Image 5">
-                                    </div>
+                                    @foreach($user->myPosts as $post)
+                                        @if (!empty($post->medias))
+                                            @foreach($post->medias as $image)
+                                                <div class="col-md-2 mb-3">
+                                                    <img src="{{ asset($image['url']) }}" class="img-fluid rounded" alt="Image 5">
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
                                     <!-- Ajoutez plus d'images au besoin -->
                                 </div>
                             </div>
@@ -154,29 +145,32 @@
                       </div>
                       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-posts-tab">
                         <!-- Contenu de l'onglet Posts -->
+                        @foreach($user->myPosts as $post)
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <h3 class="card-title">Posts</h3>
 
-                                <!-- Section 1 -->
+                                <!-- Section 1 -->  
                                 <div class="media mb-4">
-                                    <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image">
+                                    {{-- <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image"> --}}
                                     <div class="media-body">
-                                        <h5 class="mt-0">Post Title 1</h5>
-                                        <p>Post content goes here...</p>
+                                        {{-- <h5 class="mt-0">Post Title 1</h5> --}}
+                                        <p>{{$post->content}}</p>
                                         <div class="row">
-                                            <div class="image-group">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 1">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 2">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 3">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 4">
-                                            </div>
+                                            @if (!empty($post->medias))
+                                                @foreach($post->medias as $image)
+                                                <div class="image-group">
+                                                    <img src="{{ asset($image['url']) }}" alt="Image 1">
+                                                </div>
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
+                                
 
                                 <!-- Section 2 (Ajoutez plus de sections au besoin) -->
-                                <div class="media mb-4">
+                                {{-- <div class="media mb-4">
                                     <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image">
                                     <div class="media-body">
                                         <h5 class="mt-0">Post Title 2</h5>
@@ -187,14 +181,15 @@
                                                 <img src="https://via.placeholder.com/150x150" alt="Image 2">
                                                 <img src="https://via.placeholder.com/150x150" alt="Image 3">
                                                 <img src="https://via.placeholder.com/150x150" alt="Image 4">
-                                              </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- Ajoutez plus de sections au besoin -->
                             </div>
                         </div>
+                        @endforeach
                         <!-- Ajoutez d'autres contenus pour l'onglet Posts au besoin -->
                       </div>
                     </div>

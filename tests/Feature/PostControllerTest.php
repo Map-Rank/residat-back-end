@@ -128,7 +128,7 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['zone_id'], $post->zone_id);
 
         // Vérifiez également que le nouveau média est associé au post
-        $storedMediaUrl = Storage::url($newMediaFile->store('media'));
+        $storedMediaUrl = Storage::url($newMediaFile->store('media/' . auth()->user()->email));
         $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl]);
     }
 

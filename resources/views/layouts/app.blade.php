@@ -33,6 +33,13 @@
         <script src="{{ asset('js/color-modes.js')}}"></script>
         {{-- <link href="node_modules/@coreui/chartjs/dist/css/coreui-chartjs.css" rel="stylesheet"> --}}
         <link rel="stylesheet" href="{{ mix('node_modules/@coreui/chartjs/dist/css/coreui-chartjs.css') }}">
+        {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"> --}}
+	
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+	
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         @yield('css')
     </head>
     <body>
@@ -46,7 +53,7 @@
             @yield('content')
             @include('layouts.footer')
         </div>
-
+      
         <!-- CoreUI and necessary plugins-->
     <script src="{{ mix('node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js')}}"></script>
     <script src="{{ mix('node_modules/simplebar/dist/simplebar.min.js')}}"></script>
@@ -67,5 +74,43 @@
     <script src="{{ asset('js/main.js')}}"></script>
     <script> 
     </script>
+    <script>
+      @if(Session::has('success'))
+      toastr.options =
+      {
+          "closeButton" : true,
+          "progressBar" : true
+      }
+              toastr.success("{{ session('success') }}");
+      @endif
+    
+      @if(Session::has('error'))
+      toastr.options =
+      {
+          "closeButton" : true,
+          "progressBar" : true
+      }
+              toastr.error("{{ session('error') }}");
+      @endif
+    
+      @if(Session::has('info'))
+      toastr.options =
+      {
+          "closeButton" : true,
+          "progressBar" : true
+      }
+              toastr.info("{{ session('info') }}");
+      @endif
+    
+      @if(Session::has('warning'))
+      toastr.options =
+      {
+          "closeButton" : true,
+          "progressBar" : true
+      }
+              toastr.warning("{{ session('warning') }}");
+      @endif
+  </script>
+    {{-- @yield('script') --}}
     </body>
 </html>

@@ -42,7 +42,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::findOrFail($id)->loadMissing('postComments', 'creator');
         return view('posts.show', ['post' => $post]);
     }
 
