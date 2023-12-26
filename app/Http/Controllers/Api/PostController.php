@@ -284,7 +284,7 @@ class PostController extends Controller
     }
 
     /**
-     * Delete the specified post
+     * Delete the specified interaction
      */
     public function deleteInteraction(Request $request, string $id)
     {
