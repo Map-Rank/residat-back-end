@@ -74,7 +74,7 @@ class PostController extends Controller
             try{
                 $sectorIds = json_decode($validated['sectors'], JSON_THROW_ON_ERROR);
                 if(is_array($sectorIds)){
-                    $data = $data->whereRelation('sectors', function(Builder  $b)use($sectorIds){
+                    $data = $data->whereRelation('sectors', function($b)use($sectorIds){
                         $b->whereIn('id', $sectorIds);
                     });
                 }
