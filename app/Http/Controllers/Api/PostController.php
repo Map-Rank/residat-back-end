@@ -283,6 +283,30 @@ class PostController extends Controller
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }
 
+    /**
+     * Delete the specified post
+     */
+    public function deleteInteraction(Request $request, string $id)
+    {
+        $interaction = Interaction::with('typeInteraction')->find($id);
 
+        if (!$interaction) {
+            return response()->errors([], __('Interaction not found'), 404);
+        }
+
+        if($interaction->user_id != auth()->user()->id){
+            return response()->errors([], __('Unauthorized access to this resource'), 401);
+        }
+
+        if($interaction->typeInteraction->id == 1){
+            return response()->errors([], __('Unauthorized deletion of this resource'), 401);
+        }
+
+        if(!$interaction->delete()){
+            return response()->errors([], __('Unable to delete the resource'), 400);
+        }
+
+        return response()->success([], __('Interaction deleted successfully'), 200);
+    }
 
 }
