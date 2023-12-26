@@ -10,7 +10,6 @@
             <div class="row mb-3">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <h1 class="my-0">List of posts</h1>
-                    {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
                 </div>
             </div>
             <table class="table border mb-0">
@@ -33,11 +32,9 @@
                 <tbody>
                     
                     @foreach ($posts as $post)
-                    {{-- {{dd($post->creator[0]->avatar)}} --}}
                         <tr class="align-middle">
                             <td class="text-center">
                                 <div class="avatar avatar-md">
-                                    {{-- <img class="avatar-img" src="{{ asset('assets/img/avatars/1.jpg') }}" alt="{{ $user->email }}"> --}}
                                     <img class="avatar-img"
                                         src="{{ $post->creator[0]->avatar ? asset($post->creator[0]->avatar) : asset('assets/img/avatars/1.jpg') }}"
                                         alt="{{ $post->creator[0]->email }}">
@@ -61,7 +58,6 @@
                                         </svg>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        {{-- <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">Active</a> --}}
                                         <a class="dropdown-item btn {{ $post->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">
                                             {{ $post->active ? 'Deactivate' : 'Activate' }}
                                         </a>
@@ -134,7 +130,6 @@
             <div class="modal-content">
                 <div class="modal-header {{ $post->active ? 'bg-warning' : 'bg-success' }}">
                     <h5 class="modal-title" id="exampleModalLabel">
-                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
                         {{ $post->active ? 'Deactivate' : 'Activate' }} Post
                     </h5>
                     <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
