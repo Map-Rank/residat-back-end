@@ -65,13 +65,13 @@ endpoints:
         name: type_id
         description: ''
         required: false
-        example: 7
+        example: 9
         type: integer
         enumValues: []
         exampleWasSpecified: false
         custom: []
     cleanBodyParameters:
-      type_id: 7
+      type_id: 9
     fileParameters: []
     responses:
       -

@@ -17,5 +17,5 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-.scribe
+/.scribe
 /public/docs    
