@@ -286,9 +286,28 @@ class PostController extends Controller
     /**
      * Delete the specified interaction
      */
-    public function deleteInteraction(Request $request, string $id)
+    public function deleteInteraction(Request $request)
     {
-        $interaction = Interaction::with('typeInteraction')->find($id);
+        $validator = Validator::make($request->all(), [
+            'id'=> ['sometimes', 'integer', 'exists:interactions,id'],
+            'post_id'=> ['sometimes', 'integer', 'exists:posts,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
+
+        $validated = $validator->validated();
+
+        if(isset($validated['id'])){
+            $interaction = Interaction::with('typeInteraction')->find($validated['id']);
+        }
+        else if(isset($validated['post_id'])){
+            $interaction = Interaction::with('typeInteraction')->where('user_id', $request->user()->id)
+                ->where('post_id', $validated['post_id'])->first();
+        }else{
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
 
         if (!$interaction) {
             return response()->errors([], __('Interaction not found'), 404);
