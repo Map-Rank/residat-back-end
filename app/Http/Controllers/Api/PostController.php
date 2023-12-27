@@ -50,7 +50,7 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias', 'postComments');
+        $data = Post::with('creator', 'medias');
 
         if(Auth::user() != null){
             $zone =  Auth::user()->loadMissing('zone.children')->zone;
@@ -142,13 +142,13 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::find($id);
+        $post = Post::with('creator', 'likes', 'shares', 'medias', 'postComments')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
-        return response()->success($post->loadMissing('postComments', 'creator'), __('Post retrieved successfully'), 200);
+        return response()->success($post, __('Post retrieved successfully'), 200);
     }
 
     /**
