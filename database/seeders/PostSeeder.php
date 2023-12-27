@@ -23,7 +23,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
             // Iterate through each post
             foreach ($posts as $post) {
                 // Like the post 50 times
-                $this->performInteractions($post, 2, 50);
+                // $this->performInteractions($post, 2, 50);
 
                 // Comment on the post 50 times
                 $this->performInteractions($post, 3, 50);
@@ -51,6 +51,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
                     'type_interaction_id' => $interactionType,
                     'user_id' => $user->id,
                     'post_id' => $post->id,
+                    'liked' => $interactionType === 2, // Set liked to true only if it's a like interaction
                 ];
 
                 // For comments, include a fake text using Faker

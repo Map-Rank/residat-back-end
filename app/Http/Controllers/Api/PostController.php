@@ -234,27 +234,33 @@ class PostController extends Controller
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
-    
+
         $user = auth()->user();
-    
+
         // Vérifiez si l'utilisateur a déjà aimé le post
         $isLiked = $post->users()->where('user_id', $user->id)->exists();
-    
+
         DB::beginTransaction();
-    
+
         try {
             if ($isLiked) {
-                // Si l'utilisateur a déjà aimé le post, retirez le like (unlike)
+                // Si l'utilisateur a déjà aimé le post, retirez le like (unlike) et mettez à jour liked à false
                 $post->users()->detach($user);
+                $post->interactions()->where('user_id', $user->id)->update(['liked' => false]);
                 $message = __('Post unliked successfully');
             } else {
-                // Sinon, ajoutez le like
-                $post->users()->attach($user, ['type_interaction_id' => 2]);
+                // Sinon, ajoutez le like et mettez à jour liked à true
+                // $post->users()->attach($user, ['type_interaction_id' => 2]);
+                $post->interactions()->create([
+                    'user_id' => $user->id,
+                    'type_interaction_id' => 2,
+                    'liked' => true,
+                ]);
                 $message = __('Post liked successfully');
             }
-    
+
             DB::commit();
-    
+
             return response()->success(PostResource::make($post), $message, 200);
         } catch (\Exception $e) {
             DB::rollBack();
