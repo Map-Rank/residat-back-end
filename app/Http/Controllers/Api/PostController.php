@@ -225,7 +225,7 @@ class PostController extends Controller
 
 
     /**
-     * Like the specified post.
+     * Like or unlike the specified post.
      */
     public function like(string $id): JsonResponse
     {
@@ -234,11 +234,32 @@ class PostController extends Controller
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
-
-        $post->users()->attach(auth()->user(), ['type_interaction_id'=> 2]);
-
-
-        return response()->success(PostResource::make($post), __('Post liked successfully'), 200);
+    
+        $user = auth()->user();
+    
+        // Vérifiez si l'utilisateur a déjà aimé le post
+        $isLiked = $post->users()->where('user_id', $user->id)->exists();
+    
+        DB::beginTransaction();
+    
+        try {
+            if ($isLiked) {
+                // Si l'utilisateur a déjà aimé le post, retirez le like (unlike)
+                $post->users()->detach($user);
+                $message = __('Post unliked successfully');
+            } else {
+                // Sinon, ajoutez le like
+                $post->users()->attach($user, ['type_interaction_id' => 2]);
+                $message = __('Post liked successfully');
+            }
+    
+            DB::commit();
+    
+            return response()->success(PostResource::make($post), $message, 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->errors([], __('Error processing like/unlike'), 500);
+        }
     }
 
     /**
