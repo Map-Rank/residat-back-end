@@ -31,7 +31,11 @@ class UserFullResource extends JsonResource
             'verified_at' => $this['verified_at'],
             'gender' => $this['gender'],
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
-            'posts' => PostResource::collection($this->whenLoaded('myPosts')),
+            'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
+            'posts' => PostResource::collection($this->whenLoaded('posts')),
+            'my_likes' => InteractionResource::collection($this->whenLoaded('likeInteractions')),
+            'my_shares' => InteractionResource::collection($this->whenLoaded('shareInteractions')),
+            'my_comments' => InteractionResource::collection($this->whenLoaded('commentInteractions')),
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
             'created_at' => $this['created_at'],
         ];

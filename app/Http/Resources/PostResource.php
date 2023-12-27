@@ -20,15 +20,19 @@ class PostResource extends JsonResource
         return [
             'id' => $this['id'],
             'content' => $this['content'],
-            'text' => $this['text'],
             'images' => ImageResource::collection($this->whenLoaded('medias')),
-            'creator' => UserResource::make($this->whenLoaded('creator')->first()),
+            'creator' => UserResource::collection($this->whenLoaded('creator')),
             'topic' => TopicResource::make($this->whenLoaded('topic')),
             'like_count' => $this->likes()->count(),
             'comment_count' => $this->comments()->count(),
             'share_count' => $this->shares()->count(),
             'published_at' => $this['published_at'],
             'created_at' => $this['created_at'],
+            'likes' => $this->likes,
+            'comments' => CommentResource::collection($this->whenLoaded('postComments')),
+            'shares' => $this->shares,
+            'sectors' => $this->sectors,
+
         ];
     }
 }

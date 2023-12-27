@@ -48,17 +48,17 @@ class User extends Authenticatable
     }
 
     public function myPosts() {
-        return $this->belongsToMany(User::class,  'interactions', 'post_id')
-            ->wherePivot('type_interaction_id', 1);
+        return $this->belongsToMany(Post::class,  'interactions', 'user_id')
+            ->wherePivot('type_interaction_id', 1)->latest();
     }
 
     public function likes(){
-        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+        return $this->belongsToMany(Post::class,  'interactions', 'user_id')
             ->wherePivot('type_interaction_id', 2);
     }
 
     public function comments(){
-        return $this->belongsToMany(User::class,  'interactions', 'post_id')
+        return $this->belongsToMany(Post::class,  'interactions', 'user_id')
             ->wherePivot('type_interaction_id', 3);
     }
 
@@ -66,6 +66,27 @@ class User extends Authenticatable
     {
         return $this->hasMany(Interaction::class);
     }
+
+
+    public function likeInteractions()
+    {
+        return $this->hasMany(Interaction::class)
+            ->where('type_interaction_id', 2);
+    }
+
+
+    public function commentInteractions()
+    {
+        return $this->hasMany(Interaction::class)
+            ->where('type_interaction_id', 3);
+    }
+
+    public function shareInteractions()
+    {
+        return $this->hasMany(Interaction::class)
+            ->where('type_interaction_id', 4);
+    }
+
 
     public function subscriptions()
     {

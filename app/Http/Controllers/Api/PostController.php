@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\PostRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\InteractionResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\UserFullResource;
 use App\Models\TypeInteraction;
+use App\Models\User;
 use App\Service\UtilService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +50,7 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'likes', 'comments', 'shares', 'medias');
+        $data = Post::with('creator', 'medias');
 
         if(Auth::user() != null){
             $zone =  Auth::user()->loadMissing('zone.children')->zone;
@@ -71,8 +74,8 @@ class PostController extends Controller
             try{
                 $sectorIds = json_decode($validated['sectors'], JSON_THROW_ON_ERROR);
                 if(is_array($sectorIds)){
-                    $data = $data->whereRelation('sectors', function(Builder  $b)use($sectorIds){
-                        $b->whereIn('id', $sectorIds);
+                    $data = $data->whereRelation('sectors', function($b)use($sectorIds){
+                        $b->whereIn('sectors.id', $sectorIds);
                     });
                 }
             }catch(Exception $ex){
@@ -106,7 +109,7 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media');
+                $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 'public');
                 $mediaPaths[] = [
                     'url' => Storage::url($mediaPath),
                     'type' => $mediaFile->getClientMimeType(),
@@ -115,6 +118,12 @@ class PostController extends Controller
 
             $post->medias()->createMany($mediaPaths);
         }
+
+        // Récupérer les secteurs à partir de la requête
+        $sectors = $request->input('sectors', []);
+
+        // Attacher les secteurs au post nouvellement créé
+        $post->sectors()->attach($sectors);
 
         $post->users()->attach($request->user(), ['type_interaction_id'=> $typeInteraction->id]);
 
@@ -133,7 +142,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::find($id);
+        $post = Post::with('creator', 'likes', 'shares', 'medias', 'postComments')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
@@ -153,7 +162,7 @@ class PostController extends Controller
             return response()->errors([], __('Project configuration error'), 500);
         }
 
-        $post = Post::with('creator')->find($id);
+        $post = Post::with('creator', 'postComments')->find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
@@ -174,7 +183,7 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media');
+                $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 'public');
                 $mediaPaths[] = [
                     'url' => Storage::url($mediaPath),
                     'type' => $mediaFile->getClientMimeType(),
@@ -202,7 +211,7 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        if($post->creator->first()->id != $request->user()->id){
+        if($post->creator->first()->id != auth()->user()->id){
             return response()->errors([], __('Unauthorized access to this resource'), 401);
         }
 
@@ -255,7 +264,7 @@ class PostController extends Controller
 
         $post->users()->attach(auth()->user(), ['type_interaction_id'=> 3, 'text' => $validated['text']]);
 
-        return response()->success(PostResource::make($post), __('Comment added successfully'), 200);
+        return response()->success(PostResource::make($post->loadMissing('postComments')), __('Comment added successfully'), 200);
     }
 
     /**
@@ -273,4 +282,50 @@ class PostController extends Controller
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }
+
+    /**
+     * Delete the specified interaction
+     */
+    public function deleteInteraction(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'=> ['sometimes', 'integer', 'exists:interactions,id'],
+            'post_id'=> ['sometimes', 'integer', 'exists:posts,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
+
+        $validated = $validator->validated();
+
+        if(isset($validated['id'])){
+            $interaction = Interaction::with('typeInteraction')->find($validated['id']);
+        }
+        else if(isset($validated['post_id'])){
+            $interaction = Interaction::with('typeInteraction')->where('user_id', $request->user()->id)
+                ->where('post_id', $validated['post_id'])->first();
+        }else{
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
+
+        if (!$interaction) {
+            return response()->errors([], __('Interaction not found'), 404);
+        }
+
+        if($interaction->user_id != auth()->user()->id){
+            return response()->errors([], __('Unauthorized access to this resource'), 401);
+        }
+
+        if($interaction->typeInteraction->id == 1){
+            return response()->errors([], __('Unauthorized deletion of this resource'), 401);
+        }
+
+        if(!$interaction->delete()){
+            return response()->errors([], __('Unable to delete the resource'), 400);
+        }
+
+        return response()->success([], __('Interaction deleted successfully'), 200);
+    }
+
 }

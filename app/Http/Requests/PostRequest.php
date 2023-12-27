@@ -28,7 +28,9 @@ class PostRequest extends FormRequest
             'content' => 'required',
             'published_at' => 'required|date',
             'zone_id' => 'required|exists:zones,id',
-            'media' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3', // Ajoute la règle pour le media
+            'media' => 'nullable',
+            'media.*' => 'nullable|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3|max:2048', // Ajoute la règle pour le media
+            'sectors' => 'nullable',
         ];
     }
 
@@ -55,7 +57,7 @@ class PostRequest extends FormRequest
                 'description' => 'id of concern zone of post',
                 'example' => 1
             ],
-            'sector_id' => [
+            'sectors' => [
                 'description' => 'Sector of post',
                 'example' => 1
             ],
