@@ -16,13 +16,23 @@ class ZoneControllerTest extends TestCase
      */
     public function test_fetch_zones(): void
     {
-        $level = Level::create(['name'=> 'Country']);
-        Zone::create(['name'=> 'Test 0', 'level_id'=>$level->id]);
+        // Supprimer toutes les zones existantes pour garantir que la table est vide
+        Zone::query()->delete();
+
+        $level = Level::create(['name' => 'Country']);
+        Zone::create(['name' => 'Test 0', 'level_id' => $level->id]);
 
         $response = $this->getJson(route('zone.index'));
 
-        $this->assertEquals(true, $response->json()['status']);
-        $this->assertEquals(1, count($response->json()['data']));
+        if (count(Zone::all()) > 0) {
+            $zone = Zone::first();
+            $this->assertEquals(true, $response->json()['status']);
+            $this->assertEquals(1, count($response->json()['data']));
+            $this->assertEquals($zone->name, $response->json()['data'][0]['name']);
+        } else {
+            $this->assertEquals(true, $response->json()['status']);
+            $this->assertEquals(0, count($response->json()['data']));
+        }
     }
 
     public function test_fetch_single_zone(): void

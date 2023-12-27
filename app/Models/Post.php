@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App/Models/Post
@@ -24,7 +25,7 @@ class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['content', 'published_at', 'zone_id', 'sector_id'];
+    protected $fillable = ['content', 'published_at', 'zone_id', 'sector_id', 'active'];
 
     public function zone()
     {
@@ -53,8 +54,14 @@ class Post extends Model
     public function comments(){
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 3);
+            // ->withPivotValue('text', 'id')
     }
 
+    public function postComments() : HasMany {
+        return $this->hasMany(Interaction::class, 'post_id')
+            ->where('type_interaction_id', 3)
+            ->with('user');
+    }
     public function shares(){
         return $this->belongsToMany(User::class,  'interactions', 'post_id')
             ->wherePivot('type_interaction_id', 4);

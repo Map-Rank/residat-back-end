@@ -10,7 +10,7 @@
             <div class="row mb-3">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <h1 class="my-0">List of users</h1>
-                    <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button>
+                    {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
                 </div>
             </div>
             <table class="table border mb-0">
@@ -64,8 +64,8 @@
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#bannedModal-{{$user->id}}" data-coreui-whatever="@mdo">Bannish</a>
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
-                                        {{-- <a class="dropdown-item" href="#" >Info</a>
-                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="{{route('user.detail',$user->id)}}" >View</a>
+                                        {{-- <a class="dropdown-item" href="#">Edit</a>
                                         <a class="dropdown-item text-danger" href="#">Delete</a> --}}
                                     </div>
                                 </div>

@@ -10,12 +10,13 @@ use App\Models\Zone;
 use App\Models\Topic;
 use App\Models\Interaction;
 use Laravel\Sanctum\Sanctum;
+use App\Models\TypeInteraction;
+use Database\Seeders\PostSeeder;
 use Illuminate\Http\UploadedFile;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\PostController;
-use App\Models\TypeInteraction;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -35,6 +36,7 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
+        $this->seed(PostSeeder::class);
         Post::factory()->count(10)->create();
 
         $response = $this->getJson('api/posts?page=0&size=5');
@@ -45,7 +47,12 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
-        TypeInteraction::factory()->count(4)->create();
+        // Vérifiez si la table TypeInteraction est vide
+        $typeInteractions = TypeInteraction::all();
+        if (count($typeInteractions) == 0) {
+            // Créez quatre enregistrements
+            TypeInteraction::factory()->count(4)->create();
+        }
         // Créez des fichiers temporaires pour simuler le téléchargement
         $file1 = UploadedFile::fake()->image('image1.jpg');
         $file2 = UploadedFile::fake()->image('image2.jpg');
@@ -54,6 +61,7 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
+            'sectors' => [1, 2], 
             'media' => [$file1, $file2], 
         ];
 
@@ -68,11 +76,13 @@ class PostControllerTest extends TestCase
         $this->assertNotNull($post);
 
         foreach ($data['media'] as $mediaFile) {
+            $mediaPath = $mediaFile->store('media/' . auth()->user()->email);
             $this->assertDatabaseHas('medias', [
-                'url' => Storage::url($mediaFile->store('media')),
-                'post_id' => $post->id,
+              'url' => Storage::url($mediaPath),
+              'post_id' => $post->id,
+              'type' => $mediaFile->getClientMimeType(),
             ]);
-        }
+          }
     }
 
     public function test_show()
@@ -88,9 +98,14 @@ class PostControllerTest extends TestCase
     public function test_update()
     {
 
-        TypeInteraction::factory()->count(4)->create();
+        // TypeInteraction::factory()->count(4)->create();
 
-        $post = Post::factory()->creator()->create();
+        $post = Post::with('creator')->first();
+
+        $user = $post->creator->first(); // Récupérer le créateur du post
+
+        // Simuler l'authentification de l'utilisateur
+        Sanctum::actingAs($user);
 
         // Créez un fichier temporaire pour simuler le téléchargement
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
@@ -99,6 +114,7 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
+            'sectors' => [1, 2], 
             'media' => [$newMediaFile], // Ajoutez les fichiers médias à la requête
         ];
 
@@ -112,13 +128,18 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['zone_id'], $post->zone_id);
 
         // Vérifiez également que le nouveau média est associé au post
-        $storedMediaUrl = Storage::url($newMediaFile->store('media'));
+        $storedMediaUrl = Storage::url($newMediaFile->store('media/' . auth()->user()->email));
         $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl]);
     }
 
     public function test_destroy()
     {
-        $post = Post::factory()->creator()->create();
+        $post = Post::with('creator')->first();
+
+        $user = $post->creator->first(); // Récupérer le créateur du post
+
+        // Simuler l'authentification de l'utilisateur
+        Sanctum::actingAs($user);
 
         $response = $this->deleteJson('api/delete/' . $post->id);
 

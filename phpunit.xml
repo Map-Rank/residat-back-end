@@ -27,6 +27,14 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="MAIL_DRIVER" value="log"/>
+        <ini name="xdebug.mode" value="coverage" />
          
     </php>
+    <phpunit>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">residat-back-end</directory>
+        </include>
+    </coverage>
+</phpunit>
 </phpunit>

@@ -40,6 +40,15 @@ Route::middleware('auth')->group(function () {
 
 
 
+    Route::post('/posts/{id}/allow', [PostController::class, 'allowPost'])->name('allow.post');
+
+    //post detail
+    Route::get('/post/{id}/detail', [PostController::class, 'show'])->name('post.detail');
+
+    //user detail
+    Route::get('/user/{id}/detail', [UserController::class, 'show'])->name('user.detail');
+
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

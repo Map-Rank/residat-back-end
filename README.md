@@ -30,3 +30,6 @@
 - Se placer dans le repertoire du projet
 - saisir la commande 
 " docker-compose up -d "
+
+## Génerate documentation
+php artisan scribe:generate

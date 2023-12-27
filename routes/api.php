@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\ZoneController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SectorController;
 
 /*
@@ -43,7 +44,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comment/{id}', [PostController::class, 'comment']);
     Route::post('/share/{id}', [PostController::class, 'share']);
 
-    
+    Route::get('/profile', [ProfileController::class, 'profile']);
+    Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
+
+    Route::delete('/delete-interaction', [PostController::class, 'deleteInteraction']);
 });
 
 
