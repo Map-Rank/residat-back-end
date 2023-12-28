@@ -240,8 +240,6 @@ class PostController extends Controller
         // Vérifiez si l'utilisateur a déjà aimé le post
         $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  2)->exists();
 
-        DB::beginTransaction();
-
         try {
             if ($isLiked) {
                 // Si l'utilisateur a déjà aimé le post, retirez le like (unlike) et mettez à jour liked à false
@@ -253,11 +251,8 @@ class PostController extends Controller
                 $message = __('Post liked successfully');
             }
 
-            DB::commit();
-
             return response()->success(PostResource::make($post->loadMissing('interactions')), $message, 200);
         } catch (\Exception $e) {
-            DB::rollBack();
             return response()->errors([], __('Error processing like/unlike'), 500);
         }
     }
