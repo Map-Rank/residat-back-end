@@ -51,7 +51,6 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
                     'type_interaction_id' => $interactionType,
                     'user_id' => $user->id,
                     'post_id' => $post->id,
-                    'liked' => $interactionType === 2, // Set liked to true only if it's a like interaction
                 ];
 
                 // For comments, include a fake text using Faker
@@ -73,5 +72,5 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
         {
             return \Faker\Factory::create()->sentence();
         }
-        
+
     }

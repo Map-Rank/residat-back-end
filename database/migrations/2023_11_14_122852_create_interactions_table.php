@@ -18,7 +18,6 @@ return new class extends Migration
                 $table->foreignId('type_interaction_id')->references('id')->on('type_interactions')->onDelete('cascade');
                 $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
                 $table->foreignId('post_id')->references('id')->on('posts')->onDelete('cascade');
-                $table->boolean('liked')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
             });

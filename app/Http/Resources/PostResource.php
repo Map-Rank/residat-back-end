@@ -17,9 +17,6 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        //get if post is like or not
-        $liked = $this->interactions->where('user_id', auth()->id())->first()?->liked ?? false;
-        $liked = $liked === 1 ? true : false; // Si $liked est true, conservez-le, sinon, mettez-le à false
 
         return [
             'id' => $this['id'],
@@ -27,7 +24,7 @@ class PostResource extends JsonResource
             'images' => ImageResource::collection($this->whenLoaded('medias')),
             'creator' => UserResource::collection($this->whenLoaded('creator')),
             'topic' => TopicResource::make($this->whenLoaded('topic')),
-            'liked' => $liked,
+            'liked' => $this->interactions->where('user_id', auth()->id())->where('type_interaction_id', 2)->first() != null   ,
             'like_count' => $this->likes()->count(),
             'comment_count' => $this->comments()->count(),
             'share_count' => $this->shares()->count(),
