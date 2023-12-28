@@ -197,7 +197,7 @@ class PostController extends Controller
             $post->medias()->createMany($mediaPaths);
         }
 
-        return response()->success($post, __('Post updated successfully'), 200);
+        return response()->success(PostResource::collection($post), __('Post updated successfully'), 200);
     }
 
     /**
@@ -225,7 +225,7 @@ class PostController extends Controller
 
 
     /**
-     * Like the specified post.
+     * Like or unlike the specified post.
      */
     public function like(string $id): JsonResponse
     {
@@ -235,10 +235,26 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        $post->users()->attach(auth()->user(), ['type_interaction_id'=> 2]);
+        $user = auth()->user();
 
+        // Vérifiez si l'utilisateur a déjà aimé le post
+        $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  2)->exists();
 
-        return response()->success(PostResource::make($post), __('Post liked successfully'), 200);
+        try {
+            if ($isLiked) {
+                // Si l'utilisateur a déjà aimé le post, retirez le like (unlike) et mettez à jour liked à false
+                $post->users()->where('id', $user->id)->wherePivot('type_interaction_id', 2)->detach($user->id);
+                $message = __('Post unliked successfully');
+            } else {
+                // Sinon, ajoutez le like et mettez à jour liked à true
+                $post->users()->attach($user, ['type_interaction_id' => 2]);
+                $message = __('Post liked successfully');
+            }
+
+            return response()->success(PostResource::make($post->loadMissing('interactions')), $message, 200);
+        } catch (\Exception $e) {
+            return response()->errors([], __('Error processing like/unlike'), 500);
+        }
     }
 
     /**
@@ -286,28 +302,10 @@ class PostController extends Controller
     /**
      * Delete the specified interaction
      */
-    public function deleteInteraction(Request $request)
+    public function deleteInteraction( $id)
     {
-        $validator = Validator::make($request->all(), [
-            'id'=> ['sometimes', 'integer', 'exists:interactions,id'],
-            'post_id'=> ['sometimes', 'integer', 'exists:posts,id'],
-        ]);
 
-        if ($validator->fails()) {
-            return response()->errors($validator->failed(),  __('bad params'), 400);
-        }
-
-        $validated = $validator->validated();
-
-        if(isset($validated['id'])){
-            $interaction = Interaction::with('typeInteraction')->find($validated['id']);
-        }
-        else if(isset($validated['post_id'])){
-            $interaction = Interaction::with('typeInteraction')->where('user_id', $request->user()->id)
-                ->where('post_id', $validated['post_id'])->first();
-        }else{
-            return response()->errors($validator->failed(),  __('bad params'), 400);
-        }
+        $interaction = Interaction::with('typeInteraction')->find($id);
 
         if (!$interaction) {
             return response()->errors([], __('Interaction not found'), 404);
@@ -317,7 +315,7 @@ class PostController extends Controller
             return response()->errors([], __('Unauthorized access to this resource'), 401);
         }
 
-        if($interaction->typeInteraction->id == 1){
+        if($interaction->typeInteraction->id == 1 || $interaction->typeInteraction->id == 2){
             return response()->errors([], __('Unauthorized deletion of this resource'), 401);
         }
 
