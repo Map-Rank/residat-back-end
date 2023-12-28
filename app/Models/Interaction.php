@@ -24,7 +24,7 @@ class Interaction extends Pivot
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['text', 'type_interaction_id', 'user_id', 'post_id', 'liked'];
+    protected $fillable = ['text', 'type_interaction_id', 'user_id', 'post_id'];
 
     public function typeInteraction()
     {
