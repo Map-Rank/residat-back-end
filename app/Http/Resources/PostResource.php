@@ -30,9 +30,9 @@ class PostResource extends JsonResource
             'share_count' => $this->shares()->count(),
             'published_at' => $this['published_at'],
             'created_at' => $this['created_at'],
-            'likes' => $this->likes,
+            'likes' => UserResource::collection($this->whenLoaded('likes')),
             'comments' => CommentResource::collection($this->whenLoaded('postComments')),
-            'shares' => $this->shares,
+            'shares' => UserResource::collection($this->whenLoaded('shares')),
             'sectors' => $this->sectors,
 
         ];
