@@ -197,7 +197,7 @@ class PostController extends Controller
             $post->medias()->createMany($mediaPaths);
         }
 
-        return response()->success(PostResource::collection($post), __('Post updated successfully'), 200);
+        return response()->success(PostResource::make($post->loadMissing('medias')), __('Post updated successfully'), 200);
     }
 
     /**
