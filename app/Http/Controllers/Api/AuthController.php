@@ -75,8 +75,9 @@ class AuthController extends Controller
             return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         }
 
-        $user = Auth::user();
-        $user = UserResource::make($user->loadMissing('zone'))->toArray($request);
+        $user = User::with('zone')->where('id', Auth::user()->id)->first();
+
+        $user = UserResource::make($user)->toArray($request);
         $user['token'] = $token->plainTextToken;
 
         return response()->success($user, __('You are logged in'), 200);
