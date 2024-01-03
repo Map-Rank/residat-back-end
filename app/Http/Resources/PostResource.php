@@ -35,6 +35,7 @@ class PostResource extends JsonResource
             'likes' => UserResource::collection($this->whenLoaded('likes')),
             'comments' => CommentResource::collection($this->whenLoaded('postComments')),
             'shares' => UserResource::collection($this->whenLoaded('shares')),
+            'zone' => ZoneResource::make($this->whenLoaded('zone')),
             'sectors' => $this->sectors,
 
         ];

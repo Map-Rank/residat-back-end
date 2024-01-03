@@ -31,6 +31,7 @@ class UserResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'gender' => $this->gender,
             'zone_id' => $this->zone_id,
+            'zone_id' => $this->zone_id,
             'role' => $this->roles,
             'active' => $this->active,
             'verified' => $this->verified,
@@ -38,6 +39,7 @@ class UserResource extends JsonResource
             'email_verified_at' => $this->email_verified_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'zone' => ZoneResource::make($this->whenLoaded('zone')),
 
         ];
     }
