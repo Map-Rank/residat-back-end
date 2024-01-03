@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ImageResource;
@@ -28,7 +29,7 @@ class PostResource extends JsonResource
             'like_count' => $this->likes()->count(),
             'comment_count' => $this->comments()->count(),
             'share_count' => $this->shares()->count(),
-            'published_at' => $this['published_at'],
+            'published_at' => Carbon::parse($this['published_at'])->diffForHumans(),
             'created_at' => $this['created_at'],
             'likes' => UserResource::collection($this->whenLoaded('likes')),
             'comments' => CommentResource::collection($this->whenLoaded('postComments')),
