@@ -33,6 +33,9 @@ class ProfileController extends Controller
     {
         $user = User::find($id);
         $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
+        if(!$user){
+            return response()->errors([], __('User not found !'), 200);
+        }
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
