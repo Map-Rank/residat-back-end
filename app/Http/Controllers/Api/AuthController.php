@@ -33,18 +33,18 @@ class AuthController extends Controller
     {
         $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
-        
+
 
         // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
         $defaultRole = Role::where('name', 'default')->first();
-        
+
         if ($defaultRole) {
             $user->assignRole($defaultRole);
         }
 
         $token = $user->createToken('authtoken');
 
-        $userData = UserResource::make($user)->toArray($request);
+        $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $userData['token'] = $token->plainTextToken;
 
         return response()->success($userData, __('User registered. Please check your email'), 201);
@@ -75,7 +75,8 @@ class AuthController extends Controller
             return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         }
 
-        $user = UserResource::make(Auth::user())->toArray($request);
+        $user = Auth::user();
+        $user = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $user['token'] = $token->plainTextToken;
 
         return response()->success($user, __('You are logged in'), 200);
