@@ -29,6 +29,7 @@ class PostResource extends JsonResource
             'comment_count' => $this->comments()->count(),
             'share_count' => $this->shares()->count(),
             'published_at' => $this['published_at'],
+            'humanize_date_creation' => Carbon::parse($this['created_at'])->diffForHumans(),
             'created_at' => $this['created_at'],
             'likes' => UserResource::collection($this->whenLoaded('likes')),
             'comments' => CommentResource::collection($this->whenLoaded('postComments')),
