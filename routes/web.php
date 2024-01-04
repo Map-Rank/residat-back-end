@@ -5,6 +5,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +54,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/send-mail', static function(){
+    Log::info('sprint');
+    $toEmail = 'keuleuronald@gmail.com';
+    $subject = 'Zip File Attachment';
+    $info = 'Please find the attached zip file.';
+
+    Mail::send([], [], function ($message) use ($toEmail, $subject, $info) {
+        $message->to($toEmail)
+            ->subject($subject)
+            ->html($info);
+    });
 });
 
 require __DIR__.'/auth.php';

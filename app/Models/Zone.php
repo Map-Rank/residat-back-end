@@ -14,7 +14,7 @@ class Zone extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'parent_id', 'level_id'];
+    protected $fillable = ['name', 'parent_id', 'level_id', 'banner'];
 
     public function parent()
     {
