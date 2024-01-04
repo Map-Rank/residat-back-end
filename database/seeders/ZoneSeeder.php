@@ -268,13 +268,5 @@ class ZoneSeeder extends Seeder
             ]
         ];
 
-        $adamawas = [
-            [
-                'name' => 'FARO & DEO',
-                'level_id' => 3,
-                'parent_id' =>
-            ],
-
-        ]
     }
 }
