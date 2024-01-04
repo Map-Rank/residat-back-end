@@ -230,16 +230,244 @@ class ZoneSeeder extends Seeder
                 'name'=>'EAST REGION',
                 'level_id' => 2,
                 'parent_id' => $cameroun->id,
+                'children' => [
+                    [
+                        'name' => 'BOUMBA ET NGOKO',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'EAST REGION')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Gari Gombo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'BOUMBA ET NGOKO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mouloundou', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'BOUMBA ET NGOKO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Salapoumbé', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'BOUMBA ET NGOKO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Yokadouma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'BOUMBA ET NGOKO')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'LOM ET DJEREM',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'EAST REGION')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Belabo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Bertoua', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Betare Oya', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Diang', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Garoua Boulai', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mandjou', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngoura', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'LOM ET DJEREM')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'KADEY',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'EAST REGION')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Batouri', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'KADEY')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Kentzou', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'KADEY')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Kette', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'KADEY')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mbang', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'KADEY')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ndelele', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'KADEY')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'HAUT NYONG',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'EAST REGION')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Abong Mbang', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Angossas', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Atok', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dimako', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Doumaintang', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Doumé', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Lomié', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mboma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Messamena', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Messok', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mindourou', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngoyla', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nguelemendouka', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Somalomo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'HAUT NYONG')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                ]
+                
             ],
             [
                 'name'=>'LITTORAL',
                 'level_id' => 2,
                 'parent_id' => $cameroun->id,
+                'children' => [
+                    [
+                        'name' => 'WOURI',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Douala I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Douala II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Douala III', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Douala IV', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Douala V', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Douala VI', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'NKAM',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Ndobian', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkondjock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Yabassi', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Yingui', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'MOUNGO',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Baré', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Bonalea', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibombarri', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Eboné', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Loum', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Manjo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mbanga', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Melong', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mombo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkonsamba I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkongsamba II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkonsamba III', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Penja', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'SANAGA MARITIME',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Dizangué', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibamba', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Massock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mouanko', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ndom', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngambe', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngwei', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nyanon', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Pouma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                ]
             ],
             [
                 'name'=>'FAR NORTH',
                 'level_id' => 2,
                 'parent_id' => $cameroun->id,
+                'children' => [
+                    [
+                        'name' => 'LOGONE ET CHARI',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'FAR NORTH')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Blangoua', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Darak', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Fotokol', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Hile-Alifa', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Kousseri', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Logone-Birni', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Makary', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Waza', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Zina', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'WOURI')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'DIAMARÉ',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'FAR NORTH')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Ndobian', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkondjock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Yabassi', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Yingui', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'NKAM')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'MAYO TSANAGA',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'FAR NORTH')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Baré', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Bonalea', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibombarri', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Eboné', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Loum', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Manjo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mbanga', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Melong', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mombo', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkonsamba I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkongsamba II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nkonsamba III', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Penja', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'MOUNGO')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'MAYO DANAY',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'FAR NORTH')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Dizangué', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibamba', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Massock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mouanko', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ndom', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngambe', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngwei', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nyanon', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Pouma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'MAYO KANI',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Dizangué', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibamba', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Massock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mouanko', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ndom', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngambe', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngwei', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nyanon', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Pouma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                    [
+                        'name' => 'MAYO SAVA',
+                        'level_id' => 3,
+                        'parent_id' => Zone::query()->where('name', 'LITTORAL')->where('level_id', 2)->id,
+                        'children' => [
+                            ['name'=> 'Dizangué', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Dibamba', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea I', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Edea II', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Massock', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Mouanko', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ndom', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngambe', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Ngwei', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Nyanon', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                            ['name'=> 'Pouma', 'level_id'  => 4, 'parent_id'=> Zone::query()->where('name', 'SANAGA MARITIME')->where('level_id', 3)->first()->id],
+                        ]
+                    ],
+                ]
             ],
             [
                 'name'=>'NORTH REGION',

@@ -47,6 +47,14 @@ class AuthController extends Controller
         $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $userData['token'] = $token->plainTextToken;
 
+        if (!Auth::user()->email_verified_at) {
+            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        }
+
+        if (!Auth::user()->active) {
+            return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        }
+
         return response()->success($userData, __('User registered. Please check your email'), 201);
     }
 
