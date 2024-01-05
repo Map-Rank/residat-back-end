@@ -27,6 +27,7 @@ class ZoneController extends Controller
     public function index(Request $request) : JsonResponse {
         $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'string'],
+            'parent_id'=> ['sometimes', 'int']
         ]);
 
         if ($validator->fails()) {
@@ -37,6 +38,10 @@ class ZoneController extends Controller
         $data = Zone::query();
         if(isset($validated['name'])){
             $data = $data->where('name', 'like' , '%'.$validated['name'].'%');
+        }
+
+        if(isset($validated['parent_id'])){
+            $data = $data->where('parent_id' , $validated['parent_id']);
         }
 
         $data = $data->get();
