@@ -19,6 +19,7 @@ class ZoneResource extends JsonResource
             'id' => $this['id'],
             'name' => $this['name'],
             'parent' => ZoneResource::make($this->whenLoaded('zone')),
+            'banner' => $this['banner'],
             'created_at' => $this['created_at'],
         ];
     }
