@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
@@ -46,6 +47,16 @@ class AuthController extends Controller
 
         $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $userData['token'] = $token->plainTextToken;
+
+        event(new Registered($user));
+
+        if (!$userData['email_verified_at']) {
+            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        }
+
+        if (!$userData['active']) {
+            return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        }
 
         return response()->success($userData, __('User registered. Please check your email'), 201);
     }
