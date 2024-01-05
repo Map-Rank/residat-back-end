@@ -17,30 +17,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            RoleSeeder::class,
-        ]);
 
         $this->call([
-            PermissionSeeder::class,
+            // RoleSeeder::class,
+            // PermissionSeeder::class,
+            // UserSeeder::class,
+            // TypeInteractionSeeder::class,
+            // SectorSeeder::class,
+            // PostSeeder::class,
+            ZoneSeeder::class,
+            DivisionSeeder::class,
+            SubDivisionSeeder::class,
         ]);
-
-        $this->call([
-            UserSeeder::class,
-        ]);
-
-        $this->call([
-            TypeInteractionSeeder::class,
-        ]);
-
-        $this->call([
-            SectorSeeder::class,
-        ]);
-
-        $this->call([
-            PostSeeder::class,
-        ]);
-
-        
     }
 }
