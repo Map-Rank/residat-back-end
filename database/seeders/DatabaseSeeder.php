@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Level;
 use Illuminate\Database\Seeder;
 use Database\Seeders\PostSeeder;
 use Database\Seeders\RoleSeeder;
@@ -25,6 +27,7 @@ class DatabaseSeeder extends Seeder
             // TypeInteractionSeeder::class,
             // SectorSeeder::class,
             // PostSeeder::class,
+            LevelSeeder::class,
             ZoneSeeder::class,
             DivisionSeeder::class,
             SubDivisionSeeder::class,
