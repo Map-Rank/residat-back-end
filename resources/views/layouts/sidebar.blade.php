@@ -25,7 +25,12 @@
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" href="{{ route('posts.index') }}">
         <svg class="nav-icon">
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
-        </svg> Posts<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+        </svg> Posts</a>
+    </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('zones.index') ? 'active' : '' }}" href="{{ route('zones.index') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+        </svg> Zones<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
     </li>
 </ul>
 <div class="sidebar-footer border-top d-none d-md-flex">

@@ -21,12 +21,12 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // RoleSeeder::class,
-            // PermissionSeeder::class,
-            // UserSeeder::class,
-            // TypeInteractionSeeder::class,
-            // SectorSeeder::class,
-            // PostSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            UserSeeder::class,
+            TypeInteractionSeeder::class,
+            SectorSeeder::class,
+            PostSeeder::class,
             LevelSeeder::class,
             ZoneSeeder::class,
             DivisionSeeder::class,
