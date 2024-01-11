@@ -148,7 +148,7 @@ class PostController extends Controller
             return response()->errors([], __('Post not found'), 404);
         }
 
-        return response()->success($post, __('Post retrieved successfully'), 200);
+        return response()->success(PostResource::make($post->loadMissing('medias')), __('Post retrieved successfully'), 200);
     }
 
     /**
