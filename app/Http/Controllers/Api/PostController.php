@@ -142,7 +142,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::with('creator', 'likes', 'shares', 'medias', 'postComments')->find($id);
+        $post = Post::find($id);
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
