@@ -26,12 +26,14 @@
         <!-- Vendors styles-->
             
         <link rel="stylesheet" href="{{ asset('css/vendors/simplebar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/simplebar.css') }}">
         <!-- Main styles for this application-->
         <link href="{{ asset('css/style.css')}}" rel="stylesheet">
         <link href="{{ asset('css/examples.css')}}" rel="stylesheet">
         <script src="{{ asset('js/config.js')}}"></script>
         <script src="{{ asset('js/color-modes.js')}}"></script>
         <link href="{{ asset('css/coreui-chartjs.css') }}" rel="stylesheet">
+        <link rel="canonical" href="https://coreui.io/docs/components/modal/">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
 	
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -56,6 +58,8 @@
         <!-- CoreUI and necessary plugins-->
         <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
         <script src="{{ asset('js/simplebar.min.js') }}"></script>
+        <script src="{{ asset('js/popovers.js' )}}"></script>
+        <script src="js/tooltips.js"></script>
     <script>
       const header = document.querySelector('header.header');
       

@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -34,7 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
-
+    Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
+    Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');
+    Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
+    Route::get('delete/subdivisions/{id}', [ZoneController::class, 'destroy'])->name('delete.subdivision');
+    Route::post('create/zone', [ZoneController::class, 'store'])->name('create.zone');
+    
+    
     //ban user
     Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');
     //active user
