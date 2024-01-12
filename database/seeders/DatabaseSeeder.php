@@ -26,11 +26,11 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             TypeInteractionSeeder::class,
             SectorSeeder::class,
-            PostSeeder::class,
             LevelSeeder::class,
             ZoneSeeder::class,
             DivisionSeeder::class,
             SubDivisionSeeder::class,
+            PostSeeder::class,
         ]);
     }
 }
