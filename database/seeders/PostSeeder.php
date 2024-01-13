@@ -12,6 +12,7 @@ use App\Models\Zone;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Testing\Fakes\Fake;
 
     class PostSeeder extends Seeder
@@ -23,8 +24,21 @@ use Illuminate\Support\Testing\Fakes\Fake;
         {
             $subDivisions = Zone::query()->where('level_id', 4)->get();
             $user = User::first();
+            $faker = \Faker\Factory::create();
 
             foreach($subDivisions as $subDivision){
+                $user = new User();
+                $user->first_name = $faker->firstName();
+                $user->last_name = $faker->lastName();
+                $user->email = mb_strtolower(str_replace(" ", "", $subDivision->name)."@residat.com");
+                $user->phone = $faker->phoneNumber();
+                $user->password = Hash::make('password!');
+                $user->gender = 'male';
+                $user->zone()->associate($subDivision);
+                $user->date_of_birth = $faker->date();
+                $user->active = 1;
+                $user->save();
+
                 for($i = 0; $i < 5; $i++){
                     $post = new Post();
                     $post->content = $this->generateFakeComment();
