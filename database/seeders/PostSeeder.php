@@ -23,7 +23,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
             // Iterate through each post
             foreach ($posts as $post) {
                 // Like the post 50 times
-                // $this->performInteractions($post, 2, 50);
+                $this->performInteractions($post, 2, 50);
 
                 // Comment on the post 50 times
                 $this->performInteractions($post, 3, 50);
