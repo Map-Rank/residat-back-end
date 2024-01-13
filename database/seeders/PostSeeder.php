@@ -3,13 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\Interaction;
+use App\Models\Media;
 use Exception;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\TypeInteraction;
+use App\Models\Zone;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Testing\Fakes\Fake;
 
     class PostSeeder extends Seeder
     {
@@ -18,19 +21,46 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
          */
         public function run(): void
         {
-            $posts = Post::factory(100)->creator()->create();
+            $subDivisions = Zone::query()->where('level_id', 4)->get();
+            $user = User::first();
 
-            // Iterate through each post
-            foreach ($posts as $post) {
-                // Like the post 50 times
-                $this->performInteractions($post, 2, 50);
+            foreach($subDivisions as $subDivision){
+                for($i = 0; $i < 5; $i++){
+                    $post = new Post();
+                    $post->content = $this->generateFakeComment();
+                    $post->published_at = now();
+                    $post->created_at = now();
+                    $post->zone()->associate($subDivision);
+                    $post->save();
 
-                // Comment on the post 50 times
-                $this->performInteractions($post, 3, 50);
+                    $interaction = new Interaction([
+                        'type_interaction_id' => 1,
+                        'user_id' => $user->id,
+                        'post_id' => $post->id,
+                    ]);
 
-                // Share the post 50 times
-                $this->performInteractions($post, 4, 50);
+                    $interaction->save();
+
+                    if(($i % 2) == 0){
+                        $media = new Media();
+                        $media->url = 'storage/media/post_'.$i.'.png';
+                        $media->type = 'image/png';
+                        $media->post()->associate($post);
+
+                        $media->save();
+                    }
+
+                    // Like the post 3 times
+                    $this->performInteractions($post, 2, 3);
+
+                    // Comment on the post 3 times
+                    $this->performInteractions($post, 3, 3);
+
+                    // Share the post 2 times
+                    $this->performInteractions($post, 4, 2);
+                }
             }
+
         }
 
         /**
