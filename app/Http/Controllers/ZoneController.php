@@ -25,7 +25,7 @@ class ZoneController extends Controller
         }
 
         $validated = $validator->validated();
-        $data = Zone::with('children');
+        $data = Zone::with('children', 'parent');
         if(isset($validated['name'])){
             $data = $data->where('name', 'like' , '%'.$validated['name'].'%');
         }
@@ -33,11 +33,10 @@ class ZoneController extends Controller
         if(isset($validated['parent_id'])){
             $data = $data->where('parent_id' , $validated['parent_id']);
         }
-        
-        $zones = $data->where('level_id' , 2)->get();
+
+        $zones = $data->orderBy('level_id')->paginate(100);
 
         return view('zones.regions', compact('zones'));
-        // return response()->success(ZoneResource::collection($data), __('Values found'));
     }
 
     public function divisions(Request $request, $id) {
@@ -58,7 +57,7 @@ class ZoneController extends Controller
         if(isset($validated['parent_id'])){
             $data = $data->where('parent_id' , $validated['parent_id']);
         }
-        
+
         $divisions = $data->where('parent_id' , $id)->get();
 
         return view('zones.divisions', compact('divisions'));
@@ -82,7 +81,7 @@ class ZoneController extends Controller
         if(isset($validated['parent_id'])){
             $data = $data->where('parent_id' , $validated['parent_id']);
         }
-        
+
         $subdivisions = $data->where('parent_id' , $id)->get();
 
         return view('zones.subdivisions', compact('subdivisions'));
@@ -142,7 +141,7 @@ class ZoneController extends Controller
     public function destroy($id)
     {
         $zone = Zone::query()->find($id);
-        
+
         if (!$zone) {
             return redirect()->back()->with('error', 'Zone not found');
         }
