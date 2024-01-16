@@ -52,19 +52,19 @@ class PostController extends Controller
 
         $data = Post::with('creator', 'medias');
 
-        if(Auth::user() != null){
-            $zone =  Auth::user()->loadMissing('zone.children')->zone;
-            // Get all the descendants of the user's zone.
-            if($zone != null){
-                $descendants = collect();
-                $descendants->push($zone);
-                if ($zone->children != null){
-                    $descendants =  UtilService::get_descendants($zone->children, $descendants);
-                }
-                $descendantIds = $descendants->pluck('id');
-                $data = $data->whereIn('zone_id',  $descendantIds);
-            }
-        }
+        // if(Auth::user() != null){
+        //     $zone =  Auth::user()->loadMissing('zone.children')->zone;
+        //     // Get all the descendants of the user's zone.
+        //     if($zone != null){
+        //         $descendants = collect();
+        //         $descendants->push($zone);
+        //         if ($zone->children != null){
+        //             $descendants =  UtilService::get_descendants($zone->children, $descendants);
+        //         }
+        //         $descendantIds = $descendants->pluck('id');
+        //         $data = $data->whereIn('zone_id',  $descendantIds);
+        //     }
+        // }
 
         if(isset($validated['zone_id'])){
             $data = $data->where('zone_id', $validated['zone_id']);
