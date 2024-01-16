@@ -77,7 +77,7 @@ class ZoneSeeder extends Seeder
                 'parent_id' => $cameroun->id,
 
             ]
-            ];
+        ];
 
             foreach($regions as $region){
                 Zone::query()->updateOrCreate($region);

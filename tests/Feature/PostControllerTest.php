@@ -32,12 +32,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostControllerTest extends TestCase
 {
-    use WithFaker;
+    use RefreshDatabase, WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        // $this->seed();
         Sanctum::actingAs(
             User::factory()->create($this->dataLogin())
         );
@@ -45,8 +45,10 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
-        // dd($this->seed());
-        // $post = Post::factory()->create();
+        Post::factory()->count(10)->creator()->create();
+
+        $this->withoutExceptionHandling();
+        $response = $this->withoutExceptionHandling()->get('api/posts?page=1&size=5');
 
         $response = $this->getJson('api/posts?page=1&size=5');
         

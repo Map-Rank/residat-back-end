@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $latestZoneWithLevelFour = Zone::factory()->existingWithLevelFour()->create();
+        // $latestZoneWithLevelFour = Zone::factory()->existingWithLevelFour()->create();
+        $zone = Zone::latest()->first();
         $user = User::query()->create([
             'id' => 1,
             'first_name' => 'users 1',
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
             'email' => 'user@user.com',
             'password' => bcrypt('password!'),
             'gender' => 'male',
-            'zone_id' => $latestZoneWithLevelFour->id,
+            'zone_id' => $zone->id,
             'active' => 1,
             'avatar'=> '/storage/media/profile.png',
             'verified' => 1,

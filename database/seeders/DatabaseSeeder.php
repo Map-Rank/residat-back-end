@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PermissionSeeder::class,
-            UserSeeder::class,
             TypeInteractionSeeder::class,
             SectorSeeder::class,
             LevelSeeder::class,
             ZoneSeeder::class,
             DivisionSeeder::class,
             SubDivisionSeeder::class,
+            UserSeeder::class,
             PostSeeder::class,
         ]);
     }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Zone;
+use App\Models\Level;
 use App\Models\Interaction;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -60,10 +61,7 @@ class PostFactory extends Factory
      */
     private function getRandomSubdivisionId(): int
     {
-        $region = Zone::where('level_id', 2)->inRandomOrder()->first();
-        $division = Zone::where('parent_id', $region->id)->where('level_id', 3)->inRandomOrder()->first();
-        $subdivision = Zone::where('parent_id', $division->id)->where('level_id', 4)->inRandomOrder()->first();
-
+        $subdivision = Zone::where('level_id', Level::query()->latest()->first()->id)->inRandomOrder()->first();
         return $subdivision->id;
     }
 

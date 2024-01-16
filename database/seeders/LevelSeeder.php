@@ -14,8 +14,6 @@ class LevelSeeder extends Seeder
      */
     public function run(): void
     {
-
-
         $levels = [
             [
                 'name'=>'Country',
