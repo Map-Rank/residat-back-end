@@ -18,6 +18,9 @@ class LevelSeeder extends Seeder
 
         $levels = [
             [
+                'name'=>'Country',
+            ],
+            [
                 'name'=>'Region',
             ],
             [

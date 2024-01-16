@@ -43,7 +43,6 @@ class PostFactory extends Factory
         $user = User::first();
         
         return $this->afterCreating(function (Post $post) use ($user) {
-            // Créez une interaction de type 'creator' pour l'utilisateur actuellement authentifié
             $interaction = new Interaction([
                 'type_interaction_id' => 1,
                 'user_id' => $user->id,
@@ -54,14 +53,13 @@ class PostFactory extends Factory
         });
     }
 
-    /**
+    /** 
      * Get a random subdivision ID.
      *
      * @return int
      */
     private function getRandomSubdivisionId(): int
     {
-        // Vous pouvez personnaliser cette logique en fonction de votre structure de données
         $region = Zone::where('level_id', 2)->inRandomOrder()->first();
         $division = Zone::where('parent_id', $region->id)->where('level_id', 3)->inRandomOrder()->first();
         $subdivision = Zone::where('parent_id', $division->id)->where('level_id', 4)->inRandomOrder()->first();
