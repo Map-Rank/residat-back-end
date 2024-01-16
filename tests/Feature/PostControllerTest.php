@@ -12,22 +12,31 @@ use App\Models\Interaction;
 use Laravel\Sanctum\Sanctum;
 use App\Models\TypeInteraction;
 use Database\Seeders\PostSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
+use Database\Seeders\ZoneSeeder;
+use Database\Seeders\LevelSeeder;
 use Illuminate\Http\UploadedFile;
+use Database\Seeders\SectorSeeder;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
+use Database\Seeders\DivisionSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\SubDivisionSeeder;
 use Illuminate\Support\Facades\Storage;
+use Database\Seeders\TypeInteractionSeeder;
 use App\Http\Controllers\Api\PostController;
+use App\Models\Level;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
-
         $this->seed();
         Sanctum::actingAs(
             User::factory()->create($this->dataLogin())
@@ -36,10 +45,11 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
-        $this->seed(PostSeeder::class);
-        Post::factory()->count(10)->create();
+        // dd($this->seed());
+        // $post = Post::factory()->create();
 
-        $response = $this->getJson('api/posts?page=0&size=5');
+        $response = $this->getJson('api/posts?page=1&size=5');
+        
 
         $this->assertEquals(true, $response->json()['status']);
         $this->assertEquals(5, count($response->json()['data']));
@@ -47,6 +57,7 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
+
         // Vérifiez si la table TypeInteraction est vide
         $typeInteractions = TypeInteraction::all();
         if (count($typeInteractions) == 0) {

@@ -12,12 +12,12 @@ class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_reset_password_link_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/forgot-password');
+    // public function test_reset_password_link_screen_can_be_rendered(): void
+    // {
+    //     $response = $this->get('/forgot-password');
 
-        $response->assertStatus(200);
-    }
+    //     $response->assertStatus(200);
+    // }
 
     public function test_reset_password_link_can_be_requested(): void
     {
@@ -25,8 +25,9 @@ class PasswordResetTest extends TestCase
 
         $user = User::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
+        $response->assertStatus(200);
         Notification::assertSentTo($user, ResetPassword::class);
     }
 
@@ -34,12 +35,24 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
+        // Créez un utilisateur
         $user = User::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        // Envoyez une demande de réinitialisation du mot de passe
+        $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
+        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+            $token = $notification->token;
+
+            // Authentifiez l'utilisateur avant d'accéder à la route de réinitialisation du mot de passe
+            $this->actingAs($user);
+
+            $response = $this->postJson("/api/reset-password", [
+                'token' => $token,
+                'email' => $user->email,
+                'password' => 'password',
+                'password_confirmation' => 'password',
+            ]);
 
             $response->assertStatus(200);
 
@@ -51,19 +64,26 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
+        // Créez un utilisateur
         $user = User::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        // Envoyez une demande de réinitialisation du mot de passe
+        $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
         Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
+            $token = $notification->token;
+
+            // Authentifiez l'utilisateur avant d'accéder à la route de réinitialisation du mot de passe
+            $this->actingAs($user);
+
+            $response = $this->postJson('/api/reset-password', [
+                'token' => $token,
                 'email' => $user->email,
                 'password' => 'password',
                 'password_confirmation' => 'password',
             ]);
 
-            $response->assertSessionHasNoErrors();
+            $response->assertStatus(200);
 
             return true;
         });

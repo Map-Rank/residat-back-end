@@ -16,8 +16,23 @@ class ZoneFactory extends Factory
 
         return [
             'name' => $this->faker->word(),
-            'parent_id' => $parentZone ? $parentZone->id : null,
-            'level_id' => Level::factory(), // Utilisation de la factory pour créer un niveau
+            'parent_id' => null,
+            'level_id' => Level::factory(),
         ];
+    }
+
+    /**
+     * Configure la factory pour utiliser la dernière zone existante avec level_id = 4.
+     *
+     * @return $this
+     */
+    public function existingWithLevelFour()
+    {
+        return $this->state(function (array $attributes) {
+            $latestZone = Zone::where('level_id', 4)->latest()->first();
+            return [
+                'parent_id' => $latestZone ? $latestZone->id : null,
+            ];
+        });
     }
 }

@@ -46,20 +46,20 @@ class AuthController extends Controller
         $token = $user->createToken('authtoken');
 
         // Envoyer la notification de vérification par e-mail
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
         $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $userData['token'] = $token->plainTextToken;
 
         // event(new Registered($user));
 
-        if (!$userData['email_verified_at']) {
-            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
-        }
+        // if (!$userData['email_verified_at']) {
+        //     return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        // }
 
-        if (!$userData['active']) {
-            return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
-        }
+        // if (!$userData['active']) {
+        //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        // }
 
         return response()->success($userData, __('User registered. Please check your email'), 201);
     }
@@ -81,13 +81,13 @@ class AuthController extends Controller
             return response()->success([], __('Invalid login credentials') , 200);
         }
 
-        if (!Auth::user()->email_verified_at) {
-            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
-        }
+        // if (!Auth::user()->email_verified_at) {
+        //     return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        // }
 
-        if (!Auth::user()->active) {
-            return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
-        }
+        // if (!Auth::user()->active) {
+        //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        // }
 
         $user = User::with('zone')->where('id', Auth::user()->id)->first();
 
