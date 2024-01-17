@@ -15,6 +15,7 @@ use App\Http\Resources\PostResource;
 use App\Http\Resources\UserFullResource;
 use App\Models\TypeInteraction;
 use App\Models\User;
+use App\Models\Zone;
 use App\Service\UtilService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -67,7 +68,15 @@ class PostController extends Controller
         // }
 
         if(isset($validated['zone_id'])){
-            $data = $data->where('zone_id', $validated['zone_id']);
+            // $data = $data->where('zone_id', $validated['zone_id']);
+            $zone = Zone::find($validated['zone_id']);
+            $descendants = collect();
+            $descendants->push($zone);
+            if ($zone->children != null){
+                $descendants =  UtilService::get_descendants($zone->children, $descendants);
+            }
+            $descendantIds = $descendants->pluck('id');
+            $data = $data->whereIn('zone_id',  $descendantIds);
         }
 
         if(isset($validated['sectors'])){
