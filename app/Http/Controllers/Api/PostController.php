@@ -51,7 +51,7 @@ class PostController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Post::with('creator', 'medias');
+        $data = Post::with('creator', 'medias', 'zone');
 
         // if(Auth::user() != null){
         //     $zone =  Auth::user()->loadMissing('zone.children')->zone;
