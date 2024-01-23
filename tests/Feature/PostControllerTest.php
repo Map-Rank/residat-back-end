@@ -51,23 +51,23 @@ class PostControllerTest extends TestCase
         sleep(3);
 
         $this->withoutExceptionHandling();
-        $response = $this->withoutExceptionHandling()->get('api/posts?page=1&size=5');
+        
+        // Utiliser la méthode index pour récupérer la liste des ressources
+        $response = $this->getJson(route('post.index', ['page' => 1, 'size' => 5]));
 
-        $response = $this->getJson('api/posts?page=1&size=5');
-
-
-        $this->assertEquals(true, $response->json()['status']);
-        $this->assertEquals(5, count($response->json()['data']));
+        $response->assertStatus(200)
+             ->assertJson(['status' => true])
+             ->assertJsonCount(5, 'data');
     }
 
     public function test_store()
     {
-        // $this->withoutExceptionHandling();
         // Vérifiez si la table TypeInteraction est vide
-        $typeInteractions = TypeInteraction::all();
-        if (count($typeInteractions) == 0) {
-            // Créez quatre enregistrements
-            TypeInteraction::factory()->create();
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
+
+        if (!$typeInteraction) {
+            // Si le type d'interaction n'existe pas, créez-le
+            $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         }
         sleep(3);
         // Créez des fichiers temporaires pour simuler le téléchargement
@@ -82,7 +82,7 @@ class PostControllerTest extends TestCase
             'media' => [$file1, $file2],
         ];
 
-        $response = $this->postJson('api/create', $data);
+        $response = $this->postJson(route('post.store'), $data);
 
         $response->assertStatus(200);
 
@@ -106,7 +106,7 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->create();
 
-        $response = $this->getJson('api/show/' . $post->id);
+        $response = $this->getJson(route('post.show', ['page' => 1, $post->id]) );
 
         $response->assertStatus(200)
             ->assertJson(['data' => ['content' => $post->content]]);
@@ -114,59 +114,67 @@ class PostControllerTest extends TestCase
 
     public function test_update()
     {
-        $this->withoutExceptionHandling();
-
-        $type = TypeInteraction::factory()->create();
-        // dd($type);
-
-        sleep(2);
-
-        Post::factory()->count(10)->creator()->create();
-
+        $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+        // Créez un post pour la mise à jour
+        $post = Post::factory()->creator()->create();
+    
         sleep(3);
-
-        $post = Post::with('creator')->first();
-
-        $user = $post->creator->first(); // Récupérer le créateur du post
-
-        // Simuler l'authentification de l'utilisateur
-        Sanctum::actingAs($user);
-
-        // Créez un fichier temporaire pour simuler le téléchargement
+    
+        // Récupérez l'utilisateur créateur du post
+        $user = $post->creator->first();
+    
+        // Simulez l'authentification de l'utilisateur
+        Sanctum::actingAs($user); // Assurez-vous que l'utilisateur est authentifié
+    
+        // Créez un nouveau fichier temporaire pour simuler la mise à jour du média
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
-
+    
         $data = [
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
             'sectors' => [1, 2],
-            'media' => [$newMediaFile], // Ajoutez les fichiers médias à la requête
+            'media' => [$newMediaFile], // Ajoutez le nouveau fichier média à la requête de mise à jour
         ];
-
-        $response = $this->putJson('api/update/' . $post->id, $data);
-
+    
+        $response = $this->putJson(route('post.update', $post->id), $data);
+    
         $response->assertStatus(200);
-
+    
+        // Rafraîchissez l'instance du post depuis la base de données
         $post->refresh();
+    
+        // Vérifiez que les données du post ont été mises à jour
         $this->assertEquals($data['content'], $post->content);
         $this->assertEquals($data['published_at'], $post->published_at);
         $this->assertEquals($data['zone_id'], $post->zone_id);
-
+    
         // Vérifiez également que le nouveau média est associé au post
         $storedMediaUrl = Storage::url($newMediaFile->store('media/' . auth()->user()->email));
-        $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl]);
+        $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl, 'post_id' => $post->id]);
     }
 
     public function test_destroy()
     {
+        // Vérifiez si la table TypeInteraction est vide
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
+
+        if (!$typeInteraction) {
+            // Si le type d'interaction n'existe pas, créez-le
+            $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+        }
+        sleep(3);
+        
+        Post::factory()->creator()->create();
+
         $post = Post::with('creator')->first();
 
         $user = $post->creator->first(); // Récupérer le créateur du post
 
         // Simuler l'authentification de l'utilisateur
-        Sanctum::actingAs($user);
+        // Sanctum::actingAs($user);
 
-        $response = $this->deleteJson('api/delete/' . $post->id);
+        $response = $this->deleteJson(route('post.delete', $post->id));
 
         sleep(5);
 
@@ -185,7 +193,7 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->creator()->create();
 
-        $response = $this->postJson('api/like/' . $post->id);
+        $response = $this->postJson('api/post/like/' . $post->id);
 
         $response->assertStatus(200);
 
@@ -208,7 +216,7 @@ class PostControllerTest extends TestCase
             'text' => $this->faker->sentence(), // Ajoutez le texte du commentaire ici
         ];
 
-        $response = $this->postJson('api/comment/' . $post->id, $data);
+        $response = $this->postJson('api/post/comment/' . $post->id, $data);
 
         $response->assertStatus(200);
 
@@ -228,7 +236,7 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->creator()->create();
 
-        $response = $this->postJson('api/share/' . $post->id);
+        $response = $this->postJson('api/post/share/' . $post->id);
 
         $response->assertStatus(200);
 

@@ -42,10 +42,12 @@ class PostFactory extends Factory
      */
     public function creator(): PostFactory
     {
+        // Exécuter le factory de TypeInteraction avant la création des posts
+        $typeInteraction = TypeInteraction::firstOrCreate(['name' => 'created']);
+
         $user = User::first();
-        
-        return $this->afterCreating(function (Post $post) use ($user) {
-            $typeInteraction = TypeInteraction::where('id', 1)->first();
+
+        return $this->afterCreating(function (Post $post) use ($user, $typeInteraction) {
             $interaction = new Interaction([
                 'type_interaction_id' => $typeInteraction->id,
                 'user_id' => $user->id,
