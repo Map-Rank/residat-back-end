@@ -54,7 +54,7 @@ class PostControllerTest extends TestCase
         $response = $this->withoutExceptionHandling()->get('api/posts?page=1&size=5');
 
         $response = $this->getJson('api/posts?page=1&size=5');
-        
+
 
         $this->assertEquals(true, $response->json()['status']);
         $this->assertEquals(5, count($response->json()['data']));
@@ -78,8 +78,8 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
-            'sectors' => [1, 2], 
-            'media' => [$file1, $file2], 
+            'sectors' => [1, 2],
+            'media' => [$file1, $file2],
         ];
 
         $response = $this->postJson('api/create', $data);
@@ -139,7 +139,7 @@ class PostControllerTest extends TestCase
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
             'zone_id' => Zone::factory()->create()->id,
-            'sectors' => [1, 2], 
+            'sectors' => [1, 2],
             'media' => [$newMediaFile], // Ajoutez les fichiers médias à la requête
         ];
 
