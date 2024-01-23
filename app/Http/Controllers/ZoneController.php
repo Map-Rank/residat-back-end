@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ZoneRequest;
 use App\Http\Resources\ZoneResource;
+use App\Models\Level;
 use App\Models\Zone;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -147,5 +148,10 @@ class ZoneController extends Controller
         }
 
         return redirect()->back()->with('sucess', 'Zone successfully deleted!');
+    }
+
+    public function create(){
+        $levels = Level::query()->get();
+        return view('zones.create', compact('levels'));
     }
 }
