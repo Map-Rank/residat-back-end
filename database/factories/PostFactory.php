@@ -8,6 +8,7 @@ use App\Models\Zone;
 use App\Models\Level;
 use App\Models\Interaction;
 use Laravel\Sanctum\Sanctum;
+use App\Models\TypeInteraction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -44,8 +45,9 @@ class PostFactory extends Factory
         $user = User::first();
         
         return $this->afterCreating(function (Post $post) use ($user) {
+            $typeInteraction = TypeInteraction::where('id', 1)->first();
             $interaction = new Interaction([
-                'type_interaction_id' => 1,
+                'type_interaction_id' => $typeInteraction->id,
                 'user_id' => $user->id,
                 'post_id' => $post->id,
             ]);

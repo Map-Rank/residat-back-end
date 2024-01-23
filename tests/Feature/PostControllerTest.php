@@ -45,7 +45,10 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
+        TypeInteraction::factory()->create();
+        sleep(2);
         Post::factory()->count(10)->creator()->create();
+        sleep(3);
 
         $this->withoutExceptionHandling();
         $response = $this->withoutExceptionHandling()->get('api/posts?page=1&size=5');
@@ -59,13 +62,14 @@ class PostControllerTest extends TestCase
 
     public function test_store()
     {
-
+        // $this->withoutExceptionHandling();
         // Vérifiez si la table TypeInteraction est vide
         $typeInteractions = TypeInteraction::all();
         if (count($typeInteractions) == 0) {
             // Créez quatre enregistrements
-            TypeInteraction::factory()->count(4)->create();
+            TypeInteraction::factory()->create();
         }
+        sleep(3);
         // Créez des fichiers temporaires pour simuler le téléchargement
         $file1 = UploadedFile::fake()->image('image1.jpg');
         $file2 = UploadedFile::fake()->image('image2.jpg');
@@ -110,8 +114,16 @@ class PostControllerTest extends TestCase
 
     public function test_update()
     {
+        $this->withoutExceptionHandling();
 
-        // TypeInteraction::factory()->count(4)->create();
+        $type = TypeInteraction::factory()->create();
+        // dd($type);
+
+        sleep(2);
+
+        Post::factory()->count(10)->creator()->create();
+
+        sleep(3);
 
         $post = Post::with('creator')->first();
 
