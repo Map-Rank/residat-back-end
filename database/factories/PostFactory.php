@@ -10,6 +10,7 @@ use App\Models\Interaction;
 use Laravel\Sanctum\Sanctum;
 use App\Models\TypeInteraction;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Ramsey\Uuid\Type\TypeInterface;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
@@ -43,7 +44,22 @@ class PostFactory extends Factory
     public function creator(): PostFactory
     {
         // Exécuter le factory de TypeInteraction avant la création des posts
-        $typeInteraction = TypeInteraction::firstOrCreate(['name' => 'created']);
+        $typeInteraction  = TypeInteraction::query()->where('id', 1)->first();
+
+        if($typeInteraction ==  null){
+            $typeInteraction = TypeInteraction::query()->where('name' , 'created')->first();
+            if($typeInteraction == null)
+                $typeInteraction = TypeInteraction::firstOrCreate(['name' => 'created', 'id'=> 1]);
+            else {
+                $typeInteraction->id = 1;
+                $typeInteraction->save();
+            }
+        }
+        else {
+            $typeInteraction->name = 'created';
+            $typeInteraction->save();
+        }
+
 
         $user = User::first();
 
@@ -58,7 +74,7 @@ class PostFactory extends Factory
         });
     }
 
-    /** 
+    /**
      * Get a random subdivision ID.
      *
      * @return int

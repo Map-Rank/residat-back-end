@@ -51,7 +51,7 @@ class PostControllerTest extends TestCase
         sleep(3);
 
         $this->withoutExceptionHandling();
-        
+
         // Utiliser la méthode index pour récupérer la liste des ressources
         $response = $this->getJson(route('post.index', ['page' => 1, 'size' => 5]));
 
@@ -117,18 +117,18 @@ class PostControllerTest extends TestCase
         $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         // Créez un post pour la mise à jour
         $post = Post::factory()->creator()->create();
-    
+
         sleep(3);
-    
+
         // Récupérez l'utilisateur créateur du post
         $user = $post->creator->first();
-    
+
         // Simulez l'authentification de l'utilisateur
         Sanctum::actingAs($user); // Assurez-vous que l'utilisateur est authentifié
-    
+
         // Créez un nouveau fichier temporaire pour simuler la mise à jour du média
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
-    
+
         $data = [
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
@@ -136,19 +136,19 @@ class PostControllerTest extends TestCase
             'sectors' => [1, 2],
             'media' => [$newMediaFile], // Ajoutez le nouveau fichier média à la requête de mise à jour
         ];
-    
+
         $response = $this->putJson(route('post.update', $post->id), $data);
-    
+
         $response->assertStatus(200);
-    
+
         // Rafraîchissez l'instance du post depuis la base de données
         $post->refresh();
-    
+
         // Vérifiez que les données du post ont été mises à jour
         $this->assertEquals($data['content'], $post->content);
         $this->assertEquals($data['published_at'], $post->published_at);
         $this->assertEquals($data['zone_id'], $post->zone_id);
-    
+
         // Vérifiez également que le nouveau média est associé au post
         $storedMediaUrl = Storage::url($newMediaFile->store('media/' . auth()->user()->email));
         $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl, 'post_id' => $post->id]);
@@ -164,7 +164,7 @@ class PostControllerTest extends TestCase
             $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         }
         sleep(3);
-        
+
         Post::factory()->creator()->create();
 
         $post = Post::with('creator')->first();
@@ -174,7 +174,7 @@ class PostControllerTest extends TestCase
         // Simuler l'authentification de l'utilisateur
         // Sanctum::actingAs($user);
 
-        $response = $this->deleteJson(route('post.delete', $post->id));
+        $response = $this->deleteJson(route('post.destroy', $post->id));
 
         sleep(5);
 
