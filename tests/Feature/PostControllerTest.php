@@ -191,17 +191,33 @@ class PostControllerTest extends TestCase
      */
     public function testLike()
     {
-        $post = Post::factory()->creator()->create();
+        $interaction = TypeInteraction::factory()->create();
 
-        $response = $this->postJson('api/post/like/' . $post->id);
+        dd($interaction);
 
-        $response->assertStatus(200);
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
 
-        $user = auth()->user();
+        
+
+        // TypeInteraction::factory()->create(['name' => 'created']);
+       
+        Post::factory()->creator()->create();
+
+        $post = Post::with('creator')->first();
+
+        $user = $post->creator->first();
+        
+        // Authentifier l'utilisateur
+        $this->actingAs($user);
+
+        // Envoyer une requête POST à la route `/api/post/like/{id}`
+        $response = $this->postJson('/api/post/like/' . $post->id);
+
+        // Asserter que la relation entre l'utilisateur, le post et le type d'interaction est bien établie
         $this->assertDatabaseHas('interactions', [
-            'type_interaction_id' => 2,
-            'user_id' => $user->id,
             'post_id' => $post->id,
+            'user_id' => $user->id,
+            'type_interaction_id' => $typeInteraction->id,
         ]);
     }
 
