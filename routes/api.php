@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SectorController;
+use App\Models\Media;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'profile']);
     Route::get('/profile/detail/{id}', [ProfileController::class, 'showProfile']);
-    
+
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
 
     Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction']);
@@ -60,3 +61,16 @@ Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
 Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
 Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
+Route::get('fix/media', function (Request $request){
+    $media = Media::query()->where('url',  'like', 'storage%')->get();
+    $count = 0;
+    foreach($media as $medium){
+        $medium->url = '/'.$medium->url;
+
+        if ($medium->save()) {
+            $count++;
+        }
+    }
+    // dd($media);
+    return $count;
+});

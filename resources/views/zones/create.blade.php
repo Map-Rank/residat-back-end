@@ -18,7 +18,7 @@
         </ol>
     </nav>
 
-    <div class="container px-4 ">
+    <div class="container px-4 " id="elt">
         <div class="row">
             <div class="col-sm-7">
 
@@ -29,21 +29,34 @@
                     <div class="card-body">
                         {!! Form::open(['route' => 'zone.store','files' => true, 'class' => 'form-horizontal panel', 'enctype '=> "multipart/form-data"]) !!}
                         @csrf
-                        <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
-                            {!! Form::label('name', null, ['class' => '',]) !!}
-                            {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Name', 'required' => 'required', 'autofocus' => 'autofocus']) !!}
-                            {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
-                        </div>
 
                         <div class="form-group {!! $errors->has('level_id') ? 'has-error' : '' !!}">
                             {!! Form::label('Level', null, ['class' => '',]) !!}
-                            <select class="form-control" required autofocus name="zone_id" >
+                            <select class="form-control" required autofocus name="level_id"  v-model="selected_level_id">
                                 <option value="">Select the level</option>
                                 @foreach($levels as $level)
                                     <option value="{{$level->id}}">{{ $level->name }}</option>
                                 @endforeach
                             </select>
                             {!! $errors->first('level_id', '<small class="help-block">:message</small>') !!}
+                        </div>
+
+                        <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
+                            <input v-model="region" v-if="show_region" onfocusout="hidePanel" type="text" class="form-control" placeholder="Filter region name"/>
+
+                            <ul v-if="show_region"
+                                style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
+                                    overflow-y: scroll; overflow-x: hidden">
+                                <li  style="cursor: pointer; " v-for="region in regions">
+                                    @{{ region.name }} </li>
+                            </ul>
+                        </div>
+
+                        <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
+                            {!! Form::label('name', null, ['class' => '',]) !!}
+                            <input  onfocusout="hidePanel" type="text" class="form-control" required name="name"
+                                placeholder="Name of the zone"/>
+                            {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
                         </div>
 
                         <div class="form-group {!! $errors->has('data') ? 'has-error' : '' !!}">
@@ -64,11 +77,14 @@
 
 @section('script')
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script>
         $(() => {
             $('[rel="tooltip"]').tooltip({trigger: "hover"});
 
-            App.checkAll()
+            // App.checkAll()
 
             // Run datatable
             var table = $('#example').DataTable({
@@ -105,6 +121,51 @@
 
         })
     </script>
+    <script>
+        var app = new Vue({
+            el: '#elt',
+            data: {
+                message: 'Hello Vue!',
+                show_zone_list : true,
+                zone_selected: null,
+                levels : @json($levels),
+                show_division : false,
+                show_region : false,
+                selected_level_id : 0,
+                region : null,
+                zones: [],
+                regions: [],
+            },
+            methods: {
+                loadZones: function (level_id) {
+                    console.log(level_id);
+                    this.show_region = (level_id == 3);
+                    this.show_division = (level_id == 4);
+                    if(this.show_region){
+                        var url = @json(env('APP_URL')).concat("/api/zone?level_id=").level_id;
+                        console.log(url);
+                        axios
+                            .get('/api/zone?level_id='+(level_id-1))
+                            .then( response => {
+                                console.log((response.data.data));
+                                this.regions = response.data.data;
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+
+            },
+            watch: {
+                selected_level_id: function (level){
+                    this.loadZones(this.selected_level_id);
+                }
+            },
+            mounted() {
+
+            }
+        })
+    </script>
+
 @endsection
 
 @section('error')
