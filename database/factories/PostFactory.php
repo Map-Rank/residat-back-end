@@ -60,17 +60,39 @@ class PostFactory extends Factory
             $typeInteraction->save();
         }
 
+        $like  = TypeInteraction::query()->where('id', 2)->first();
+
+        if($like ==  null){
+            $like = TypeInteraction::query()->where('name' , 'like')->first();
+            if($like == null)
+                $like = TypeInteraction::firstOrCreate(['name' => 'like', 'id'=> 2]);
+            else {
+                $like->id = 2;
+                $like->save();
+            }
+        }
+        else {
+            $like->name = 'like';
+            $like->save();
+        }
+
 
         $user = User::first();
 
-        return $this->afterCreating(function (Post $post) use ($user, $typeInteraction) {
+        return $this->afterCreating(function (Post $post) use ($user, $typeInteraction, $like) {
             $interaction = new Interaction([
                 'type_interaction_id' => $typeInteraction->id,
                 'user_id' => $user->id,
                 'post_id' => $post->id,
             ]);
+            $likeInteraction = new Interaction([
+                'type_interaction_id' => $like->id,
+                'user_id' => $user->id,
+                'post_id' => $post->id,
+            ]);
 
             $post->interactions()->save($interaction);
+            $post->interactions()->save($likeInteraction);
         });
     }
 

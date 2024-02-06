@@ -231,20 +231,25 @@ class PostController extends Controller
     public function like(string $id): JsonResponse
     {
         $post = Post::with('creator')->find($id);
+        $typeInteraction  = TypeInteraction::query()->where('name', 'like')->first();
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
+        if(!$typeInteraction){
+            return response()->errors([], __('Bad project configuration'), 404);
+        }
+
         $user = auth()->user();
 
         // Vérifiez si l'utilisateur a déjà aimé le post
-        $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  2)->exists();
+        $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  $typeInteraction->id)->exists();
 
         try {
             if ($isLiked) {
                 // Si l'utilisateur a déjà aimé le post, retirez le like (unlike) et mettez à jour liked à false
-                $post->users()->where('id', $user->id)->wherePivot('type_interaction_id', 2)->detach($user->id);
+                $post->users()->where('id', $user->id)->wherePivot('type_interaction_id', $typeInteraction->id)->detach($user->id);
                 $message = __('Post unliked successfully');
             } else {
                 // Sinon, ajoutez le like et mettez à jour liked à true
@@ -254,7 +259,11 @@ class PostController extends Controller
 
             return response()->success(PostResource::make($post->loadMissing('interactions')), $message, 200);
         } catch (\Exception $e) {
+            Log::info(sprintf('%s: User %d generated the error : %s', __METHOD__, auth()->id, $e->getMessage()));
             return response()->errors(['error' => $e->getMessage()], __('Error processing like/unlike'), 500);
+
+            return response()->errors([], $e->getMessage() .__(' Error processing like/unlike'), 500);
+
         }
     }
 

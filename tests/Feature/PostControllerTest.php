@@ -228,6 +228,7 @@ class PostControllerTest extends TestCase
     {
         $post = Post::factory()->creator()->create();
 
+        dd($post->loadMissing('interactions.typeInteraction'));
         $data = [
             'text' => $this->faker->sentence(), // Ajoutez le texte du commentaire ici
         ];
