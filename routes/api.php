@@ -61,16 +61,4 @@ Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
 Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
 Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
-Route::get('fix/media', function (Request $request){
-    $media = Media::query()->where('url',  'like', 'storage%')->get();
-    $count = 0;
-    foreach($media as $medium){
-        $medium->url = '/'.$medium->url;
 
-        if ($medium->save()) {
-            $count++;
-        }
-    }
-    // dd($media);
-    return $count;
-});
