@@ -29,6 +29,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Models\Level;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 
 class PostControllerTest extends TestCase
 {
@@ -45,7 +46,13 @@ class PostControllerTest extends TestCase
 
     public function test_index()
     {
-        TypeInteraction::factory()->create();
+        $interactions =  [
+            ['name'=> 'created', 'id'=> 1],
+            ['name'=> 'like', 'id'=> 2],
+            ['name'=> 'comment', 'id'=> 3],
+            ['name'=> 'share', 'id'=> 4],
+        ];
+        DB::table('type_interactions')->insert($interactions);
         sleep(2);
         Post::factory()->count(10)->creator()->create();
         sleep(3);
@@ -114,7 +121,22 @@ class PostControllerTest extends TestCase
 
     public function test_update()
     {
-        $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
+
+        if(!$typeInteraction){
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
+
+            DB::table('type_interactions')->insert($typeInteractions);
+        }
+
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
+
+        // $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         // Créez un post pour la mise à jour
         $post = Post::factory()->creator()->create();
 
@@ -161,8 +183,17 @@ class PostControllerTest extends TestCase
 
         if (!$typeInteraction) {
             // Si le type d'interaction n'existe pas, créez-le
-            $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+            // $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
+
+            DB::table('type_interactions')->insert($typeInteractions);
         }
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
         sleep(3);
 
         Post::factory()->creator()->create();
@@ -191,52 +222,58 @@ class PostControllerTest extends TestCase
      */
     public function testLike()
     {
-        // $interaction = TypeInteraction::factory()->create();
 
-        // // dd($interaction);
+        $typeInteraction = TypeInteraction::where('name', 'like')->first();
 
-        // $typeInteraction = TypeInteraction::where('name', 'created')->first();
+        if(!$typeInteraction){
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
 
-        
+            DB::table('type_interactions')->insert($typeInteractions);
+        }
 
-        // // TypeInteraction::factory()->create(['name' => 'created']);
-       
-        // Post::factory()->creator()->create();
-
-        // $post = Post::with('creator')->first();
-
-        // $user = $post->creator->first();
-        
-        // // Authentifier l'utilisateur
-        // $this->actingAs($user);
-
-        // // Envoyer une requête POST à la route `/api/post/like/{id}`
-        // $response = $this->postJson('/api/post/like/' . $post->id);
-
-        // // Asserter que la relation entre l'utilisateur, le post et le type d'interaction est bien établie
-        // $this->assertDatabaseHas('interactions', [
-        //     'post_id' => $post->id,
-        //     'user_id' => $user->id,
-        //     'type_interaction_id' => $typeInteraction->id,
-        // ]);
-        $typeInteraction = TypeInteraction::where('name', 'created')->firstOrCreate(['name' => 'created']);
+        $typeInteraction = TypeInteraction::where('name', 'like')->first();
 
         $post = Post::factory()->creator()->create();
+
+        sleep(3);
+
+        // Récupérez l'utilisateur créateur du post
         $user = $post->creator->first();
+
+        // Authentifier l'utilisateur
+        // dd(json_encode($post->loadMissing('creator', 'interactions.typeInteraction')));
+
+        $interaction  = $post->interactions->where('user_id', $user->id)
+            ->where('post_id', $post->id)->where('type_interaction_id', $typeInteraction->id)->first();
+
+        $hasValue = ($interaction != null );
 
         $this->actingAs($user);
 
+        // Envoyer une requête POST à la route `/api/post/like/{id}`
+
         $response = $this->postJson('/api/post/like/' . $post->id);
 
-        $response->assertStatus(200);
+        // Asserter que la relation entre l'utilisateur, le post et le type d'interaction est bien établie
+        if($hasValue){
+            $this->assertDatabaseMissing('interactions', [
+                'post_id' => $post->id,
+                'user_id' => $user->id,
+                'type_interaction_id' => $typeInteraction->id,
+            ]);
+        }else {
+            $this->assertDatabaseHas('interactions', [
+                'post_id' => $post->id,
+                'user_id' => $user->id,
+                'type_interaction_id' => $typeInteraction->id,
+            ]);
+        }
 
-        $typeInteraction = TypeInteraction::where('name', 'created')->first();
-
-        $this->assertDatabaseHas('interactions', [
-            'post_id' => $post->id,
-            'user_id' => $user->id,
-            'type_interaction_id' => $typeInteraction->id,
-        ]);
     }
 
     /**
@@ -244,6 +281,19 @@ class PostControllerTest extends TestCase
      */
     public function testComment()
     {
+        $typeInteraction = TypeInteraction::where('name', 'comment')->first();
+
+        if(!$typeInteraction){
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
+
+            DB::table('type_interactions')->insert($typeInteractions);
+        }
+
         $post = Post::factory()->creator()->create();
 
         $data = [
@@ -268,6 +318,19 @@ class PostControllerTest extends TestCase
      */
     public function testShare()
     {
+        $typeInteraction = TypeInteraction::where('name', 'comment')->first();
+
+        if(!$typeInteraction){
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
+
+            DB::table('type_interactions')->insert($typeInteractions);
+        }
+
         $post = Post::factory()->creator()->create();
 
         $response = $this->postJson('api/post/share/' . $post->id);
@@ -284,30 +347,48 @@ class PostControllerTest extends TestCase
 
     public function testDeleteInteraction()
     {
-        // Vérifiez si la table TypeInteraction est vide
+
+        // Créer un type d'interaction s'il n'existe pas déjà
         $typeInteraction = TypeInteraction::where('name', 'comment')->first();
-
         if (!$typeInteraction) {
-            // Si le type d'interaction n'existe pas, créez-le
-            $typeInteraction = TypeInteraction::factory()->create(['name' => 'comment']);
+            $typeInteractions =  [
+                ['name'=> 'created', 'id'=> 1],
+                ['name'=> 'like', 'id'=> 2],
+                ['name'=> 'comment', 'id'=> 3],
+                ['name'=> 'share', 'id'=> 4],
+            ];
+            DB::table('type_interactions')->insert($typeInteractions);
         }
-        sleep(3);
 
-        Post::factory()->creator()->create();
+        // Créer un post
+        $post = Post::factory()->creator()->create();
 
-        $post = Post::with('creator')->first();
+        // Créer un commentaire
+        $commentData = [
+            'text' => $this->faker->sentence(), // Ajoutez le texte du commentaire ici
+        ];
+        $this->postJson('api/post/comment/' . $post->id, $commentData)->assertStatus(200);
+        // Assurez-vous que le commentaire a été correctement ajouté à la base de données
+        $user = auth()->user();
+        $this->assertDatabaseHas('interactions', [
+            'type_interaction_id' => 3,
+            'user_id' => $user->id,
+            'post_id' => $post->id,
+            'text' => $commentData['text'],
+        ]);
 
-        $user = $post->creator->first(); // Récupérer le créateur du post
+        $comment = Interaction::where('user_id', auth()->id())
+        ->where('type_interaction_id', 3)
+        ->latest()
+        ->firstOrFail();
 
-        $response = $this->deleteJson(route('delete.interaction', $post->id));
+        // dd($comment);
 
-        sleep(5);
+        $this->deleteJson(route('delete.interaction', $comment->id))->assertStatus(200);
 
-        $response->assertStatus(200);
-
-        $this->assertDatabaseMissing('interactions', [
-            'id' => $post->id,
-            'deleted_at' => $post->deleted_at,
+        // Assurez-vous que le commentaire a été supprimé de la base de données
+        $this->assertSoftDeleted('interactions', [
+            'id' => $comment->id,
         ]);
     }
 

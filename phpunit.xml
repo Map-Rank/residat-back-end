@@ -30,15 +30,11 @@
         <ini name="xdebug.mode" value="coverage" />
          
     </php>
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include>
-    </coverage>
-    <filter>
-        <blacklist>
-            <directory suffix=".php">../app/Models</directory>
-                <directory suffix=".php">../resources/View</directory>
-        </blacklist>
-    </filter>
+    <phpunit>
+        <coverage processUncoveredFiles="true">
+            <include>
+                <directory suffix=".php">residat-back-end</directory>
+            </include>
+        </coverage>
+    </phpunit>
 </phpunit>
