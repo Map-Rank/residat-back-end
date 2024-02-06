@@ -50,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
 
-    Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction']);
+    Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
 });
 
 
