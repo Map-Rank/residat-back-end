@@ -46,36 +46,7 @@ class PostFactory extends Factory
         // Exécuter le factory de TypeInteraction avant la création des posts
         $typeInteraction  = TypeInteraction::query()->where('id', 1)->first();
 
-        if($typeInteraction ==  null){
-            $typeInteraction = TypeInteraction::query()->where('name' , 'created')->first();
-            if($typeInteraction == null)
-                $typeInteraction = TypeInteraction::firstOrCreate(['name' => 'created', 'id'=> 1]);
-            else {
-                $typeInteraction->id = 1;
-                $typeInteraction->save();
-            }
-        }
-        else {
-            $typeInteraction->name = 'created';
-            $typeInteraction->save();
-        }
-
         $like  = TypeInteraction::query()->where('id', 2)->first();
-
-        if($like ==  null){
-            $like = TypeInteraction::query()->where('name' , 'like')->first();
-            if($like == null)
-                $like = TypeInteraction::firstOrCreate(['name' => 'like', 'id'=> 2]);
-            else {
-                $like->id = 2;
-                $like->save();
-            }
-        }
-        else {
-            $like->name = 'like';
-            $like->save();
-        }
-
 
         $user = User::first();
 

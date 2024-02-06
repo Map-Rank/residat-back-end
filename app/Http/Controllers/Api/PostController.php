@@ -231,25 +231,20 @@ class PostController extends Controller
     public function like(string $id): JsonResponse
     {
         $post = Post::with('creator')->find($id);
-        $typeInteraction  = TypeInteraction::query()->where('name', 'like')->first();
 
         if (!$post) {
             return response()->errors([], __('Post not found'), 404);
         }
 
-        if(!$typeInteraction){
-            return response()->errors([], __('Bad project configuration'), 404);
-        }
-
         $user = auth()->user();
 
         // Vérifiez si l'utilisateur a déjà aimé le post
-        $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  $typeInteraction->id)->exists();
+        $isLiked = $post->users()->where('users.id', $user->id)->wherePivot('type_interaction_id',  2)->exists();
 
         try {
             if ($isLiked) {
                 // Si l'utilisateur a déjà aimé le post, retirez le like (unlike) et mettez à jour liked à false
-                $post->users()->where('id', $user->id)->wherePivot('type_interaction_id', $typeInteraction->id)->detach($user->id);
+                $post->users()->where('id', $user->id)->wherePivot('type_interaction_id', 2)->detach($user->id);
                 $message = __('Post unliked successfully');
             } else {
                 // Sinon, ajoutez le like et mettez à jour liked à true
