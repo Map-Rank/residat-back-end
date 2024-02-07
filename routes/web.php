@@ -39,10 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');
     Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
     Route::get('delete/subdivisions/{id}', [ZoneController::class, 'destroy'])->name('delete.subdivision');
-    Route::post('create/zone', [ZoneController::class, 'store'])->name('create.zone');
-    Route::put('update/zone', [ZoneController::class, 'update'])->name('update.zone');
-    
-    
+    Route::get('create/zone', [ZoneController::class, 'create'])->name('zone.create');
+    Route::get('zones/{id}/edit', [ZoneController::class, 'edit'])->name('zone.edit');
+    Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
+    Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
+
+
     //ban user
     Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');
     //active user

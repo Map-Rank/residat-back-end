@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SectorController;
+use App\Models\Media;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,3 +62,4 @@ Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
 Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
 Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
+

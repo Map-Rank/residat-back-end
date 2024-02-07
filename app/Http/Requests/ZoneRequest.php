@@ -26,13 +26,14 @@ class ZoneRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
                 'name' => ['sometimes','string'],
-                'parent_id' => ['exists:zones,id'],
-                ];
+                'parent_id' => ['sometimes','exists:zones,id',],
+            ];
         }
         return [
             'name' => ['required','string'],
-            'parent_id' => ['exists:zones,id'],
-            'level_id' => ['required'],
+            'division_id' => ['sometimes','exists:zones,id',],
+            'region_id' => ['sometimes','exists:zones,id',],
+            'level_id' => ['sometimes','exists:levels,id',],
         ];
     }
 
@@ -43,5 +44,5 @@ class ZoneRequest extends FormRequest
     {
         throw new HttpResponseException(response()->errors($validator->errors(), 'Validation errors', 422));
     }
-    
+
 }

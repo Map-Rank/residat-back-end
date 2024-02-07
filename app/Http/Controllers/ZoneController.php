@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ZoneRequest;
 use App\Http\Resources\ZoneResource;
+use App\Models\Level;
 use App\Models\Zone;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ZoneController extends Controller
@@ -103,15 +105,35 @@ class ZoneController extends Controller
      * Create and store a zone
      *
      * @param ZoneRequest $request List of elements used to save a zone entity.
-     * @return JsonResponse
      */
-    public function store(ZoneRequest $request) {
+    public function store(ZoneRequest $request)  {
 
-        $datum = new Zone($request->validated());
-        if (!$datum->save()) {
-            return response()->error('Failed to create zone!', 500);
+        if($request['division_id'] > 0){
+            $parent = Zone::query()->where('parent_id', $request['region_id'])
+                ->where('id', $request['division_id'])->first();
         }
-        return response()->success('Zone successfully created!', 201);
+        else if($request['region_id'] > 0) {
+            $parent = Zone::query()->where('id', $request['region_id'])->first();
+        }
+        else {
+            $parent = Zone::query()->where('name', 'Cameroun')->first();
+        }
+
+        $datum = new Zone();
+        $datum->parent()->associate($parent);
+        $datum->level_id = $request['level_id'];
+        $datum->name = $request['name'];
+
+        if ($request->hasFile('data')) {
+            $mediaFile = $request->file('data');
+
+            $mediaPath = $mediaFile->store('media/zone', 'public');
+            $datum->banner = Storage::url($mediaPath);
+        }
+
+        return (!$datum->save())
+            ? redirect()->back()->with('Error while creating the zone')
+            : redirect()->route('zones.index')->withSuccess('Zone '.$datum->name.' created successfully!');;
     }
 
     /**
@@ -119,20 +141,38 @@ class ZoneController extends Controller
      *
      * @param ZoneRequest $request
      * @param int $id
-     * @return JsonResponse
      */
     public function update(ZoneRequest $request, int $id)
     {
+        // dd($request->all());
         $zone = Zone::query()->find($id);
-        if (!$zone) {
-            return redirect()->back()->with('error', __('Zone not found!'));
+        if(!$zone)
+        { return response()->notFoundId(); }
+
+        $parent = null;
+        if($request['parent_id'] > 0){
+            $parent = Zone::query()->where('parent_id', $request['parent_id'])->first();
         }
-    
-        if ($zone->update($request->validated())) {
-            return redirect()->back()->with('success', __('Zone successfully updated!'));
-        } else {
-            return redirect()->back()->with('error', __('Failed to update zone!'));
+
+        $updated = [];
+        if($parent != null) {
+            $updated['parent_id'] = $parent->id;
         }
+
+        if(isset($request['name'])) {
+            $updated['name'] = $request['name'];
+        }
+
+        if ($request->hasFile('data')) {
+            $mediaFile = $request->file('data');
+
+            $mediaPath = $mediaFile->store('media/zone', 'public');
+            $updated['banner'] = Storage::url($mediaPath);
+        }
+
+        return (! $zone->update($request->validated()))
+            ? redirect()->back()->with('Zone not found')
+            : redirect()->route('zones.index')->withSuccess( __('Zone successfully updated!'));
     }
 
     /**
@@ -150,5 +190,19 @@ class ZoneController extends Controller
         }
 
         return redirect()->back()->with('sucess', 'Zone successfully deleted!');
+    }
+
+    public function create(){
+        $levels = Level::query()->get();
+        return view('zones.create', compact('levels'));
+    }
+
+    public function edit($id){
+        $zone = Zone::with('parent')->find($id);
+        $zones = null;
+        if($zone->parent != null)
+            $zones = Zone::query()->where('level_id', $zone->parent->level_id)->get();
+
+        return view('zones.edit', compact('zones', 'zone'));
     }
 }

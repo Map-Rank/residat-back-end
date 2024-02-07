@@ -13,8 +13,8 @@ return new class extends Migration
     {
         //
         if(Schema::hasTable('zones')){
-            if(Schema::hasColumns('zones', ['banner'])){
-                Schema::table('audits', function(Blueprint $table){
+            if(!Schema::hasColumns('zones', ['banner'])){
+                Schema::table('zones', function(Blueprint $table){
                     $table->string('banner')->default('img/default.png');
                 });
             }
