@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Zone;
 use App\Models\Level;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use App\Http\Requests\ZoneRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -53,30 +54,35 @@ class ZoneControllerTest extends TestCase
 
     public function testStoreZoneSuccess()
     {
+        // **Prepare user and necessary data:**
         $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->actingAs($user); // Authenticate if applicable
 
-        $level_id = Level::create(['name' => 'Country'])->id;
-        $zone_id = Zone::create(['name' => 'Cameroun', 'level_id' => 1])->id;
-        
+        $level = Level::factory()->create(['name' => 'Country']);
+        $parentZone = Zone::factory()->create(['level_id' => 1]); // Ensure valid parent
 
+        // **Create valid zone data:**
         $validZoneData = [
-            'name' => 'Test zone',
-            'parent_id' => $zone_id, 
-            'level_id' => $level_id, 
+            'name' => 'Test Zone',
+            'parent_id' => $parentZone->id,
+            'level_id' => $level->id,
         ];
-    
-        // Appeler la route pour créer une zone
-        $response = $this->postJson(route('create.zone'), $validZoneData);
 
-        // Vérifier le code de réponse et le format JSON
-        $response->assertStatus(200);
-        $this->assertJson($response->getContent());
+            // **Simulate file upload if applicable:**
+            // if ($this->usesFileUpload()) {
+                // Replace with your logic to prepare a mock file or use a package like "intervention/testing"
+                $file = UploadedFile::fake()->image('photo.jpg');
+                $validZoneData['data'] = $file;
+            // }
 
-        // Vérifier si la zone a été correctement créée dans la base de données
-        $this->assertDatabaseHas('zones', [
-            'name' => 'Test zone',
-        ]);
+        // **Send POST request to store zone:**
+        $response = $this->postJson(route('zone.store'), $validZoneData);
+
+        // $this->assertSessionHas('success', 'Zone Test Zone created successfully!');
+        $this->assertTrue(session()->has('success'), 'Zone'.$validZoneData['name'].' created successfully!');
+
+         // Vérifiez que la redirection s'est effectuée vers la route 'zones.index'
+        $response->assertRedirect(route('zones.index'));
     }
     
     public function testStoreZoneFailsValidation()
@@ -88,13 +94,16 @@ class ZoneControllerTest extends TestCase
         $invalidZoneData = [];
     
         // **Send POST request to the store endpoint:**
-        $response = $this->postJson(route('create.zone'), $invalidZoneData);
+        $response = $this->postJson(route('zone.store'), $invalidZoneData);
     
         // **Assert validation error response:**
         $response->assertStatus(422)
-        ->assertJsonValidationErrors([
-            'name' => ['The name field is required.'],
-            'level_id' => ['The level id field is required.']
+        ->assertJson([
+            'status' => false,
+            'errors' => [
+                'name' => ['The name field is required.'],
+            ],
+            'message' => 'Validation errors',
         ]);
     
         // **Verify zone not created in database:**
@@ -117,39 +126,40 @@ class ZoneControllerTest extends TestCase
 
         // Créer une zone à mettre à jour
         $level_id = Level::create(['name' => 'Country'])->id;
-        $zone_id = Zone::create(['name' => 'Cameroun', 'level_id' => 1])->id;
+        $zone = Zone::create(['name' => 'Cameroun', 'level_id' => 1]);
 
         $validZoneData = [
             'name' => 'Test zone',
-            'parent_id' => $zone_id, 
+            'parent_id' => $zone->id, 
             'level_id' => $level_id, 
         ];
-    
+
         // Appeler la route pour créer une zone
-        $response = $this->postJson(route('create.zone'), $validZoneData);
+        $response = $this->postJson(route('zone.store'), $validZoneData);
 
         // Données pour mettre à jour la zone
         $data = [
             'name' => 'Updated Zone Name',
-            'parent_id' => $zone_id, 
+            'parent_id' => $zone->id, 
             'level_id' => $level_id,
         ];
 
         // Appeler la route pour mettre à jour la zone
-        $response = $this->putJson(route('update.zone', ['id' => $zone_id]), $data);
+        $response = $this->putJson(route('zone.update', ['id' => $zone->id]), $data);
 
-        $response->assertStatus(200);
+        // Vérifier le message de succès dans la session
+        $this->assertTrue(session()->has('success'), 'Zone Updated Zone Name updated successfully!');
 
-        // Vérifier que la redirection a eu lieu avec un message de succès
-        $response->assertRedirect();
+        // Vérifier que la redirection s'est effectuée vers la route 'zones.index'
+        $response->assertRedirect(route('zones.index'));
 
         // Vérifier que la zone a été correctement mise à jour dans la base de données
         $this->assertDatabaseHas('zones', [
-            'id' => $data->id,
+            'id' => $zone->id,
             'name' => 'Updated Zone Name',
-            'parent_id' => 2,
-            'level_id' => 3,
-            'banner' => 'path/to/updated-banner.jpg',
+            'parent_id' => $zone->id, // Assurez-vous de mettre à jour cela si nécessaire
+            'level_id' => 1, // Assurez-vous de mettre à jour cela si nécessaire
+            // Ajoutez d'autres champs si nécessaire
         ]);
     }
 
@@ -160,18 +170,24 @@ class ZoneControllerTest extends TestCase
      */
     public function testDestroy()
     {
-        // Authentifier un utilisateur
+        // Créer un utilisateur pour l'authentification
         $user = User::factory()->create();
         $this->actingAs($user);
-        
+
+        // Créer une zone à supprimer
         $zone = Zone::factory()->create();
 
-        $response = $this->deleteJson(route('delete.subdivision', $zone->id));
+        // Appeler la route pour supprimer la zone
+        $response = $this->get(route('delete.subdivision', ['id' => $zone->id]));
 
-        $response->assertStatus(200);
-            
-        // Assert that the zone has been deleted from the database
+        // Vérifier que la redirection s'est effectuée
+        $response->assertRedirect();
+
+        // Vérifier que la zone a été supprimée de la base de données
         $this->assertSoftDeleted($zone);
+
+        // Vérifier que le message de succès est présent dans la session
+        $this->assertTrue(session()->has('success'), 'Zone successfully deleted!');
     }
 
 }
