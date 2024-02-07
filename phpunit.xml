@@ -31,10 +31,10 @@
          
     </php>
     <phpunit>
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include>
-    </coverage>
-</phpunit>
+        <coverage processUncoveredFiles="true">
+            <include>
+                <directory suffix=".php">residat-back-end</directory>
+            </include>
+        </coverage>
+    </phpunit>
 </phpunit>

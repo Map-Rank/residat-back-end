@@ -263,7 +263,11 @@ class PostController extends Controller
 
             return response()->success(PostResource::make($post->loadMissing('interactions')), $message, 200);
         } catch (\Exception $e) {
-            return response()->errors([], __('Error processing like/unlike'), 500);
+            Log::info(sprintf('%s: User %d generated the error : %s', __METHOD__, auth()->id, $e->getMessage()));
+            return response()->errors(['error' => $e->getMessage()], __('Error processing like/unlike'), 500);
+
+            return response()->errors([], $e->getMessage() .__(' Error processing like/unlike'), 500);
+
         }
     }
 
