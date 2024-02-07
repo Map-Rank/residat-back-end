@@ -21,7 +21,7 @@
             <div class="card-header">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                         {{ $zones->appends(request()->query())->render("pagination::bootstrap-5") }}
-                        {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
+                        <a href="{{ route('zone.create') }}" class="btn btn-info text-white" > Add a zone</a>
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <a class="dropdown-item" href="{{route('region.division',$zone->id)}}" >View Division</a>
-                                            <a class="dropdown-item" href="#">Edit</a>
+                                            <a class="dropdown-item" href="{{ route('zone.edit', $zone->id) }}">Edit</a>
                                             <a class="dropdown-item text-danger" href="#">Delete</a>
                                         </div>
                                     </div>

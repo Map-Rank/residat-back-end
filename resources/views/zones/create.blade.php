@@ -41,14 +41,29 @@
                             {!! $errors->first('level_id', '<small class="help-block">:message</small>') !!}
                         </div>
 
-                        <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
-                            <input v-model="region" v-if="show_region" onfocusout="hidePanel" type="text" class="form-control" placeholder="Filter region name"/>
-
-                            <ul v-if="show_region"
+                        <div v-if="show_region"  class="form-group {!! $errors->has('region') ? 'has-error' : '' !!}">
+                            {!! Form::label('Region', null, ['class' => '',]) !!}
+                            <input v-model="region_name" onfocusout="hidePanel" type="text"
+                                class="form-control" placeholder="Filter region name"/>
+                            <input type="hidden" v-model="selected_region_id" name="region_id"/>
+                            <ul v-if="show_region_list"
                                 style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
                                     overflow-y: scroll; overflow-x: hidden">
-                                <li  style="cursor: pointer; " v-for="region in regions">
+                                <li  @click="selectRegion(region)" style="cursor: pointer; " v-for="region in regions" >
                                     @{{ region.name }} </li>
+                            </ul>
+                        </div>
+
+                        <div v-if="show_division"  class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
+                            {!! Form::label('Division', null, ['class' => '',]) !!}
+                            <input v-model="division_name" onfocusout="hidePanel" type="text"
+                                class="form-control" placeholder="Filter division name"/>
+                            <input type="hidden" v-model="selected_division_id" name="division_id"/>
+                            <ul v-if="show_division_list"
+                                style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
+                                    overflow-y: scroll; overflow-x: hidden">
+                                <li  @click="selectDivision(division)" style="cursor: pointer; " v-for="division in divisions" >
+                                    @{{ division.name }} </li>
                             </ul>
                         </div>
 
@@ -131,19 +146,42 @@
                 levels : @json($levels),
                 show_division : false,
                 show_region : false,
+                show_region_list : false,
+                show_division_list : false,
                 selected_level_id : 0,
                 region : null,
                 zones: [],
                 regions: [],
+                divisions: [],
+                selected_region : '',
+                region_name: '',
+                selected_division : '',
+                selected_division_id : 0,
+                selected_region_id : 0,
+                division_name: '',
             },
             methods: {
                 loadZones: function (level_id) {
                     console.log(level_id);
-                    this.show_region = (level_id == 3);
-                    this.show_division = (level_id == 4);
+                    this.show_region = (level_id >= 3);
+                    this.show_region_list = (level_id >= 3);
+                    this.show_division = (level_id >= 4);
                     if(this.show_region){
-                        var url = @json(env('APP_URL')).concat("/api/zone?level_id=").level_id;
-                        console.log(url);
+                        axios
+                            .get('/api/zone?level_id=2' )
+                            .then( response => {
+                                console.log((response.data.data));
+                                this.regions = response.data.data;
+                            })
+                            .catch(error => console.log(error))
+                    }
+                },
+                loadRegions: function (level_id) {
+                    console.log(level_id);
+                    this.show_region = (level_id >= 3);
+                    this.show_region_list = (level_id >= 3);
+                    this.show_division = (level_id >= 4);
+                    if(this.show_region){
                         axios
                             .get('/api/zone?level_id='+(level_id-1))
                             .then( response => {
@@ -152,6 +190,35 @@
                             })
                             .catch(error => console.log(error))
                     }
+                },
+                selectRegion: function(region){
+                    console.log(region.name);
+                    this.selected_region = region;
+                    this.region_name = region.name;
+                    this.show_region_list = false;
+                    this.selected_region_id = region.id;
+                    axios
+                        .get('/api/zone?parent_id='+(region.id))
+                        .then( response => {
+                            console.log((response.data.data));
+                            this.divisions = response.data.data;
+                            this.show_division_list = true;
+                        })
+                        .catch(error => console.log(error))
+                },
+                selectDivision: function(division){
+                    console.log(division.name);
+                    this.selected_division = division;
+                    this.division_name = division.name;
+                    this.show_division_list = false;
+                    this.selected_division_id = division.id;
+                    axios
+                        .get('/api/zone?parent_id='+(division.id))
+                        .then( response => {
+                            console.log((response.data.data));
+                            this.divisions = response.data.data;
+                        })
+                        .catch(error => console.log(error))
                 },
 
             },

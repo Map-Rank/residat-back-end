@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
     Route::get('delete/subdivisions/{id}', [ZoneController::class, 'destroy'])->name('delete.subdivision');
     Route::get('create/zone', [ZoneController::class, 'create'])->name('zone.create');
+    Route::get('zones/{id}/edit', [ZoneController::class, 'edit'])->name('zone.edit');
+    Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
 
 
