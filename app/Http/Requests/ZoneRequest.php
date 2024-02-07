@@ -26,12 +26,13 @@ class ZoneRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
                 'name' => ['sometimes','string'],
-                'parent_id' => ['required|exists:zones,id',],
+                'parent_id' => ['exists:zones,id'],
                 ];
         }
         return [
             'name' => ['required','string'],
-            'parent_id' => ['required|exists:zones,id',],
+            'parent_id' => ['exists:zones,id'],
+            'level_id' => ['required'],
         ];
     }
 

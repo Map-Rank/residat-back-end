@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
     Route::get('delete/subdivisions/{id}', [ZoneController::class, 'destroy'])->name('delete.subdivision');
     Route::post('create/zone', [ZoneController::class, 'store'])->name('create.zone');
+    Route::put('update/zone', [ZoneController::class, 'update'])->name('update.zone');
     
     
     //ban user

@@ -105,13 +105,13 @@ class ZoneController extends Controller
      * @param ZoneRequest $request List of elements used to save a zone entity.
      * @return JsonResponse
      */
-    public function store(ZoneRequest $request) : JsonResponse {
+    public function store(ZoneRequest $request) {
 
         $datum = new Zone($request->validated());
-
-        return (!$datum->save())
-            ? response()->notFoundId()
-            : response()->created(ZoneResource::make($datum), __('Zone successfully created!'), 201);
+        if (!$datum->save()) {
+            return response()->error('Failed to create zone!', 500);
+        }
+        return response()->success('Zone successfully created!', 201);
     }
 
     /**
@@ -121,15 +121,18 @@ class ZoneController extends Controller
      * @param int $id
      * @return JsonResponse
      */
-    public function update(ZoneRequest $request, int $id): JsonResponse
+    public function update(ZoneRequest $request, int $id)
     {
         $zone = Zone::query()->find($id);
-        if(!$zone)
-        { return response()->notFoundId(); }
-
-        return (! $zone->update($request->validated()))
-            ? response()->notFoundId()
-            : response()->success(ZoneResource::make($zone), __('Zone successfully updated!'), 200);
+        if (!$zone) {
+            return redirect()->back()->with('error', __('Zone not found!'));
+        }
+    
+        if ($zone->update($request->validated())) {
+            return redirect()->back()->with('success', __('Zone successfully updated!'));
+        } else {
+            return redirect()->back()->with('error', __('Failed to update zone!'));
+        }
     }
 
     /**
