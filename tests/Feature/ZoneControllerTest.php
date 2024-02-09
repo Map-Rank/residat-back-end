@@ -16,7 +16,7 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithSession;
 
 class ZoneControllerTest extends TestCase
 {
-    use RefreshDatabase, InteractsWithSession;
+    use RefreshDatabase, WithFaker, InteractsWithSession;
     /**
      * A basic feature test example.
      */
@@ -55,16 +55,29 @@ class ZoneControllerTest extends TestCase
     public function testStoreZoneSuccess()
     {
         // **Prepare user and necessary data:**
-        $user = User::factory()->create();
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
         $this->actingAs($user); // Authenticate if applicable
 
         $level = Level::factory()->create(['name' => 'Country']);
-        $parentZone = Zone::factory()->create(['level_id' => 1]); // Ensure valid parent
+        
+        DB::table('zones')->insert([
+            'name' => $this->faker->word(),
+            'parent_id' => null,
+            'level_id' => $level->id,
+        ]);
+        $parentZone = Zone::first(); // Ensure valid parent
+        
 
         // **Create valid zone data:**
         $validZoneData = [
             'name' => 'Test Zone',
-            'parent_id' => $parentZone->id,
+            'parent_id' => $parentZone->id ?? null,
             'level_id' => $level->id,
         ];
 
@@ -87,7 +100,14 @@ class ZoneControllerTest extends TestCase
     
     public function testStoreZoneFailsValidation()
     {
-        $user = User::factory()->create();
+        // **Prepare user and necessary data:**
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+        
         $this->actingAs($user);
 
         // **Prepare invalid zone data:**
@@ -121,17 +141,32 @@ class ZoneControllerTest extends TestCase
     public function testUpdateZone()
     {
         // Créer un utilisateur pour l'authentification
-        $user = User::factory()->create();
+        // **Prepare user and necessary data:**
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
         $this->actingAs($user);
 
-        // Créer une zone à mettre à jour
-        $level_id = Level::create(['name' => 'Country'])->id;
-        $zone = Zone::create(['name' => 'Cameroun', 'level_id' => 1]);
+        Level::factory()->create(['name' => 'Country']);
+
+        $level = Level::first();
+        
+        DB::table('zones')->insert([
+            'name' => $this->faker->word(),
+            'parent_id' => null,
+            'level_id' => $level->id,
+        ]);
+
+        $parentZone = Zone::first(); // Ensure valid parent
 
         $validZoneData = [
             'name' => 'Test zone',
-            'parent_id' => $zone->id, 
-            'level_id' => $level_id, 
+            'parent_id' => $parentZone->id, 
+            'level_id' => $level->id, 
         ];
 
         // Appeler la route pour créer une zone
@@ -140,12 +175,12 @@ class ZoneControllerTest extends TestCase
         // Données pour mettre à jour la zone
         $data = [
             'name' => 'Updated Zone Name',
-            'parent_id' => $zone->id, 
-            'level_id' => $level_id,
+            'parent_id' => $parentZone->id, 
+            'level_id' => $level->id,
         ];
 
         // Appeler la route pour mettre à jour la zone
-        $response = $this->putJson(route('zone.update', ['id' => $zone->id]), $data);
+        $response = $this->putJson(route('zone.update', ['id' => $parentZone->id]), $data);
 
         // Vérifier le message de succès dans la session
         $this->assertTrue(session()->has('success'), 'Zone Updated Zone Name updated successfully!');
@@ -155,10 +190,10 @@ class ZoneControllerTest extends TestCase
 
         // Vérifier que la zone a été correctement mise à jour dans la base de données
         $this->assertDatabaseHas('zones', [
-            'id' => $zone->id,
+            'id' => $parentZone->id,
             'name' => 'Updated Zone Name',
-            'parent_id' => $zone->id, // Assurez-vous de mettre à jour cela si nécessaire
-            'level_id' => 1, // Assurez-vous de mettre à jour cela si nécessaire
+            'parent_id' => $parentZone->id, // Assurez-vous de mettre à jour cela si nécessaire
+            'level_id' => $level->id, // Assurez-vous de mettre à jour cela si nécessaire
             // Ajoutez d'autres champs si nécessaire
         ]);
     }
@@ -171,7 +206,7 @@ class ZoneControllerTest extends TestCase
     public function testDestroy()
     {
         // Créer un utilisateur pour l'authentification
-        $user = User::factory()->create();
+        $user = User::first();
         $this->actingAs($user);
 
         // Créer une zone à supprimer
