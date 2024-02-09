@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('vectors', function (Blueprint $table) {
             $table->id();
             $table->string('path');
-            $table->foreignId('zone_id');
+            $table->foreignId('model_id');
             $table->enum('category',  ['MAP', 'WATER_STRESS', 'DROUGHT', 'FLOOD']);
             $table->enum('type',  ['IMAGE', 'SVG']);
+            $table->enum('model_type', ['App\Models\Zone', 'App\Models\Report']);
             $table->timestamps();
             $table->softDeletes();
         });

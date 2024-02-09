@@ -11,14 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_data', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('report_id');
-            $table->foreignId('metric_type_id');
-            $table->double('value');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+
     }
 
     /**
@@ -26,6 +19,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_items');
+        //
     }
 };

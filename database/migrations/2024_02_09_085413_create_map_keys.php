@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('vector_keys', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->nullable();
+            $table->string('value');
             $table->enum('type', ['COLOR', 'IMAGE', 'FIGURE'])->default('COLOR');
             $table->string('name');
             $table->foreignId('vector_id');

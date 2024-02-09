@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->unique();
             $table->foreignId('user_id');
             $table->foreignId('zone_id');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->enum('type', ['DROUGHT','FLOOD','WATER_STRESS']);
             $table->string('image');
             $table->date('start_date');
