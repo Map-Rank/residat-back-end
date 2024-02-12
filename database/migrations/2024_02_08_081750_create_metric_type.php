@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('metric_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('hazard', ['DEGREE OF IMPACT', 'CLIMATE VULNERABILITY', 'CLIMATE RISK THREATS']);
+            $table->enum('hazard', ['DEGREE_OF_IMPACT', 'CLIMATE_VULNERABILITY', 'CLIMATE_RISK_THREATS']);
             $table->timestamps();
             $table->softDeletes();
         });
