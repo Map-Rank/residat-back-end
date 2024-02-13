@@ -133,7 +133,7 @@ class ZoneController extends Controller
 
         return (!$datum->save())
             ? redirect()->back()->with('Error while creating the zone')
-            : redirect()->route('zones.index')->withSuccess('Zone '.$datum->name.' created successfully!');;
+            : redirect()->route('zones.index')->withSuccess('Zone '.$datum->name.' created successfully!');
     }
 
     /**
@@ -189,7 +189,9 @@ class ZoneController extends Controller
             return redirect()->back()->with('error', 'Zone not found');
         }
 
-        return redirect()->back()->with('sucess', 'Zone successfully deleted!');
+        $zone->delete();
+
+        return redirect()->back()->with('success', 'Zone successfully deleted!');
     }
 
     public function create(){

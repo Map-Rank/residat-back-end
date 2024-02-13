@@ -4,6 +4,10 @@
          bootstrap="vendor/autoload.php"
          colors="true"
 >
+    <exclude>
+        <directory>./vendor</directory>
+        <directory>./node_modules</directory>
+    </exclude>
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
@@ -35,6 +39,14 @@
             <include>
                 <directory suffix=".php">residat-back-end</directory>
             </include>
+            <filter>
+                <blacklist>
+                    <directory suffix=".php">./app/Models</directory>
+                    <directory suffix=".php">./app/View</directory>
+                    <directory suffix=".php">./resources/View</directory>
+                    <directory suffix=".php">./app/Models/.*Test\.php</directory>
+                </blacklist>
+            </filter>
         </coverage>
     </phpunit>
 </phpunit>
