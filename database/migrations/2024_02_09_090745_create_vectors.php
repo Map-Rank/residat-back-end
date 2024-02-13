@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('model_id');
             $table->enum('category',  ['MAP', 'WATER_STRESS', 'DROUGHT', 'FLOOD']);
             $table->enum('type',  ['IMAGE', 'SVG']);
-            $table->enum('model_type', ['App\Models\Zone', 'App\Models\Report']);
+            $table->enum('model_type', ['App\\\\Models\\\\Zone', 'App\\\\Models\\\\Report']);
             $table->timestamps();
             $table->softDeletes();
         });
