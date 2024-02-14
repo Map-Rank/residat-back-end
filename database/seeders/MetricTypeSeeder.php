@@ -18,7 +18,7 @@ class MetricTypeSeeder extends Seeder
         foreach ($hazards as $hazard) {
             for ($i = 1; $i <= 3; $i++) {
                 MetricType::create([
-                    'name' => "Metric Type $i for $hazard",
+                    'name' => "Metric Type $i for $hazard,
                     'hazard' => $hazard
                 ]);
             }

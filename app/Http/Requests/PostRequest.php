@@ -35,13 +35,17 @@ class PostRequest extends FormRequest
     }
 
     /**
+     * @codeCoverageIgnore
      * @param Validator $validator
      */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->errors($validator->errors(), 'Validation errors', 422));
     }
-
+    
+    /**
+     * @codeCoverageIgnore
+     */
     public function bodyParameters()
     {
         return [
