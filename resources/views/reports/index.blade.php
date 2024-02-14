@@ -20,7 +20,7 @@
         <div class="row mb-3 card card-style-1">
             <div class="card-header">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                        {{ $zones->appends(request()->query())->render("pagination::bootstrap-5") }}
+                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-5") }}
                         <a href="{{ route('reports.create') }}" class="btn btn-info text-white" > Add a report</a>
                 </div>
             </div>
@@ -52,9 +52,9 @@
                             <th>Zone</th>
                             <th>Creator</th>
                             <th>Type</th>
-                            <th>Vector</th>
                             <th>Start date</th>
                             <th>End date</th>
+                            <th>Vector</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
