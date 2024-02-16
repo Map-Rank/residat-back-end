@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="col-sm-12">
-                            <div class=" col-sm-6 pt-4 pb-4" style="border: 1px solid #ccc">
+                            <div class=" col-sm-5 pt-4 pb-4" style="border: 1px solid #ccc">
                                 <fieldset>
                                     Vector keys
                                 </fieldset>
@@ -126,7 +126,7 @@
                         </div>
 
                         <div class="col-sm-12 mt-4">
-                            <div class=" col-sm-6 pt-4 pb-4" style="border: 1px solid #ccc">
+                            <div class=" col-sm-5 pt-4 pb-4" style="border: 1px solid #ccc">
                                 <fieldset>
                                     Report data
                                 </fieldset>
@@ -150,7 +150,7 @@
                                 <button class="btn  btn-success">Add report data</button>
                             </div>
 
-                            <table id="example" class="col-sm-6 table table-striped table-bordered table-sm dt-responsive nowrap" >
+                            <table id="example1" class="col-sm-7 table table-striped table-bordered table-sm dt-responsive nowrap" >
 
                                 <thead class="fw-semibold text-nowrap">
                                     <tr class="column-filter dt-column-filter">
@@ -232,6 +232,49 @@
 
         })
     </script>
+
+    <script>
+        $(() => {
+            $('[rel="tooltip"]').tooltip({trigger: "hover"});
+
+            // App.checkAll()
+
+            // Run datatable
+            var table = $('#example1').DataTable({
+                drawCallback: function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-sm') // make pagination small
+                }
+            })
+            // Apply column filter
+            $('#example1 .dt-column-filter th').each(function (i) {
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw()
+                    }
+                })
+            })
+            // Toggle Column filter function
+            var responsiveFilter = function (table, index, val) {
+                var th = $(table).find('.dt-column-filter th').eq(index)
+                val === true ? th.removeClass('d-none') : th.addClass('d-none')
+            }
+            // Run Toggle Column filter at first
+            $.each(table.columns().responsiveHidden(), function (index, val) {
+                responsiveFilter('#example1', index, val)
+            })
+            // Run Toggle Column filter on responsive-resize event
+            table.on('responsive-resize', function (e, datatable, columns) {
+                $.each(columns, function (index, val) {
+                    responsiveFilter('#example1', index, val)
+                })
+            })
+
+        })
+    </script>
+
     <script>
         var app = new Vue({
             el: '#elt',
