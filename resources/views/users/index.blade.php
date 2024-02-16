@@ -13,7 +13,8 @@
                     {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
                 </div>
             </div>
-            <table class="table border mb-0">
+            {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }}
+            <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
                 <thead class="fw-semibold text-nowrap">
                     <tr class="align-middle">
                         <th class="bg-body-secondary text-center">
@@ -80,13 +81,13 @@
                         <li class="page-item disabled">
                             <a class="page-link" href="#" tabindex="-1">Previous</a>
                         </li>
-            
+
                         @for ($i = 1; $i <= $users->lastPage(); $i++)
                             <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link" href="{{ route('users.index', ['page' => $i]) }}">{{ $i }}</a>
                             </li>
                         @endfor
-            
+
                         <li class="page-item {{ $users->currentPage() == $users->lastPage() ? 'disabled' : '' }}">
                             <a class="page-link" href="{{ route('users.index', ['page' => $users->nextPageUrl()]) }}">Next</a>
                         </li>
@@ -151,7 +152,7 @@
                                 <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
                             </p>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
@@ -187,7 +188,7 @@
                                 <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
                             </p>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
@@ -199,4 +200,52 @@
         </div>
     @endforeach
     <!-- Modal end -->
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
+    <script>
+        $(() => {
+            $('[rel="tooltip"]').tooltip({trigger: "hover"});
+
+            // App.checkAll()
+
+            // Run datatable
+            var table = $('#example').DataTable({
+                drawCallback: function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-sm') // make pagination small
+                }
+            })
+            // Apply column filter
+            $('#example .dt-column-filter th').each(function (i) {
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw()
+                    }
+                })
+            })
+            // Toggle Column filter function
+            var responsiveFilter = function (table, index, val) {
+                var th = $(table).find('.dt-column-filter th').eq(index)
+                val === true ? th.removeClass('d-none') : th.addClass('d-none')
+            }
+            // Run Toggle Column filter at first
+            $.each(table.columns().responsiveHidden(), function (index, val) {
+                responsiveFilter('#example', index, val)
+            })
+            // Run Toggle Column filter on responsive-resize event
+            table.on('responsive-resize', function (e, datatable, columns) {
+                $.each(columns, function (index, val) {
+                    responsiveFilter('#example', index, val)
+                })
+            })
+
+        })
+    </script>
+@endsection
+
+@section('error')
 @endsection

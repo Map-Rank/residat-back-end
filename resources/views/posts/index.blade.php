@@ -214,3 +214,6 @@
     </script>
 
 @endsection
+
+@section('error')
+@endsection

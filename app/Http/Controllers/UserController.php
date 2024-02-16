@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('zone')->paginate(10); // 10 utilisateurs par page, ajustez selon vos besoins
+        $users = User::with('zone')->paginate(100); // 100 utilisateurs par page, ajustez selon vos besoins
         return view('users.index', ['users' => $users]);
     }
 
