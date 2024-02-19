@@ -80,7 +80,8 @@
                                 </fieldset>
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Key Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="key" ref="vectorKeyType">
+                                    <select class="form-select" required autofocus name="key" ref="vectorKeyType"
+                                        v-model="keyType">
                                         <option value="">Select key type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
@@ -89,19 +90,21 @@
                                     {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
                                 </div>
 
-                               
+
 
                                 <div class="form-group">
                                     <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue">
+                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue"
+                                        v-model="keyValue">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" name="name" ref="vectorkeyName">
+                                    <input type="text" class="form-control" name="name" ref="vectorkeyName"
+                                        v-model="keyName">
                                 </div>
 
-                                <button class="btn  btn-success" @click="addVectorKey">Add vector key</button>
+                                <button class="btn  btn-success" @click="submitVectorKey">Add vector key</button>
                             </div>
 
                             <table id="example"
@@ -129,12 +132,28 @@
                                 </thead>
                                 {{-- where data are loaded --}}
                                 <tbody>
-                                    <tr v-for="(key, index) in vectorKeys" :key="index">
-                                        <td>@{{ key.type }}</td>
-                                        <td>@{{ key.value }}</td>
-                                        <td>@{{ key.name }}</td>
+                                    <tr v-for=" (key,index) in vectorKeys ">
+                                        <td> @{{ key.type }}</td>
+                                        <td> @{{ key.value }}</td>
+                                        <td> @{{ key.name }}</td>
                                         <td>
-                                            <button class="btn btn-success">Edit/delete</button>
+
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <button @click.prevent='prepareUpdateVectorKey(index)'
+                                                    class="btn btn-success" style="width: 40%;">
+
+                                                    <img src="https://img.icons8.com/metro/26/000000/edit.png"
+                                                        alt="edit" style="vertical-align: middle;" />
+                                                </button>
+
+                                                <button @click.prevent='deleteSpecificVectrKey(index)'
+                                                    class="btn btn-danger" style="width: 40%;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
+                                                        alt="delete" style="vertical-align: middle;">
+                                                </button>
+
+                                            </div>
+
                                         </td>
                                     </tr>
 
@@ -307,31 +326,69 @@
                 keyType: '',
                 keyValue: '',
                 keyName: '',
-                vectorKeys: []
+                updateIndex: null,
+                vectorKeys: [{
+                    keyType: 'val',
+                    keyValue: 'val',
+                    keyName: 'val',
+                }]
 
 
             },
             methods: {
-                addVectorKey(event) {
-                    console.log('enter')
+
+                submitVectorKey() {
+
+                    if (this.updateIndex !== null) {
+                        this.updateVectorKey()
+                    } else {
+                        this.addVectorKey()
+                    }
+                },
+                addVectorKey() {
                     event.preventDefault();
 
-                    // const keyType = this.$refs.vectorKeyType.value;
-                    const keyValue = this.$refs.vectorKeyValue.value;
-                    const keyName = this.$refs.vectorKeyName.value;
-
                     this.vectorKeys.push({
-                        type: keyType,
-                        value: keyValue,
-                        name: keyName,
+                        type: this.keyType,
+                        value: this.keyValue,
+                        name: this.keyName,
                     });
 
-                    // Clear the input fields
-                    this.$refs.vectorKeyType.value = '';
-                    this.$refs.vectorKeyValue.value = '';
-                    this.$refs.vectorKeyName.value = '';
+                    this.resetForm()
                 },
+
+                prepareUpdateVectorKey(index) {
+                    const vectorKey = this.vectorKeys[index];
+                    this.keyType = vectorKey.type;
+                    this.keyValue = vectorKey.value;
+                    this.keyName = vectorKey.name;
+
+                    this.updateIndex = index;
+                },
+
+                updateVectorKey() {
+                    event.preventDefault();
+                    this.vectorKeys[this.updateIndex] = {
+                        type: this.keyType,
+                        value: this.keyValue,
+                        name: this.keyName,
+                    };
+
+                    this.resetForm();
+                    this.updateIndex = null;
+                },
+
+                deleteSpecificVectrKey(index) {
+                    this.vectorKeys.splice(index, 1);
+                },
+
+                resetForm() {
+                    this.keyType = '';
+                    this.keyValue = '';
+                    this.keyName = '';
+                }
             },
+
             watch: {
 
             },
