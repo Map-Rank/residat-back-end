@@ -13,12 +13,16 @@ class MetricTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $hazards = ['DEGREE_OF_IMPACT', 'CLIMATE_VULNERABILITY', 'CLIMATE_RISK_THREATS'];
+        $hazardData = [
+            'DEGREE_OF_IMPACT' => ['Mild', 'Strong', 'Severe', 'Very severe'],
+            'CLIMATE_VULNERABILITY' => ['Health', 'Agriculture', 'Infrastructure', 'Business', 'Social'],
+            'CLIMATE_RISK_THREATS' => ['Food security', 'Water stress', 'Epidemics', 'Migration']
+        ];
 
-        foreach ($hazards as $hazard) {
-            for ($i = 1; $i <= 3; $i++) {
+        foreach ($hazardData as $hazard => $names) {
+            foreach ($names as $name) {
                 MetricType::create([
-                    'name' => "Metric Type $i for $hazard",
+                    'name' => $name,
                     'hazard' => $hazard
                 ]);
             }
