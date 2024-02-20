@@ -168,7 +168,7 @@
                                 </fieldset>
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="type">
+                                    <select class="form-select" required autofocus name="type" v-model="metricType">
                                         <option value="">Select the metric type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
@@ -177,13 +177,13 @@
                                     {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
                                 </div>
 
-                                <div class="form-group {!! $errors->has('value') ? 'has-error' : '' !!}">
-                                    {!! Form::label('Value', null, ['class' => '']) !!}
-                                    {!! Form::text('value', null, ['class' => 'form-control']) !!}
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                                <div class="form-group">
+                                    <label for="value">Value</label>
+                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue"
+                                        v-model="metricValue">
                                 </div>
 
-                                <button class="btn  btn-success">Add report data</button>
+                                <button class="btn  btn-success" @click="submitMetricType">Add Metric data</button>
                             </div>
 
                             <table id="example1"
@@ -206,7 +206,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr v-for=" (metric,index) in metricTypes ">
+                                        <td> @{{ metric.type }}</td>
+                                        <td> @{{ metric.value }}</td>
+                                        <td>
 
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <button @click.prevent='prepareUpdateMetricType(index)'
+                                                    class="btn btn-success" style="width: 40%;">
+
+                                                    <img src="https://img.icons8.com/metro/26/000000/edit.png"
+                                                        alt="edit" style="vertical-align: middle;" />
+                                                </button>
+
+                                                <button @click.prevent='deleteSpecificVectrKey(index)'
+                                                    class="btn btn-danger" style="width: 40%;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
+                                                        alt="delete" style="vertical-align: middle;">
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -326,12 +348,13 @@
                 keyType: '',
                 keyValue: '',
                 keyName: '',
+                metricType:'',
+                metricValue:'',
                 updateIndex: null,
+                updateMetricIndex: null,
                 vectorKeys: [{
-                    keyType: 'val',
-                    keyValue: 'val',
-                    keyName: 'val',
-                }]
+                }],
+                metricTypes:[{}]
 
 
             },
@@ -343,6 +366,16 @@
                         this.updateVectorKey()
                     } else {
                         this.addVectorKey()
+                    }
+                },
+
+                submitMetricType() {
+
+                    console.log(this.updateMetricIndex)
+                    if (this.updateMetricIndex !== null) {
+                        this.updateMetricType()
+                    } else {
+                        this.addMetricType()
                     }
                 },
                 addVectorKey() {
@@ -357,6 +390,17 @@
                     this.resetForm()
                 },
 
+                addMetricType() {
+                    event.preventDefault();
+
+                    this.metricTypes.push({
+                        type: this.metricType,
+                        value: this.metricValue,
+                    });
+
+                    this.resetForm()
+                },
+
                 prepareUpdateVectorKey(index) {
                     const vectorKey = this.vectorKeys[index];
                     this.keyType = vectorKey.type;
@@ -364,6 +408,14 @@
                     this.keyName = vectorKey.name;
 
                     this.updateIndex = index;
+                },
+                prepareUpdateMetricType(index) {
+                    const metricType = this.metricTypes[index];
+                    this.metricType = metricType.type;
+                    this.metricValue = metricType.value;
+
+                    this.updateMetricIndex = index;
+                    console.log(this.updateMetricIndex)
                 },
 
                 updateVectorKey() {
@@ -377,6 +429,16 @@
                     this.resetForm();
                     this.updateIndex = null;
                 },
+                updateMetricType() {
+                    event.preventDefault();
+                    this.metricTypes[this.updateMetricIndex] = {
+                        type: this.metricType,
+                        value: this.metricValue,
+                    };
+
+                    this.resetMetricForm();
+                    this.updateMetricIndex = null;
+                },
 
                 deleteSpecificVectrKey(index) {
                     this.vectorKeys.splice(index, 1);
@@ -386,6 +448,10 @@
                     this.keyType = '';
                     this.keyValue = '';
                     this.keyName = '';
+                },
+                resetMetricForm() {
+                    this.metricType = '';
+                    this.metricValue = '';
                 }
             },
 
