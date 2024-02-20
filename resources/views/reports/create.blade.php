@@ -80,28 +80,33 @@
                                 </fieldset>
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Key Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="key" ref="vectorKeyType"
-                                        v-model="keyType">
+                                    <select class="form-select" required autofocus name="key" ref="vectorvectorType"
+                                        v-model="vectorType">
                                         <option value="">Select key type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
                                         @endforeach
                                     </select>
                                     {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+
+                                    <span class="text-danger">@{{ formErrors.vectorType }}</span>
                                 </div>
 
 
 
                                 <div class="form-group">
                                     <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue"
-                                        v-model="keyValue">
+                                    <input type="text" class="form-control" name="value" ref="vectorvectorValue"
+                                        v-model="vectorValue" @input="validateVectorForm">
+                                    <span class="text-danger">@{{ formErrors.vectorValue }}</span>
+
                                 </div>
 
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" name="name" ref="vectorkeyName"
-                                        v-model="keyName">
+                                    <input type="text" class="form-control" name="name" ref="vectorvectorName"
+                                        v-model="vectorName" @input="validateVectorForm">
+                                    <span class="text-danger">@{{ formErrors.vectorName }}</span>
                                 </div>
 
                                 <button class="btn  btn-success" @click="submitVectorKey">Add vector key</button>
@@ -179,7 +184,7 @@
 
                                 <div class="form-group">
                                     <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue"
+                                    <input type="text" class="form-control" name="value" ref="vectorvectorValue"
                                         v-model="metricValue">
                                 </div>
 
@@ -206,6 +211,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {{-- <tr>
+
+                                        <td valign="top" colspan="4" class="dataTables_empty">No data available in table</td>
+                                    </tr> --}}
+
                                     <tr v-for=" (metric,index) in metricTypes ">
                                         <td> @{{ metric.type }}</td>
                                         <td> @{{ metric.value }}</td>
@@ -219,7 +229,7 @@
                                                         alt="edit" style="vertical-align: middle;" />
                                                 </button>
 
-                                                <button @click.prevent='deleteSpecificVectrKey(index)'
+                                                <button @click.prevent='deleteSpecificMetricType(index)'
                                                     class="btn btn-danger" style="width: 40%;">
                                                     <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
                                                         alt="delete" style="vertical-align: middle;">
@@ -229,6 +239,7 @@
 
                                         </td>
                                     </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -248,6 +259,7 @@
 @section('script')
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@2.2.15"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
@@ -341,32 +353,127 @@
     </script>
 
     <script>
+        Vue.use(VeeValidate);
+
+        
         var app = new Vue({
             el: '#elt',
             data: {
                 message: 'Hello Vue!',
-                keyType: '',
-                keyValue: '',
-                keyName: '',
-                metricType:'',
-                metricValue:'',
+                vectorType: '',
+                vectorValue: '',
+                vectorName: '',
+                metricType: '',
+                metricValue: '',
                 updateIndex: null,
                 updateMetricIndex: null,
-                vectorKeys: [{
-                }],
-                metricTypes:[{}]
+                vectorKeys: [],
+                metricTypes: [],
+
+                formErrors: {
+                    vectorType: '',
+                    vectorValue: '',
+                    vectorName: '',
+                    metricType: '',
+                    metricValue: '',
+                },
 
 
             },
             methods: {
 
-                submitVectorKey() {
 
-                    if (this.updateIndex !== null) {
-                        this.updateVectorKey()
-                    } else {
-                        this.addVectorKey()
+                validateVectorForm() {
+                    let isValid = true;
+
+                    // this.formErrors = {
+                    //     vectorType: '',
+                    //     vectorValue: '',
+                    //     vectorName: '',
+                    //     metricType: '',
+                    //     metricValue: '',
+                    // };
+
+                    if (!this.vectorType) {
+                        this.formErrors.keyType = 'key is required.';
+                        isValid = false;
                     }
+
+                    if (!this.vectorValue) {
+                        this.formErrors.keyValue = 'The Value is required.';
+                        isValid = false;
+                    }
+
+                    if (!this.vectorName) {
+                        this.formErrors.keyValue = 'The Name is required.';
+                        isValid = false;
+                    }
+
+                    console.log(isValid)
+
+                    return isValid;
+
+                },
+
+
+                submitVectorKey() {
+                    this.validateVectorForm()
+                    event.preventDefault();
+
+
+                    if (this.validateVectorForm()) {
+
+                        if (this.updateIndex !== null) {
+                            this.updateVectorKey()
+                        } else {
+                            this.addVectorKey()
+                        }
+
+                    }
+
+                },
+
+                addVectorKey() {
+                    event.preventDefault();
+
+                    this.vectorKeys.push({
+                        type: this.vectorType,
+                        value: this.vectorValue,
+                        name: this.vectorName,
+                    });
+
+                    this.resetForm()
+                },
+                prepareUpdateVectorKey(index) {
+                    const vectorKey = this.vectorKeys[index];
+                    this.vectorType = vectorKey.type;
+                    this.vectorValue = vectorKey.value;
+                    this.vectorName = vectorKey.name;
+
+                    this.updateIndex = index;
+                },
+
+
+                updateVectorKey() {
+                    event.preventDefault();
+                    this.vectorKeys[this.updateIndex] = {
+                        type: this.vectorType,
+                        value: this.vectorValue,
+                        name: this.vectorName,
+                    };
+
+                    this.resetForm();
+                    this.updateIndex = null;
+                },
+
+                deleteSpecificVectrKey(index) {
+                    this.vectorKeys.splice(index, 1);
+                },
+
+                resetForm() {
+                    this.vectorType = '';
+                    this.vectorValue = '';
+                    this.vectorName = '';
                 },
 
                 submitMetricType() {
@@ -377,17 +484,8 @@
                     } else {
                         this.addMetricType()
                     }
-                },
-                addVectorKey() {
-                    event.preventDefault();
 
-                    this.vectorKeys.push({
-                        type: this.keyType,
-                        value: this.keyValue,
-                        name: this.keyName,
-                    });
-
-                    this.resetForm()
+                    this.resetMetricForm()
                 },
 
                 addMetricType() {
@@ -401,14 +499,6 @@
                     this.resetForm()
                 },
 
-                prepareUpdateVectorKey(index) {
-                    const vectorKey = this.vectorKeys[index];
-                    this.keyType = vectorKey.type;
-                    this.keyValue = vectorKey.value;
-                    this.keyName = vectorKey.name;
-
-                    this.updateIndex = index;
-                },
                 prepareUpdateMetricType(index) {
                     const metricType = this.metricTypes[index];
                     this.metricType = metricType.type;
@@ -418,17 +508,6 @@
                     console.log(this.updateMetricIndex)
                 },
 
-                updateVectorKey() {
-                    event.preventDefault();
-                    this.vectorKeys[this.updateIndex] = {
-                        type: this.keyType,
-                        value: this.keyValue,
-                        name: this.keyName,
-                    };
-
-                    this.resetForm();
-                    this.updateIndex = null;
-                },
                 updateMetricType() {
                     event.preventDefault();
                     this.metricTypes[this.updateMetricIndex] = {
@@ -440,15 +519,12 @@
                     this.updateMetricIndex = null;
                 },
 
-                deleteSpecificVectrKey(index) {
-                    this.vectorKeys.splice(index, 1);
+
+                deleteSpecificMetricType(index) {
+                    this.metricTypes.splice(index, 1);
                 },
 
-                resetForm() {
-                    this.keyType = '';
-                    this.keyValue = '';
-                    this.keyName = '';
-                },
+
                 resetMetricForm() {
                     this.metricType = '';
                     this.metricValue = '';
