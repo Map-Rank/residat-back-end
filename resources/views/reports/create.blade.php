@@ -109,8 +109,9 @@
                                                 class="text-danger">@{{ errors.first('vectorName') }}</span>
                                         </div>
 
-                                     <button type="submit" class="btn btn-success" @click.prevent='validateVectorFormBeforeSubmit($event)'>Submit</button>
-                                     
+                                        <button type="submit" class="btn btn-success"
+                                            @click.prevent='validateVectorFormBeforeSubmit'>Submit</button>
+
                                     </form>
                                 </div>
                             </div>
@@ -176,22 +177,28 @@
                                 </fieldset>
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="type" v-model="metricType">
+                                    <select class="form-select" required autofocus name="metricType" v-model="metricType"
+                                        v-validate="'required'">
                                         <option value="">Select the metric type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
                                         @endforeach
                                     </select>
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                                    <span v-show="errors.has('metricType')"
+                                        class="text-danger">@{{ errors.first('metricType') }}</span>
                                 </div>
-
                                 <div class="form-group">
-                                    <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorvectorValue"
-                                        v-model="metricValue">
+                                    <label for="metricValue">Value</label>
+                                    <input type="text" class="form-control" name="metricValue" v-model="metricValue"
+                                        v-validate="'required'">
+                                    <span v-show="errors.has('metricValue')"
+                                        class="text-danger">@{{ errors.first('metricValue') }}</span>
                                 </div>
 
-                                <button class="btn  btn-success" @click="submitMetricType">Add Metric data</button>
+                                <button type="button" class="btn btn-success"
+                                    @click.prevent="validateMetricFormBeforeSubmit">Add Metric Data</button>
+                                {{-- <button class="btn  btn-success" @click="submitMetricType">Add Metric data</button> --}}
+
                             </div>
 
                             <table id="example1"
@@ -214,10 +221,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- <tr>
-
-                                        <td valign="top" colspan="4" class="dataTables_empty">No data available in table</td>
-                                    </tr> --}}
 
                                     <tr v-for=" (metric,index) in metricTypes ">
                                         <td> @{{ metric.type }}</td>
@@ -385,25 +388,41 @@
             },
             methods: {
 
+
                 validateVectorFormBeforeSubmit(event) {
-                    event.preventDefault();
+                    event.preventDefault(); // Prevent default form submission
 
-                    this.$validator.validateAll().then(success => {
-                        if (success) {
-
-                            this.submitVectorKey()
+                    let fieldsToValidate = ['vectorType', 'vectorValue', 'vectorName'];
+                    Promise.all(fieldsToValidate.map(field => this.$validator.validate(field))).then(results => {
+                        let allValid = results.every(valid => valid);
+                        if (allValid) {
+                            this.submitVectorKey();
                         } else {
-
-                            console.log('Form is invalid!')
+                            console.log('Vector form is invalid!');
                         }
                     });
+                },
+                validateMetricFormBeforeSubmit(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    let metricFieldsToValidate = ['metricType', 'metricValue'];
+                    Promise.all(metricFieldsToValidate.map(field => this.$validator.validate(field))).then(
+                        results => {
+                            let allValid = results.every(valid => valid);
+                            if (allValid) {
+                                this.submitMetricType();
+                            } else {
+                                console.log('Metric form is invalid!');
+                            }
+                        });
                 },
 
 
 
 
+
+
                 submitVectorKey() {
-                    event.preventDefault();
 
 
 
@@ -456,6 +475,8 @@
                 },
 
                 resetForm() {
+                    event.preventDefault();
+
                     this.vectorType = '';
                     this.vectorValue = '';
                     this.vectorName = '';
@@ -511,6 +532,8 @@
 
 
                 resetMetricForm() {
+                    event.preventDefault();
+
                     this.metricType = '';
                     this.metricValue = '';
                 }
