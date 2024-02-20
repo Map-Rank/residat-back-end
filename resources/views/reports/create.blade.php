@@ -78,38 +78,41 @@
                                 <fieldset>
                                     Vector keys
                                 </fieldset>
-                                <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
-                                    {!! Form::label('Key Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="key" ref="vectorvectorType"
-                                        v-model="vectorType">
-                                        <option value="">Select key type</option>
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
-                                        @endforeach
-                                    </select>
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                                <div id="elt">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="vectorType">Key Type</label>
+                                            <select v-model="vectorType" v-validate="'required'" name="vectorType"
+                                                class="form-control">
+                                                <option value="">Select key type</option>
+                                                @foreach ($types as $type)
+                                                    <option value="{{ $type }}">{{ $type }}</option>
+                                                @endforeach
+                                            </select>
+                                            <span v-show="errors.has('vectorType')"
+                                                class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                        </div>
 
-                                    <span class="text-danger">@{{ formErrors.vectorType }}</span>
+                                        <div class="form-group">
+                                            <label for="vectorValue">Value</label>
+                                            <input type="text" v-model="vectorValue" v-validate="'required'"
+                                                name="vectorValue" class="form-control">
+                                            <span v-show="errors.has('vectorValue')"
+                                                class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="vectorName">Name</label>
+                                            <input type="text" v-model="vectorName" v-validate="'required'"
+                                                name="vectorName" class="form-control">
+                                            <span v-show="errors.has('vectorName')"
+                                                class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                        </div>
+
+                                     <button type="submit" class="btn btn-success" @click.prevent='validateVectorFormBeforeSubmit($event)'>Submit</button>
+                                     
+                                    </form>
                                 </div>
-
-
-
-                                <div class="form-group">
-                                    <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorvectorValue"
-                                        v-model="vectorValue" @input="validateVectorForm">
-                                    <span class="text-danger">@{{ formErrors.vectorValue }}</span>
-
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" name="name" ref="vectorvectorName"
-                                        v-model="vectorName" @input="validateVectorForm">
-                                    <span class="text-danger">@{{ formErrors.vectorName }}</span>
-                                </div>
-
-                                <button class="btn  btn-success" @click="submitVectorKey">Add vector key</button>
                             </div>
 
                             <table id="example"
@@ -355,7 +358,7 @@
     <script>
         Vue.use(VeeValidate);
 
-        
+
         var app = new Vue({
             el: '#elt',
             data: {
@@ -382,54 +385,36 @@
             },
             methods: {
 
+                validateVectorFormBeforeSubmit(event) {
+                    event.preventDefault();
 
-                validateVectorForm() {
-                    let isValid = true;
+                    this.$validator.validateAll().then(success => {
+                        if (success) {
 
-                    // this.formErrors = {
-                    //     vectorType: '',
-                    //     vectorValue: '',
-                    //     vectorName: '',
-                    //     metricType: '',
-                    //     metricValue: '',
-                    // };
+                            this.submitVectorKey()
+                        } else {
 
-                    if (!this.vectorType) {
-                        this.formErrors.keyType = 'key is required.';
-                        isValid = false;
-                    }
-
-                    if (!this.vectorValue) {
-                        this.formErrors.keyValue = 'The Value is required.';
-                        isValid = false;
-                    }
-
-                    if (!this.vectorName) {
-                        this.formErrors.keyValue = 'The Name is required.';
-                        isValid = false;
-                    }
-
-                    console.log(isValid)
-
-                    return isValid;
-
+                            console.log('Form is invalid!')
+                        }
+                    });
                 },
 
 
+
+
                 submitVectorKey() {
-                    this.validateVectorForm()
                     event.preventDefault();
 
 
-                    if (this.validateVectorForm()) {
 
-                        if (this.updateIndex !== null) {
-                            this.updateVectorKey()
-                        } else {
-                            this.addVectorKey()
-                        }
 
+                    if (this.updateIndex !== null) {
+                        this.updateVectorKey()
+                    } else {
+                        this.addVectorKey()
                     }
+
+
 
                 },
 
