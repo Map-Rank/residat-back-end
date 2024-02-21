@@ -33,7 +33,7 @@
                             'class' => 'form-horizontal panel',
                             'enctype ' => 'multipart/form-data',
                         ]) !!}
-
+                        @csrf
                         <div class="form-group">
                             <label for="type">Report Type</label>
                             <select class="form-control" required autofocus name="type" v-model="reportType">
@@ -91,24 +91,21 @@
                                                     <option value="{{ $type }}">{{ $type }}</option>
                                                 @endforeach
                                             </select>
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorType') }}</span>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="vectorValue">Value</label>
                                             <input type="text" v-model="vectorValue" v-validate="'required'"
                                                 name="vectorValue" class="form-control">
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorValue') }}</span>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="vectorName">Name</label>
                                             <input type="text" v-model="vectorName" v-validate="'required'"
                                                 name="vectorName" class="form-control">
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorName') }}</span>
                                         </div>
 
                                         <button type="submit" class="btn btn-success"
@@ -254,7 +251,8 @@
 
 
 
-                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;" @click="saveReport" >Save</button>
+                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;"
+                            @click="saveReport">Save</button>
                     </div>
                 </div>
 
@@ -392,7 +390,7 @@
             },
             methods: {
 
-                saveReport() {
+                async saveReport() {
                     const reportData = {
                         reportType: this.reportType,
                         startDate: this.startDate,
@@ -406,11 +404,18 @@
 
                     console.log('this is the json field' + jsonData)
 
-                    const blob = new Blob([jsonData], {
-                        type: 'application/json'
-                    });
-                    const url = URL.createObjectURL(blob);
-                   
+                    await axios
+                        .post('store', reportData, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        })
+                        .then(response => {
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error occurred:', error);
+                        });
                 },
 
 
