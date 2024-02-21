@@ -29,6 +29,14 @@ class ReportRequest extends FormRequest
             'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
+            'vector.path' => 'required|string',
+            'vector.category' => 'required|in:MAP,WATER_STRESS,DROUGHT,FLOOD',
+            'vector.type' => 'required|in:IMAGE,SVG',
+            'vector_keys.*.value' => 'required|string',
+            'vector_keys.*.type' => 'required|in:COLOR,IMAGE,FIGURE',
+            'vector_keys.*.name' => 'required|string',
+            'report_items.*.metric_type_id' => 'required|exists:metric_types,id',
+            'report_items.*.value' => 'required|numeric',
         ];
     }
 
