@@ -75,25 +75,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-3 d-flex flex-row-reverse">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
 
-                        @for ($i = 1; $i <= $users->lastPage(); $i++)
-                            <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link" href="{{ route('users.index', ['page' => $i]) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
-
-                        <li class="page-item {{ $users->currentPage() == $users->lastPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ route('users.index', ['page' => $users->nextPageUrl()]) }}">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
         </div>
     </div>
     <!-- Modal add user -->
