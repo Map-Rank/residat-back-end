@@ -11,7 +11,8 @@
         "@coreui/icons": "^3.0.1",
         "@coreui/utils": "^2.0.2",
         "chart.js": "^4.4.0",
-        "simplebar": "^6.2.5"
+        "simplebar": "^6.2.5",
+        "vee-validate": "^2.2.15"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",

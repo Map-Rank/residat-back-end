@@ -33,78 +33,89 @@
                             'class' => 'form-horizontal panel',
                             'enctype ' => 'multipart/form-data',
                         ]) !!}
-                        @csrf
-                        <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
-                            {!! Form::label('Report Type', null, ['class' => '']) !!}
-                            <select class="form-control" required autofocus name="type">
+
+                        <div class="form-group">
+                            <label for="type">Report Type</label>
+                            <select class="form-control" required autofocus name="type" v-model="reportType">
                                 <option value="">Select the type</option>
                                 @foreach ($types as $type)
                                     <option value="{{ $type }}">{{ $type }}</option>
                                 @endforeach
                             </select>
-                            {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                            <small class="help-block" v-if="reportType === ''">Please select a report type</small>
                         </div>
 
-                        <div class="form-group {!! $errors->has('start_date') ? 'has-error' : '' !!}">
-                            {!! Form::label('Starting period', null, ['class' => '']) !!}
-                            {!! Form::date('start_date', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
-                            {!! $errors->first('start_date', '<small class="help-block">:message</small>') !!}
+                        <div class="form-group">
+                            <label for="start_date">Starting Period</label>
+                            <input type="date" class="form-control" name="start_date" v-model="startDate">
+                            <small class="help-block" v-if="startDate === ''">Please select a start date</small>
                         </div>
 
-                        <div class="form-group {!! $errors->has('end_date') ? 'has-error' : '' !!}">
-                            {!! Form::label('End period', null, ['class' => '']) !!}
-                            {!! Form::date('end_date', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
-                            {!! $errors->first('end_date', '<small class="help-block">:message</small>') !!}
+                        <div class="form-group">
+                            <label for="end_date">End Period</label>
+                            <input type="date" class="form-control" name="end_date" v-model="endDate">
+                            <small class="help-block" v-if="endDate === ''">Please select an end date</small>
                         </div>
 
                         <div class="col-sm-12">
-                            <div class="form-group {!! $errors->has('data') ? 'has-error' : '' !!}">
+                            <div class="form-group">
                                 <img src="../../image/image-.png"
                                     style="width: 200px; height : 200px; border: 1px #ccc solid" />
-                                {!! Form::label('Graphic', null, ['class' => 'd-block']) !!}
-                                {!! Form::file('data', ['place_holder' => 'Drop the file here', 'accept' => 'image/*']) !!}
-                                {!! $errors->first('data', '<small class="help-block">:message</small>') !!}
+                                <label for="graphic" class="d-block">Graphic</label>
+                                <input type="file" name="image" accept="image/*" v-model="imageFile">
+                                <small class="help-block" v-if="!imageFile">Please upload a graphic file</small>
                             </div>
 
-                            <div class="form-group {!! $errors->has('data') ? 'has-error' : '' !!}">
-                                {!! Form::label('Detected keys on the map', null, ['class' => 'd-block']) !!}
-                                <span class="badge badge-sm bg-info ms-auto">Key 1</span> <span
-                                    class="badge badge-sm bg-warning ms-auto">Key 2</span>
+                            <div class="form-group">
+                                <label for="detected_keys">Detected keys on the map</label>
+                                <span class="badge badge-sm bg-info ms-auto">Key 1</span>
+                                <span class="badge badge-sm bg-warning ms-auto">Key 2</span>
                             </div>
                         </div>
+
+
 
                         <div class="col-sm-12">
                             <div class=" col-sm-5 pt-4 pb-4" style="border: 1px solid #ccc">
                                 <fieldset>
                                     Vector keys
                                 </fieldset>
-                                <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
-                                    {!! Form::label('Key Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="key" ref="vectorKeyType"
-                                        v-model="keyType">
-                                        <option value="">Select key type</option>
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
-                                        @endforeach
-                                    </select>
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                                <div id="elt">
+                                    <form>
+                                        <div class="form-group">
+                                            <label for="vectorType">Key Type</label>
+                                            <select v-model="vectorType" v-validate="'required'" name="vectorType"
+                                                class="form-control">
+                                                <option value="">Select key type</option>
+                                                @foreach ($types as $type)
+                                                    <option value="{{ $type }}">{{ $type }}</option>
+                                                @endforeach
+                                            </select>
+                                            <span 
+                                                class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="vectorValue">Value</label>
+                                            <input type="text" v-model="vectorValue" v-validate="'required'"
+                                                name="vectorValue" class="form-control">
+                                            <span 
+                                                class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="vectorName">Name</label>
+                                            <input type="text" v-model="vectorName" v-validate="'required'"
+                                                name="vectorName" class="form-control">
+                                            <span 
+                                                class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success"
+                                            @click.prevent='validateVectorFormBeforeSubmit'>Submit</button>
+
+                                    </form>
                                 </div>
-
-
-
-                                <div class="form-group">
-                                    <label for="value">Value</label>
-                                    <input type="text" class="form-control" name="value" ref="vectorkeyValue"
-                                        v-model="keyValue">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" name="name" ref="vectorkeyName"
-                                        v-model="keyName">
-                                </div>
-
-                                <button class="btn  btn-success" @click="submitVectorKey">Add vector key</button>
                             </div>
 
                             <table id="example"
@@ -168,22 +179,28 @@
                                 </fieldset>
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="type">
+                                    <select class="form-select" required autofocus name="metricType" v-model="metricType"
+                                        v-validate="'required'">
                                         <option value="">Select the metric type</option>
                                         @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }}</option>
                                         @endforeach
                                     </select>
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
+                                    <span v-show="errors.has('metricType')"
+                                        class="text-danger">@{{ errors.first('metricType') }}</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="metricValue">Value</label>
+                                    <input type="text" class="form-control" name="metricValue" v-model="metricValue"
+                                        v-validate="'required'">
+                                    <span v-show="errors.has('metricValue')"
+                                        class="text-danger">@{{ errors.first('metricValue') }}</span>
                                 </div>
 
-                                <div class="form-group {!! $errors->has('value') ? 'has-error' : '' !!}">
-                                    {!! Form::label('Value', null, ['class' => '']) !!}
-                                    {!! Form::text('value', null, ['class' => 'form-control']) !!}
-                                    {!! $errors->first('type', '<small class="help-block">:message</small>') !!}
-                                </div>
+                                <button type="button" class="btn btn-success"
+                                    @click.prevent="validateMetricFormBeforeSubmit">Add Metric Data</button>
+                                {{-- <button class="btn  btn-success" @click="submitMetricType">Add Metric data</button> --}}
 
-                                <button class="btn  btn-success">Add report data</button>
                             </div>
 
                             <table id="example1"
@@ -207,14 +224,37 @@
                                 </thead>
                                 <tbody>
 
+                                    <tr v-for=" (metric,index) in metricTypes ">
+                                        <td> @{{ metric.type }}</td>
+                                        <td> @{{ metric.value }}</td>
+                                        <td>
+
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <button @click.prevent='prepareUpdateMetricType(index)'
+                                                    class="btn btn-success" style="width: 40%;">
+
+                                                    <img src="https://img.icons8.com/metro/26/000000/edit.png"
+                                                        alt="edit" style="vertical-align: middle;" />
+                                                </button>
+
+                                                <button @click.prevent='deleteSpecificMetricType(index)'
+                                                    class="btn btn-danger" style="width: 40%;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
+                                                        alt="delete" style="vertical-align: middle;">
+                                                </button>
+
+                                            </div>
+
+                                        </td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
 
 
 
-                        {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right', 'style' => 'margin-top:10px; width:100%;']) !!}
-                        {!! Form::close() !!}
+                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;" @click="saveReport" >Save</button>
                     </div>
                 </div>
 
@@ -226,6 +266,7 @@
 @section('script')
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@2.2.15"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
@@ -319,59 +360,138 @@
     </script>
 
     <script>
+        Vue.use(VeeValidate);
+
+
         var app = new Vue({
             el: '#elt',
             data: {
-                message: 'Hello Vue!',
-                keyType: '',
-                keyValue: '',
-                keyName: '',
+                reportType: '',
+                startDate: '2023-01-15',
+                endDate: '2023-01-31',
+                imageFile: null,
+                vectorKeys: [],
+                metricTypes: [],
+                vectorType: '',
+                vectorValue: '',
+                vectorName: '',
+                metricType: '',
+                metricValue: '',
                 updateIndex: null,
-                vectorKeys: [{
-                    keyType: 'val',
-                    keyValue: 'val',
-                    keyName: 'val',
-                }]
+                updateMetricIndex: null,
+
+                formErrors: {
+                    vectorType: '',
+                    vectorValue: '',
+                    vectorName: '',
+                    metricType: '',
+                    metricValue: '',
+                },
 
 
             },
             methods: {
 
+                saveReport() {
+                    const reportData = {
+                        reportType: this.reportType,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        imageFile: this.imageFile,
+                        vectorKeys: this.vectorKeys,
+                        metricTypes: this.metricTypes
+                    };
+
+                    const jsonData = JSON.stringify(reportData);
+
+                    console.log('this is the json field' + jsonData)
+
+                    const blob = new Blob([jsonData], {
+                        type: 'application/json'
+                    });
+                    const url = URL.createObjectURL(blob);
+                   
+                },
+
+
+
+                validateVectorFormBeforeSubmit(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    let fieldsToValidate = ['vectorType', 'vectorValue', 'vectorName'];
+                    Promise.all(fieldsToValidate.map(field => this.$validator.validate(field))).then(results => {
+                        let allValid = results.every(valid => valid);
+                        if (allValid) {
+                            this.submitVectorKey();
+                        } else {
+                            console.log('Vector form is invalid!');
+                        }
+                    });
+                },
+
+
+                validateMetricFormBeforeSubmit(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    let metricFieldsToValidate = ['metricType', 'metricValue'];
+                    Promise.all(metricFieldsToValidate.map(field => this.$validator.validate(field))).then(
+                        results => {
+                            let allValid = results.every(valid => valid);
+                            if (allValid) {
+                                this.submitMetricType();
+                            } else {
+                                console.log('Metric form is invalid!');
+                            }
+                        });
+                },
+
+
+
+
+
+
                 submitVectorKey() {
+
+
+
 
                     if (this.updateIndex !== null) {
                         this.updateVectorKey()
                     } else {
                         this.addVectorKey()
                     }
+
+
+
                 },
+
                 addVectorKey() {
                     event.preventDefault();
 
                     this.vectorKeys.push({
-                        type: this.keyType,
-                        value: this.keyValue,
-                        name: this.keyName,
+                        type: this.vectorType,
+                        value: this.vectorValue,
+                        name: this.vectorName,
                     });
 
                     this.resetForm()
                 },
-
                 prepareUpdateVectorKey(index) {
                     const vectorKey = this.vectorKeys[index];
-                    this.keyType = vectorKey.type;
-                    this.keyValue = vectorKey.value;
-                    this.keyName = vectorKey.name;
+                    this.vectorType = vectorKey.type;
+                    this.vectorValue = vectorKey.value;
+                    this.vectorName = vectorKey.name;
 
                     this.updateIndex = index;
                 },
 
+
                 updateVectorKey() {
                     event.preventDefault();
                     this.vectorKeys[this.updateIndex] = {
-                        type: this.keyType,
-                        value: this.keyValue,
-                        name: this.keyName,
+                        type: this.vectorType,
+                        value: this.vectorValue,
+                        name: this.vectorName,
                     };
 
                     this.resetForm();
@@ -383,9 +503,67 @@
                 },
 
                 resetForm() {
-                    this.keyType = '';
-                    this.keyValue = '';
-                    this.keyName = '';
+                    event.preventDefault();
+
+                    this.vectorType = '';
+                    this.vectorValue = '';
+                    this.vectorName = '';
+                },
+
+                submitMetricType() {
+
+                    console.log(this.updateMetricIndex)
+                    if (this.updateMetricIndex !== null) {
+                        this.updateMetricType()
+                    } else {
+                        this.addMetricType()
+                    }
+
+                    this.resetMetricForm()
+                },
+
+                addMetricType() {
+                    event.preventDefault();
+
+                    this.metricTypes.push({
+                        type: this.metricType,
+                        value: this.metricValue,
+                    });
+
+                    this.resetForm()
+                },
+
+                prepareUpdateMetricType(index) {
+                    const metricType = this.metricTypes[index];
+                    this.metricType = metricType.type;
+                    this.metricValue = metricType.value;
+
+                    this.updateMetricIndex = index;
+                    console.log(this.updateMetricIndex)
+                },
+
+                updateMetricType() {
+                    event.preventDefault();
+                    this.metricTypes[this.updateMetricIndex] = {
+                        type: this.metricType,
+                        value: this.metricValue,
+                    };
+
+                    this.resetMetricForm();
+                    this.updateMetricIndex = null;
+                },
+
+
+                deleteSpecificMetricType(index) {
+                    this.metricTypes.splice(index, 1);
+                },
+
+
+                resetMetricForm() {
+                    event.preventDefault();
+
+                    this.metricType = '';
+                    this.metricValue = '';
                 }
             },
 
