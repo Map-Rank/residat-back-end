@@ -29,6 +29,7 @@ class ReportRequest extends FormRequest
             'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
+            'vector' => 'required|file',
             'vector.path' => 'required|string',
             'vector.category' => 'required|in:MAP,WATER_STRESS,DROUGHT,FLOOD',
             'vector.type' => 'required|in:IMAGE,SVG',

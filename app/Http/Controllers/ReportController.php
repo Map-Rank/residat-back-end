@@ -47,12 +47,14 @@ class ReportController extends Controller
 
         // Création du vecteur
         $vectorData = $validatedData['vector'];
+        $vectorFilePath = $request->file('vector')->store('Vector');
+
         $vector = Vector::create([
-            'path' => $vectorData['path'],
+            'path' => $vectorFilePath,
             'model_id' => $report->id,
             'category' => $vectorData['category'],
             'type' => $vectorData['type'],
-            'model_type' => 'App\Models\Report', // Le modèle parent est Report
+            'model_type' => 'App\\Models\\Report',
         ]);
 
         // Création des clés de vecteur pour le vecteur
