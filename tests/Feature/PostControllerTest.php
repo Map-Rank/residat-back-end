@@ -7,8 +7,10 @@ use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Zone;
+use App\Models\Level;
 use App\Models\Topic;
 use App\Models\Interaction;
+use App\Models\Subscription;
 use Laravel\Sanctum\Sanctum;
 use App\Models\TypeInteraction;
 use Database\Seeders\PostSeeder;
@@ -18,18 +20,20 @@ use Database\Seeders\ZoneSeeder;
 use Database\Seeders\LevelSeeder;
 use Illuminate\Http\UploadedFile;
 use Database\Seeders\SectorSeeder;
+use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\UserResource;
 use Database\Seeders\DivisionSeeder;
+use App\Http\Resources\TopicResource;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\SubDivisionSeeder;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\InteractionResource;
 use Database\Seeders\TypeInteractionSeeder;
 use App\Http\Controllers\Api\PostController;
-use App\Models\Level;
+use App\Http\Resources\SubscriptionResource;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 
 class PostControllerTest extends TestCase
 {
@@ -390,6 +394,81 @@ class PostControllerTest extends TestCase
         $this->assertSoftDeleted('interactions', [
             'id' => $comment->id,
         ]);
+    }
+
+    public function testIndexWithZoneId()
+    {
+        // Créez une zone avec des enfants pour tester la récupération des descendants
+        $parentZone = Zone::factory()->create();
+        $childZone1 = Zone::factory()->create(['parent_id' => $parentZone->id]);
+        $childZone2 = Zone::factory()->create(['parent_id' => $parentZone->id]);
+
+        // Simulez une requête avec un zone_id spécifié
+        $zoneId = $parentZone->id;
+
+        $response = $this->getJson(route('post.index', ['zone_id' => $zoneId]));
+
+        $response->assertStatus(200);
+
+        // Assurez-vous que les posts récupérés appartiennent aux descendants de la zone
+        $posts = json_decode($response->getContent(), true)['data'];
+        foreach ($posts as $post) {
+            $this->assertTrue(in_array($post['zone_id'], [$parentZone->id, $childZone1->id, $childZone2->id]));
+        }
+    }
+
+    public function test_topic_resource()
+    {
+        // Créez un modèle Topic factice
+        $topic = Topic::factory()->create([
+            'name' => 'Example Topic',
+            'created_at' => '2022-02-18 12:00:00',
+        ]);
+
+        // Transformez le modèle Topic en utilisant TopicResource
+        $topicResource = new TopicResource($topic);
+
+        // Vérifiez si les données transformées correspondent à ce que vous attendez
+        $expectedData = [
+            'id' => $topic->id,
+            'name' => 'Example Topic',
+            'created_at' => '2022-02-18 12:00:00',
+        ];
+
+        // Obtenez les données transformées sous forme de tableau
+        $transformedData = $topicResource->jsonSerialize();
+
+        // Comparez les données transformées avec les données attendues
+        $this->assertEquals($expectedData, $transformedData);
+    }
+
+    public function test_interaction_resource()
+    {
+        // Créez un modèle Interaction factice
+        $interaction = Interaction::factory()->create([
+            'text' => 'Example Interaction',
+            'user_id' => User::first()->id,
+            'created_at' => '2022-02-18 12:00:00',
+        ]);
+
+        // Transformez le modèle Interaction en utilisant InteractionResource
+        $interactionResource = new InteractionResource($interaction);
+
+        // Obtenez les données transformées sous forme de tableau
+        $transformedData = $interactionResource->jsonSerialize();
+
+        // Vérifiez si les données transformées correspondent à ce que vous attendez
+        $expectedData = [
+            'id' => $interaction->id,
+            'user_id' => User::first()->id,
+            'post_id' => $interaction->post_id,
+            'text' => 'Example Interaction',
+            'created_at' => '2022-02-18 12:00:00',
+            'updated_at' => $interaction->updated_at,
+        ];
+
+        // Comparez les données transformées avec les données attendues
+        $this->assertEquals($expectedData, $transformedData);
     }
 
     /**

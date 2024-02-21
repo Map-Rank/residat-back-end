@@ -4,10 +4,6 @@
          bootstrap="vendor/autoload.php"
          colors="true"
 >
-    <exclude>
-        <directory>./vendor</directory>
-        <directory>./node_modules</directory>
-    </exclude>
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>

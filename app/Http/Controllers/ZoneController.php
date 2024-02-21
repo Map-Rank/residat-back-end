@@ -23,7 +23,7 @@ class ZoneController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->error($validator->failed(), __('Bad parameters'), 400);
+            return response()->errors($validator->failed(), __('Bad parameters'), 400);
         }
 
         $validated = $validator->validated();
@@ -47,7 +47,8 @@ class ZoneController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->error($validator->failed(), __('Bad parameters'), 400);
+            // return response()->errors($validator->failed(), __('Bad parameters'), 400);
+            return redirect()->back()->with($validator->failed(), 'Bad parameters');
         }
 
         $validated = $validator->validated();
@@ -71,7 +72,7 @@ class ZoneController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->error($validator->failed(), __('Bad parameters'), 400);
+            return response()->errors($validator->failed(), __('Bad parameters'), 400);
         }
 
         $validated = $validator->validated();
@@ -95,7 +96,7 @@ class ZoneController extends Controller
         $data->loadMissing(['parent']);
 
         if (!$data) {
-            return redirect()->back()->with('error', 'Zone not found');
+            return redirect()->back()->with('errors', 'Zone not found');
         }
 
         return view('zones.show', compact('data'));
@@ -186,7 +187,7 @@ class ZoneController extends Controller
         $zone = Zone::query()->find($id);
 
         if (!$zone) {
-            return redirect()->back()->with('error', 'Zone not found');
+            return redirect()->back()->with('errors', 'Zone not found');
         }
 
         $zone->delete();
