@@ -11,7 +11,6 @@
             <div class="col-md-3">
                 <div class="card shadow">
                     <div class="card-body text-center">
-                        {{-- {{dd($user->myPosts)}} --}}
                         <img src="{{$user->avatar}}" alt="John Doe" class="img-fluid rounded-circle mb-3">
                         <h2 class="card-title">{{$user->first_name}}</h2>
                         <h2 class="card-title">{{$user->last_name}}</h2>
@@ -47,59 +46,6 @@
                                 </p>
                             </div>
                         </div>
-                        {{-- <div class="card shadow mb-4">
-                            <div class="card-body">
-                                <h3 class="card-title">Complementary Informations</h3>
-                                <ul class="list-unstyled">
-                                    <li class="mb-3">
-                                        <h4 class="mb-1">Software Engineer</h4>
-                                        <span class="company">Acme Corporation</span>
-                                        <span class="location">Yaoundé, Cameroon</span>
-                                        <span class="dates">2022 - Present</span>
-                                        <p>
-                                            Led the development of a new web application for managing customer accounts.
-                                            Developed a machine learning model to predict customer churn.
-                                            Built a data pipeline to collect and analyze customer data.
-                                        </p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <h4 class="mb-1">Software Engineer</h4>
-                                        <span class="company">Acme Corporation</span>
-                                        <span class="location">Yaoundé, Cameroon</span>
-                                        <span class="dates">2022 - Present</span>
-                                        <p>
-                                            Led the development of a new web application for managing customer accounts.
-                                            Developed a machine learning model to predict customer churn.
-                                            Built a data pipeline to collect and analyze customer data.
-                                        </p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <h4 class="mb-1">Software Engineer</h4>
-                                        <span class="company">Acme Corporation</span>
-                                        <span class="location">Yaoundé, Cameroon</span>
-                                        <span class="dates">2022 - Present</span>
-                                        <p>
-                                            Led the development of a new web application for managing customer accounts.
-                                            Developed a machine learning model to predict customer churn.
-                                            Built a data pipeline to collect and analyze customer data.
-                                        </p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="card shadow mb-4">
-                            <div class="card-body">
-                                <h3 class="card-title">Education</h3>
-                                <ul class="list-unstyled">
-                                    <li class="mb-3">
-                                        <h4 class="mb-1">Bachelor of Science in Computer Science</h4>
-                                        <span class="school">University of Yaoundé</span>
-                                        <span class="location">Yaoundé, Cameroon</span>
-                                        <span class="dates">2018 - 2022</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> --}}
                         <div class="card shadow mb-4">
                             <div class="card-body">
                                 <h3 class="card-title">Sectors</h3>
@@ -137,11 +83,9 @@
                                             @endforeach
                                         @endif
                                     @endforeach
-                                    <!-- Ajoutez plus d'images au besoin -->
                                 </div>
                             </div>
                         </div>
-                        <!-- Ajoutez d'autres contenus pour l'onglet Gallery au besoin -->
                       </div>
                       <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-posts-tab">
                         <!-- Contenu de l'onglet Posts -->
@@ -152,9 +96,7 @@
 
                                 <!-- Section 1 -->  
                                 <div class="media mb-4">
-                                    {{-- <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image"> --}}
                                     <div class="media-body">
-                                        {{-- <h5 class="mt-0">Post Title 1</h5> --}}
                                         <p>{{$post->content}}</p>
                                         <div class="row">
                                             @if (!empty($post->medias))
@@ -167,30 +109,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-
-                                <!-- Section 2 (Ajoutez plus de sections au besoin) -->
-                                {{-- <div class="media mb-4">
-                                    <img src="https://via.placeholder.com/64" class="mr-3 rounded-circle" alt="User Image">
-                                    <div class="media-body">
-                                        <h5 class="mt-0">Post Title 2</h5>
-                                        <p>Post content goes here...</p>
-                                        <div class="row">
-                                            <div class="image-group">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 1">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 2">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 3">
-                                                <img src="https://via.placeholder.com/150x150" alt="Image 4">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-
-                                <!-- Ajoutez plus de sections au besoin -->
                             </div>
                         </div>
                         @endforeach
-                        <!-- Ajoutez d'autres contenus pour l'onglet Posts au besoin -->
                       </div>
                     </div>
                   </div>

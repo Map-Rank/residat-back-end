@@ -36,7 +36,6 @@
                         <tr class="align-middle">
                             <td class="text-center">
                                 <div class="avatar avatar-md">
-                                    {{-- <img class="avatar-img" src="{{ asset('assets/img/avatars/1.jpg') }}" alt="{{ $user->email }}"> --}}
                                     <img class="avatar-img"
                                         src="{{ $user->avatar ? asset($user->avatar) : asset('assets/img/avatars/1.jpg') }}"
                                         alt="{{ $user->email }}">
@@ -47,9 +46,6 @@
                             <td>{{ $user->last_name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            {{-- <td class="text-center">
-                            <img src="{{ $user->avatar }}" alt="{{ $user->email }}" style="width: 50px; height: 50px; border-radius: 50%;">
-                        </td> --}}
                             <td>{{ $user->gender }}</td>
                             <td>{{ $user->zone->name }}</td>
                             <td>
@@ -66,8 +62,6 @@
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#bannedModal-{{$user->id}}" data-coreui-whatever="@mdo">Bannish</a>
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
                                         <a class="dropdown-item" href="{{route('user.detail',$user->id)}}" >View</a>
-                                        {{-- <a class="dropdown-item" href="#">Edit</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a> --}}
                                     </div>
                                 </div>
                             </td>

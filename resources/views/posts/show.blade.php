@@ -11,8 +11,6 @@
             <div class="col-md-3">
                 <div class="card shadow">
                     <div class="card-body text-center">
-                        
-                        <!-- Utiliser les informations de l'utilisateur qui a créé le post -->
                         <img src="{{$post->creator[0]->avatar}}" alt="User Image" class="img-fluid rounded-circle mb-3">
                         <p class="card-subtitle text-muted"><strong>Creator</strong> </p>
                         <h2 class="card-title">{{$post->creator[0]->first_name}}</h2>
