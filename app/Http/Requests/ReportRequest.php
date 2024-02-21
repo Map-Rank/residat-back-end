@@ -31,7 +31,6 @@ class ReportRequest extends FormRequest
             'end_date' => 'required|date|after:start_date',
             'vector' => 'required|file',
             'vector_keys.*.value' => 'required|string',
-            'vector_keys.*.type' => 'required|in:COLOR,IMAGE,FIGURE',
             'vector_keys.*.name' => 'required|string',
             'report_items.*.metric_type_id' => 'required|exists:metric_types,id',
             'report_items.*.value' => 'required|numeric',

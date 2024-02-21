@@ -47,13 +47,13 @@ class ReportController extends Controller
 
         // Création du vecteur
         $vectorData = $validatedData['vector'];
-        $vectorFilePath = $request->file('vector')->store('Vector');
+        // $vectorFilePath = $request->file('vector')->store('Vector');
 
         $vector = Vector::create([
-            'path' => $vectorFilePath,
+            'path' => $imagePath,
             'model_id' => $report->id,
-            'category' => $vectorData['category'],
-            'type' => $vectorData['type'],
+            'category' => $validatedData['type'],
+            'type' => $request->file('image')->getClientMimeType(),
             'model_type' => 'App\\Models\\Report',
         ]);
 
