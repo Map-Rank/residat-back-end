@@ -13,15 +13,15 @@
     <nav aria-label="breadcrumb" class="main-breadcrumb pl-3 py-2">
         <ol class="breadcrumb breadcrumb-style2">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Administrative zones</li>
+            <li class="breadcrumb-item active" aria-current="page">Reports</li>
         </ol>
     </nav>
     <div class="container px-4 ">
         <div class="row mb-3 card card-style-1">
             <div class="card-header">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                        {{ $zones->appends(request()->query())->render("pagination::bootstrap-5") }}
-                        <a href="{{ route('zone.create') }}" class="btn btn-info text-white" > Add a zone</a>
+                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-5") }}
+                        <a href="{{ route('reports.create') }}" class="btn btn-info text-white" > Add a report</a>
                 </div>
             </div>
 
@@ -44,44 +44,22 @@
                                 <input type="text" class="form-control" placeholder="">
                             </th>
                             <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         <tr class="align-middle">
                             <th>#</th>
-                            <th>Regions</th>
-                            <th>Administrative unit</th>
-                            <th>Parent</th>
-                            <th>#Children</th>
+                            <th>Zone</th>
+                            <th>Creator</th>
+                            <th>Type</th>
+                            <th>Start date</th>
+                            <th>End date</th>
+                            <th>Vector</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        @foreach ($zones as $key => $zone)
-                            <tr class="align-middle">
-                                <td class="">{{ $key+1 }}</td>
-                                <td>{{ $zone->name }}</td>
-                                <td>{{ $zone->level->name }}</td>
-                                <td>{{ $zone->parent->name ?? '' }}</td>
-                                <td>{{ $zone->children->count() }}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <svg class="icon">
-                                                <use
-                                                    xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
-                                                </use>
-                                            </svg>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a class="dropdown-item" href="{{route('region.division',$zone->id)}}" >View Division</a>
-                                            <a class="dropdown-item" href="{{ route('zone.edit', $zone->id) }}">Edit</a>
-                                            <a class="dropdown-item text-danger" href="#">Delete</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -135,7 +113,4 @@
 
         })
     </script>
-@endsection
-
-@section('error')
 @endsection

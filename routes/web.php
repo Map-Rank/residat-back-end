@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ZoneController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('zones/{id}/edit', [ZoneController::class, 'edit'])->name('zone.edit');
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
+    Route::resource('reports', ReportController::class);
 
 
     //ban user
