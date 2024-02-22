@@ -404,10 +404,14 @@
 
                     console.log('this is the json field' + jsonData)
 
+                    const token = localStorage.getItem('token');
+
+                    
                     await axios
-                        .post('store', reportData, {
-                            headers: {
-                                'Content-Type': 'application/json',
+                    .post('http://127.0.0.1:8000/reports', reportData, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': Bearer ${token}
                             }
                         })
                         .then(response => {
