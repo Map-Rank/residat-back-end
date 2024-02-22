@@ -8,6 +8,7 @@ use App\Models\VectorKey;
 use App\Models\ReportItem;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
+use App\Models\MetricType;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
@@ -18,7 +19,10 @@ class ReportController extends Controller
     }
 
     public function create(){
-        $types = ["DROUGHT", "FLOOD", "WATER_STRESS"];
+        $types = MetricType::all();
+        dd($types);
+        
+
 
         return view('reports.create', compact('types'));
     }

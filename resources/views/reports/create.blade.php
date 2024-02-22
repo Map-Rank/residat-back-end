@@ -174,13 +174,14 @@
                                 <fieldset>
                                     Report data
                                 </fieldset>
+                                {{-- {{dd($types)}} --}}
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
                                     <select class="form-select" required autofocus name="metricType" v-model="metricType"
                                         v-validate="'required'">
                                         <option value="">Select the metric type</option>
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
+                                        @foreach ($types as $type => $key)
+                                            <option value="{{ $type }}">{{ $type }} </option>
                                         @endforeach
                                     </select>
                                     <span v-show="errors.has('metricType')"
@@ -403,12 +404,15 @@
 
                 async saveReport() {
                     const reportData = {
-                        reportType: this.reportType,
-                        startDate: this.startDate,
-                        endDate: this.endDate,
-                        imageFile: this.imageFile,
-                        vectorKeys: this.vectorKeys,
-                        metricTypes: this.metricTypes
+                        code:'1',
+                        description:'repost describtion',
+                        type: this.reportType,
+                        image: this.imageFile,
+                        start_date: this.startDate,
+                        end_date: this.endDate,
+                        vector:'f.png',
+                        vector_keys: this.vectorKeys,
+                        report_items: this.metricTypes
                     };
 
                     const jsonData = JSON.stringify(reportData);
@@ -545,7 +549,7 @@
                     event.preventDefault();
 
                     this.metricTypes.push({
-                        type: this.metricType,
+                        metric_type_id: this.metricType,
                         value: this.metricValue,
                     });
 
