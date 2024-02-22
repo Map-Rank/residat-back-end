@@ -377,7 +377,7 @@
                 metricValue: '',
                 updateIndex: null,
                 updateMetricIndex: null,
-
+                token: '',
                 formErrors: {
                     vectorType: '',
                     vectorValue: '',
@@ -387,6 +387,17 @@
                 },
 
 
+            },
+
+            mounted() {
+                axios.get('/get-token-from-session')
+                    .then(response => {
+                        this.token=response.data.token.plainTextToken
+                        console.log('this is token '+ this.token)
+                                     })
+                    .catch(error => {
+                        console.error('Error retrieving token:', error);
+                    });
             },
             methods: {
 
@@ -403,15 +414,14 @@
                     const jsonData = JSON.stringify(reportData);
 
                     console.log('this is the json field' + jsonData)
+                    console.log('this is token' + this.token)
 
-                    const token = localStorage.getItem('token');
 
-                    
                     await axios
-                    .post('http://127.0.0.1:8000/reports', reportData, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': Bearer ${token}
+                        .post('http://127.0.0.1:8000/reports', reportData, {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${this.token}`
                             }
                         })
                         .then(response => {
@@ -579,9 +589,7 @@
             watch: {
 
             },
-            mounted() {
 
-            }
         })
     </script>
 
