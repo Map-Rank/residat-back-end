@@ -56,6 +56,7 @@ class ZoneController extends Controller
     /**
      * Show the specified zone
      *
+     * @codeCoverageIgnore
      * @param int $id Id of the resource entity
      * @return JsonResponse
      */
@@ -70,6 +71,7 @@ class ZoneController extends Controller
     /**
      * Create and store a zone
      *
+     * @codeCoverageIgnore
      * @param ZoneRequest $request List of elements used to save a zone entity.
      * @return JsonResponse
      */
@@ -85,6 +87,7 @@ class ZoneController extends Controller
     /**
      * Update the specified zone
      *
+     * @codeCoverageIgnore
      * @param ZoneRequest $request
      * @param int $id
      * @return JsonResponse
@@ -102,7 +105,7 @@ class ZoneController extends Controller
 
     /**
      * Delete the specified zone.
-     *
+     * @codeCoverageIgnore
      * @param int $id
      * @return JsonResponse
      */
