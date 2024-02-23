@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Zone;
 use App\Models\Report;
 use App\Models\Vector;
 use App\Models\VectorKey;
+use App\Models\MetricType;
 use App\Models\ReportItem;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
-use App\Models\MetricType;
-use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
@@ -34,7 +35,7 @@ class ReportController extends Controller
         $user = Auth::user();
 
         $report = Report::create([
-            'code' => $validatedData['code'],
+            'code' => Str::uuid(),
             'user_id' => $user->id,
             'zone_id' => $validatedData['zone_id'],
             'description' => $validatedData['description'],
