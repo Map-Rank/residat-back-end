@@ -410,7 +410,7 @@
                         image: this.imageFile,
                         start_date: this.startDate,
                         end_date: this.endDate,
-                        vector:'f.png',
+                        vector: this.imageFile,
                         vector_keys: this.vectorKeys,
                         report_items: this.metricTypes
                     };
