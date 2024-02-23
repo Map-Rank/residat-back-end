@@ -45,7 +45,6 @@ class ReportController extends Controller
 
         // Enregistrer l'image si elle est fournie
         if ($request->hasFile('image')) {
-            dd($request->file('image'));
             $imagePath = $request->file('image')->store('report_images');
             $report->image = $imagePath;
             $report->save();

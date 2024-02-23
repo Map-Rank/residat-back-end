@@ -422,7 +422,7 @@
                 axios.get('/get-token-from-session')
                     .then(response => {
                         this.token = response.data.token.plainTextToken
-                        console.log('this is token ' + this.token)
+                        // console.log('this is token ' + this.token)
                     })
                     .catch(error => {
                         console.error('Error retrieving token:', error);
@@ -431,7 +431,7 @@
             methods: {
 
                 async saveReport() {
-                    console.log(this.imageFile);
+                    // console.log(this.imageFile);
 
                     const reportData = new FormData();
                     reportData.append('zone_id', this.selected_division_id);
@@ -444,9 +444,9 @@
                     reportData.append('vector_keys', this.vectorKeys);
                     reportData.append('report_items', JSON.stringify(this.metricTypes));
 
-                    console.log(reportData);
+                    console.log('imageFile:', this.imageFile[0]);
 
-                    console.log('this is token' + this.token);
+                    // console.log('this is token' + this.token);
 
                     await axios
                         .post('http://127.0.0.1:8000/reports', reportData, {
@@ -465,11 +465,10 @@
 
 
                 onFileChange(event) {
-                    if (event.target.files.length > 0) {
-                        for (let i = 0; i < event.target.files.length; i++) {
-                            this.imageFile.push(event.target.files[i]);
-                        }
-                        console.log(this.imageFile);
+                    const files = event.target.files;
+                    if (files.length > 0) {
+                        this.imageFile = files[0]; // Stocke le premier fichier sélectionné dans this.imageFile
+                        console.log(this.imageFile)
                     }
                 },
 
