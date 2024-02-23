@@ -57,6 +57,19 @@
                             <small class="help-block" v-if="endDate === ''">Please select an end date</small>
                         </div>
 
+                        <div  class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
+                            {!! Form::label('Sub Division', null, ['class' => '',]) !!}
+                            <input v-model="division_name" onfocusout="hidePanel" type="text"
+                                class="form-control" placeholder="Filter sub division name"/>
+                            <input type="hidden" v-model="selected_division_id" name="zone_id"/>
+                            <ul v-if="show_division_list"
+                                style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
+                                    overflow-y: scroll; overflow-x: hidden">
+                                <li  @click="selectDivision(division)" style="cursor: pointer; " v-for="division in filtered_divisions" >
+                                    @{{ division.name }} </li>
+                            </ul>
+                        </div>
+
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <img src="../../image/image-.png"
@@ -386,8 +399,12 @@
                     metricType: '',
                     metricValue: '',
                 },
-
-
+                selected_division : '',
+                selected_division_id : 0,
+                division_name: '',
+                divisions: @json($zones),
+                filtered_divisions: @json($zones),
+                show_division_list : true,
             },
 
             mounted() {
@@ -467,11 +484,6 @@
                             }
                         });
                 },
-
-
-
-
-
 
                 submitVectorKey() {
 
@@ -587,11 +599,34 @@
 
                     this.metricType = '';
                     this.metricValue = '';
-                }
+                },
+                selectDivision: function(division){
+                    console.log(division.name);
+                    this.selected_division = division;
+                    this.division_name = division.name;
+                    this.show_division_list = false;
+                    this.selected_division_id = division.id;
+                },
             },
 
             watch: {
-
+                division_name: function (division_name){
+                    console.log('new value '+ division_name);
+                    this.show_division_list = true;
+                    if(division_name.length > 0) {
+                        this.filtered_divisions = [];
+                        for (let i = 0; i < this.divisions.length; i++) {
+                            let full_name = this.divisions[i].name ;
+                            if(this.divisions[i].name.toLowerCase().includes(this.division_name.toLowerCase()))
+                            {
+                                this.filtered_divisions.push(this.divisions[i]);
+                            }
+                        }
+                    }
+                    else {
+                        this.filtered_divisions = @json($zones);
+                    }
+                }
             },
 
         })

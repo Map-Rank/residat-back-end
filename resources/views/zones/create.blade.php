@@ -225,7 +225,7 @@
             watch: {
                 selected_level_id: function (level){
                     this.loadZones(this.selected_level_id);
-                }
+                },
             },
             mounted() {
 

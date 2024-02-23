@@ -9,6 +9,7 @@ use App\Models\ReportItem;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
 use App\Models\MetricType;
+use App\Models\Zone;
 use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
@@ -20,11 +21,11 @@ class ReportController extends Controller
 
     public function create(){
         $types = MetricType::all();
-        dd($types);
-        
+        // dd($types);
+        $zones = Zone::query()->where('level_id', 4)->get();
+        // dd($zones);
 
-
-        return view('reports.create', compact('types'));
+        return view('reports.create', compact('types', 'zones'));
     }
 
     public function store(ReportRequest $request){
@@ -79,7 +80,7 @@ class ReportController extends Controller
                 'value' => $itemData['value'],
             ]);
         }
-        
+
         return view('reports.show', compact('report'));
     }
 }
