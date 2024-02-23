@@ -46,6 +46,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea required type="text" v-model="description" v-validate="'required'" name="description" class="form-control"></textarea>
+                            <span class="text-danger">@{{ errors.first('description') }}</span>
+                        </div>
+
+
+
+                        <div class="form-group">
                             <label for="start_date">Starting Period</label>
                             <input type="date" class="form-control" name="start_date" v-model="startDate">
                             <small class="help-block" v-if="startDate === ''">Please select a start date</small>
@@ -57,15 +65,16 @@
                             <small class="help-block" v-if="endDate === ''">Please select an end date</small>
                         </div>
 
-                        <div  class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
-                            {!! Form::label('Sub Division', null, ['class' => '',]) !!}
-                            <input v-model="division_name" onfocusout="hidePanel" type="text"
-                                class="form-control" placeholder="Filter sub division name"/>
-                            <input type="hidden" v-model="selected_division_id" name="zone_id"/>
+                        <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
+                            {!! Form::label('Sub Division', null, ['class' => '']) !!}
+                            <input v-model="division_name" onfocusout="hidePanel" type="text" class="form-control"
+                                placeholder="Filter sub division name" />
+                            <input type="hidden" v-model="selected_division_id" name="zone_id" />
                             <ul v-if="show_division_list"
                                 style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
                                     overflow-y: scroll; overflow-x: hidden">
-                                <li  @click="selectDivision(division)" style="cursor: pointer; " v-for="division in filtered_divisions" >
+                                <li @click="selectDivision(division)" style="cursor: pointer; "
+                                    v-for="division in filtered_divisions">
                                     @{{ division.name }} </li>
                             </ul>
                         </div>
@@ -75,7 +84,8 @@
                                 <img src="../../image/image-.png"
                                     style="width: 200px; height : 200px; border: 1px #ccc solid" />
                                 <label for="graphic" class="d-block">Graphic</label>
-                                <input type="file" name="image" accept="image/*" v-model="imageFile">
+                                <input type="file" name="image" accept="image/*" multiple @change="onFileChange">
+
                                 <small class="help-block" v-if="!imageFile">Please upload a graphic file</small>
                             </div>
 
@@ -202,7 +212,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="metricValue">Value</label>
-                                    <input type="text" class="form-control" name="metricValue" v-model="metricValue"
+                                    <input type="number" class="form-control" name="metricValue" v-model="metricValue"
                                         v-validate="'required'">
                                     <span v-show="errors.has('metricValue')"
                                         class="text-danger">@{{ errors.first('metricValue') }}</span>
@@ -379,9 +389,10 @@
             el: '#elt',
             data: {
                 reportType: '',
+                description: '',
                 startDate: '2023-01-15',
                 endDate: '2023-01-31',
-                imageFile: null,
+                imageFile: [],
                 vectorKeys: [],
                 metricTypes: [],
                 vectorType: '',
@@ -399,20 +410,20 @@
                     metricType: '',
                     metricValue: '',
                 },
-                selected_division : '',
-                selected_division_id : 0,
+                selected_division: '',
+                selected_division_id: 0,
                 division_name: '',
                 divisions: @json($zones),
                 filtered_divisions: @json($zones),
-                show_division_list : true,
+                show_division_list: true,
             },
 
             mounted() {
                 axios.get('/get-token-from-session')
                     .then(response => {
-                        this.token=response.data.token.plainTextToken
-                        console.log('this is token '+ this.token)
-                                     })
+                        this.token = response.data.token.plainTextToken
+                        console.log('this is token ' + this.token)
+                    })
                     .catch(error => {
                         console.error('Error retrieving token:', error);
                     });
@@ -420,28 +431,27 @@
             methods: {
 
                 async saveReport() {
-                    const reportData = {
-                        code:'1',
-                        description:'repost describtion',
-                        type: this.reportType,
-                        image: this.imageFile,
-                        start_date: this.startDate,
-                        end_date: this.endDate,
-                        vector: this.imageFile,
-                        vector_keys: this.vectorKeys,
-                        report_items: this.metricTypes
-                    };
+                    console.log(this.imageFile);
 
-                    const jsonData = JSON.stringify(reportData);
+                    const reportData = new FormData();
+                    reportData.append('zone_id', this.selected_division_id);
+                    reportData.append('description', this.description);
+                    reportData.append('type', this.reportType);
+                    reportData.append('image', this.imageFile);
+                    reportData.append('start_date', this.startDate);
+                    reportData.append('end_date', this.endDate);
+                    reportData.append('vector', this.imageFile);
+                    reportData.append('vector_keys', this.vectorKeys);
+                    reportData.append('report_items', JSON.stringify(this.metricTypes));
 
-                    console.log('this is the json field' + jsonData)
-                    console.log('this is token' + this.token)
+                    console.log(reportData);
 
+                    console.log('this is token' + this.token);
 
                     await axios
                         .post('http://127.0.0.1:8000/reports', reportData, {
                             headers: {
-                                'Content-Type': 'application/json',
+                                'Content-Type': 'multipart/form-data',
                                 'Authorization': `Bearer ${this.token}`
                             }
                         })
@@ -451,6 +461,16 @@
                         .catch(error => {
                             console.error('Error occurred:', error);
                         });
+                },
+
+
+                onFileChange(event) {
+                    if (event.target.files.length > 0) {
+                        for (let i = 0; i < event.target.files.length; i++) {
+                            this.imageFile.push(event.target.files[i]);
+                        }
+                        console.log(this.imageFile);
+                    }
                 },
 
 
@@ -600,7 +620,7 @@
                     this.metricType = '';
                     this.metricValue = '';
                 },
-                selectDivision: function(division){
+                selectDivision: function(division) {
                     console.log(division.name);
                     this.selected_division = division;
                     this.division_name = division.name;
@@ -610,20 +630,19 @@
             },
 
             watch: {
-                division_name: function (division_name){
-                    console.log('new value '+ division_name);
+                division_name: function(division_name) {
+                    console.log('new value ' + division_name);
                     this.show_division_list = true;
-                    if(division_name.length > 0) {
+                    if (division_name.length > 0) {
                         this.filtered_divisions = [];
                         for (let i = 0; i < this.divisions.length; i++) {
-                            let full_name = this.divisions[i].name ;
-                            if(this.divisions[i].name.toLowerCase().includes(this.division_name.toLowerCase()))
-                            {
+                            let full_name = this.divisions[i].name;
+                            if (this.divisions[i].name.toLowerCase().includes(this.division_name
+                                    .toLowerCase())) {
                                 this.filtered_divisions.push(this.divisions[i]);
                             }
                         }
-                    }
-                    else {
+                    } else {
                         this.filtered_divisions = @json($zones);
                     }
                 }
