@@ -164,11 +164,10 @@
                                 {{-- where data are loaded --}}
                                 <tbody>
                                     <tr v-for=" (key,index) in vectorKeys ">
-                                        <td> @{{ key.type }}</td>
-                                        <td> @{{ key.value }}</td>
-                                        <td> @{{ key.name }}</td>
+                                        <td><input type="text" v-model="key.type" name="vector_key[]['type']" style="border: none; width: 100%" disabled/></td>
+                                        <td><input type="text" v-model="key.value" name="vector_key[]['value']" style="border: none; width: 100%" disabled/></td>
+                                        <td><input type="text" v-model="key.name" name="vector_key[]['name']" style="border: none; width: 100%" disabled/></td>
                                         <td>
-
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
                                                     class="btn btn-success" style="width: 40%;">
@@ -182,7 +181,6 @@
                                                     <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
                                                         alt="delete" style="vertical-align: middle;">
                                                 </button>
-
                                             </div>
 
                                         </td>
@@ -203,7 +201,7 @@
                                     <select class="form-select" required autofocus name="metricType" v-model="metricType"
                                         v-validate="'required'">
                                         <option value="">Select the metric type</option>
-                                        @foreach ($types as $type => $key)
+                                        @foreach ($types as $type)
                                             <option value="{{ $type }}">{{ $type }} </option>
                                         @endforeach
                                     </select>
@@ -246,8 +244,8 @@
                                 <tbody>
 
                                     <tr v-for=" (metric,index) in metricTypes ">
-                                        <td> @{{ metric.type }}</td>
-                                        <td> @{{ metric.value }}</td>
+                                        <td><input type="text" v-model="metric.type" name="metrics[]['type']" style="border: none; width: 100%" disabled/> @{{ metric.type }}</td>
+                                        <td><input type="text" v-model="metric.value" name="metrics[]['value']" style="border: none; width: 100%" disabled/> @{{ metric.value }}</td>
                                         <td>
 
                                             <div style="display: flex; justify-content: space-between;">
@@ -400,6 +398,7 @@
                 vectorName: '',
                 metricType: '',
                 metricValue: '',
+                metricName: '',
                 updateIndex: null,
                 updateMetricIndex: null,
                 token: '',
@@ -566,7 +565,7 @@
 
                 submitMetricType() {
 
-                    console.log(this.updateMetricIndex)
+                    // console.log(this.updateMetricIndex)
                     if (this.updateMetricIndex !== null) {
                         this.updateMetricType()
                     } else {
@@ -579,8 +578,10 @@
                 addMetricType() {
                     event.preventDefault();
 
+                    console.log("the type  : "+ this.metricType);
                     this.metricTypes.push({
-                        metric_type_id: this.metricType,
+                        type: this.metricType,
+                        name: this.metricName,
                         value: this.metricValue,
                     });
 
@@ -600,6 +601,7 @@
                     event.preventDefault();
                     this.metricTypes[this.updateMetricIndex] = {
                         type: this.metricType,
+                        name: this.metricName,
                         value: this.metricValue,
                     };
 
