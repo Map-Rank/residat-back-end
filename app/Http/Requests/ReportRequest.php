@@ -37,23 +37,19 @@ class ReportRequest extends FormRequest
         // ];
 
         return [
-            'code' => 'required|string|max:255',
             'zone_id' => 'required|exists:zones,id',
             'description' => 'required|string',
             'type' => 'required|string',
             'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
-            'vector_key_names' => 'required|array',
-            'vector_key_values' => 'required|array',
-            'vector_key_types' => 'required|array',
-            'metric_names' => 'required|array',
-            'metric_values' => 'required|array',
-            'metric_types' => 'required|array',
-            // 'vector_keys.*.value' => 'required|string',
-            // 'vector_keys.*.name' => 'required|string',
-            // 'report_items.*.metric_type_id' => 'required|exists:metric_types,id',
-            // 'report_items.*.value' => 'required|numeric',
+            'vector_keys' => 'array',
+            'vector_keys.*.value' => 'required|string',
+            'vector_keys.*.name' => 'required|string',
+            'vector_keys.*.type' => 'required|string',
+            'report_items' => 'array',
+            'report_items.*.metric_type_id' => 'required|exists:metric_types,id',
+            'report_items.*.value' => 'required|numeric',
         ];
     }
 

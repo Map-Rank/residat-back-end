@@ -164,9 +164,9 @@
                                 {{-- where data are loaded --}}
                                 <tbody>
                                     <tr v-for=" (key,index) in vectorKeys ">
-                                        <td><input type="text" v-model="key.type" name="vector_key_types[]" style="border: none; width: 100%" /></td>
-                                        <td><input type="text" v-model="key.value" name="vector_key_value[]" style="border: none; width: 100%" /></td>
-                                        <td><input type="text" v-model="key.name" name="vector_key_name[]" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.type" :name="'vector_keys[' + index + '][type]'" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.value" :name="'vector_keys[' + index + '][value]'" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.name" :name="'vector_keys[' + index + '][name]'" style="border: none; width: 100%" /></td>
                                         <td>
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
@@ -244,9 +244,9 @@
                                 <tbody>
 
                                     <tr v-for=" (metric,index) in metricTypes ">
-                                        <td><input type="text" v-model="metric.name" name="metric_names[]" style="border: none; width: 100%"/>
-                                            <input type="hidden" v-model="metric.type" name="metric_types[]"  /> </td>
-                                        <td><input type="text" v-model="metric.value" name="metric_values[]" style="border: none; width: 100%"/> </td>
+                                        <td><input type="text" v-model="metric.name" :name="'report_items[' + index + '][name]'" style="border: none; width: 100%"/>
+                                            <input type="hidden" v-model="metric.type" :name="'report_items[' + index + '][metric_type_id]'"  /> </td>
+                                        <td><input type="text" v-model="metric.value" :name="'report_items[' + index + '][value]'" style="border: none; width: 100%"/> </td>
                                         <td>
 
                                             <div style="display: flex; justify-content: space-between;">

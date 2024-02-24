@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
@@ -29,9 +30,10 @@ class ReportController extends Controller
         return view('reports.create', compact('types', 'zones', 'metricTypes'));
     }
 
-    public function store(Request $request){
+    public function store(ReportRequest $request){
 
-        dd($request->all());
+        // dd($request->all());
+
         $validatedData = $request->validated();
 
         $user = Auth::user();
