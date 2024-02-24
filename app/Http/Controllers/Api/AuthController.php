@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session; 
+
 
 /**
  * Class AuthController
@@ -76,6 +78,8 @@ class AuthController extends Controller
     {
         $request->authenticate();
         $token = $request->user()->createToken('authtoken');
+
+        Session::put('token', $token->plainTextToken);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->success([], __('Invalid login credentials') , 200);

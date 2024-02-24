@@ -33,7 +33,7 @@
                             'class' => 'form-horizontal panel',
                             'enctype ' => 'multipart/form-data',
                         ]) !!}
-
+                        @csrf
                         <div class="form-group">
                             <label for="type">Report Type</label>
                             <select class="form-control" required autofocus name="type" v-model="reportType">
@@ -44,6 +44,14 @@
                             </select>
                             <small class="help-block" v-if="reportType === ''">Please select a report type</small>
                         </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea required type="text" v-model="description" v-validate="'required'" name="description" class="form-control"></textarea>
+                            <span class="text-danger">@{{ errors.first('description') }}</span>
+                        </div>
+
+
 
                         <div class="form-group">
                             <label for="start_date">Starting Period</label>
@@ -57,12 +65,27 @@
                             <small class="help-block" v-if="endDate === ''">Please select an end date</small>
                         </div>
 
+                        <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
+                            {!! Form::label('Sub Division', null, ['class' => '']) !!}
+                            <input v-model="division_name" onfocusout="hidePanel" type="text" class="form-control"
+                                placeholder="Filter sub division name" />
+                            <input type="hidden" v-model="selected_division_id" name="zone_id" />
+                            <ul v-if="show_division_list"
+                                style="max-height: 300px; padding: 10px; margin: 10px; border: 1px solid #CCCCCC; border-radius: 10px;
+                                    overflow-y: scroll; overflow-x: hidden">
+                                <li @click="selectDivision(division)" style="cursor: pointer; "
+                                    v-for="division in filtered_divisions">
+                                    @{{ division.name }} </li>
+                            </ul>
+                        </div>
+
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <img src="../../image/image-.png"
                                     style="width: 200px; height : 200px; border: 1px #ccc solid" />
                                 <label for="graphic" class="d-block">Graphic</label>
-                                <input type="file" name="image" accept="image/*" v-model="imageFile">
+                                <input type="file" name="image" accept="image/*" multiple @change="onFileChange">
+
                                 <small class="help-block" v-if="!imageFile">Please upload a graphic file</small>
                             </div>
 
@@ -91,24 +114,21 @@
                                                     <option value="{{ $type }}">{{ $type }}</option>
                                                 @endforeach
                                             </select>
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorType') }}</span>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="vectorValue">Value</label>
                                             <input type="text" v-model="vectorValue" v-validate="'required'"
                                                 name="vectorValue" class="form-control">
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorValue') }}</span>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="vectorName">Name</label>
                                             <input type="text" v-model="vectorName" v-validate="'required'"
                                                 name="vectorName" class="form-control">
-                                            <span 
-                                                class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                            <span class="text-danger">@{{ errors.first('vectorName') }}</span>
                                         </div>
 
                                         <button type="submit" class="btn btn-success"
@@ -144,11 +164,10 @@
                                 {{-- where data are loaded --}}
                                 <tbody>
                                     <tr v-for=" (key,index) in vectorKeys ">
-                                        <td> @{{ key.type }}</td>
-                                        <td> @{{ key.value }}</td>
-                                        <td> @{{ key.name }}</td>
+                                        <td><input type="text" v-model="key.type" name="vector_key[]['type']" style="border: none; width: 100%" disabled/></td>
+                                        <td><input type="text" v-model="key.value" name="vector_key[]['value']" style="border: none; width: 100%" disabled/></td>
+                                        <td><input type="text" v-model="key.name" name="vector_key[]['name']" style="border: none; width: 100%" disabled/></td>
                                         <td>
-
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
                                                     class="btn btn-success" style="width: 40%;">
@@ -162,7 +181,6 @@
                                                     <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
                                                         alt="delete" style="vertical-align: middle;">
                                                 </button>
-
                                             </div>
 
                                         </td>
@@ -177,13 +195,14 @@
                                 <fieldset>
                                     Report data
                                 </fieldset>
+                                {{-- {{dd($types)}} --}}
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
                                     <select class="form-select" required autofocus name="metricType" v-model="metricType"
                                         v-validate="'required'">
                                         <option value="">Select the metric type</option>
                                         @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }}</option>
+                                            <option value="{{ $type }}">{{ $type }} </option>
                                         @endforeach
                                     </select>
                                     <span v-show="errors.has('metricType')"
@@ -191,7 +210,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="metricValue">Value</label>
-                                    <input type="text" class="form-control" name="metricValue" v-model="metricValue"
+                                    <input type="number" class="form-control" name="metricValue" v-model="metricValue"
                                         v-validate="'required'">
                                     <span v-show="errors.has('metricValue')"
                                         class="text-danger">@{{ errors.first('metricValue') }}</span>
@@ -225,8 +244,8 @@
                                 <tbody>
 
                                     <tr v-for=" (metric,index) in metricTypes ">
-                                        <td> @{{ metric.type }}</td>
-                                        <td> @{{ metric.value }}</td>
+                                        <td><input type="text" v-model="metric.type" name="metrics[]['type']" style="border: none; width: 100%" disabled/> @{{ metric.type }}</td>
+                                        <td><input type="text" v-model="metric.value" name="metrics[]['value']" style="border: none; width: 100%" disabled/> @{{ metric.value }}</td>
                                         <td>
 
                                             <div style="display: flex; justify-content: space-between;">
@@ -254,7 +273,8 @@
 
 
 
-                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;" @click="saveReport" >Save</button>
+                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;"
+                            @click="saveReport">Save</button>
                     </div>
                 </div>
 
@@ -367,9 +387,10 @@
             el: '#elt',
             data: {
                 reportType: '',
+                description: '',
                 startDate: '2023-01-15',
                 endDate: '2023-01-31',
-                imageFile: null,
+                imageFile: [],
                 vectorKeys: [],
                 metricTypes: [],
                 vectorType: '',
@@ -377,9 +398,10 @@
                 vectorName: '',
                 metricType: '',
                 metricValue: '',
+                metricName: '',
                 updateIndex: null,
                 updateMetricIndex: null,
-
+                token: '',
                 formErrors: {
                     vectorType: '',
                     vectorValue: '',
@@ -387,30 +409,66 @@
                     metricType: '',
                     metricValue: '',
                 },
+                selected_division: '',
+                selected_division_id: 0,
+                division_name: '',
+                divisions: @json($zones),
+                filtered_divisions: @json($zones),
+                show_division_list: true,
+            },
 
-
+            mounted() {
+                axios.get('/get-token-from-session')
+                    .then(response => {
+                        this.token = response.data.token.plainTextToken
+                        // console.log('this is token ' + this.token)
+                    })
+                    .catch(error => {
+                        console.error('Error retrieving token:', error);
+                    });
             },
             methods: {
 
-                saveReport() {
-                    const reportData = {
-                        reportType: this.reportType,
-                        startDate: this.startDate,
-                        endDate: this.endDate,
-                        imageFile: this.imageFile,
-                        vectorKeys: this.vectorKeys,
-                        metricTypes: this.metricTypes
-                    };
+                async saveReport() {
+                    // console.log(this.imageFile);
 
-                    const jsonData = JSON.stringify(reportData);
+                    const reportData = new FormData();
+                    reportData.append('zone_id', this.selected_division_id);
+                    reportData.append('description', this.description);
+                    reportData.append('type', this.reportType);
+                    reportData.append('image', this.imageFile);
+                    reportData.append('start_date', this.startDate);
+                    reportData.append('end_date', this.endDate);
+                    reportData.append('vector', this.imageFile);
+                    reportData.append('vector_keys', this.vectorKeys);
+                    reportData.append('report_items', JSON.stringify(this.metricTypes));
 
-                    console.log('this is the json field' + jsonData)
+                    console.log('imageFile:', this.imageFile[0]);
 
-                    const blob = new Blob([jsonData], {
-                        type: 'application/json'
-                    });
-                    const url = URL.createObjectURL(blob);
-                   
+                    // console.log('this is token' + this.token);
+
+                    await axios
+                        .post('http://127.0.0.1:8000/reports', reportData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data',
+                                'Authorization': `Bearer ${this.token}`
+                            }
+                        })
+                        .then(response => {
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            console.error('Error occurred:', error);
+                        });
+                },
+
+
+                onFileChange(event) {
+                    const files = event.target.files;
+                    if (files.length > 0) {
+                        this.imageFile = files[0]; // Stocke le premier fichier sélectionné dans this.imageFile
+                        console.log(this.imageFile)
+                    }
                 },
 
 
@@ -444,11 +502,6 @@
                             }
                         });
                 },
-
-
-
-
-
 
                 submitVectorKey() {
 
@@ -512,7 +565,7 @@
 
                 submitMetricType() {
 
-                    console.log(this.updateMetricIndex)
+                    // console.log(this.updateMetricIndex)
                     if (this.updateMetricIndex !== null) {
                         this.updateMetricType()
                     } else {
@@ -525,8 +578,10 @@
                 addMetricType() {
                     event.preventDefault();
 
+                    console.log("the type  : "+ this.metricType);
                     this.metricTypes.push({
                         type: this.metricType,
+                        name: this.metricName,
                         value: this.metricValue,
                     });
 
@@ -546,6 +601,7 @@
                     event.preventDefault();
                     this.metricTypes[this.updateMetricIndex] = {
                         type: this.metricType,
+                        name: this.metricName,
                         value: this.metricValue,
                     };
 
@@ -564,15 +620,35 @@
 
                     this.metricType = '';
                     this.metricValue = '';
-                }
+                },
+                selectDivision: function(division) {
+                    console.log(division.name);
+                    this.selected_division = division;
+                    this.division_name = division.name;
+                    this.show_division_list = false;
+                    this.selected_division_id = division.id;
+                },
             },
 
             watch: {
-
+                division_name: function(division_name) {
+                    console.log('new value ' + division_name);
+                    this.show_division_list = true;
+                    if (division_name.length > 0) {
+                        this.filtered_divisions = [];
+                        for (let i = 0; i < this.divisions.length; i++) {
+                            let full_name = this.divisions[i].name;
+                            if (this.divisions[i].name.toLowerCase().includes(this.division_name
+                                    .toLowerCase())) {
+                                this.filtered_divisions.push(this.divisions[i]);
+                            }
+                        }
+                    } else {
+                        this.filtered_divisions = @json($zones);
+                    }
+                }
             },
-            mounted() {
 
-            }
         })
     </script>
 

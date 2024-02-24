@@ -22,7 +22,7 @@ class VectorsSeeder extends Seeder
             foreach ($types as $type) {
                 for ($i = 1; $i <= 3; $i++) {
                     $modelId = ($i % 2 == 0) ? Zone::inRandomOrder()->first()->id : Report::inRandomOrder()->first()->id;
-                    $modelType = ($modelId instanceof Zone) ? 'App\Models\Zone' : 'App\Models\Report';
+                    $modelType = ($modelId instanceof Zone) ? 'App\\Models\\Zone' : 'App\\Models\\Report';
 
                     Vector::create([
                         'path' => "example_path_$i.$type",
