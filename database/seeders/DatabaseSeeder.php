@@ -43,10 +43,10 @@ class DatabaseSeeder extends Seeder
             // PostSeeder::class,
 
             MetricTypeSeeder::class,
-            ReportsSeeder::class,
-            ReportItemsSeeder::class,
-            VectorsSeeder::class,
-            VectorKeysSeeder::class,
+            // ReportsSeeder::class,
+            // ReportItemsSeeder::class,
+            // VectorsSeeder::class,
+            // VectorKeysSeeder::class,
         ]);
     }
 }

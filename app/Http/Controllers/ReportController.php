@@ -22,13 +22,16 @@ class ReportController extends Controller
 
     public function create(){
         $types = ["DROUGHT", "FLOOD", "WATER_STRESS"];
+        $metricTypes = MetricType::all();
 
         $zones = Zone::query()->where('level_id', 4)->get();
 
-        return view('reports.create', compact('types', 'zones'));
+        return view('reports.create', compact('types', 'zones', 'metricTypes'));
     }
 
-    public function store(ReportRequest $request){
+    public function store(Request $request){
+
+        dd($request->all());
         $validatedData = $request->validated();
 
         $user = Auth::user();

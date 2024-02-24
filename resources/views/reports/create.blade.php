@@ -104,37 +104,37 @@
                                     Vector keys
                                 </fieldset>
                                 <div id="elt">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="vectorType">Key Type</label>
-                                            <select v-model="vectorType" v-validate="'required'" name="vectorType"
-                                                class="form-control">
-                                                <option value="">Select key type</option>
-                                                @foreach ($types as $type)
-                                                    <option value="{{ $type }}">{{ $type }}</option>
-                                                @endforeach
-                                            </select>
-                                            <span class="text-danger">@{{ errors.first('vectorType') }}</span>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="vectorValue">Value</label>
-                                            <input type="text" v-model="vectorValue" v-validate="'required'"
-                                                name="vectorValue" class="form-control">
-                                            <span class="text-danger">@{{ errors.first('vectorValue') }}</span>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="vectorType">Key Type</label>
+                                        <select v-model="vectorType" v-validate="'required'" name="vectorType"
+                                            class="form-control">
+                                            <option value="">Select key type</option>
+                                            @foreach ($types as $type)
+                                                <option value="{{ $type }}">{{ $type }}</option>
+                                            @endforeach
+                                        </select>
+                                        <span class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                    </div>
 
-                                        <div class="form-group">
-                                            <label for="vectorName">Name</label>
-                                            <input type="text" v-model="vectorName" v-validate="'required'"
-                                                name="vectorName" class="form-control">
-                                            <span class="text-danger">@{{ errors.first('vectorName') }}</span>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="vectorValue">Value</label>
+                                        <input type="text" v-model="vectorValue" v-validate="'required'"
+                                            name="vectorValue" class="form-control">
+                                        <span class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                    </div>
 
-                                        <button type="submit" class="btn btn-success"
-                                            @click.prevent='validateVectorFormBeforeSubmit'>Submit</button>
+                                    <div class="form-group">
+                                        <label for="vectorName">Name</label>
+                                        <input type="text" v-model="vectorName" v-validate="'required'"
+                                            name="vectorName" class="form-control">
+                                        <span class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                    </div>
 
-                                    </form>
+                                    <button type="submit" class="btn btn-success"
+                                        @click.prevent='validateVectorFormBeforeSubmit'>Submit</button>
+
+
                                 </div>
                             </div>
 
@@ -164,9 +164,9 @@
                                 {{-- where data are loaded --}}
                                 <tbody>
                                     <tr v-for=" (key,index) in vectorKeys ">
-                                        <td><input type="text" v-model="key.type" name="vector_key[]['type']" style="border: none; width: 100%" disabled/></td>
-                                        <td><input type="text" v-model="key.value" name="vector_key[]['value']" style="border: none; width: 100%" disabled/></td>
-                                        <td><input type="text" v-model="key.name" name="vector_key[]['name']" style="border: none; width: 100%" disabled/></td>
+                                        <td><input type="text" v-model="key.type" name="vector_key_types[]" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.value" name="vector_key_value[]" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.name" name="vector_key_name[]" style="border: none; width: 100%" /></td>
                                         <td>
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
@@ -198,11 +198,11 @@
                                 {{-- {{dd($types)}} --}}
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select" required autofocus name="metricType" v-model="metricType"
+                                    <select class="form-select"  autofocus name="metricType" v-model="metricType"
                                         v-validate="'required'">
                                         <option value="">Select the metric type</option>
-                                        @foreach ($types as $type)
-                                            <option value="{{ $type }}">{{ $type }} </option>
+                                        @foreach ($metricTypes as $metricType)
+                                            <option value="{{ $metricType->id }}">{{ $metricType->name }} </option>
                                         @endforeach
                                     </select>
                                     <span v-show="errors.has('metricType')"
@@ -244,8 +244,9 @@
                                 <tbody>
 
                                     <tr v-for=" (metric,index) in metricTypes ">
-                                        <td><input type="text" v-model="metric.type" name="metrics[]['type']" style="border: none; width: 100%" disabled/> @{{ metric.type }}</td>
-                                        <td><input type="text" v-model="metric.value" name="metrics[]['value']" style="border: none; width: 100%" disabled/> @{{ metric.value }}</td>
+                                        <td><input type="text" v-model="metric.name" name="metric_names[]" style="border: none; width: 100%"/>
+                                            <input type="hidden" v-model="metric.type" name="metric_types[]"  /> </td>
+                                        <td><input type="text" v-model="metric.value" name="metric_values[]" style="border: none; width: 100%"/> </td>
                                         <td>
 
                                             <div style="display: flex; justify-content: space-between;">
@@ -270,11 +271,10 @@
                                 </tbody>
                             </table>
                         </div>
-
-
-
-                        <button type="submit" class="btn btn-primary pull-right" style="width: 100%;"
-                            @click="saveReport">Save</button>
+                        {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right','style' => 'margin-top:10px; width:100%;']) !!}
+                        {!! Form::close() !!}
+                        {{-- <button type="submit" class="btn btn-primary pull-right" style="width: 100%;"
+                            >Save</button> --}}
                     </div>
                 </div>
 
@@ -393,6 +393,7 @@
                 imageFile: [],
                 vectorKeys: [],
                 metricTypes: [],
+                metrics: @json($metricTypes),
                 vectorType: '',
                 vectorValue: '',
                 vectorName: '',
@@ -579,9 +580,15 @@
                     event.preventDefault();
 
                     console.log("the type  : "+ this.metricType);
+                    var metricName = '';
+                    for(let i=0;  i< this.metrics.length; i++){
+                        if(this.metrics[i].id == this.metricType){
+                            metricName = this.metrics[i].name;
+                        }
+                    }
                     this.metricTypes.push({
                         type: this.metricType,
-                        name: this.metricName,
+                        name: metricName,
                         value: this.metricValue,
                     });
 
