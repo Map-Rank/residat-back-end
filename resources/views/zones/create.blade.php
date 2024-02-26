@@ -20,7 +20,7 @@
 
     <div class="container px-4 " id="elt">
         <div class="row">
-            <div class="col-sm-7">
+            <div class="col-sm-12">
 
                 <div class="card card-style-1">
                     <div class="card-header">
@@ -80,10 +80,105 @@
                             {!! $errors->first('data', '<small class="help-block">:message</small>') !!}
                         </div>
 
+                        <div class="col-sm-12">
+                            <div class=" col-sm-5 pt-4 pb-4" style="border: 1px solid #ccc">
+                                <fieldset>
+                                    Vector keys
+                                </fieldset>
+                                <div id="elt">
+        
+                                    <div class="form-group">
+                                        <label for="vectorType">Key Type</label>
+                                        <select v-model="vectorType" v-validate="'required'" name="vectorType"
+                                            class="form-control">
+                                            <option value="">Select key type</option>
+                                            @foreach ($types as $type)
+                                                <option value="{{ $type }}">{{ $type }}</option>
+                                            @endforeach
+                                        </select>
+                                        <span class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="vectorValue">Value</label>
+                                        <input type="text" v-model="vectorValue" v-validate="'required'"
+                                            name="vectorValue" class="form-control">
+                                        <span class="text-danger">@{{ errors.first('vectorValue') }}</span>
+                                    </div>
+        
+                                    <div class="form-group">
+                                        <label for="vectorName">Name</label>
+                                        <input type="text" v-model="vectorName" v-validate="'required'"
+                                            name="vectorName" class="form-control">
+                                        <span class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                    </div>
+        
+                                    <button type="submit" class="btn btn-success"
+                                        @click.prevent='validateVectorFormBeforeSubmit'>Submit</button>
+        
+        
+                                </div>
+                            </div>
+        
+                            <table id="example"
+                                class="col-sm-6 table table-striped table-bordered table-sm dt-responsive nowrap w-100">
+        
+                                <thead class="fw-semibold text-nowrap">
+                                    <tr class="column-filter dt-column-filter">
+                                        <th>
+                                            <input type="text" class="form-control" placeholder="">
+                                        </th>
+                                        <th>
+                                            <input type="text" class="form-control" placeholder="">
+                                        </th>
+                                        <th>
+                                            <input type="text" class="form-control" placeholder="">
+                                        </th>
+        
+                                    </tr>
+                                    <tr class="align-middle">
+                                        <th>Vector type</th>
+                                        <th>Value</th>
+                                        <th>Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                {{-- where data are loaded --}}
+                                <tbody>
+                                    <tr v-for=" (key,index) in vectorKeys ">
+                                        <td><input type="text" v-model="key.type" :name="'vector_keys[' + index + '][type]'" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.value" :name="'vector_keys[' + index + '][value]'" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.name" :name="'vector_keys[' + index + '][name]'" style="border: none; width: 100%" /></td>
+                                        <td>
+                                            <div style="display: flex; justify-content: space-between;">
+                                                <button @click.prevent='prepareUpdateVectorKey(index)'
+                                                    class="btn btn-success" style="width: 40%;">
+        
+                                                    <img src="https://img.icons8.com/metro/26/000000/edit.png"
+                                                        alt="edit" style="vertical-align: middle;" />
+                                                </button>
+        
+                                                <button @click.prevent='deleteSpecificVectrKey(index)'
+                                                    class="btn btn-danger" style="width: 40%;">
+                                                    <img src="https://img.icons8.com/material-outlined/24/000000/trash--v1.png"
+                                                        alt="delete" style="vertical-align: middle;">
+                                                </button>
+                                            </div>
+        
+                                        </td>
+                                    </tr>
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+
                         {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right','style' => 'margin-top:10px; width:100%;']) !!}
                         {!! Form::close() !!}
                     </div>
                 </div>
+
+               
 
             </div>
         </div>
@@ -94,6 +189,8 @@
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vee-validate@2.2.15"></script>
+
 
     <script>
         $(() => {
@@ -137,6 +234,9 @@
         })
     </script>
     <script>
+         Vue.use(VeeValidate);
+
+
         var app = new Vue({
             el: '#elt',
             data: {
@@ -159,8 +259,94 @@
                 selected_division_id : 0,
                 selected_region_id : 0,
                 division_name: '',
+                vectorType: '',
+                vectorValue: '',
+                vectorName: '',
+                vectorKeys: [],
+                formErrors: {
+                    vectorType: '',
+                    vectorValue: '',
+                    vectorName: '',
+                    metricType: '',
+                    metricValue: '',
+                },
             },
             methods: {
+
+                validateVectorFormBeforeSubmit(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    let fieldsToValidate = ['vectorType', 'vectorValue', 'vectorName'];
+                    Promise.all(fieldsToValidate.map(field => this.$validator.validate(field))).then(results => {
+                        let allValid = results.every(valid => valid);
+                        if (allValid) {
+                            this.submitVectorKey();
+                        } else {
+                            console.log('Vector form is invalid!');
+                        }
+                    });
+                },
+
+                submitVectorKey() {
+
+
+
+
+if (this.updateIndex !== null) {
+    this.updateVectorKey()
+} else {
+    this.addVectorKey()
+}
+
+
+
+},
+
+addVectorKey() {
+event.preventDefault();
+
+this.vectorKeys.push({
+    type: this.vectorType,
+    value: this.vectorValue,
+    name: this.vectorName,
+});
+
+this.resetForm()
+},
+prepareUpdateVectorKey(index) {
+const vectorKey = this.vectorKeys[index];
+this.vectorType = vectorKey.type;
+this.vectorValue = vectorKey.value;
+this.vectorName = vectorKey.name;
+
+this.updateIndex = index;
+},
+
+
+updateVectorKey() {
+event.preventDefault();
+this.vectorKeys[this.updateIndex] = {
+    type: this.vectorType,
+    value: this.vectorValue,
+    name: this.vectorName,
+};
+
+this.resetForm();
+this.updateIndex = null;
+},
+
+deleteSpecificVectrKey(index) {
+this.vectorKeys.splice(index, 1);
+},
+
+resetForm() {
+event.preventDefault();
+
+this.vectorType = '';
+this.vectorValue = '';
+this.vectorName = '';
+},
+
                 loadZones: function (level_id) {
                     console.log(level_id);
                     this.show_region = (level_id >= 3);

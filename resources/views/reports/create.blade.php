@@ -430,38 +430,7 @@
             },
             methods: {
 
-                async saveReport() {
-                    // console.log(this.imageFile);
-
-                    const reportData = new FormData();
-                    reportData.append('zone_id', this.selected_division_id);
-                    reportData.append('description', this.description);
-                    reportData.append('type', this.reportType);
-                    reportData.append('image', this.imageFile);
-                    reportData.append('start_date', this.startDate);
-                    reportData.append('end_date', this.endDate);
-                    reportData.append('vector', this.imageFile);
-                    reportData.append('vector_keys', this.vectorKeys);
-                    reportData.append('report_items', JSON.stringify(this.metricTypes));
-
-                    console.log('imageFile:', this.imageFile[0]);
-
-                    // console.log('this is token' + this.token);
-
-                    await axios
-                        .post('http://127.0.0.1:8000/reports', reportData, {
-                            headers: {
-                                'Content-Type': 'multipart/form-data',
-                                'Authorization': `Bearer ${this.token}`
-                            }
-                        })
-                        .then(response => {
-                            console.log(response.data);
-                        })
-                        .catch(error => {
-                            console.error('Error occurred:', error);
-                        });
-                },
+             
 
 
                 onFileChange(event) {
