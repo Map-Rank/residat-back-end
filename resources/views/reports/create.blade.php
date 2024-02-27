@@ -81,18 +81,26 @@
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <img src="../../image/image-.png"
+                                <img :src="imageFile ?? '../../image/image-.png'"
                                     style="width: 200px; height : 200px; border: 1px #ccc solid" />
                                 <label for="graphic" class="d-block">Graphic</label>
-                                <input type="file" name="image" accept="image/*" multiple @change="onFileChange">
+                                <input type="file" name="image" accept=".svg" @change="processSVGFile">
+
 
                                 <small class="help-block" v-if="!imageFile">Please upload a graphic file</small>
                             </div>
 
                             <div class="form-group">
+
+
                                 <label for="detected_keys">Detected keys on the map</label>
-                                <span class="badge badge-sm bg-info ms-auto">Key 1</span>
-                                <span class="badge badge-sm bg-warning ms-auto">Key 2</span>
+                                <div style="display: flex; flex-direction: row;">
+
+                                    <div v-for="(key, index) in vectorKeys" :key="index">
+                                        <span class="badge badge-sm mx-2 p-2"
+                                            :style="{ backgroundColor: key.color }">@{{ key.id }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -104,17 +112,13 @@
                                     Vector keys
                                 </fieldset>
                                 <div id="elt">
-
                                     <div class="form-group">
-                                        <label for="vectorType">Key Type</label>
-                                        <select v-model="vectorType" v-validate="'required'" name="vectorType"
-                                            class="form-control">
-                                            <option value="">Select key type</option>
-                                            @foreach ($types as $type)
-                                                <option value="{{ $type }}">{{ $type }}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="text-danger">@{{ errors.first('vectorType') }}</span>
+                                        <label for="vectorType">Code/Image</label>
+                                        <div class="form-group">
+                                            <input type="color" style="height: 50px;pointer-events: none;" v-model="vectorType"
+                                                name="vectorType" class="form-control ">
+
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -126,9 +130,16 @@
 
                                     <div class="form-group">
                                         <label for="vectorName">Name</label>
-                                        <input type="text" v-model="vectorName" v-validate="'required'"
-                                            name="vectorName" class="form-control">
+                                        <input type="text" v-model="vectorName" v-validate="'required'" name="vectorName"
+                                            class="form-control">
                                         <span class="text-danger">@{{ errors.first('vectorName') }}</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="vectorColor">Color</label>
+                                        <input type="color" style="height: 50px" v-model="vectorColor"
+                                            name="vectorColor" class="form-control" readonly>
+
                                     </div>
 
                                     <button type="submit" class="btn btn-success"
@@ -155,9 +166,10 @@
 
                                     </tr>
                                     <tr class="align-middle">
-                                        <th>Vector type</th>
+                                        <th>Code/Image</th>
                                         <th>Value</th>
                                         <th>Name</th>
+                                        <th>color</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -173,6 +185,13 @@
                                         <td><input type="text" v-model="key.name"
                                                 :name="'vector_keys[' + index + '][name]'"
                                                 style="border: none; width: 100%" /></td>
+                                        <td>
+                                            <input type="color" v-model="key.color"
+                                                :name="'vector_keys[' + index + '][color]'"
+                                                style="border: none; width: 100%; pointer-events: none;" readonly />
+
+                                        </td>
+
                                         <td>
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
@@ -401,13 +420,14 @@
                 description: '',
                 startDate: '2023-01-15',
                 endDate: '2023-01-31',
-                imageFile: [],
+                imageFile: null,
                 vectorKeys: [],
                 metricTypes: [],
                 metrics: @json($metricTypes),
                 vectorType: '',
                 vectorValue: '',
                 vectorName: '',
+                vectorColor: '',
                 metricType: '',
                 metricValue: '',
                 metricName: '',
@@ -433,7 +453,6 @@
                 axios.get('/get-token-from-session')
                     .then(response => {
                         this.token = response.data.token.plainTextToken
-                        // console.log('this is token ' + this.token)
                     })
                     .catch(error => {
                         console.error('Error retrieving token:', error);
@@ -442,7 +461,34 @@
             methods: {
 
 
-                
+                processSVGFile(event) {
+                    const file = event.target.files[0];
+                    if (!file) {
+                        this.imageFile = null;
+                        return;
+                    }
+
+                    this.imageFile = URL.createObjectURL(file);
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const parser = new DOMParser();
+                        const svgDoc = parser.parseFromString(e.target.result, "image/svg+xml");
+                        const paths = svgDoc.querySelectorAll('path');
+
+                        const extractedData = Array.from(paths).map(path => ({
+
+                            id: path.getAttribute('data-id'),
+                            value: this.extractColor(path.getAttribute('style')),
+                            type: this.extractColor(path.getAttribute('style')),
+                            name: path.getAttribute('data-name'),
+                            color: this.extractColor(path.getAttribute('style'))
+                        }));
+
+                        this.vectorKeys.push(...extractedData)
+                        console.log(this.vectorKeys)
+                    };
+                    reader.readAsText(file);
+                },
 
 
                 onFileChange(event) {
@@ -507,6 +553,7 @@
                         type: this.vectorType,
                         value: this.vectorValue,
                         name: this.vectorName,
+                        color: this.vectorColor
                     });
 
                     this.resetForm()
@@ -516,7 +563,7 @@
                     this.vectorType = vectorKey.type;
                     this.vectorValue = vectorKey.value;
                     this.vectorName = vectorKey.name;
-
+                    this.vectorColor = vectorKey.color
                     this.updateIndex = index;
                 },
 
@@ -527,6 +574,7 @@
                         type: this.vectorType,
                         value: this.vectorValue,
                         name: this.vectorName,
+                        color: this.vectorColor
                     };
 
                     this.resetForm();
@@ -543,6 +591,7 @@
                     this.vectorType = '';
                     this.vectorValue = '';
                     this.vectorName = '';
+                    this.vectorColor = '';
                 },
 
                 submitMetricType() {
