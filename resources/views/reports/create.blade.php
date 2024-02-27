@@ -164,9 +164,15 @@
                                 {{-- where data are loaded --}}
                                 <tbody>
                                     <tr v-for=" (key,index) in vectorKeys ">
-                                        <td><input type="text" v-model="key.type" :name="'vector_keys[' + index + '][type]'" style="border: none; width: 100%" /></td>
-                                        <td><input type="text" v-model="key.value" :name="'vector_keys[' + index + '][value]'" style="border: none; width: 100%" /></td>
-                                        <td><input type="text" v-model="key.name" :name="'vector_keys[' + index + '][name]'" style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.type"
+                                                :name="'vector_keys[' + index + '][type]'"
+                                                style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.value"
+                                                :name="'vector_keys[' + index + '][value]'"
+                                                style="border: none; width: 100%" /></td>
+                                        <td><input type="text" v-model="key.name"
+                                                :name="'vector_keys[' + index + '][name]'"
+                                                style="border: none; width: 100%" /></td>
                                         <td>
                                             <div style="display: flex; justify-content: space-between;">
                                                 <button @click.prevent='prepareUpdateVectorKey(index)'
@@ -198,7 +204,7 @@
                                 {{-- {{dd($types)}} --}}
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select"  autofocus name="metricType" v-model="metricType"
+                                    <select class="form-select" autofocus name="metricType" v-model="metricType"
                                         v-validate="'required'">
                                         <option value="">Select the metric type</option>
                                         @foreach ($metricTypes as $metricType)
@@ -218,7 +224,6 @@
 
                                 <button type="button" class="btn btn-success"
                                     @click.prevent="validateMetricFormBeforeSubmit">Add Metric Data</button>
-                                {{-- <button class="btn  btn-success" @click="submitMetricType">Add Metric data</button> --}}
 
                             </div>
 
@@ -244,9 +249,15 @@
                                 <tbody>
 
                                     <tr v-for=" (metric,index) in metricTypes ">
-                                        <td><input type="text" v-model="metric.name" :name="'report_items[' + index + '][name]'" style="border: none; width: 100%"/>
-                                            <input type="hidden" v-model="metric.type" :name="'report_items[' + index + '][metric_type_id]'"  /> </td>
-                                        <td><input type="text" v-model="metric.value" :name="'report_items[' + index + '][value]'" style="border: none; width: 100%"/> </td>
+                                        <td><input type="text" v-model="metric.name"
+                                                :name="'report_items[' + index + '][name]'"
+                                                style="border: none; width: 100%" />
+                                            <input type="hidden" v-model="metric.type"
+                                                :name="'report_items[' + index + '][metric_type_id]'" />
+                                        </td>
+                                        <td><input type="text" v-model="metric.value"
+                                                :name="'report_items[' + index + '][value]'"
+                                                style="border: none; width: 100%" /> </td>
                                         <td>
 
                                             <div style="display: flex; justify-content: space-between;">
@@ -271,7 +282,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right','style' => 'margin-top:10px; width:100%;']) !!}
+                        {!! Form::submit('Save', ['class' => 'btn btn-primary pull-right', 'style' => 'margin-top:10px; width:100%;']) !!}
                         {!! Form::close() !!}
                         {{-- <button type="submit" class="btn btn-primary pull-right" style="width: 100%;"
                             >Save</button> --}}
@@ -430,7 +441,8 @@
             },
             methods: {
 
-             
+
+                
 
 
                 onFileChange(event) {
@@ -548,10 +560,10 @@
                 addMetricType() {
                     event.preventDefault();
 
-                    console.log("the type  : "+ this.metricType);
+                    console.log("the type  : " + this.metricType);
                     var metricName = '';
-                    for(let i=0;  i< this.metrics.length; i++){
-                        if(this.metrics[i].id == this.metricType){
+                    for (let i = 0; i < this.metrics.length; i++) {
+                        if (this.metrics[i].id == this.metricType) {
                             metricName = this.metrics[i].name;
                         }
                     }
