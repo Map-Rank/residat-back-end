@@ -55,10 +55,6 @@ class ReportController extends Controller
             $report->save();
         }
 
-        // Création du vecteur
-        $vectorData = $validatedData['vector'];
-        // $vectorFilePath = $request->file('vector')->store('Vector');
-
         $vector = Vector::create([
             'path' => $imagePath,
             'model_id' => $report->id,
