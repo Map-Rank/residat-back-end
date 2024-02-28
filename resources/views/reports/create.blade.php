@@ -490,6 +490,11 @@
                     reader.readAsText(file);
                 },
 
+                extractColor(styleString) {
+                    const match = styleString.match(/fill: (\#[0-9a-fA-F]{6})/);
+                    return match ? match[1] : 'DefaultColor'; // Return a default color or null if no match
+                },
+
 
                 onFileChange(event) {
                     const files = event.target.files;
