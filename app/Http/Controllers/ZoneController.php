@@ -197,7 +197,8 @@ class ZoneController extends Controller
 
     public function create(){
         $levels = Level::query()->get();
-        return view('zones.create', compact('levels'));
+        $types = ["DROUGHT", "FLOOD", "WATER_STRESS"];
+        return view('zones.create', compact('levels','types'));
     }
 
     public function edit($id){
