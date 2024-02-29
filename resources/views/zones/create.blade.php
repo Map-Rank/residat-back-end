@@ -93,17 +93,17 @@
                             </div>
 
                             <div class="form-group">
-
-
                                 <label for="detected_keys">Detected keys on the map</label>
                                 <div style="display: flex; flex-direction: row;">
 
                                     <div v-for="(key, index) in vectorKeys" :key="index">
-                                        <span class="badge badge-sm mx-2 p-2"
+                                        <span class="badge badge-sm mx-2 "
                                             :style="{ backgroundColor: key.color }">@{{ key.id }}</span>
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
 
                         <div class="col-sm-12">
@@ -113,10 +113,15 @@
                                 </fieldset>
                                 <div id="elt">
                                     <div class="form-group">
-                                        <label for="vectorType">Code/Image</label>
+                                        <label for="vectorType">Key Type</label>
                                         <div class="form-group">
-                                            <input type="color" style="height: 50px;pointer-events: none;" v-model="vectorType"
-                                                name="vectorType" class="form-control ">
+
+                                            <select class="form-control" v-validate="'required'" autofocus name="vectorType"
+                                                v-model="vectorType">
+                                                <option value="">Select Key Type</option>
+                                                <option v-for="(keyType, index) in keyTypes" :value="keyType">
+                                                    @{{ keyType }}</option>
+                                            </select>
 
                                         </div>
                                     </div>
@@ -130,8 +135,8 @@
 
                                     <div class="form-group">
                                         <label for="vectorName">Name</label>
-                                        <input type="text" v-model="vectorName" v-validate="'required'" name="vectorName"
-                                            class="form-control">
+                                        <input type="text" v-model="vectorName" v-validate="'required'"
+                                            name="vectorName" class="form-control">
                                         <span class="text-danger">@{{ errors.first('vectorName') }}</span>
                                     </div>
 
@@ -290,6 +295,7 @@
                 show_zone_list: true,
                 zone_selected: null,
                 imageFile: null,
+                showSvgStructureError = false;
                 levels: @json($levels),
                 show_division: false,
                 show_region: false,
@@ -318,17 +324,24 @@
                     metricType: '',
                     metricValue: '',
                 },
+                keyTypes: [
+                    'image',
+                    'code'
+                ]
             },
             methods: {
 
 
                 processSVGFile(event) {
+                    this.vectorKeys.splice(0, this.vectorKeys.length)
+
                     const file = event.target.files[0];
                     if (!file) {
                         this.imageFile = null;
                         return;
                     }
 
+                    this.isSvg = file.type === 'image/svg+xml';
                     this.imageFile = URL.createObjectURL(file);
                     const reader = new FileReader();
                     reader.onload = (e) => {
@@ -340,7 +353,7 @@
 
                             id: path.getAttribute('data-id'),
                             value: this.extractColor(path.getAttribute('style')),
-                            type: this.extractColor(path.getAttribute('style')),
+                            type: this.isSvg ? 'color' : 'image',
                             name: path.getAttribute('data-name'),
                             color: this.extractColor(path.getAttribute('style'))
                         }));
