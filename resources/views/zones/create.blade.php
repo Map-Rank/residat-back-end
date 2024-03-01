@@ -295,7 +295,7 @@
                 show_zone_list: true,
                 zone_selected: null,
                 imageFile: null,
-                showSvgStructureError = false;
+                showSvgStructureError: false,
                 levels: @json($levels),
                 show_division: false,
                 show_region: false,
