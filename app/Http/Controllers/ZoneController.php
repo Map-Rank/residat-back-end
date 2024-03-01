@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ZoneRequest;
-use App\Http\Resources\ZoneResource;
-use App\Models\Level;
-use App\Models\Zone;
 use Exception;
-use Illuminate\Http\JsonResponse;
+use App\Models\Zone;
+use App\Models\Level;
+use App\Models\Vector;
+use App\Models\VectorKey;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\ZoneRequest;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\ZoneResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -92,7 +94,7 @@ class ZoneController extends Controller
 
     public function show($id) {
 
-        $data = Zone::query()->find($id);
+        $data = Zone::with('vectors.vectorKeys')->find($id);
         $data->loadMissing(['parent']);
 
         if (!$data) {
@@ -130,6 +132,24 @@ class ZoneController extends Controller
 
             $mediaPath = $mediaFile->store('media/zone', 'public');
             $datum->banner = Storage::url($mediaPath);
+        }
+
+        $vector = Vector::create([
+            'path' => $mediaPath,
+            'model_id' => $datum->id,
+            'category' => $request['type'],
+            'type' => $request->file('image')->getClientMimeType(),
+            'model_type' => 'App\\Models\\Zone',
+        ]);
+
+        // Création des clés de vecteur pour le vecteur
+        foreach ($request['vector_keys'] as $keyData) {
+            $vectorKey = VectorKey::create([
+                'value' => $keyData['value'],
+                'type' => $keyData['type'],
+                'name' => $keyData['name'],
+                'vector_id' => $vector->id,
+            ]);
         }
 
         return (!$datum->save())

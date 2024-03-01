@@ -61,7 +61,7 @@ class ZoneController extends Controller
      */
     public function show($id) : JsonResponse {
 
-        $datum = Zone::query()->find($id);
+        $datum = Zone::with('vector.vectorKeys')->find($id);
         return (!$datum)
             ? response()->errors([], __('Zone not found'), 404)
             : response()->success(ZoneResource::make($datum->loadMissing(['parent']),__('Values found')));

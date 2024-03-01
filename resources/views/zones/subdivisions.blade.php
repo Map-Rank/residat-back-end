@@ -9,7 +9,7 @@
     <div class="container px-4">
         <div class="row mb-3">
             <div class="col-md-12 d-flex justify-content-between align-items-center">
-                <h1 class="my-0 mb-3">List of divisions</h1>
+                <h1 class="my-0 mb-3">List of subdivisions</h1>
                 <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add Subdivision</button>
             </div>
             <table class="table border mb-0">
