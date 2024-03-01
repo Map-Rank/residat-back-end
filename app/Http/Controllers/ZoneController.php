@@ -94,7 +94,7 @@ class ZoneController extends Controller
 
     public function show($id) {
 
-        $data = Zone::query()->find($id);
+        $data = Zone::with('vectors.vectorKeys')->find($id);
         $data->loadMissing(['parent']);
 
         if (!$data) {

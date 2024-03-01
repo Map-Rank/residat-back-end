@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Models\Zone;
 use Illuminate\Http\Request;
+use App\Http\Resources\VectorResource;
+use App\Http\Resources\VectorKeyResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ZoneResource extends JsonResource
@@ -21,6 +23,8 @@ class ZoneResource extends JsonResource
             'parent' => ZoneResource::make($this->whenLoaded('zone')),
             'banner' => $this['banner'],
             'created_at' => $this['created_at'],
+            'vector' => VectorResource::make($this->whenLoaded('vector')),
+            'vector_keys' => VectorKeyResource::collection($this->whenLoaded('vector.vectorKeys')),
         ];
     }
 }
