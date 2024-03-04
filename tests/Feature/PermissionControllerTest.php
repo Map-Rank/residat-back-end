@@ -53,12 +53,12 @@ class PermissionControllerTest extends TestCase
         $response->assertViewIs('permissions.index');
     }
 
-    // public function testGetAllUsersWithRolesAndPermissions()
-    // {
-    //     $response = $this->get('/your_route_to_get_all_users_with_roles_and_permissions');
+    public function testGetAllUsersWithRolesAndPermissions()
+    {
+        $response = $this->get('/your_route_to_get_all_users_with_roles_and_permissions');
 
-    //     $response->assertStatus(200);
-    // }
+        $response->assertStatus(200);
+    }
 
     // public function testShowRole()
     // {

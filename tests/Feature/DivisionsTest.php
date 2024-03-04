@@ -201,6 +201,16 @@ class DivisionsTest extends TestCase
 
     public function test_edit_throws_model_not_found_exception_for_nonexistent_zone()
     {
+        // **Prepare user and necessary data:**
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+        
         $this->expectException(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
 
         $this->get(route('zone.edit', 100)); // Nonexistent ID

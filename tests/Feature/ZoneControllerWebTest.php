@@ -117,4 +117,32 @@ class ZoneControllerWebTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertSee($zone->name);
     }
+
+    /** @test */
+    public function it_can_show_create_form_with_levels()
+    {
+         // **Prepare user and necessary data:**
+         $user = User::first();
+
+         // Si aucun utilisateur n'existe, créez-en un
+         if (!$user) {
+             $user = User::factory()->create();
+         }
+ 
+         $this->actingAs($user); // Authenticate if applicable
+         
+        // Supprimer toutes les zones existantes pour garantir que la table est vide
+        Zone::query()->delete();
+
+        $level = Level::create(['name' => 'Country']);
+        $zone = Zone::create(['name' => 'Test 0', 'level_id' => $level->id]);
+
+        // Appelez la méthode create() du ZoneController
+        $response = $this->get(route('zone.create'));
+
+        // Vérifiez que la réponse contient la vue 'zones.create'
+        $response->assertViewIs('zones.create');
+
+        $response->assertSee($level->name);
+    }
 }

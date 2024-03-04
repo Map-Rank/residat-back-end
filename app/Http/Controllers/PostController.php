@@ -88,6 +88,6 @@ class PostController extends Controller
 
         $message = $post->active ? 'Post activated successfully' : 'Post deactivated successfully';
 
-        return redirect()->back()->with('success', $message);
+        return redirect()->route('post.detail', ['id' => $post->id])->with('success', $message);
     }
 }
