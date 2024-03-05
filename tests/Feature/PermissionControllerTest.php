@@ -55,7 +55,19 @@ class PermissionControllerTest extends TestCase
 
     public function testGetAllUsersWithRolesAndPermissions()
     {
-        $response = $this->get('/your_route_to_get_all_users_with_roles_and_permissions');
+        // Insérez ici le code pour exécuter votre seeder si ce n'est pas déjà fait
+        $this->seed(RoleSeeder::class);
+        $this->seed(PermissionSeeder::class);
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        $response = $this->get('/roles');
 
         $response->assertStatus(200);
     }

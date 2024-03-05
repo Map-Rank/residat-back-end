@@ -25,10 +25,13 @@ class AuthenticationTest extends TestCase
         $response = $this->post('/login', [
             'email' => $user->email,
             'password' => 'password',
-        ]);
+        ]); 
 
-        $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+        $this->assertAuthenticated();
+        $response = $this->get(RouteServiceProvider::HOME);
+        $response->assertStatus(200); // Vous pouvez ajuster ceci selon le comportement attendu
+        
     }
 
     // public function test_users_can_not_authenticate_with_invalid_password(): void
