@@ -27,6 +27,7 @@
                         <th class="bg-body-secondary">Email</th>
                         <th class="bg-body-secondary">Phone</th>
                         <th class="bg-body-secondary">Gender</th>
+                        <th class="bg-body-secondary">Type</th>
                         <th class="bg-body-secondary">Zone ID</th>
                         <th class="bg-body-secondary"></th>
                     </tr>
@@ -47,6 +48,7 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->gender }}</td>
+                            <td>{{ $user->type }}</td>
                             <td>{{ $user->zone->name }}</td>
                             <td>
                                 <div class="dropdown">
