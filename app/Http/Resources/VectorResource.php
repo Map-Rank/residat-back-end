@@ -17,6 +17,7 @@ class VectorResource extends JsonResource
             'model_type' => $this->model_type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'keys' => VectorKeyResource::collection($this->whenLoaded('vectorKeys'))
         ];
     }
 }
