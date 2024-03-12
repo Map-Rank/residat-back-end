@@ -47,7 +47,9 @@
                         </tr>
                         <tr class="align-middle">
                             <th>#</th>
-                            <th>Regions</th>
+                            <th>Name</th>
+                            <th>Banner</th>
+                            <th>Vector</th>
                             <th>Administrative unit</th>
                             <th>Parent</th>
                             <th>#Children</th>
@@ -60,6 +62,8 @@
                             <tr class="align-middle">
                                 <td class="">{{ $key+1 }}</td>
                                 <td>{{ $zone->name }}</td>
+                                <td><img src="{{ env('APP_URL').$zone->banner }}" height="50" width="50"/></td>
+                                <td><img src="{{ env('APP_URL').$zone->vector?->path  }}" height="50" width="50"/></td>
                                 <td>{{ $zone->level->name }}</td>
                                 <td>{{ $zone->parent->name ?? '' }}</td>
                                 <td>{{ $zone->children->count() }}</td>

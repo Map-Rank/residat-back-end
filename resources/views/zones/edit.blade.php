@@ -46,7 +46,7 @@
                         <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
                             {!! Form::label('name', null, ['class' => '',]) !!}
                             <input  onfocusout="hidePanel" type="text" class="form-control" required name="name"
-                                placeholder="Name of the zone"/>
+                                placeholder="Name of the zone" value="{{ $zone->name ?? '' }}"/>
                             {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
                         </div>
 
@@ -258,9 +258,9 @@
                 message: 'Hello Vue!',
                 zones : @json($zones),
                 show_zone_list : false,
-                zone_name: '',
-                selected_zone : '',
-                selected_zone_id : 0,
+                zone_name: @json($zone->parent->name ?? ''),
+                selected_zone : @json($zone->parent ?? ''),
+                selected_zone_id : @json($zone->parent->id ?? 0),
                 vectorType: '',
                 vectorValue: '',
                 vectorName: '',

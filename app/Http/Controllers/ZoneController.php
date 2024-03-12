@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ZoneRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\ZoneResource;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -129,27 +130,31 @@ class ZoneController extends Controller
 
         if ($request->hasFile('data')) {
             $mediaFile = $request->file('data');
-
             $mediaPath = $mediaFile->store('media/zone', 'public');
             $datum->banner = Storage::url($mediaPath);
         }
 
-        $vector = Vector::create([
-            'path' => $mediaPath,
-            'model_id' => $datum->id,
-            'category' => $request['type'],
-            'type' => $request->file('image')->getClientMimeType(),
-            'model_type' => 'App\\Models\\Zone',
-        ]);
+        if($request->hasFile('image')){
+            $vectorFile = $request->file('image');
+            $vectorPath =  $vectorFile->store('media/zone', 'public');
 
-        // Création des clés de vecteur pour le vecteur
-        foreach ($request['vector_keys'] as $keyData) {
-            $vectorKey = VectorKey::create([
-                'value' => $keyData['value'],
-                'type' => $keyData['type'],
-                'name' => $keyData['name'],
-                'vector_id' => $vector->id,
+            $vector = Vector::create([
+                'path' => Storage::url($vectorPath),
+                'model_id' => $datum->id,
+                'category' => 'MAP',
+                'type' => 'SVG',
+                'model_type' => Zone::class,
             ]);
+
+            // Création des clés de vecteur pour le vecteur
+            foreach ($request['vector_keys'] as $keyData) {
+                $vectorKey = VectorKey::create([
+                    'value' => $keyData['value'],
+                    'type' => $keyData['type'],
+                    'name' => $keyData['name'],
+                    'vector_id' => $vector->id,
+                ]);
+            }
         }
 
         return (!$datum->save())
@@ -165,14 +170,13 @@ class ZoneController extends Controller
      */
     public function update(ZoneRequest $request, int $id)
     {
-        // dd($request->all());
-        $zone = Zone::query()->find($id);
+        $zone = Zone::with('vector.vectorKeys')->find($id);
         if(!$zone)
         { return response()->notFoundId(); }
 
         $parent = null;
         if($request['parent_id'] > 0){
-            $parent = Zone::query()->where('parent_id', $request['parent_id'])->first();
+            $parent = Zone::query()->where('id', $request['parent_id'])->first();
         }
 
         $updated = [];
@@ -191,7 +195,55 @@ class ZoneController extends Controller
             $updated['banner'] = Storage::url($mediaPath);
         }
 
-        return (! $zone->update($request->validated()))
+        if($request->hasFile('image')){
+            $vectorFile =  $request->file('image');
+            $vectorPath = $vectorFile->store('media/zone', 'public');
+
+            if($zone->vector == null){
+                $vector = Vector::create([
+                    'path' => Storage::url($vectorPath),
+                    'model_id' => $zone->id,
+                    'category' => 'MAP',
+                    'type' => 'SVG',
+                    'model_type' => Zone::class,
+                ]);
+            }
+            else {
+                $vector = Vector::with('vectorKeys')->where('id', $zone->vector->id)->first();
+                $vector->path = Storage::url($vectorPath);
+                $vector->update();
+            }
+
+            if($vector->vectorKeys == null){
+                foreach ($request['vector_keys'] as $keyData) {
+                    $vectorKey = VectorKey::create([
+                        'value' => $keyData['value'],
+                        'type' => $keyData['type'],
+                        'name' => $keyData['name'],
+                        'vector_id' => $vector->id,
+                    ]);
+                }
+            }
+            else {
+                if($request['vector_keys'] !=  null){
+                    VectorKey::query()->where('vector_id', $vector->id)->delete();
+                    // DB::table('vector_keys')->where('vector_id', $vector->id)->delete();
+
+                    foreach ($request['vector_keys'] as $keyData) {
+                        $vectorKey = VectorKey::create([
+                            'value' => $keyData['value'],
+                            'type' => $keyData['type'],
+                            'name' => $keyData['name'],
+                            'vector_id' => $vector->id,
+                        ]);
+                    }
+                }
+            }
+
+
+        }
+
+        return (! $zone->update($updated))
             ? redirect()->back()->with('Zone not found')
             : redirect()->route('zones.index')->withSuccess( __('Zone successfully updated!'));
     }
@@ -222,7 +274,7 @@ class ZoneController extends Controller
     }
 
     public function edit($id){
-        $zone = Zone::with('parent')->find($id);
+        $zone = Zone::with('parent', 'vector.vectorKeys')->find($id);
         $zones = null;
         if($zone->parent != null)
             $zones = Zone::query()->where('level_id', $zone->parent->level_id)->get();

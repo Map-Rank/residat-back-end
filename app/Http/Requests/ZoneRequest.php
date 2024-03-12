@@ -26,7 +26,13 @@ class ZoneRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
                 'name' => ['sometimes','string'],
-                'parent_id' => ['sometimes','exists:zones,id',],
+                'parent_id' => ['sometimes','int',],
+                'data' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+                'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+                'vector_keys' => 'sometimes|array',
+                'vector_keys.*.value' => 'required|string',
+                'vector_keys.*.name' => 'required|string',
+                'vector_keys.*.type' => 'required|string',
             ];
         }
         return [
@@ -35,11 +41,12 @@ class ZoneRequest extends FormRequest
             'region_id' => ['sometimes','exists:zones,id',],
             'level_id' => ['sometimes','exists:levels,id',],
             'data' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
             'vector_keys' => 'array',
             'vector_keys.*.value' => 'required|string',
             'vector_keys.*.name' => 'required|string',
             'vector_keys.*.type' => 'required|string',
-            
+
         ];
     }
 
