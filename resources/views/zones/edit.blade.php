@@ -307,10 +307,12 @@
                         const extractedData = Array.from(paths).map(path => ({
 
                             id: path.getAttribute('data-id'),
-                            value: this.extractColor(path.getAttribute('style')),
+                            value: path.getAttribute('fill'),
                             type: this.isSvg ? 'color' : 'image',
                             name: path.getAttribute('data-name'),
-                            color: this.extractColor(path.getAttribute('style'))
+                            color: path.getAttribute('fill'),
+                            //this will be us if the color code in the svg is in the style attribute 🚀 @konnofuente
+                            // color: this.extractColor(path.getAttribute('style'))
                         }));
 
                         this.vectorKeys.push(...extractedData)
