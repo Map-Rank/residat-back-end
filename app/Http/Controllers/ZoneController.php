@@ -134,6 +134,9 @@ class ZoneController extends Controller
             $datum->banner = Storage::url($mediaPath);
         }
 
+        if (!$datum->save())
+            {redirect()->back()->with('Error while creating the zone');}
+
         if($request->hasFile('image')){
             $vectorFile = $request->file('image');
             $vectorPath =  $vectorFile->store('media/zone', 'public');
