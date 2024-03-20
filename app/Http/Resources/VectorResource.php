@@ -10,13 +10,14 @@ class VectorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'path' => $this->path,
+            'path' => env('APP_URL').$this->path,
             'model_id' => $this->model_id,
             'category' => $this->category,
             'type' => $this->type,
             'model_type' => $this->model_type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'keys' => VectorKeyResource::collection($this->whenLoaded('vectorKeys'))
         ];
     }
 }
