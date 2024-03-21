@@ -10,7 +10,7 @@ class VectorResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'path' => env('APP_URL').$this->path,
+            'path' => env('FRONT_URL').$this->path,
             'model_id' => $this->model_id,
             'category' => $this->category,
             'type' => $this->type,
