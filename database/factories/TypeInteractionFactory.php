@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\TypeInteraction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class TypeInteractionFactory extends Factory
 {
+
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = TypeInteraction::class;
+    
     /**
      * Define the model's default state.
      *
@@ -17,16 +26,11 @@ class TypeInteractionFactory extends Factory
     public function definition(): array
     {
         $types = ['created', 'like', 'comment', 'share'];
-
-        // Mélanger le tableau aléatoirement
-        shuffle($types);
+        $ids = [1, 2, 3, 4];
 
         return [
-            'name' => function () use ($types) {
-                // Utiliser une closure pour garantir l'ordre fixe dans le tableau mélangé
-                static $index = 0;
-                return $types[$index++];
-            },
+            'name' => $types[array_rand($types)],
+            'id' => $ids[array_rand($ids)],
         ];
     }
 }

@@ -13,11 +13,6 @@
             @csrf
             @method('PUT')
 
-            {{-- <div class="mb-3">
-                <label class="form-label">Role Name</label>
-                <input type="text" class="form-control" value="{{ $role->name }}" readonly>
-            </div> --}}
-
             <div class="mb-3">
                 <h3 class="form-label mb-3">Permissions</h3>
                 <div class="row">
@@ -37,6 +32,5 @@
         </form>
     </div>
 </div>
-{{-- {{dd($role)}} --}}
 
 @endsection 

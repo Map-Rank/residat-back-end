@@ -13,7 +13,8 @@
                     {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
                 </div>
             </div>
-            <table class="table border mb-0">
+            {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }}
+            <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
                 <thead class="fw-semibold text-nowrap">
                     <tr class="align-middle">
                         <th class="bg-body-secondary text-center">
@@ -26,6 +27,7 @@
                         <th class="bg-body-secondary">Email</th>
                         <th class="bg-body-secondary">Phone</th>
                         <th class="bg-body-secondary">Gender</th>
+                        <th class="bg-body-secondary">Type</th>
                         <th class="bg-body-secondary">Zone ID</th>
                         <th class="bg-body-secondary"></th>
                     </tr>
@@ -35,7 +37,6 @@
                         <tr class="align-middle">
                             <td class="text-center">
                                 <div class="avatar avatar-md">
-                                    {{-- <img class="avatar-img" src="{{ asset('assets/img/avatars/1.jpg') }}" alt="{{ $user->email }}"> --}}
                                     <img class="avatar-img"
                                         src="{{ $user->avatar ? asset($user->avatar) : asset('assets/img/avatars/1.jpg') }}"
                                         alt="{{ $user->email }}">
@@ -46,10 +47,8 @@
                             <td>{{ $user->last_name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            {{-- <td class="text-center">
-                            <img src="{{ $user->avatar }}" alt="{{ $user->email }}" style="width: 50px; height: 50px; border-radius: 50%;">
-                        </td> --}}
                             <td>{{ $user->gender }}</td>
+                            <td>{{ $user->type }}</td>
                             <td>{{ $user->zone->name }}</td>
                             <td>
                                 <div class="dropdown">
@@ -65,8 +64,6 @@
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#bannedModal-{{$user->id}}" data-coreui-whatever="@mdo">Bannish</a>
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
                                         <a class="dropdown-item" href="{{route('user.detail',$user->id)}}" >View</a>
-                                        {{-- <a class="dropdown-item" href="#">Edit</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a> --}}
                                     </div>
                                 </div>
                             </td>
@@ -74,25 +71,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-3 d-flex flex-row-reverse">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-            
-                        @for ($i = 1; $i <= $users->lastPage(); $i++)
-                            <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }}">
-                                <a class="page-link" href="{{ route('users.index', ['page' => $i]) }}">{{ $i }}</a>
-                            </li>
-                        @endfor
-            
-                        <li class="page-item {{ $users->currentPage() == $users->lastPage() ? 'disabled' : '' }}">
-                            <a class="page-link" href="{{ route('users.index', ['page' => $users->nextPageUrl()]) }}">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+
         </div>
     </div>
     <!-- Modal add user -->
@@ -151,7 +130,7 @@
                                 <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
                             </p>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
@@ -187,7 +166,7 @@
                                 <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
                             </p>
                         </div>
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
@@ -199,4 +178,52 @@
         </div>
     @endforeach
     <!-- Modal end -->
+@endsection
+
+@section('script')
+    <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
+    <script>
+        $(() => {
+            $('[rel="tooltip"]').tooltip({trigger: "hover"});
+
+            // App.checkAll()
+
+            // Run datatable
+            var table = $('#example').DataTable({
+                drawCallback: function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-sm') // make pagination small
+                }
+            })
+            // Apply column filter
+            $('#example .dt-column-filter th').each(function (i) {
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw()
+                    }
+                })
+            })
+            // Toggle Column filter function
+            var responsiveFilter = function (table, index, val) {
+                var th = $(table).find('.dt-column-filter th').eq(index)
+                val === true ? th.removeClass('d-none') : th.addClass('d-none')
+            }
+            // Run Toggle Column filter at first
+            $.each(table.columns().responsiveHidden(), function (index, val) {
+                responsiveFilter('#example', index, val)
+            })
+            // Run Toggle Column filter on responsive-resize event
+            table.on('responsive-resize', function (e, datatable, columns) {
+                $.each(columns, function (index, val) {
+                    responsiveFilter('#example', index, val)
+                })
+            })
+
+        })
+    </script>
+@endsection
+
+@section('error')
 @endsection

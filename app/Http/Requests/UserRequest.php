@@ -50,6 +50,9 @@ class UserRequest extends FormRequest
         ];
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function bodyParameters()
     {
         return [

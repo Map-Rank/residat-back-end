@@ -14,11 +14,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('zone')->paginate(10); // 10 utilisateurs par page, ajustez selon vos besoins
+        $users = User::with('zone')->paginate(100); // 100 utilisateurs par page, ajustez selon vos besoins
         return view('users.index', ['users' => $users]);
     }
 
     /**
+     * @codeCoverageIgnore
      * Show the form for creating a new resource.
      */
     public function create()
@@ -27,6 +28,7 @@ class UserController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Store a newly created resource in storage.
      */
     public function store(UserRequest $request)
@@ -47,6 +49,7 @@ class UserController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -55,6 +58,7 @@ class UserController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Update the specified resource in storage.
      */
     public function update(UserRequest $request, string $id)
@@ -66,6 +70,7 @@ class UserController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)

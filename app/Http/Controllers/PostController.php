@@ -13,7 +13,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')->withCount('likes', 'comments', 'shares')->latest()->paginate(10);
+        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')->withCount('likes', 'comments', 'shares')->latest()->paginate(500);
         // Post::with('creator', 'likes', 'comments', 'shares', 'medias')
         return view('posts.index', compact('posts'));
     }
@@ -88,6 +88,6 @@ class PostController extends Controller
 
         $message = $post->active ? 'Post activated successfully' : 'Post deactivated successfully';
 
-        return redirect()->back()->with('success', $message);
+        return redirect()->route('post.detail', ['id' => $post->id])->with('success', $message);
     }
 }

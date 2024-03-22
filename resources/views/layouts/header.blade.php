@@ -95,6 +95,6 @@
         </li>
     </ul>
 </div>
-<div class="container-fluid px-4">
+{{-- <div class="container-fluid px-4">
     @include('layouts.breadcrumb')
-</div>
+</div> --}}

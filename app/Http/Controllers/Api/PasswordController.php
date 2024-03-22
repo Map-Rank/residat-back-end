@@ -30,6 +30,7 @@ class PasswordController extends Controller
 {
 
     /**
+     * 
      * @param ForgotPasswordRequest $request
      * @return JsonResponse
      * @throws ValidationException
@@ -55,7 +56,7 @@ class PasswordController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status)]);
+        return response()->success([], __($status) , 200);
 
     }
 
@@ -94,7 +95,7 @@ class PasswordController extends Controller
             ]);
         }
 
-        return response()->json(['status' => __($status)]);
+        return response()->success([], __($status) , 200);
     }
 }
 

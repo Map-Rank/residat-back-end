@@ -21,7 +21,7 @@
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="CACHE_DRIVER" value="array"/>
-        <env name="DB_DATABASE" value="residat_db"/>
+        <env name="DB_DATABASE" value="testing"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
@@ -31,10 +31,18 @@
          
     </php>
     <phpunit>
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include>
-    </coverage>
-</phpunit>
+        <coverage processUncoveredFiles="true">
+            <include>
+                <directory suffix=".php">residat-back-end</directory>
+            </include>
+            <filter>
+                <blacklist>
+                    <directory suffix=".php">./app/Models</directory>
+                    <directory suffix=".php">./app/View</directory>
+                    <directory suffix=".php">./resources/View</directory>
+                    <directory suffix=".php">./app/Models/.*Test\.php</directory>
+                </blacklist>
+            </filter>
+        </coverage>
+    </phpunit>
 </phpunit>

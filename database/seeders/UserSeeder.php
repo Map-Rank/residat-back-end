@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $zone = Zone::factory()->create();
+        // $latestZoneWithLevelFour = Zone::factory()->existingWithLevelFour()->create();
+        $zone = Zone::latest()->first();
         $user = User::query()->create([
             'id' => 1,
             'first_name' => 'users 1',

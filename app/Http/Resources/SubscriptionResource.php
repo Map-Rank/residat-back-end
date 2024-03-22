@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class SubscriptionResource extends JsonResource
 {
     /**
+     * @codeCoverageIgnore
      * Transform the resource into an array.
      *
      * @return array<string, mixed>

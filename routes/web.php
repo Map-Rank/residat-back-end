@@ -5,6 +5,11 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ZoneController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +37,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
+    Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');
+    Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
+    Route::get('delete/subdivisions/{id}', [ZoneController::class, 'destroy'])->name('delete.subdivision');
+    Route::get('create/zone', [ZoneController::class, 'create'])->name('zone.create');
+    Route::get('zones/{id}/edit', [ZoneController::class, 'edit'])->name('zone.edit');
+    Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
+    Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
+    Route::resource('reports', ReportController::class);
+
 
     //ban user
     Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');
@@ -52,6 +67,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+});
+Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');
+
+Route::get('/send-mail', static function(){
+    Log::info('sprint');
+    $toEmail = 'keuleuronald@gmail.com';
+    $subject = 'Zip File Attachment';
+    $info = 'Please find the attached zip file.';
+
+    Mail::send([], [], function ($message) use ($toEmail, $subject, $info) {
+        $message->to($toEmail)
+            ->subject($subject)
+            ->html($info);
+    });
 });
 
 require __DIR__.'/auth.php';

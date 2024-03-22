@@ -912,4 +912,20 @@
             <!-- /.row-->
         </div>
     </div>
+
+
+
+    <script>
+        fetch('/get-token-from-session')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Token from session:', data.token);
+            })
+            .catch(error => console.error('Error retrieving token:', error));
+    </script>
 @endsection
+
+
+
+
+

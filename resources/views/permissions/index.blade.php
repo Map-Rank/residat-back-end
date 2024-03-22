@@ -6,8 +6,6 @@
 
 @section('content')
 
-{{-- {{dd($roles)}} --}}
-
 <!-- /.row-->
 <div class="body flex-grow-1">
     <div class="container px-4">
@@ -28,7 +26,6 @@
             </thead>
             <tbody>
                 @foreach($roles as $role)
-                {{-- onclick="window.location='{{ route('role.show', ['id' => $role->id]) }}';" style="cursor: pointer;" --}}
                     <tr class="align-middle">
                         <td class="">
                             <div class="text-nowrap">{{ $role->name }}</div>
@@ -36,11 +33,6 @@
                         <td>
                             <div class="text-nowrap">{{ $role->users->count() }}</div>
                         </td>
-                        {{-- <td>
-                            @foreach($role->permissions as $permission)
-                                <span class="badge me-1 rounded-pill bg-info">{{ $permission->name }}</span>
-                            @endforeach
-                        </td> --}}
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-transparent p-0" type="button"
