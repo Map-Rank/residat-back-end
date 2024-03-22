@@ -14,7 +14,7 @@
 - DB_PASSWORD=
 - APP_URL=http://localhost:8000
 
----- Add these variables to the end of the .env file ----
+### Add these variables to the end of the .env file
 - WWWUSER=1000
 - WWWGROUP=1000
 - PWD=chemin_au_projet
@@ -30,10 +30,7 @@
 - Navigate to the project directory.
 - Run the command:
 
-## Invite de commande 
-- Se placer dans le repertoire du projet
-- saisir la commande 
-" docker-compose up -d "
+ **docker-compose up -d**
 
 ## Generating Documentation
 Run the following command to generate documentation:
@@ -42,7 +39,7 @@ Run the following command to generate documentation:
 ## Accessing the Documentation
 You can access the documentation at:
 
-http://localhost:8000/docs
+**http://localhost:8000/docs**
 
 ## Deployment of Test Coverage and Running Tests
 
@@ -52,11 +49,11 @@ http://localhost:8000/docs
 
 2. To generate a code coverage report, run the following command:
 
--php artisan test --coverage-html=coverage
+**php artisan test --coverage-html=coverage**
 
 or 
 
--php artisan test --coverage-html reports/
+**php artisan test --coverage-html reports/**
 
 
 3. Once the command is executed successfully, you can find the HTML coverage report in the `coverage` directory.
@@ -65,7 +62,7 @@ or
 
 To run tests in your Laravel project, use the following command:
 
-php artisan test
+**php artisan test**
 
 This command will execute all the test cases defined in your project and display the results.
 
