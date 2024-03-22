@@ -101,34 +101,25 @@ How you write this is up to you, but some things you may want to include:
 [source: [Chef](https://github.com/chef/chef/blob/master/CONTRIBUTING.md#chef-obvious-fix-policy)] **Need more inspiration?** [1] [Puppet](https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md#making-trivial-changes)
 
 # How to report a bug
-### Explain security disclosures first!
-At bare minimum, include this sentence:
-> If you find a security vulnerability, do NOT open an issue. Email XXXX instead.
 
-If you don’t want to use your personal contact information, set up a “security@” email address. Larger projects might have more formal processes for disclosing security, including encrypted communication. (Disclosure: I am not a security expert.)
+Reporting bugs is essential for improving the quality of the project. If you encounter a bug, please follow these steps to report it effectively using GitHub Issues:
 
-> Any security issues should be submitted directly to security@travis-ci.org
-> In order to determine whether you are dealing with a security issue, ask yourself these two questions:
-> * Can I access something that's not mine, or something I shouldn't have access to?
-> * Can I disable something for other people?
->
-> If the answer to either of those two questions are "yes", then you're probably dealing with a security issue. Note that even if you answer "no" to both questions, you may still be dealing with a security issue, so if you're unsure, just email us at security@travis-ci.org.
+1. **Search Existing Issues**: Before reporting a new bug, search through existing issues to see if the problem has already been reported. If you find an open issue that matches your problem, you can add additional information or subscribe to it for updates.
 
-[source: [Travis CI](https://github.com/travis-ci/travis-ci/blob/master/CONTRIBUTING.md)] **Need more inspiration?** [1] [Celery](https://github.com/celery/celery/blob/master/CONTRIBUTING.rst#security) [2] [Express.js](https://github.com/expressjs/express/blob/master/Security.md)
+2. **Check the Latest Version**: Ensure that you are using the latest version of the project. Bugs may have already been fixed in newer releases.
 
-### Tell your contributors how to file a bug report.
-You can even include a template so people can just copy-paste (again, less work for you).
+3. **Create a New Issue**: If you couldn't find an existing issue addressing your problem, create a new one. Follow these guidelines when creating the issue:
+   - **Title**: Provide a clear and descriptive title summarizing the issue.
+   - **Description**: Include detailed steps to reproduce the bug, expected behavior, and actual behavior. Also, mention the version of the project you are using.
+   - **Code Snippets/Screenshots**: If applicable, include any relevant code snippets or screenshots to help illustrate the issue.
+   - **Environment Details**: Provide information about your environment, such as operating system, browser version, or any other relevant details.
+   - **Labels**: Choose appropriate labels for the issue, such as "bug" or "enhancement."
 
-> When filing an issue, make sure to answer these five questions:
->
-> 1. What version of Go are you using (go version)?
-> 2. What operating system and processor architecture are you using?
-> 3. What did you do?
-> 4. What did you expect to see?
-> 5. What did you see instead?
-> General questions should go to the golang-nuts mailing list instead of the issue tracker. The gophers there will answer or ask you to file an issue if you've tripped over a bug.
+4. **Engage in Discussion**: Once the issue is created, be responsive to any requests for additional information or clarification from maintainers or other contributors. Engage in constructive discussion to help resolve the issue efficiently.
 
-[source: [Go](https://github.com/golang/go/blob/master/CONTRIBUTING.md#filing-issues)] **Need more inspiration?** [1] [Celery](https://github.com/celery/celery/blob/master/CONTRIBUTING.rst#other-bugs ) [2] [Atom](https://github.com/atom/atom/blob/master/CONTRIBUTING.md#reporting-bugs) (includes template)
+5. **Follow Up**: If the bug gets resolved, verify the fix in the latest version. If the issue remains unresolved, you can provide additional information or test any proposed solutions.
+
+By following these guidelines, you contribute to making the project more robust and reliable. Thank you for helping us improve!
 
 # How to suggest a feature or enhancement
 ### If you have a particular roadmap, goals, or philosophy for development, share it here.

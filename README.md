@@ -33,3 +33,6 @@
 
 ## Génerate documentation
 php artisan scribe:generate
+
+## Lien possible de la doc
+http://localhost:8000/docs
