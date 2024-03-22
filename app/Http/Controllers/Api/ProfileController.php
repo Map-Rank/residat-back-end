@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\InteractionResource;
-use App\Http\Resources\UserFullResource;
+use App\Models\User;
 use App\Models\Interaction;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\InteractionResource;
 
 /**
  * @group Module Profile
@@ -21,6 +22,20 @@ class ProfileController extends Controller
     public function profile(Request $request): JsonResponse
     {
         $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
+
+        return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
+    }
+
+    /**
+     * Get another profile information including posts.
+     */
+    public function showProfile($id): JsonResponse
+    {
+        $user = User::find($id);
+        $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
+        if(!$user){
+            return response()->errors([], __('User not found !'), 404);
+        }
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }

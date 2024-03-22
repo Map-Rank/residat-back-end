@@ -9,10 +9,13 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Session; 
+
 
 /**
  * Class AuthController
@@ -33,19 +36,32 @@ class AuthController extends Controller
     {
         $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
-        
+
 
         // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
         $defaultRole = Role::where('name', 'default')->first();
-        
+
         if ($defaultRole) {
             $user->assignRole($defaultRole);
         }
 
         $token = $user->createToken('authtoken');
 
-        $userData = UserResource::make($user)->toArray($request);
+        // Envoyer la notification de vérification par e-mail
+        // $user->sendEmailVerificationNotification();
+
+        $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
         $userData['token'] = $token->plainTextToken;
+
+        // event(new Registered($user));
+
+        // if (!$userData['email_verified_at']) {
+        //     return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        // }
+
+        // if (!$userData['active']) {
+        //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        // }
 
         return response()->success($userData, __('User registered. Please check your email'), 201);
     }
@@ -63,19 +79,23 @@ class AuthController extends Controller
         $request->authenticate();
         $token = $request->user()->createToken('authtoken');
 
+        Session::put('token', $token->plainTextToken);
+
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->success([], __('Invalid login credentials') , 200);
         }
 
-        if (!Auth::user()->email_verified_at) {
-            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
-        }
+        // if (!Auth::user()->email_verified_at) {
+        //     return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
+        // }
 
-        if (!Auth::user()->active) {
-            return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
-        }
+        // if (!Auth::user()->active) {
+        //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
+        // }
 
-        $user = UserResource::make(Auth::user())->toArray($request);
+        $user = User::with('zone')->where('id', Auth::user()->id)->first();
+
+        $user = UserResource::make($user)->toArray($request);
         $user['token'] = $token->plainTextToken;
 
         return response()->success($user, __('You are logged in'), 200);

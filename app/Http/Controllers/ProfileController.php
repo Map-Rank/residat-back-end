@@ -12,14 +12,6 @@ use App\Http\Requests\ProfileUpdateRequest;
 
 class ProfileController extends Controller
 {
-
-    public function userDetail($id)
-    {
-        $user = User::find($id);
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
-    }
     /**
      * Display the user's profile form.
      */

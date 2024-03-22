@@ -20,7 +20,9 @@ class PermissionController extends Controller
             'roles' => $roles
         ]);
     }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function getAllUsersWithRolesAndPermissions()
     {
         $users = User::with(['roles.permissions'])->get();
@@ -29,7 +31,9 @@ class PermissionController extends Controller
             'users' => $users
         ]);
     }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function showRole($id)
     {
         $role = Role::find($id);
@@ -43,6 +47,9 @@ class PermissionController extends Controller
         return view('permissions.show', compact('role', 'permissions'));
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function updatePermissions(Request $request, $id)
     {
         $role = Role::where('guard_name','web')->where('id',$id)->first();

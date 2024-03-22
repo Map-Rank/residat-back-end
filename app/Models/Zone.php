@@ -14,7 +14,7 @@ class Zone extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'parent_id', 'level_id'];
+    protected $fillable = ['name', 'parent_id', 'level_id', 'banner'];
 
     public function parent()
     {
@@ -43,5 +43,9 @@ class Zone extends Model
     public function medias()
     {
         return $this->hasManyThrough(Media::class, Post::class);
+    }
+
+    public function vector() {
+        return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
     }
 }

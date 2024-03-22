@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\SectorController;
+use App\Models\Media;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,21 +35,25 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/reset-password', [PasswordController::class, 'reset']);
 
 
-    Route::get('/posts', [PostController::class, 'index']);
-    Route::post('/create', [PostController::class, 'store']);
-    Route::get('/show/{id}', [PostController::class, 'show']);
-    Route::put('/update/{id}', [PostController::class, 'update']);
-    Route::delete('/delete/{id}', [PostController::class, 'destroy']);
+    Route::resource('post', PostController::class);
+    // Route::get('post', [PostController::class, 'index']);
+    // Route::post('post', [PostController::class, 'store']);
+    // Route::get('/show/{id}', [PostController::class, 'show']);
+    // Route::put('/update/{id}', [PostController::class, 'update']);
+    // Route::delete('/delete/{id}', [PostController::class, 'destroy']);
 
     //interactions
-    Route::post('/like/{id}', [PostController::class, 'like']);
-    Route::post('/comment/{id}', [PostController::class, 'comment']);
-    Route::post('/share/{id}', [PostController::class, 'share']);
+    Route::post('post/like/{id}', [PostController::class, 'like']);
+    Route::post('post/comment/{id}', [PostController::class, 'comment']);
+    Route::post('post/share/{id}', [PostController::class, 'share']);
 
     Route::get('/profile', [ProfileController::class, 'profile']);
+    Route::get('/profile/detail/{id}', [ProfileController::class, 'showProfile']);
+
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
 
-    Route::delete('/delete-interaction', [PostController::class, 'deleteInteraction']);
+    Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
+    Route::post('/reports', [ReportController::class,  'store']);
 });
 
 
@@ -58,3 +64,4 @@ Route::get('zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
 Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
 Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
+

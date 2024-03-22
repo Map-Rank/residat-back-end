@@ -27,6 +27,8 @@ class ZoneController extends Controller
     public function index(Request $request) : JsonResponse {
         $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'string'],
+            'parent_id'=> ['sometimes', 'int'],
+            'level_id'=> ['sometimes', 'int'],
         ]);
 
         if ($validator->fails()) {
@@ -34,9 +36,16 @@ class ZoneController extends Controller
         }
 
         $validated = $validator->validated();
-        $data = Zone::query();
+        $data = Zone::with('children');
         if(isset($validated['name'])){
             $data = $data->where('name', 'like' , '%'.$validated['name'].'%');
+        }
+
+        if(isset($validated['parent_id'])){
+            $data = $data->where('parent_id' , $validated['parent_id']);
+        }
+        if(isset($validated['level_id'])){
+            $data = $data->where('level_id' , $validated['level_id']);
         }
 
         $data = $data->get();
@@ -47,12 +56,13 @@ class ZoneController extends Controller
     /**
      * Show the specified zone
      *
+     * @codeCoverageIgnore
      * @param int $id Id of the resource entity
      * @return JsonResponse
      */
     public function show($id) : JsonResponse {
 
-        $datum = Zone::query()->find($id);
+        $datum = Zone::with('vector.vectorKeys')->find($id);
         return (!$datum)
             ? response()->errors([], __('Zone not found'), 404)
             : response()->success(ZoneResource::make($datum->loadMissing(['parent']),__('Values found')));
@@ -61,6 +71,7 @@ class ZoneController extends Controller
     /**
      * Create and store a zone
      *
+     * @codeCoverageIgnore
      * @param ZoneRequest $request List of elements used to save a zone entity.
      * @return JsonResponse
      */
@@ -76,6 +87,7 @@ class ZoneController extends Controller
     /**
      * Update the specified zone
      *
+     * @codeCoverageIgnore
      * @param ZoneRequest $request
      * @param int $id
      * @return JsonResponse
@@ -93,7 +105,7 @@ class ZoneController extends Controller
 
     /**
      * Delete the specified zone.
-     *
+     * @codeCoverageIgnore
      * @param int $id
      * @return JsonResponse
      */

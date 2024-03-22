@@ -22,15 +22,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        // return [
-        //     'name' => fake()->name(),
-        //     'email' => fake()->unique()->safeEmail(),
-        //     'email_verified_at' => now(),
-        //     'password' => static::$password ??= Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-            
-        // ];
-        $zone = Zone::factory()->create();
+        $latestZoneWithLevelFour = Zone::factory()->existingWithLevelFour()->create();
         
         return [
             'first_name' => 'users',
@@ -40,7 +32,7 @@ class UserFactory extends Factory
             'email' => 'users@user.com',
             'password' => bcrypt('password'),
             'gender' => 'male',
-            'zone_id' => $zone->id, // Utilisez l'ID de la zone créée
+            'zone_id' => $latestZoneWithLevelFour->id,
             'active' => 1,
             'verified' => 1,
             'email_verified_at' => Carbon::now(),
