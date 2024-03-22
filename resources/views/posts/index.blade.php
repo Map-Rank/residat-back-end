@@ -10,10 +10,11 @@
             <div class="row mb-3">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <h1 class="my-0">List of posts</h1>
-                    {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
                 </div>
             </div>
-            <table class="table border mb-0">
+
+            {{ $posts->appends(request()->query())->render("pagination::bootstrap-5") }}
+            <table id="example" class="col-sm-7 table table-striped table-bordered table-sm dt-responsive nowrap" >
                 <thead class="fw-semibold text-nowrap">
                     <tr class="align-middle">
                         <th class="bg-body-secondary text-center">
@@ -31,13 +32,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                     @foreach ($posts as $post)
-                    {{-- {{dd($post->creator[0]->avatar)}} --}}
                         <tr class="align-middle">
                             <td class="text-center">
                                 <div class="avatar avatar-md">
-                                    {{-- <img class="avatar-img" src="{{ asset('assets/img/avatars/1.jpg') }}" alt="{{ $user->email }}"> --}}
                                     <img class="avatar-img"
                                         src="{{ $post->creator[0]->avatar ? asset($post->creator[0]->avatar) : asset('assets/img/avatars/1.jpg') }}"
                                         alt="{{ $post->creator[0]->email }}">
@@ -61,7 +60,6 @@
                                         </svg>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        {{-- <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">Active</a> --}}
                                         <a class="dropdown-item btn {{ $post->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$post->id}}" data-coreui-whatever="@mdo">
                                             {{ $post->active ? 'Deactivate' : 'Activate' }}
                                         </a>
@@ -75,25 +73,25 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="mt-3 d-flex flex-row-reverse">
+            {{-- <div class="mt-3 d-flex flex-row-reverse">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">
                         <li class="page-item disabled">
                             <a class="page-link" href="#" tabindex="-1">Previous</a>
                         </li>
-            
+
                         @for ($i = 1; $i <= $posts->lastPage(); $i++)
                             <li class="page-item {{ $posts->currentPage() == $i ? 'active' : '' }}">
                                 <a class="page-link" href="{{ route('posts.index', ['page' => $i]) }}">{{ $i }}</a>
                             </li>
                         @endfor
-            
+
                         <li class="page-item {{ $posts->currentPage() == $posts->lastPage() ? 'disabled' : '' }}">
                             <a class="page-link" href="{{ route('posts.index', ['page' => $posts->nextPageUrl()]) }}">Next</a>
                         </li>
                     </ul>
                 </nav>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,7 +132,6 @@
             <div class="modal-content">
                 <div class="modal-header {{ $post->active ? 'bg-warning' : 'bg-success' }}">
                     <h5 class="modal-title" id="exampleModalLabel">
-                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
                         {{ $post->active ? 'Deactivate' : 'Activate' }} Post
                     </h5>
                     <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
@@ -165,3 +162,54 @@
     <!-- Modal end -->
 @endsection
 
+@section('script')
+    <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        $(() => {
+            $('[rel="tooltip"]').tooltip({trigger: "hover"});
+
+            // App.checkAll()
+
+            // Run datatable
+            var table = $('#example').DataTable({
+                drawCallback: function () {
+                    $('.dataTables_paginate > .pagination').addClass('pagination-sm') // make pagination small
+                }
+            })
+            // Apply column filter
+            $('#example .dt-column-filter th').each(function (i) {
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw()
+                    }
+                })
+            })
+            // Toggle Column filter function
+            var responsiveFilter = function (table, index, val) {
+                var th = $(table).find('.dt-column-filter th').eq(index)
+                val === true ? th.removeClass('d-none') : th.addClass('d-none')
+            }
+            // Run Toggle Column filter at first
+            $.each(table.columns().responsiveHidden(), function (index, val) {
+                responsiveFilter('#example', index, val)
+            })
+            // Run Toggle Column filter on responsive-resize event
+            table.on('responsive-resize', function (e, datatable, columns) {
+                $.each(columns, function (index, val) {
+                    responsiveFilter('#example', index, val)
+                })
+            })
+
+        })
+    </script>
+
+@endsection
+
+@section('error')
+@endsection

@@ -44,4 +44,8 @@ class Zone extends Model
     {
         return $this->hasManyThrough(Media::class, Post::class);
     }
+
+    public function vector() {
+        return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
+    }
 }

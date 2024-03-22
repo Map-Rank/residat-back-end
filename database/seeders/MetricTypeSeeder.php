@@ -14,7 +14,7 @@ class MetricTypeSeeder extends Seeder
     public function run(): void
     {
         $hazardData = [
-            'DEGREE_OF_IMPACT' => ['Mild', 'Strong', 'Severe', 'Very severe'],
+            'DEGREE_OF_IMPACT' => ['Degree of impact'],
             'CLIMATE_VULNERABILITY' => ['Health', 'Agriculture', 'Infrastructure', 'Business', 'Social'],
             'CLIMATE_RISK_THREATS' => ['Food security', 'Water stress', 'Epidemics', 'Migration']
         ];

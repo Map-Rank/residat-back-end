@@ -25,4 +25,8 @@ class Vector extends Model
     public function keys() : HasMany{
         return $this->hasMany(VectorKey::class);
     }
+
+    public function vectorKeys() {
+        return $this->hasMany(VectorKey::class, 'vector_id');
+    }
 }

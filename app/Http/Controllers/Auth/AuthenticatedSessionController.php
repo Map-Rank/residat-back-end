@@ -29,7 +29,20 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $token = $request->user()->createToken('authtoken');
+
+        $request->session()->put('api_token', $token);
+
         return redirect()->intended(RouteServiceProvider::HOME)->with('success', "Login successfully");
+    }
+
+    public function getTokenFromSession(Request $request)
+    {
+        // Récupérer le jeton de la session Laravel
+        $token = $request->session()->get('api_token');
+
+        // Retourner le jeton sous forme de réponse JSON
+        return response()->json(['token' => $token]);
     }
 
     /**

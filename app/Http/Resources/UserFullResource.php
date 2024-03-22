@@ -30,6 +30,7 @@ class UserFullResource extends JsonResource
             'activated_at' => $this['activated_at'],
             'verified_at' => $this['verified_at'],
             'gender' => $this['gender'],
+            'type' => $this['type'],
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
             'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
             'posts' => PostResource::collection($this->whenLoaded('posts')),
