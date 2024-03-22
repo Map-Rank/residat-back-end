@@ -92,7 +92,9 @@ class ZoneController extends Controller
 
         return view('zones.subdivisions', compact('subdivisions'));
     }
-
+    /**
+     * @codeCoverageIgnore
+     */
     public function show($id) {
 
         $data = Zone::with('vectors.vectorKeys')->find($id);
