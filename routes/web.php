@@ -36,6 +36,10 @@ Route::middleware('auth')->group(function () {
     Route::get('permissions', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
+
+    Route::post('/create-role', [PermissionController::class, 'store'])->name('create.role');
+    Route::put('/update-role/{id}', [PermissionController::class, 'update'])->name('update.role');
+
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
     Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');
