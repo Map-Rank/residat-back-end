@@ -31,22 +31,22 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            // RoleSeeder::class,
-            // PermissionSeeder::class,
-            // TypeInteractionSeeder::class,
-            // SectorSeeder::class,
-            // LevelSeeder::class,
-            // ZoneSeeder::class,
-            // DivisionSeeder::class,
-            // SubDivisionSeeder::class,
-            // UserSeeder::class,
-            // PostSeeder::class,
+            RoleSeeder::class,
+            PermissionSeeder::class,
+            TypeInteractionSeeder::class,
+            SectorSeeder::class,
+            LevelSeeder::class,
+            ZoneSeeder::class,
+            DivisionSeeder::class,
+            SubDivisionSeeder::class,
+            UserSeeder::class,
+            PostSeeder::class,
 
             MetricTypeSeeder::class,
-            // ReportsSeeder::class,
-            // ReportItemsSeeder::class,
-            // VectorsSeeder::class,
-            // VectorKeysSeeder::class,
+            ReportsSeeder::class,
+            ReportItemsSeeder::class,
+            VectorsSeeder::class,
+            VectorKeysSeeder::class,
         ]);
     }
 }

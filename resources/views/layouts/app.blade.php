@@ -42,6 +42,13 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         @yield('css')
+        <style>
+            .modal {
+                opacity: 100;
+                background-color: rgba(0, 0, 0, 0.5);
+                padding: 10%;
+            }
+        </style>
     </head>
     <body>
         <div class="sidebar sidebar-dark sidebar-fixed border-end" id="sidebar">
@@ -54,7 +61,7 @@
             @yield('content')
             @include('layouts.footer')
         </div>
-
+        
         <!-- CoreUI and necessary plugins-->
         <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
         <script src="{{ asset('js/simplebar.min.js') }}"></script>
