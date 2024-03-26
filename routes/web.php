@@ -32,6 +32,10 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/store-user', [UserController::class, 'store'])->name('users.store');
+    Route::get('/create-user', [UserController::class, 'create'])->name('users.create');
+    Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/update-user/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('roles', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('permissions', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
