@@ -10,7 +10,7 @@ class Event extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['title', 'desscription', 'Location', 'Organized_by', 'user_id', 'published_at', 'is_valid'];
+    protected $fillable = ['title', 'desscription', 'Location', 'date_debut','date_fin', 'Organized_by', 'user_id', 'published_at', 'is_valid'];
 
     public function user()
     {

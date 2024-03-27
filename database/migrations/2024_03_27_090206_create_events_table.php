@@ -17,8 +17,11 @@ return new class extends Migration
             $table->string('description');
             $table->string('Location');
             $table->string('Organized_by');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('file');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamp('published_at');
+            $table->timestamp('date_debut');
+            $table->timestamp('date_fin');
             $table->boolean('is_valid')->default(1);
             $table->timestamps();
             $table->softDeletes();
