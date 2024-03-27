@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Organized_by');
             $table->text('media');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreignId('sector_id')->references('id')->on('sectors')->onDelete('set null');
             $table->timestamp('published_at');
             $table->timestamp('date_debut');
             $table->timestamp('date_fin');

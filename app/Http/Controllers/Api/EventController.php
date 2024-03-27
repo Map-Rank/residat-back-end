@@ -24,7 +24,7 @@ class EventController extends Controller
             'page' => ['sometimes','numeric'],
             'size'=> ['sometimes', 'numeric'],
             'zone_id'=> ['sometimes', 'integer', 'exists:zones,id'],
-            'sectors'=> ['sometimes', 'string'],
+            'sector'=> ['sometimes', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -49,11 +49,11 @@ class EventController extends Controller
             $data = $data->whereIn('zone_id',  $descendantIds);
         }
 
-        if(isset($validated['sectors'])){
+        if(isset($validated['sector'])){
             try{
-                $sectorIds = json_decode($validated['sectors'], JSON_THROW_ON_ERROR);
+                $sectorIds = json_decode($validated['sector'], JSON_THROW_ON_ERROR);
                 if(is_array($sectorIds)){
-                    $data = $data->whereRelation('sectors', function($b)use($sectorIds){
+                    $data = $data->whereRelation('sector', function($b)use($sectorIds){
                         $b->whereIn('sectors.id', $sectorIds);
                     });
                 }
