@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('Organized_by');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamp('published_at');
+            $table->boolean('is_valid')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
