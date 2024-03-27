@@ -16,7 +16,7 @@ class EventResource extends JsonResource
             'organized_by' => $this->organized_by,
             'user_id' => $this->user_id,
             'published_at' => $this->published_at,
-            'image' => $this->media,
+            'image' => env('APP_URL') .$this->media,
             'is_valid' => $this->is_valid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
