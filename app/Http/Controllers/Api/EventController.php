@@ -53,9 +53,7 @@ class EventController extends Controller
             try{
                 $sectorIds = json_decode($validated['sector'], JSON_THROW_ON_ERROR);
                 if(is_array($sectorIds)){
-                    $data = $data->whereRelation('sector', function($b)use($sectorIds){
-                        $b->whereIn('sectors.id', $sectorIds);
-                    });
+                    $data = $data->whereIn('sector_id', $sectorIds);
                 }
             }catch(Exception $ex){
                 Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
