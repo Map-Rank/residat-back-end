@@ -1,16 +1,17 @@
 <?php
 
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\PasswordController;
-use App\Http\Controllers\Api\ZoneController;
-use App\Http\Controllers\Api\EmailVerificationController;
-use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\SectorController;
-use App\Models\Media;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ZoneController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\SectorController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\EmailVerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::resource('post', PostController::class);
+    Route::resource('events', EventController::class);
     // Route::get('post', [PostController::class, 'index']);
     // Route::post('post', [PostController::class, 'store']);
     // Route::get('/show/{id}', [PostController::class, 'show']);
