@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->string('Location');
-            $table->string('Organized_by');
+            $table->string('location');
+            $table->string('organized_by');
             $table->text('media');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreignId('sector_id')->references('id')->on('sectors')->onDelete('set null');
