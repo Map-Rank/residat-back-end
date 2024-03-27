@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Post;
 use App\Models\Zone;
+use App\Models\Event;
 use App\Models\Interaction;
 use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
@@ -147,6 +148,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new CustomVerificationNotification());
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
     }
 
 }
