@@ -28,18 +28,15 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $event = Event::create($validatedData);
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            // Générez un nom de fichier unique pour l'avatar
-            $fileName = uniqid('avatar_') . '.' . $file->getClientOriginalExtension();
+        if ($request->hasFile('media')) {
+            $file = $request->file('media');
 
-            // Stockez l'avatar dans le dossier de stockage
+            $fileName = uniqid('media_'. $event->id) . '.' . $file->getClientOriginalExtension();
+
             $filePath = $file->storeAs('storage/media/events/', $fileName);
 
-            // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $event->file = $filePath;
 
-            // Sauvegardez les modifications apportées à l'utilisateur
             $event->save();
         }
 
@@ -58,23 +55,20 @@ class EventController extends Controller
     /**
      * Update event.
      */
-    public function update(Request $request, Event $event)
+    public function update(EventRequest $request, Event $event)
     {
         $validatedData = $request->validated();
         $event->update($validatedData);
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            // Générez un nom de fichier unique pour l'avatar
-            $fileName = uniqid('avatar_') . '.' . $file->getClientOriginalExtension();
+        if ($request->hasFile('media')) {
+            $file = $request->file('media');
 
-            // Stockez l'avatar dans le dossier de stockage
+            $fileName = uniqid('media_'. $event->id) . '.' . $file->getClientOriginalExtension();
+
             $filePath = $file->storeAs('storage/media/events/', $fileName);
 
-            // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $event->file = $filePath;
 
-            // Sauvegardez les modifications apportées à l'utilisateur
             $event->save();
         }
 
