@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreignId('sector_id')->references('id')->on('sectors')->onDelete('set null');
             $table->timestamp('published_at');
-            $table->timestamp('date_debut');
-            $table->timestamp('date_fin');
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin');
             $table->boolean('is_valid')->default(0);
             $table->timestamps();
             $table->softDeletes();
