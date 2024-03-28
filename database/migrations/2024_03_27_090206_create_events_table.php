@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('location');
             $table->string('organized_by');
             $table->text('media');
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreignId('sector_id')->references('id')->on('sectors')->onDelete('set null');
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('sector_id')->references('id')->on('sectors');
             $table->timestamp('published_at');
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');
