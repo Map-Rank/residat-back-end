@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -21,7 +22,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('sector_id')->references('id')->on('sectors');
             $table->timestamp('published_at');
-            $table->timestamp('date_debut');
+            $table->timestamp('date_debut')->default(DB::raw('now()'));
             $table->timestamp('date_fin');
             $table->boolean('is_valid')->default(0);
             $table->timestamps();
