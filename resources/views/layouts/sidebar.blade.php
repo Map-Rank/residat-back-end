@@ -20,7 +20,12 @@
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('permissions.index') ? 'active' : '' }}" href="{{ route('permissions.index') }}">
         <svg class="nav-icon">
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-beach-access') }}"></use>
-        </svg>Roles & Permissions </a>
+        </svg>Roles </a>
+    </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('all.permissions') ? 'active' : '' }}" href="{{ route('all.permissions') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-beach-access') }}"></use>
+        </svg>Permissions  </a>
     </li>
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}" href="{{ route('posts.index') }}">
         <svg class="nav-icon">
