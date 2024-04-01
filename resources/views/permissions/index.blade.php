@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    List of Permissions
+    List of Role
 @endsection
 
 @section('content')

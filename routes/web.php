@@ -41,8 +41,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
 
+    Route::put('/update-permissions/{id}', [PermissionController::class, 'updateUniqPermission'])->name('update.uniq.permissions');
+
     Route::post('/create-role', [PermissionController::class, 'store'])->name('create.role');
     Route::put('/update-role/{id}', [PermissionController::class, 'update'])->name('update.role');
+    Route::put('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
+    Route::post('/create-permissions', [PermissionController::class, 'storePermission'])->name('create.permissions');
+    Route::get('/all-permissions', [PermissionController::class, 'getAllPermissions'])->name('all.permissions');
+    
+    
 
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
