@@ -142,6 +142,6 @@ class EventController extends Controller
             return response()->errors([], __('Unable to update the resource'), 400);
         }
 
-        return response()->success([], __('Event deleted successfully'), 204);
+        return response()->success([], __('Event deleted successfully'));
     }
 }
