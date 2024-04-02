@@ -85,7 +85,7 @@ class EventController extends Controller
             $event->save();
         }
 
-        
+
         return response()->success(new EventResource($event), __('Event created successfully'), 201);
     }
 
@@ -118,16 +118,30 @@ class EventController extends Controller
             $event->save();
         }
 
-        
+
         return response()->success(new EventResource($event), __('Event updated successfully'), 200);
     }
 
     /**
      * Delete event.
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        $event->delete();
+        $datum = Event::query()->find($id);
+
+        if (!$datum) {
+            return response()->errors([], __('Event not found'), 404);
+        }
+
+        if($datum->user_id != auth()->user()->id){
+            return response()->errors([], __('Unauthorized deletion to this resource'), 401);
+        }
+
+
+        if(!$datum->delete()){
+            return response()->errors([], __('Unable to update the resource'), 400);
+        }
+
         return response()->success([], __('Event deleted successfully'), 204);
     }
 }
