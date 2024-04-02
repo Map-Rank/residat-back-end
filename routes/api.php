@@ -28,7 +28,7 @@ use App\Http\Controllers\Api\EmailVerificationController;
 //     return $request->user();
 // });
 
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+Route::middleware(['auth:sanctum',])->group(function () {
     Route::post('/verify-token', [AuthController::class, 'verifyToken']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
