@@ -55,7 +55,8 @@ class ZoneController extends Controller
             $data  = $data->take($validated['size']);
         }
         if(isset($validated['with_vector'])){
-            $data  = $data->loadMissing('vector.vectorKeys');
+            if($validated['with_vector'] > 0)
+                $data  = $data->loadMissing('vector.vectorKeys');
         }
 
         $data = $data->get();;
