@@ -31,6 +31,7 @@ class ZoneController extends Controller
             'level_id'=> ['sometimes', 'int'],
             'size'=> ['sometimes', 'int'],
             'page'=> ['sometimes', 'int'],
+            'with_vector'=> ['sometimes', 'int']
         ]);
 
         if ($validator->fails()) {
@@ -52,6 +53,9 @@ class ZoneController extends Controller
         }
         if(isset($validated['size'])){
             $data  = $data->take($validated['size']);
+        }
+        if(isset($validated['with_vector'])){
+            $data  = $data->loadMissing('vector.vectorKeys');
         }
 
         $data = $data->get();;
