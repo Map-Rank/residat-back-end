@@ -51,13 +51,14 @@ class ZoneController extends Controller
         if(isset($validated['level_id'])){
             $data = $data->where('level_id' , $validated['level_id']);
         }
-        if(isset($validated['size'])){
-            $data  = $data->take($validated['size']);
-        }
         if(isset($validated['with_vector'])){
             if($validated['with_vector'] > 0)
                 $data  = $data->loadMissing('vector.vectorKeys');
         }
+        if(isset($validated['size'])){
+            $data  = $data->take($validated['size']);
+        }
+
 
         $data = $data->get();;
 
