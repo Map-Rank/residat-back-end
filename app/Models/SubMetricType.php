@@ -17,9 +17,4 @@ class SubMetricType extends Model
     {
         return $this->belongsTo(MetricType::class);
     }
-
-    public function subMetricAttributes()
-    {
-        return $this->hasMany(SubMetricAttribute::class);
-    }
 }
