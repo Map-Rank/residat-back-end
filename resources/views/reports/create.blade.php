@@ -223,16 +223,307 @@
                                 {{-- {{dd($types)}} --}}
                                 <div class="form-group {!! $errors->has('type') ? 'has-error' : '' !!}">
                                     {!! Form::label('Metric Type', null, ['class' => '']) !!}
-                                    <select class="form-select" autofocus name="metricType" v-model="metricType"
-                                        v-validate="'required'">
+                                    <select class="form-select mb-3" autofocus name="metricType" v-model="metricType" v-validate="'required'"
+                                            @change="toggleInput">
                                         <option value="">Select the metric type</option>
                                         @foreach ($metricTypes as $metricType)
-                                            <option value="{{ $metricType->id }}">{{ $metricType->name }} </option>
+                                            <option value="{{ $metricType->id }}">{{ $metricType->name }}</option>
                                         @endforeach
                                     </select>
-                                    <span v-show="errors.has('metricType')"
-                                        class="text-danger">@{{ errors.first('metricType') }}</span>
+                                    <span v-show="errors.has('metricType')" class="text-danger">@{{ errors.first('metricType') }}</span>
+                                    <div v-if="health">
+                                        <div class="form-group">
+                                            <label for="metricValue">% Vulnerable to climate health risks</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Reported cases in last 30 days</label>
+                                            <input type="text" name="reported-value" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Doctor to patient ratio</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Total number of health units</label>
+                                            <input type="text" name="total-number-unit" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                    </div>
+                                    <div v-if="agriculture">
+                                        <div class="form-group" >
+                                            <label for="metricValue">% Population Vulnerable</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Last annual output</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Number of farmers</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Contribution to local economy</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                    </div>
+                                    <div v-if="infrastructure">
+                                        <div class="form-group" >
+                                            <label for="metricValue">Percentage exposure</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">At risk Critical infrastructure</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">At risk Social infrastructure
+                                                </label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Number of Evacuation sites</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                    </div>
+                                    <div v-if="fishing">
+                                        <div class="form-group" >
+                                            <label for="metricValue">% Population Vulnerable</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Last annual output</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Number of fishermen</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Contribution to local economy</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                    </div>
+                                    <div v-if="social">
+                                        <div class="form-group" >
+                                            <label for="metricValue">High risk social group</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Local climate  literacy</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Social stability</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="metricValue">Poverty index</label>
+                                            <input type="text" name="additionalField" class="form-control" placeholder="Additional Field">
+                                        </div>
+                                    </div>
+                                    <div v-if="floodSecurity">
+                                        <div class="form-group">
+                                            <select class="form-select" autofocus name="floodSecurity" id="floodSecurity" v-model="selectedSecurity">
+                                                <option value="">--- Select level ---</option>
+                                                <option value="CurrentLevel">Current level</option>
+                                                <option value="CrisisLevel">Crisis level</option>
+                                            </select>
+                                        </div>
+                                        <div v-if="selectedSecurity === 'CurrentLevel'">
+                                            <!-- Affiche les champs si CurrentLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Food secure households</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="High risk social group">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">Highly food insecure households</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="Local climate literacy">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Low food secure households</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Social stability">
+                                            </div>
+                                        </div>
+                                    
+                                        <div v-else-if="selectedSecurity === 'CrisisLevel'">
+                                            <!-- Affiche les champs si CrisisLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Food secure households</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="High risk social group">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">Low food secure households</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="Local climate literacy">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Highly food insecure households</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Social stability">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="waterStress">
+                                        <div class="form-group">
+                                            <select class="form-select" autofocus name="waterStress" id="waterStress" v-model="selectedFoodSecurity">
+                                                <option value="">--- Select level ---</option>
+                                                <option value="CurrentLevel">Current level</option>
+                                                <option value="CrisisLevel">Crisis level</option>
+                                            </select>
+                                        </div>
+                                        <div v-if="selectedFoodSecurity === 'CurrentLevel'">
+                                            <!-- Affiche les champs si CurrentLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Low water stress</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="Low water stress">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">High water stressed</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="High water stressed">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Severe water stress</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Severe water stress">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CurrentLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    
+                                        <div v-else-if="selectedFoodSecurity === 'CrisisLevel'">
+                                            <!-- Affiche les champs si CrisisLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Low water stress</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="High risk social group">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">High water stressed</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="Local climate literacy">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Severe water stress</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Social stability">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CrisisLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="migration">
+                                        <div class="form-group">
+                                            <select class="form-select" autofocus name="waterStress" id="waterStress" v-model="selectedMigration">
+                                                <option value="">--- Select migration ---</option>
+                                                <option value="UrbanToRural">Urban to Rural</option>
+                                                <option value="RuralToUrban">Rutal to urban</option>
+                                            </select>
+                                        </div>
+                                        <div v-if="selectedMigration === 'UrbanToRural'">
+                                            <!-- Affiche les champs si CurrentLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="adult">Adult</label>
+                                                <input type="text" name="adult" class="form-control" placeholder="adult">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="youth">Youth</label>
+                                                <input type="text" name="youth" class="form-control" placeholder="youth">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="children">Children</label>
+                                                <input type="text" name="children" class="form-control" placeholder="children">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CurrentLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    
+                                        <div v-else-if="selectedMigration === 'RuralToUrban'">
+                                            <!-- Affiche les champs si CrisisLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Low water stress</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="High risk social group">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">High water stressed</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="Local climate literacy">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Severe water stress</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Social stability">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CrisisLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="ressourceCompletion">
+                                        <div class="form-group">
+                                            <select class="form-select" autofocus name="waterStress" id="waterStress" v-model="selectedRessourceCompletion">
+                                                <option value="">--- Select ressource completion ---</option>
+                                                <option value="Current">Current</option>
+                                                <option value="Projected">Projected</option>
+                                            </select>
+                                        </div>
+                                        <div v-if="selectedRessourceCompletion === 'Current'">
+                                            <!-- Affiche les champs si CurrentLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="adult">Farmer-Grazer conflicts</label>
+                                                <input type="text" name="adult" class="form-control" placeholder="Farmer-Grazer conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="youth">Water conflicts</label>
+                                                <input type="text" name="youth" class="form-control" placeholder="Water conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="children">Human-Wildlife conflicts</label>
+                                                <input type="text" name="children" class="form-control" placeholder="Human-Wildlife conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="children">Land conflicts</label>
+                                                <input type="text" name="children" class="form-control" placeholder="Land conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CurrentLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    
+                                        <div v-else-if="selectedRessourceCompletion === 'Projected'">
+                                            <!-- Affiche les champs si CrisisLevel est sélectionné -->
+                                            <div class="form-group">
+                                                <label for="highRiskSocialGroup">Farmer-Grazer conflicts</label>
+                                                <input type="text" name="highRiskSocialGroup" class="form-control" placeholder="Farmer-Grazer conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="localClimateLiteracy">Water conflicts</label>
+                                                <input type="text" name="localClimateLiteracy" class="form-control" placeholder="Water conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="socialStability">Human-Wildlife conflicts</label>
+                                                <input type="text" name="socialStability" class="form-control" placeholder="Human-Wildlife conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="children">Land conflicts</label>
+                                                <input type="text" name="children" class="form-control" placeholder="Land conflicts">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="CrisisLevel">Description</label>
+                                                <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                   
+
+                                    
                                 </div>
+
+
                                 <div class="form-group">
                                     <label for="metricValue">Value</label>
                                     <input type="number" class="form-control" name="metricValue" v-model="metricValue"
@@ -411,7 +702,7 @@
 
     <script>
         Vue.use(VeeValidate);
-
+        // const health = ref();
 
         var app = new Vue({
             el: '#elt',
@@ -429,6 +720,22 @@
                 vectorName: '',
                 vectorColor: '',
                 metricType: '',
+                selectedSecurity:'',
+                selectedFoodSecurity:'',
+                selectedMigration:'',
+                selectedRessourceCompletion:'',
+                health: false,
+                agriculture: false,
+                fishing:false,
+                social:false,
+                floodSecurity:false,
+                waterStress:false,
+                infrastructure:false,
+                ImpactDegree: false,
+                CurrentLevel:false,
+                CrisisLevel:false,
+                migration:false,
+                ressourceCompletion:false,
                 metricValue: '',
                 metricName: '',
                 updateIndex: null,
@@ -459,6 +766,135 @@
                     });
             },
             methods: {
+                toggleInput() {
+                    console.log(this.metricType)
+                    if (this.metricType == 2) {
+                        this.ImpactDegree = false;
+                        this.health = true;
+                        this.agriculture = false;
+                        this.fishing = false;
+                        this.infrastructure = false;
+                        this.social = false;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.CurrentLevel = false;
+                        this.CrisisLevel = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    } else if(this.metricType == 3) {
+                        this.health = false;
+                        this.ImpactDegree = false;
+                        this.agriculture = true;
+                        this.fishing = false;
+                        this.infrastructure = false;
+                        this.social = false;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.CurrentLevel = false;
+                        this.CrisisLevel = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    } else if(this.metricType == 4) {
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.fishing = false;
+                        this.infrastructure = true;
+                        this.waterStress = false;
+                        this.social = false;
+                        this.floodSecurity = false;
+                        this.CurrentLevel = false;
+                        this.CrisisLevel = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    } else if(this.metricType == 5){
+                        this.fishing = true;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.social = false;
+                        this.CurrentLevel = false;
+                        this.CrisisLevel = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    }else if(this.metricType == 6){
+                        this.social = true;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.CurrentLevel = false;
+                        this.CrisisLevel = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    }else if(this.metricType == 7){
+                        this.floodSecurity = true;
+                        this.social = false;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.waterStress = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    }else if(this.metricType == 8){
+                        this.waterStress = true;
+                        this.floodSecurity = false;
+                        this.social = false;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    }else if(this.metricType == 10){
+                        this.migration = true;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.social = false;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.ressourceCompletion = false;
+                    }else if(this.metricType == 9){
+                        this.ressourceCompletion = true;
+                        this.migration = false;
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.social = false;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                    }else{
+                        this.waterStress = false;
+                        this.floodSecurity = false;
+                        this.social = false;
+                        this.fishing = false;
+                        this.agriculture = false;
+                        this.ImpactDegree = false;
+                        this.health = false;
+                        this.infrastructure = false;
+                        this.migration = false;
+                        this.ressourceCompletion = false;
+                    }
+
+                    // if(){
+                        // waterStress
+
+                    // }
+                },
 
 
                 processSVGFile(event) {
