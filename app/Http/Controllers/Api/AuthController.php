@@ -11,10 +11,11 @@ use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Session; 
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Session; 
 
 
 /**
@@ -34,8 +35,15 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $user['avatar'] = '/storage/media/profile.png';
+        // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
+
+        if ($request->hasFile('data')) {
+            $mediaFile = $request->file('data');
+            $mediaPath = $mediaFile->store('media/avatar'.auth()->user()->email, 'public');
+            $user['avatar'] = Storage::url($mediaPath);
+            $user->save;
+        }
 
 
         // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur

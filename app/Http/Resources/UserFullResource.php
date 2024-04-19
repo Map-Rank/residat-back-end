@@ -24,6 +24,7 @@ class UserFullResource extends JsonResource
             'date_of_birth' => $this['date_of_birth'],
             'phone' => $this['phone'],
             'address' => $this['address'],
+            'profession' => $this['profession'],
             'avatar' => $this['avatar'],
             'active' => $this['active'],
             'verified' => $this['verified'],
