@@ -11,6 +11,7 @@ use App\Http\Requests\EventRequest;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
@@ -73,15 +74,22 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $event = Event::create($validatedData);
 
+        // if ($request->hasFile('media')) {
+        //     $file = $request->file('media');
+
+        //     $fileName = uniqid('media_'. $event->id) . '.' . $file->getClientOriginalExtension();
+
+        //     $filePath = $file->storeAs('storage/media/events/', $fileName);
+
+        //     $event->media = $filePath;
+
+        //     $event->save();
+        // }
+
         if ($request->hasFile('media')) {
-            $file = $request->file('media');
-
-            $fileName = uniqid('media_'. $event->id) . '.' . $file->getClientOriginalExtension();
-
-            $filePath = $file->storeAs('storage/media/events/', $fileName);
-
-            $event->media = $filePath;
-
+            $mediaFile = $request->file('media');
+            $mediaPath = $mediaFile->store('media/events'.auth()->user()->email, 'public');
+            $event['media'] = Storage::url($mediaPath);
             $event->save();
         }
 

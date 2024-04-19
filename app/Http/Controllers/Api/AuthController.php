@@ -35,14 +35,14 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        $user['avatar'] = '/storage/media/profile.png';
+        // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
 
         if ($request->hasFile('data')) {
             $mediaFile = $request->file('data');
-
             $mediaPath = $mediaFile->store('media/avatar'.auth()->user()->email, 'public');
             $user['avatar'] = Storage::url($mediaPath);
+            $user->save;
         }
 
 
