@@ -33,7 +33,7 @@ class UserFullResource extends JsonResource
             'type' => $this['type'],
             'avatar' => env('APP_URL').''.$this->avatar,
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
-            'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
+            'my_posts' => PostResource::collection($this->whenLoaded('myPosts.zone')),
             'posts' => PostResource::collection($this->whenLoaded('posts')),
             'my_likes' => InteractionResource::collection($this->whenLoaded('likeInteractions')),
             'my_shares' => InteractionResource::collection($this->whenLoaded('shareInteractions')),
