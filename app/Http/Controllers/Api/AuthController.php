@@ -38,8 +38,8 @@ class AuthController extends Controller
         // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
 
-        if ($request->hasFile('data')) {
-            $mediaFile = $request->file('data');
+        if ($request->hasFile('avatar')) {
+            $mediaFile = $request->file('avatar');
             $mediaPath = $mediaFile->store('media/avatar'.auth()->user()->email, 'public');
             $user['avatar'] = Storage::url($mediaPath);
             $user->save;
