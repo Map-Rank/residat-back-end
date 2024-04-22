@@ -96,7 +96,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function myPosts() {
         return $this->belongsToMany(Post::class,  'interactions', 'user_id')
-            ->with('zone')
             ->wherePivot('type_interaction_id', 1)->latest();
     }
 

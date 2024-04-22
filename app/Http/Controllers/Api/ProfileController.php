@@ -21,7 +21,7 @@ class ProfileController extends Controller
      */
     public function profile(Request $request): JsonResponse
     {
-        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
+        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments', 'myPosts.zone');
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
@@ -32,7 +32,7 @@ class ProfileController extends Controller
     public function showProfile($id): JsonResponse
     {
         $user = User::find($id);
-        $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments');
+        $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments', 'myPosts.zone');
         if(!$user){
             return response()->errors([], __('User not found !'), 404);
         }
