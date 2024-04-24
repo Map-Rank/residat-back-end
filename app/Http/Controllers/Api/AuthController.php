@@ -40,7 +40,7 @@ class AuthController extends Controller
 
         if ($request->hasFile('avatar')) {
             $mediaFile = $request->file('avatar');
-            $mediaPath = $mediaFile->store('media/avatar'.auth()->user()->email, 'public');
+            $mediaPath = $mediaFile->store('media/avatar'.$user->email, 'public');
             $user['avatar'] = Storage::url($mediaPath);
             $user->save;
         }
