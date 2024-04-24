@@ -66,7 +66,10 @@ class ProfileController extends Controller
 
         return response()->success(InteractionResource::collection($interactions->get()), __('Interactions'), 200);
     }
-
+    
+    /**
+     * Update profil user
+     */
     public function update(UserRequest $request, string $id)
     {
         $user = User::findOrFail($id);
