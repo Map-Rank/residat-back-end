@@ -35,6 +35,7 @@ class UserRequest extends FormRequest
                 'password' => 'nullable|string|min:6',
                 'gender' => 'nullable|in:male,female',
                 'zone_id' => 'exists:zones,id',
+                'profession' => 'nullable|string',
                 ];
         }
         return [
@@ -48,6 +49,7 @@ class UserRequest extends FormRequest
             'password' => 'required|string|min:6',
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'exists:zones,id',
+            'profession' => 'nullable|string',
         ];
     }
 
@@ -77,9 +79,13 @@ class UserRequest extends FormRequest
                 'description' => 'date of birth',
                 'example' => Carbon::now()
             ],
+            'profession' => [
+                'description' => 'Example of profession',
+                'example' => 'Developper'
+            ],
             'avatar' => [
                 'description' => 'profil picture',
-                'example' => 'image.jpg'
+                'example' => 'storage/media/avatar.jpg'
             ],
             'password' => [
                 'description' => 'password',

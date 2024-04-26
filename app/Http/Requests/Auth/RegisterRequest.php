@@ -40,6 +40,7 @@ class RegisterRequest extends FormRequest
             'password' => 'required|string|min:6',
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'required|exists:zones,id',
+            'profession' => 'nullable|string',
         ];
     }
 
