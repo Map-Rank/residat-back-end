@@ -10,12 +10,14 @@ use Illuminate\Http\JsonResponse;
 use App\Mail\ResetPasswordWithOtp;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Notifications\Notification;
+use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
@@ -96,6 +98,38 @@ class PasswordController extends Controller
         }
 
         return response()->success([], __($status) , 200);
+    }
+
+    /**
+     * Met à jour le mot de passe de l'utilisateur.
+     *
+     * @param UpdatePasswordRequest $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
+    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
+    {
+        $user = Auth::user();
+
+        // Vérifier que l'ancien mot de passe correspond à celui de l'utilisateur
+        if (!Hash::check($request->old_password, $user->password)) {
+            throw ValidationException::withMessages([
+                'old_password' => ['L\'ancien mot de passe est incorrect.'],
+            ]);
+        }
+
+        // Vérifier que le nouveau mot de passe correspond à la confirmation
+        if ($request->password !== $request->password_confirmation) {
+            throw ValidationException::withMessages([
+                'password' => ['Les mots de passe ne correspondent pas.'],
+            ]);
+        }
+
+        // Mettre à jour le mot de passe de l'utilisateur
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->success([], 'Le mot de passe a été mis à jour avec succès.', 200);
     }
 }
 
