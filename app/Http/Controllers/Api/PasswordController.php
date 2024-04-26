@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Notifications\Notification;
-use App\Http\Requests\UpdatePasswordRequest;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
+use App\Http\Requests\Auth\UpdatePasswordRequest;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 
 /**
