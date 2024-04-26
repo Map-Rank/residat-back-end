@@ -24,6 +24,7 @@ use App\Http\Requests\Auth\ForgotPasswordRequest;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 
 /**
+ * @group Module Password
  * Class PasswordController
  * @package App\Http\Controllers\Api
  * @group Module Authentification
@@ -32,7 +33,7 @@ class PasswordController extends Controller
 {
 
     /**
-     * 
+     * Forgot password
      * @param ForgotPasswordRequest $request
      * @return JsonResponse
      * @throws ValidationException
@@ -64,6 +65,7 @@ class PasswordController extends Controller
 
 
     /**
+     * reset password
      * @param ResetPasswordRequest $request
      * @return JsonResponse
      * @unauthenticated
@@ -101,8 +103,7 @@ class PasswordController extends Controller
     }
 
     /**
-     * Met à jour le mot de passe de l'utilisateur.
-     *
+     * Update password.
      * @param UpdatePasswordRequest $request
      * @return JsonResponse
      * @throws ValidationException

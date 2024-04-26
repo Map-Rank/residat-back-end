@@ -14,6 +14,9 @@ use App\Http\Resources\EventResource;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @group Module Events
+ */
 class EventController extends Controller
 {
     /**

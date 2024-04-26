@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Resources\InteractionResource;
 
 /**
@@ -71,7 +72,7 @@ class ProfileController extends Controller
     /**
      * Update profil user
      */
-    public function update(UserRequest $request, string $id)
+    public function update(ProfileUpdateRequest $request, string $id)
     {
         $user = User::findOrFail($id);
         $user->update($request->all());
