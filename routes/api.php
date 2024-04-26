@@ -57,6 +57,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
     Route::post('/reports', [ReportController::class,  'store']);
+    Route::put('/password/update', [PasswordController::class, 'updatePassword']);
 });
 
 
