@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\InteractionResource;
@@ -107,11 +108,14 @@ class ProfileController extends Controller
             // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $user->avatar = $avatarPath;
 
+
+            $user->load('zone');
+
             // Sauvegardez les modifications apportées à l'utilisateur
             $user->save();
         }
 
-        return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
+        return response()->success(UserResource::make($user), __('User profile retrieved successfully'), 200);
     }
 
 }
