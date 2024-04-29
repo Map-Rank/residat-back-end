@@ -29,6 +29,9 @@ class ZoneController extends Controller
             'name' => ['sometimes', 'string'],
             'parent_id'=> ['sometimes', 'int'],
             'level_id'=> ['sometimes', 'int'],
+            'size'=> ['sometimes', 'int'],
+            'page'=> ['sometimes', 'int'],
+            'with_vector'=> ['sometimes', 'int']
         ]);
 
         if ($validator->fails()) {
@@ -36,9 +39,10 @@ class ZoneController extends Controller
         }
 
         $validated = $validator->validated();
+
         $data = Zone::with('children');
         if(isset($validated['name'])){
-            $data = $data->where('name', 'like' , '%'.$validated['name'].'%');
+            $data = $data->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($validated['name']) . '%']);
         }
 
         if(isset($validated['parent_id'])){
@@ -47,8 +51,16 @@ class ZoneController extends Controller
         if(isset($validated['level_id'])){
             $data = $data->where('level_id' , $validated['level_id']);
         }
+        if(isset($validated['with_vector'])){
+            if($validated['with_vector'] > 0)
+                $data  = $data->with('vector.vectorKeys');
+        }
+        if(isset($validated['size'])){
+            $data  = $data->take($validated['size']);
+        }
 
-        $data = $data->get();
+
+        $data = $data->get();;
 
         return response()->success(ZoneResource::collection($data), __('Values found'));
     }

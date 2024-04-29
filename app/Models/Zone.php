@@ -48,4 +48,9 @@ class Zone extends Model
     public function vector() {
         return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }

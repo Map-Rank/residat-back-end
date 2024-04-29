@@ -11,10 +11,10 @@ class ReportItem extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['report_id', 'value', 'metric_type_id'];
+    protected $fillable = ['report_id', 'value', 'sub_metric_type_id', 'description'];
 
-    public function metricType(): BelongsTo{
-        return $this->belongsTo(MetricType::class);
+    public function subMetricType(): BelongsTo{
+        return $this->belongsTo(SubMetricType::class);
     }
 
     public function report(): BelongsTo{

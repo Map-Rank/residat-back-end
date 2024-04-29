@@ -28,13 +28,14 @@ class UserRequest extends FormRequest
             return [
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'nullable|string|max:255',
-                'email' => 'required|email|unique:users|max:255',
                 'phone' => 'required|string|max:20',
                 'date_of_birth' => 'required|date',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'password' => 'required|string|min:6',
-                'gender' => 'required|in:male,female',
+                'profession' => 'nullable|string',
+                'password' => 'nullable|string|min:6',
+                'gender' => 'nullable|in:male,female',
                 'zone_id' => 'exists:zones,id',
+                'profession' => 'nullable|string',
                 ];
         }
         return [
@@ -44,9 +45,11 @@ class UserRequest extends FormRequest
             'phone' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profession' => 'nullable|string',
             'password' => 'required|string|min:6',
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'exists:zones,id',
+            'profession' => 'nullable|string',
         ];
     }
 
@@ -76,9 +79,13 @@ class UserRequest extends FormRequest
                 'description' => 'date of birth',
                 'example' => Carbon::now()
             ],
+            'profession' => [
+                'description' => 'Example of profession',
+                'example' => 'Developper'
+            ],
             'avatar' => [
                 'description' => 'profil picture',
-                'example' => 'image.jpg'
+                'example' => 'storage/media/avatar.jpg'
             ],
             'password' => [
                 'description' => 'password',

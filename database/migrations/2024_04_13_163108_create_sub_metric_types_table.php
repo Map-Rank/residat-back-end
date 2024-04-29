@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_items', function (Blueprint $table) {
+        Schema::create('sub_metric_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_id');
-            $table->foreignId('sub_metric_type_id')->constrained()->onDelete('cascade');
-            $table->integer('value')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('metric_type_id')->constrained()->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_items');
+        Schema::dropIfExists('sub_metric_types');
     }
 };
