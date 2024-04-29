@@ -38,7 +38,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::resource('post', PostController::class);
     Route::resource('events', EventController::class);
-    Route::resource('reports', [ReportController::class]);
+    Route::resource('reports', ReportController::class);
     // Route::get('post', [PostController::class, 'index']);
     // Route::post('post', [PostController::class, 'store']);
     // Route::get('/show/{id}', [PostController::class, 'show']);
