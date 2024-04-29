@@ -1,14 +1,15 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PermissionController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ZoneController;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
@@ -26,16 +27,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::post('/store-user', [UserController::class, 'store'])->name('users.store');
+    Route::get('/create-user', [UserController::class, 'create'])->name('users.create');
+    Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/update-user/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('roles', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('permissions', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
     Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
+
+    Route::put('/update-permissions/{id}', [PermissionController::class, 'updateUniqPermission'])->name('update.uniq.permissions');
+
+    Route::post('/create-role', [PermissionController::class, 'store'])->name('create.role');
+    Route::put('/update-role/{id}', [PermissionController::class, 'update'])->name('update.role');
+    Route::put('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
+    Route::post('/create-permissions', [PermissionController::class, 'storePermission'])->name('create.permissions');
+    Route::get('/all-permissions', [PermissionController::class, 'getAllPermissions'])->name('all.permissions');
+    
+    
+
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
     Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');

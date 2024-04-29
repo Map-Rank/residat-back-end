@@ -1,16 +1,17 @@
 <?php
 
+use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\PasswordController;
-use App\Http\Controllers\Api\ZoneController;
-use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\PostController;
-use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ZoneController;
+use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
-use App\Models\Media;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\EmailVerificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,7 @@ use App\Http\Controllers\ReportController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum',])->group(function () {
     Route::post('/verify-token', [AuthController::class, 'verifyToken']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
@@ -36,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::resource('post', PostController::class);
+    Route::resource('events', EventController::class);
+    Route::resource('reports', ReportController::class);
     // Route::get('post', [PostController::class, 'index']);
     // Route::post('post', [PostController::class, 'store']);
     // Route::get('/show/{id}', [PostController::class, 'show']);
@@ -49,11 +52,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'profile']);
     Route::get('/profile/detail/{id}', [ProfileController::class, 'showProfile']);
+    Route::put('/profile/update/{id}', [ProfileController::class, 'update']);
 
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
 
     Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
-    Route::post('/reports', [ReportController::class,  'store']);
+    Route::put('/password/update', [PasswordController::class, 'updatePassword']);
 });
 
 

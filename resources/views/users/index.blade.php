@@ -10,7 +10,7 @@
             <div class="row mb-3">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <h1 class="my-0">List of users</h1>
-                    {{-- <button type="button" class="btn btn-info text-white" data-coreui-toggle="modal" data-coreui-target="#exampleModal" data-coreui-whatever="@mdo"><span class="cil-contrast"></span> Add User</button> --}}
+                    <a type="button" class="btn btn-info text-white" href="{{route('users.create')}}"><span class="cil-contrast"></span> Create User</a>
                 </div>
             </div>
             {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }}
@@ -64,6 +64,7 @@
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#bannedModal-{{$user->id}}" data-coreui-whatever="@mdo">Bannish</a>
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
                                         <a class="dropdown-item" href="{{route('user.detail',$user->id)}}" >View</a>
+                                        <a class="dropdown-item" href="{{route('users.edit',$user->id)}}" >Edit</a>
                                     </div>
                                 </div>
                             </td>
@@ -77,32 +78,60 @@
     <!-- Modal add user -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
-              <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="mb-3">
-                  <label for="recipient-name" class="col-form-label">first name</label>
-                  <input type="text" class="form-control" id="recipient-name">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="mb-3">
-                    <label for="recipient-name" class="col-form-label">last name</label>
-                    <input type="text" class="form-control" id="recipient-name">
-                  </div>
-                <div class="mb-3">
-                  <label for="message-text" class="col-form-label">Message:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
-                </div>
-              </form>
+                <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="first_name" class="col-form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="last_name" class="col-form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="col-form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_of_birth" class="col-form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="avatar" class="col-form-label">Avatar</label>
+                            <input type="file" class="form-control" id="avatar" name="avatar">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="col-form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="col-form-label">Gender</label>
+                            <select class="form-select" id="gender" name="gender" required>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="zone_id" class="col-form-label">Zone ID</label>
+                            <input type="text" class="form-control" id="zone_id" name="zone_id">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Send message</button>
-            </div>
-          </div>
         </div>
     </div>
     <!-- Modal End -->
