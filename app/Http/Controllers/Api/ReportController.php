@@ -40,17 +40,10 @@ class ReportController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Report::with('zone');
+        $data = Report::with('zone', 'items', 'vector.keys');
 
-        if(isset($validated['zone_id'])){
-            $zone = Zone::find($validated['zone_id']);
-            $descendants = collect();
-            $descendants->push($zone);
-            if ($zone->children != null){
-                $descendants =  UtilService::get_descendants($zone->children, $descendants);
-            }
-            $descendantIds = $descendants->pluck('id');
-            $data = $data->whereIn('zone_id',  $descendantIds);
+        if (isset($validated['zone_id'])) {
+            $data->where('zone_id', $validated['zone_id']);
         }
 
         // Filtrer par date de début si une date de début est spécifiée dans la demande
@@ -134,7 +127,7 @@ class ReportController extends Controller
         }
 
         // Charger les éléments associés au rapport
-        $report->load('items');
+        $report->load('items', 'vector.keys');
 
         return response()->success($report, __('Report details retrieved successfully'), 200);
     }
@@ -201,7 +194,8 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         // Vérifier si l'utilisateur authentifié est autorisé à supprimer le rapport
-        if (Auth::user()->id !== $report->user_id) {
+        $user = Auth::user();
+        if (!$user->hasRole('Admin') && $user->id !== $report->user_id) {
             return response()->errors([], __('Unauthorized'), 401);
         }
 
