@@ -43,7 +43,7 @@ class ReportController extends Controller
         $data = Report::with('zone', 'items', 'vector.keys');
 
         if (isset($validated['zone_id'])) {
-            $data->whereDate('zone_id', $validated['zone_id']);
+            $data->where('zone_id', $validated['zone_id']);
         }
 
         // Filtrer par date de début si une date de début est spécifiée dans la demande
