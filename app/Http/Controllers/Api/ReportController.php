@@ -126,6 +126,19 @@ class ReportController extends Controller
         return response()->success($report, __('Reports charged successfully'), 200);
     }
 
+    public function show(Report $report)
+    {
+        // Vérifier si l'utilisateur authentifié est autorisé à afficher le rapport
+        if (Auth::user()->id !== $report->user_id) {
+            return response()->errors([], __('Unauthorized'), 401);
+        }
+
+        // Charger les éléments associés au rapport
+        $report->load('items');
+
+        return response()->success($report, __('Report details retrieved successfully'), 200);
+    }
+
     public function update(ReportRequest $request, Report $report)
     {
         $validatedData = $request->validated();
@@ -182,7 +195,7 @@ class ReportController extends Controller
             ]);
         }
 
-        return response()->success($report, __('Rapport mis à jour avec succès'), 200);
+        return response()->success($report, __('Report updated successfully'), 200);
     }
 
     public function destroy(Report $report)
@@ -195,6 +208,6 @@ class ReportController extends Controller
         // Supprimer le rapport
         $report->delete();
 
-        return response()->success([], __('Rapport supprimé avec succès'), 200);
+        return response()->success([], __('Report deleted successfully'), 200);
     }
 }
