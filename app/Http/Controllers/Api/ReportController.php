@@ -194,7 +194,8 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         // Vérifier si l'utilisateur authentifié est autorisé à supprimer le rapport
-        if (Auth::user()->id !== $report->user_id) {
+        $user = Auth::user();
+        if (!$user->hasRole('Admin') && $user->id !== $report->user_id) {
             return response()->errors([], __('Unauthorized'), 401);
         }
 
