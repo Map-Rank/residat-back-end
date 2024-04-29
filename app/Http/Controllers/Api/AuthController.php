@@ -13,7 +13,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Support\Facades\Session; 
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
 
