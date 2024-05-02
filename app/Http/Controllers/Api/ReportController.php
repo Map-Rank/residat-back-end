@@ -119,15 +119,17 @@ class ReportController extends Controller
         return response()->success($report, __('Reports charged successfully'), 200);
     }
 
-    public function show(Report $report)
+    public function show($zoneId)
     {
+        $report = Report::where('zone_id', $zoneId)->first();
+
         // Vérifier si l'utilisateur authentifié est autorisé à afficher le rapport
         if (Auth::user()->id !== $report->user_id) {
             return response()->errors([], __('Unauthorized'), 401);
         }
 
         // Charger les éléments associés au rapport
-        $report->load('items', 'vector.keys');
+        $report->load('items.report','creator');
 
         return response()->success($report, __('Report details retrieved successfully'), 200);
     }
