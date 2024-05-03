@@ -60,7 +60,7 @@ class ReportController extends Controller
             'model_id' => $report->id,
             'category' => $validatedData['type'],
             'type' => $request->file('image')->getClientMimeType(),
-            'model_type' => 'App\\Models\\Report',
+            'model_type' => Report::class,
         ]);
 
         // Création des clés de vecteur pour le vecteur
