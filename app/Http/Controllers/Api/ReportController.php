@@ -123,9 +123,10 @@ class ReportController extends Controller
     {
         $report = Report::with('items.report', 'creator', 'vector.vectorKeys')->where('zone_id', $zoneId)->first();
 
+        $vector = Vector::query()->where('model_id', $report->id)->where('model_type', Report::class)->first();
         // Charger les éléments associés au rapport
 
-        return response()->success($report, __('Report details retrieved successfully'), 200);
+        return response()->success(['report'=>$report, 'vector'=> $vector], __('Report details retrieved successfully'), 200);
     }
 
     public function update(ReportRequest $request, Report $report)
