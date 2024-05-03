@@ -64,23 +64,28 @@ class ReportController extends Controller
         ]);
 
         // Création des clés de vecteur pour le vecteur
-        foreach ($validatedData['vector_keys'] as $keyData) {
-            $vectorKey = VectorKey::create([
-                'value' => $keyData['value'],
-                'type' => $keyData['type'],
-                'name' => $keyData['name'],
-                'vector_id' => $vector->id,
-            ]);
+        if(isset($validatedData['vector_keys'])){
+            foreach ($validatedData['vector_keys'] as $keyData) {
+                $vectorKey = VectorKey::create([
+                    'value' => $keyData['value'],
+                    'type' => $keyData['type'],
+                    'name' => $keyData['name'],
+                    'vector_id' => $vector->id,
+                ]);
+            }
         }
 
-        // Création des éléments de rapport
-        foreach ($validatedData['report_items'] as $itemData) {
-            $reportItem = ReportItem::create([
-                'report_id' => $report->id,
-                'metric_type_id' => $itemData['metric_type_id'],
-                'value' => $itemData['value'],
-            ]);
+        if(isset($validatedData['report_items'])){
+            // Création des éléments de rapport
+            foreach ($validatedData['report_items'] as $itemData) {
+                $reportItem = ReportItem::create([
+                    'report_id' => $report->id,
+                    'metric_type_id' => $itemData['metric_type_id'],
+                    'value' => $itemData['value'],
+                ]);
+            }
         }
+
 
         return view('reports.show', compact('report'));
     }
