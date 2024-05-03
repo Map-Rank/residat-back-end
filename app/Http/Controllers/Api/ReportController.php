@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
+use App\Http\Resources\ReportResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -124,7 +125,7 @@ class ReportController extends Controller
         $report = Report::with('items.report', 'creator', 'vector.vectorKeys')->where('zone_id', $zoneId)->first();
         // Charger les éléments associés au rapport
 
-        return response()->success($report, __('Report details retrieved successfully'), 200);
+        return response()->success(ReportResource::make($report), __('Report details retrieved successfully'), 200);
     }
 
     public function update(ReportRequest $request, Report $report)
