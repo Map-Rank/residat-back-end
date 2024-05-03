@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
             return $this->hasMany(ReportItem::class, 'report_id', 'id');
         }
 
-        public function vector() : BelongsTo{
+        public function vector() {
             return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
         }
     }
