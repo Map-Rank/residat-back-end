@@ -345,7 +345,7 @@
                                                 <input type="text" name="low_food_secure_households" class="form-control" placeholder="Social stability" v-model="low_food_secure_households">
                                             </div>
                                         </div>
-                                    
+
                                         <div v-else-if="selectedSecurity === 'CrisisLevel'">
                                             <!-- Affiche les champs si CrisisLevel est sélectionné -->
                                             <div class="form-group">
@@ -389,7 +389,7 @@
                                                 <textarea class="form-control" name="water_stress_description" id="" cols="30" rows="5" v-model="water_stress_description"></textarea>
                                             </div>
                                         </div>
-                                    
+
                                         <div v-else-if="selectedFoodSecurity === 'CrisisLevel'">
                                             <!-- Affiche les champs si CrisisLevel est sélectionné -->
                                             <div class="form-group">
@@ -437,7 +437,7 @@
                                                 <textarea class="form-control" name="migration_description" id="" cols="30" rows="5" v-model="migration_description"></textarea>
                                             </div>
                                         </div>
-                                    
+
                                         <div v-else-if="selectedMigration === 'RuralToUrban'">
                                             <!-- Affiche les champs si CrisisLevel est sélectionné -->
                                             <div class="form-group">
@@ -489,7 +489,7 @@
                                                 <textarea class="form-control" name="resource_completion_description" id="" cols="30" rows="5" v-model="resource_completion_description"></textarea>
                                             </div>
                                         </div>
-                                    
+
                                         <div v-else-if="selectedRessourceCompletion === 'Projected'">
                                             <!-- Affiche les champs si CrisisLevel est sélectionné -->
                                             <div class="form-group">
@@ -514,13 +514,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    
-                                    
-                                    
-                                   
 
-                                    
+
+
+
+
+
+
                                 </div>
 
 
@@ -750,7 +750,7 @@
                 land_conflicts: '',
                 resource_completion_description: '',
 
-                
+
                 description: '',
                 startDate: '2023-01-15',
                 endDate: '2023-01-31',
@@ -1028,6 +1028,7 @@
 
 
                 processSVGFile(event) {
+                    /*
                     const file = event.target.files[0];
                     if (!file) {
                         this.imageFile = null;
@@ -1056,6 +1057,7 @@
                         console.log(this.vectorKeys)
                     };
                     reader.readAsText(file);
+                    */
                 },
 
                 extractColor(styleString) {
