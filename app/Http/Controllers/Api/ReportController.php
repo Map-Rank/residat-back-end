@@ -121,10 +121,9 @@ class ReportController extends Controller
 
     public function show($zoneId)
     {
-        $report = Report::where('zone_id', $zoneId)->first();
+        $report = Report::with('items.report', 'creator', 'vector.vectorKeys')->where('zone_id', $zoneId)->first();
 
         // Charger les éléments associés au rapport
-        $report->load('items.report','creator',  'vector.vectorKeys');
 
         return response()->success($report, __('Report details retrieved successfully'), 200);
     }
