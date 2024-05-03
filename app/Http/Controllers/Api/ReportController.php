@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Validator;
 class ReportController extends Controller
 {
     public function  index(Request $request){
-        
+
         $validator = Validator::make($request->all(), [
             'page' => ['sometimes','numeric'],
             'size'=> ['sometimes', 'numeric'],
@@ -122,11 +122,6 @@ class ReportController extends Controller
     public function show($zoneId)
     {
         $report = Report::where('zone_id', $zoneId)->first();
-
-        // Vérifier si l'utilisateur authentifié est autorisé à afficher le rapport
-        if (Auth::user()->id !== $report->user_id) {
-            return response()->errors([], __('Unauthorized'), 401);
-        }
 
         // Charger les éléments associés au rapport
         $report->load('items.report','creator');
