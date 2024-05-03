@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
     class Report extends Model
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
             return $this->hasMany(ReportItem::class, 'report_id', 'id');
         }
 
-        public function vector(): BelongsTo {
-            return $this->BelongsTo(Vector::class, 'model_id')->where('model_type', self::class);
+        public function vector(): HasOne {
+            return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
         }
     }
