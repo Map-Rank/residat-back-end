@@ -59,7 +59,7 @@ class ReportController extends Controller
             'path' => $imagePath,
             'model_id' => $report->id,
             'category' => $validatedData['type'],
-            'type' => $request->file('image')->getClientMimeType(),
+            'type' => 'SVG',
             'model_type' => Report::class,
         ]);
 
