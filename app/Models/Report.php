@@ -28,6 +28,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
         }
 
         public function vector(): HasOne {
-            return $this->hasOne(Vector::class, 'model_id')->where('model_type', 'App\\\\Models\\\\Report');
+            return $this->hasOne(Vector::class, 'model_id')->where('model_type', self::class);
         }
     }
