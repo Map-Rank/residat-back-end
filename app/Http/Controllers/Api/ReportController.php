@@ -26,7 +26,7 @@ class ReportController extends Controller
         $validator = Validator::make($request->all(), [
             'page' => ['sometimes','numeric'],
             'size'=> ['sometimes', 'numeric'],
-            'type'=> ['sometimes', 'numeric'],
+            'type'=> ['sometimes', 'string'],
             'start_date'=> ['sometimes', 'date'],
             'end_date'=> ['sometimes', 'date'],
             'zone_id'=> ['sometimes', 'integer', 'exists:zones,id'],
