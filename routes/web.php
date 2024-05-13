@@ -111,7 +111,7 @@ Route::get('/send-mail', static function(){
 
 Route::get('/add-keys', static function(Request $request){
     $vectors  = Vector::query()->where('model_type', Report::class)
-        ->where('type', $request->input('type'))->get();
+        ->where('category', $request->input('type'))->get();
     $count = 0;
     foreach($vectors as $vector){
         $count = $count + 1;
