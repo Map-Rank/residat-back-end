@@ -86,7 +86,7 @@ class ReportController extends Controller
             }
         }
 
-        return redirect()->route('reports.index');
+        return redirect()->route('reports.index')->with('success', 'Report created successfully');
     }
 
     /**
