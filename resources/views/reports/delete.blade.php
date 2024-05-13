@@ -5,7 +5,7 @@
                 <div class="text-center">
                     <i class="bi bi-exclamation-circle fs-5x text-warning"></i>
                     <h4 class="p-2">Do you want to delete the report :
-                        <span class="text-danger text-decoration-underline">{{ $report->name }}</span>?
+                        <span class="text-danger text-decoration-underline">{{ $report->zone->name . ' - ' .$report->zone->type}} </span>?
                     </h4>
                     <form action="{{ route('reports.destroy',$report->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
