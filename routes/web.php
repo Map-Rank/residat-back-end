@@ -13,6 +13,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Report;
 use App\Models\Vector;
+use App\Models\VectorKey;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,11 +107,21 @@ Route::get('/send-mail', static function(){
     });
 });
 
-Route::get('/fix-db', static function(){
-    $vectors  = Vector::query()->where('model_type', Report::class)->get();
+Route::get('/add-keys', static function(){
+    $vectors  = Vector::query()->where('model_type', Report::class)
+        ->where('DROUGHT')->get();
     foreach($vectors as $vector){
-        $vector->path = '/'.$vector->path;
-        $vector->save();
+        $key = VectorKey::query()->create(
+            ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
+            ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
+            ['value' => 'keys/extinct_stream.png', 'type' => 'IMAGE', 'name' => 'Extinct Stream','vector_id' => $vector->id,],
+            ['value' => 'keys/4_month_stream.png', 'type' => 'IMAGE', 'name' => '4 months Stream flow','vector_id' => $vector->id,],
+            ['value' => 'keys/8_month_stream.png', 'type' => 'IMAGE', 'name' => '8 months flow','vector_id' => $vector->id,],
+            ['value' => 'keys/10_month_stream.png', 'type' => 'IMAGE', 'name' => '10 months Stream flow','vector_id' => $vector->id,],
+            ['value' => 'keys/permanent.png', 'type' => 'IMAGE', 'name' => 'Permanent','vector_id' => $vector->id,],
+            ['value' => 'keys/river.png', 'type' => 'IMAGE', 'name' => 'River','vector_id' => $vector->id,],
+            ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
+        );
     }
 });
 
