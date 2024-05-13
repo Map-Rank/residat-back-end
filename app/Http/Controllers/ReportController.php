@@ -30,6 +30,13 @@ class ReportController extends Controller
         return view('reports.create', compact('types', 'zones', 'metricTypes'));
     }
 
+    public function createHealth(){
+
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.health-create', compact('zones'));
+    }
+
     public function store(ReportRequest $request){
 
         // dd($request->all());

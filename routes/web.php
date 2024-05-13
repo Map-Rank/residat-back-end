@@ -51,8 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
     Route::post('/create-permissions', [PermissionController::class, 'storePermission'])->name('create.permissions');
     Route::get('/all-permissions', [PermissionController::class, 'getAllPermissions'])->name('all.permissions');
-    
-    
+
+
 
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
     Route::resource('reports', ReportController::class);
+    Route::get('create/health-report-items', [ReportController::class, 'createHealth'])->name('health-report-items.create');
+    Route::post('health-report-items', [ReportController::class, 'healthStore'])->name('health-report-items.store');
 
 
     //ban user
