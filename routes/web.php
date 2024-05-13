@@ -115,7 +115,7 @@ Route::get('/add-keys', static function(Request $request){
     $count = 0;
     foreach($vectors as $vector){
         $count = $count + 1;
-        $key = Vector::query()->insert(
+        $key = VectorKey::query()->insert(
             ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
             ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
             ['value' => 'keys/extinct_stream.png', 'type' => 'IMAGE', 'name' => 'Extinct Stream','vector_id' => $vector->id,],
