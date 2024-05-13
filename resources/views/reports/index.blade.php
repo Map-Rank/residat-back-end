@@ -48,7 +48,6 @@
                             <th></th>
                         </tr>
                         <tr class="align-middle">
-                            <th>#</th>
                             <th>Zone</th>
                             <th>Creator</th>
                             <th>Type</th>
@@ -59,7 +58,36 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        @foreach ($reports as $report)
+                        <tr class="align-middle">
+                            <td>{{ $report->zone->name ?? ''}}</td>
+                            <td>{{ $report->creator->first_name. ' ' .$report->user->last_name }}</td>
+                            <td>{{ $report->type }}</td>
+                            <td>{{ $report->start_date }}</td>
+                            <td>{{ $report->end_date }}</td>
+                            <td><img src="{{ env('APP_URL').$report->vector?->path  }}" height="50" width="50"/></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <svg class="icon">
+                                            <use
+                                                xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
+                                            </use>
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item btn {{ $report->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$report->id}}" data-coreui-whatever="@mdo">
+                                            {{ $report->active ? 'Deactivate' : 'Activate' }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{route('post.detail',$report->id)}}" >View</a>
+                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
