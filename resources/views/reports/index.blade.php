@@ -61,7 +61,7 @@
                         @foreach ($reports as $report)
                         <tr class="align-middle">
                             <td>{{ $report->zone->name ?? ''}}</td>
-                            <td>{{ $report->creator->first_name. ' ' .$report->user->last_name }}</td>
+                            <td>{{ $report->creator->first_name. ' ' .$report->creator->last_name }}</td>
                             <td>{{ $report->type }}</td>
                             <td>{{ $report->start_date }}</td>
                             <td>{{ $report->end_date }}</td>
