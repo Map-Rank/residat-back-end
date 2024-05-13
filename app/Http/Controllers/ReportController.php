@@ -87,6 +87,6 @@ class ReportController extends Controller
         }
 
 
-        return view('reports.show', compact('report'));
+        return redirect()->route('reports.index');
     }
 }
