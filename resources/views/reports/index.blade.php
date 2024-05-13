@@ -64,11 +64,13 @@
                                         </a>
                                         <a class="dropdown-item" href="{{route('reports.show',$report->id)}}" >View</a>
                                         <a class="dropdown-item" href="{{route('reports.edit',$report->id)}}">Edit</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        <a class="dropdown-item text-danger" data-coreui-toggle="modal" data-coreui-target="#deleteModal-{{$report->id}}" data-coreui-whatever="@mdo" href="#">Delete</a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+
+                        @include('reports.delete')
                         @endforeach
                     </tbody>
                 </table>
