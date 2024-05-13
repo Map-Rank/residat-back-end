@@ -109,32 +109,32 @@ Route::get('/send-mail', static function(){
     });
 });
 
-Route::get('/add-keys', static function(Request $request){
-    $vectors  = Vector::query()->where('model_type', Report::class)
-        ->where('category', 'FLOOD')->get();
-    $count = 0;
+// Route::get('/add-keys', static function(Request $request){
+//     $vectors  = Vector::query()->where('model_type', Report::class)
+//         ->where('category', 'FLOOD')->get();
+//     $count = 0;
 
-    foreach($vectors as $vector){
-        $count = $count + 1;
-        $key = VectorKey::query()->insert(
-            [
-                ['value' => 'keys/comm_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
-                ['value' => 'keys/comm_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
-                ['value' => 'keys/comm_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
-                ['value' => 'keys/comm_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
-                ['value' => 'keys/comm_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
-                ['value' => 'keys/spatial_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
-                ['value' => 'keys/spatial_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
-                ['value' => 'keys/spatial_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
-                ['value' => 'keys/spatial_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
-                ['value' => 'keys/spatial_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
-                ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
-                ['value' => 'keys/river.png', 'type' => 'IMAGE', 'name' => 'River','vector_id' => $vector->id,],
-                ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
-            ]
-        );
-    }
-    return $count;
-});
+//     foreach($vectors as $vector){
+//         $count = $count + 1;
+//         $key = VectorKey::query()->insert(
+//             [
+//                 ['value' => 'keys/comm_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
+//                 ['value' => 'keys/river.png', 'type' => 'IMAGE', 'name' => 'River','vector_id' => $vector->id,],
+//                 ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
+//             ]
+//         );
+//     }
+//     return $count;
+// });
 
 require __DIR__.'/auth.php';
