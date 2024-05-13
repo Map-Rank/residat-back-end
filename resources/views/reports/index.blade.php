@@ -29,24 +29,6 @@
                 <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
 
                     <thead class="fw-semibold text-nowrap">
-                        <tr class="column-filter dt-column-filter">
-                            <th></th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
                         <tr class="align-middle">
                             <th>Zone</th>
                             <th>Creator</th>
@@ -80,8 +62,8 @@
                                         <a class="dropdown-item btn {{ $report->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$report->id}}" data-coreui-whatever="@mdo">
                                             {{ $report->active ? 'Deactivate' : 'Activate' }}
                                         </a>
-                                        <a class="dropdown-item" href="{{route('post.detail',$report->id)}}" >View</a>
-                                        <a class="dropdown-item" href="#">Edit</a>
+                                        <a class="dropdown-item" href="{{route('reports.show',$report->id)}}" >View</a>
+                                        <a class="dropdown-item" href="{{route('reports.edit',$report->id)}}">Edit</a>
                                         <a class="dropdown-item text-danger" href="#">Delete</a>
                                     </div>
                                 </div>
