@@ -88,4 +88,23 @@ class ReportController extends Controller
 
         return redirect()->route('reports.index');
     }
+
+    /**
+     * Delete the specified zone.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy($id)
+    {
+        $datum = Report::query()->find($id);
+
+        if (!$datum) {
+            return redirect()->back()->with('errors', 'Report not found');
+        }
+
+        $datum->delete();
+
+        return redirect()->back()->with('success', 'Report successfully deleted!');
+    }
 }
