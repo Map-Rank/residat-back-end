@@ -64,7 +64,7 @@ class ReportController extends Controller
 
         $reports =  $data->offSet($page * $size)->take($size)->latest()->get();
 
-        return response()->success($reports, __('Reports charged successfully'), 200);
+        return response()->success(ReportResource::collection($reports), __('Reports charged successfully'), 200);
     }
 
     public function store(ReportRequest $request){
