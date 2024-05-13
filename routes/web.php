@@ -15,6 +15,7 @@ use App\Models\Report;
 use App\Models\Vector;
 use App\Models\VectorKey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,8 +112,10 @@ Route::get('/send-mail', static function(){
 Route::get('/add-keys', static function(Request $request){
     $vectors  = Vector::query()->where('model_type', Report::class)
         ->where('type', $request->input('type'))->get();
+    $count = 0;
     foreach($vectors as $vector){
-        $key = VectorKey::query()->create(
+        $count = $count + 1;
+        $key = DB::table('vector_keys')->insert(
             ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
             ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
             ['value' => 'keys/extinct_stream.png', 'type' => 'IMAGE', 'name' => 'Extinct Stream','vector_id' => $vector->id,],
@@ -124,6 +127,7 @@ Route::get('/add-keys', static function(Request $request){
             ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
         );
     }
+    return $count;
 });
 
 require __DIR__.'/auth.php';
