@@ -113,10 +113,8 @@ Route::get('/add-keys', static function(Request $request){
     $vectors  = Vector::query()->where('model_type', Report::class)
         ->where('category', $request->input('type'))->get();
     $count = 0;
-    foreach($vectors as $vector){
-        $count = $count + 1;
-        $key = VectorKey::query()->insert(
-            ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
+    $data = [
+        ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
             ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
             ['value' => 'keys/extinct_stream.png', 'type' => 'IMAGE', 'name' => 'Extinct Stream','vector_id' => $vector->id,],
             ['value' => 'keys/4_month_stream.png', 'type' => 'IMAGE', 'name' => '4 months Stream flow','vector_id' => $vector->id,],
@@ -125,6 +123,11 @@ Route::get('/add-keys', static function(Request $request){
             ['value' => 'keys/permanent.png', 'type' => 'IMAGE', 'name' => 'Permanent','vector_id' => $vector->id,],
             ['value' => 'keys/river.png', 'type' => 'IMAGE', 'name' => 'River','vector_id' => $vector->id,],
             ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
+    ];
+    foreach($vectors as $vector){
+        $count = $count + 1;
+        $key = VectorKey::query()->insert(
+            $data
         );
     }
     return $count;
