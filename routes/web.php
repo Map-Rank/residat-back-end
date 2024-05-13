@@ -11,6 +11,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Report;
+use App\Models\Vector;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +104,14 @@ Route::get('/send-mail', static function(){
             ->subject($subject)
             ->html($info);
     });
+});
+
+Route::get('/fix-db', static function(){
+    $vectors  = Vector::query()->where('model_type', Report::class)->get();
+    foreach($vectors as $vector){
+        $vector->path = '/'.$vector->path;
+        $vector->save();
+    }
 });
 
 require __DIR__.'/auth.php';
