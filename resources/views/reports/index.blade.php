@@ -20,7 +20,7 @@
         <div class="row mb-3 card card-style-1">
             <div class="card-header">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-5") }}
+                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-4") }}
                         <a href="{{ route('reports.create') }}" class="btn btn-info text-white" > Add a report</a>
                 </div>
             </div>
