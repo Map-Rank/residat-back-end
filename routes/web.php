@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\Report;
 use App\Models\Vector;
 use App\Models\VectorKey;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,9 +108,9 @@ Route::get('/send-mail', static function(){
     });
 });
 
-Route::get('/add-keys', static function(){
+Route::get('/add-keys', static function(Request $request){
     $vectors  = Vector::query()->where('model_type', Report::class)
-        ->where('DROUGHT')->get();
+        ->where('type', $request->input('type'))->get();
     foreach($vectors as $vector){
         $key = VectorKey::query()->create(
             ['value' => 'keys/village.png', 'type' => 'IMAGE', 'name' => 'Village','vector_id' => $vector->id,],
