@@ -41,7 +41,7 @@ class ReportController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Report::with('zone', 'items', 'vector.keys');
+        $data = Report::with('zone', 'items', 'vector.vectorKeys');
 
         if (isset($validated['zone_id'])) {
             $data->where('zone_id', $validated['zone_id']);
