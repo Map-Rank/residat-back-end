@@ -26,7 +26,7 @@ class PostRequest extends FormRequest
     {
         return [
             'content' => 'required',
-            'published_at' => 'required|date',
+            'published_at' => 'nullable|date',
             'zone_id' => 'required|exists:zones,id',
             'media' => 'nullable',
             'media.*' => 'nullable|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3|max:2048', // Ajoute la règle pour le media
