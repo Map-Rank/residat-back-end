@@ -11,6 +11,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Report;
+use App\Models\Vector;
+use App\Models\VectorKey;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,8 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
     Route::post('/create-permissions', [PermissionController::class, 'storePermission'])->name('create.permissions');
     Route::get('/all-permissions', [PermissionController::class, 'getAllPermissions'])->name('all.permissions');
-    
-    
+
+
 
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
@@ -64,6 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
     Route::resource('reports', ReportController::class);
+    Route::get('create/health-report-items', [ReportController::class, 'createHealth'])->name('health-report-items.create');
+    Route::post('health-report-items', [ReportController::class, 'healthStore'])->name('health-report-items.store');
 
 
     //ban user
@@ -101,5 +108,33 @@ Route::get('/send-mail', static function(){
             ->html($info);
     });
 });
+
+// Route::get('/add-keys', static function(Request $request){
+//     $vectors  = Vector::query()->where('model_type', Report::class)
+//         ->where('category', 'FLOOD')->get();
+//     $count = 0;
+
+//     foreach($vectors as $vector){
+//         $count = $count + 1;
+//         $key = VectorKey::query()->insert(
+//             [
+//                 ['value' => 'keys/comm_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/comm_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_very_low.png', 'type' => 'IMAGE', 'name' => 'Very Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_low.png', 'type' => 'IMAGE', 'name' => 'Low','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_medium.png', 'type' => 'IMAGE', 'name' => 'Medium','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_high.png', 'type' => 'IMAGE', 'name' => 'High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/spatial_very_high.png', 'type' => 'IMAGE', 'name' => 'Very High','vector_id' => $vector->id,],
+//                 ['value' => 'keys/sub_divisional_limit.png', 'type' => 'IMAGE', 'name' => 'Subdivisional-Limit','vector_id' => $vector->id,],
+//                 ['value' => 'keys/river.png', 'type' => 'IMAGE', 'name' => 'River','vector_id' => $vector->id,],
+//                 ['value' => 'keys/river_logone.png', 'type' => 'IMAGE', 'name' => 'River Logone','vector_id' => $vector->id,],
+//             ]
+//         );
+//     }
+//     return $count;
+// });
 
 require __DIR__.'/auth.php';

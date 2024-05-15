@@ -30,6 +30,13 @@ class ReportController extends Controller
         return view('reports.create', compact('types', 'zones', 'metricTypes'));
     }
 
+    public function createHealth(){
+
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.health-create', compact('zones'));
+    }
+
     public function store(ReportRequest $request){
 
         // dd($request->all());
@@ -50,7 +57,7 @@ class ReportController extends Controller
 
         // Enregistrer l'image si elle est fournie
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('report_images');
+            $imagePath = $request->file('image')->store('report_images/', 'public');
             $report->image = $imagePath;
             $report->save();
         }
@@ -59,29 +66,52 @@ class ReportController extends Controller
             'path' => $imagePath,
             'model_id' => $report->id,
             'category' => $validatedData['type'],
-            'type' => $request->file('image')->getClientMimeType(),
-            'model_type' => 'App\\Models\\Report',
+            'type' => 'SVG',
+            'model_type' => Report::class,
         ]);
 
         // Création des clés de vecteur pour le vecteur
-        foreach ($validatedData['vector_keys'] as $keyData) {
-            $vectorKey = VectorKey::create([
-                'value' => $keyData['value'],
-                'type' => $keyData['type'],
-                'name' => $keyData['name'],
-                'vector_id' => $vector->id,
-            ]);
+        if(isset($validatedData['vector_keys'])){
+            foreach ($validatedData['vector_keys'] as $keyData) {
+                $vectorKey = VectorKey::create([
+                    'value' => $keyData['value'],
+                    'type' => $keyData['type'],
+                    'name' => $keyData['name'],
+                    'vector_id' => $vector->id,
+                ]);
+            }
         }
 
-        // Création des éléments de rapport
-        foreach ($validatedData['report_items'] as $itemData) {
-            $reportItem = ReportItem::create([
-                'report_id' => $report->id,
-                'metric_type_id' => $itemData['metric_type_id'],
-                'value' => $itemData['value'],
-            ]);
+        if(isset($validatedData['report_items'])){
+            // Création des éléments de rapport
+            foreach ($validatedData['report_items'] as $itemData) {
+                $reportItem = ReportItem::create([
+                    'report_id' => $report->id,
+                    'metric_type_id' => $itemData['metric_type_id'],
+                    'value' => $itemData['value'],
+                ]);
+            }
         }
 
-        return view('reports.show', compact('report'));
+        return redirect()->route('reports.index')->with('success', 'Report created successfully');
+    }
+
+    /**
+     * Delete the specified zone.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function destroy($id)
+    {
+        $datum = Report::query()->find($id);
+
+        if (!$datum) {
+            return redirect()->back()->with('errors', 'Report not found');
+        }
+
+        $datum->delete();
+
+        return redirect()->back()->with('success', 'Report successfully deleted!');
     }
 }

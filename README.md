@@ -68,7 +68,7 @@ With RESIDAT, administrators will have access to a comprehensive set of tools to
 "Residat is dedicated to fostering a collaborative environment where scientists, local authorities, developers, and community members come together to combat climate risks. We encourage the sharing of insights, the development of local solutions, and the creation of a united front against the adverse effects of climate change."
 
 ### Licensing Strategy
-"To maximize impact and encourage innovation, Residat will operate under an MIT License, promoting open-source collaboration. This approach will allow for the free use, modification, and distribution of our resources, ensuring they remain accessible for adaptation to other regions facing similar climate challenges."
+"To maximize impact and encourage innovation, Residat will operate under an AGPL License (Affero General Public License), promoting open-source collaboration. This approach will allow for the free use, modification, and distribution of our resources, ensuring they remain accessible for adaptation to other regions facing similar climate challenges."
 
 
 ## Features ✨
