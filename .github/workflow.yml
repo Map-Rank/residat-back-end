@@ -2,9 +2,9 @@ name: Generate Test Coverage
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ feature/GithubActionTestCoverage ]
   pull_request:
-    branches: [ dev ]
+    branches: [ feature/GithubActionTestCoverage ]
 
 jobs:
   test-coverage:
