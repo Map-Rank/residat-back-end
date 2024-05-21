@@ -10,11 +10,12 @@ use App\Models\VectorKey;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ZoneRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\ZoneResource;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ZoneController extends Controller
 {
@@ -278,12 +279,19 @@ class ZoneController extends Controller
         return view('zones.create', compact('levels','types'));
     }
 
-    public function edit($id){
+    public function edit($id) {
         $zone = Zone::with('parent', 'vector.vectorKeys')->find($id);
+    
+        // Vérifiez si la zone est null et lancez une exception si c'est le cas
+        if (!$zone) {
+            throw new ModelNotFoundException("Zone not found");
+        }
+    
         $zones = null;
-        if($zone->parent != null)
+        if ($zone->parent != null) {
             $zones = Zone::query()->where('level_id', $zone->parent->level_id)->get();
-
+        }
+    
         return view('zones.edit', compact('zones', 'zone'));
     }
 }
