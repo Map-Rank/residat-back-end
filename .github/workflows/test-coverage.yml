@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Spécifiez la version PHP 8.2
       - name: Obtenir le code
         uses: actions/checkout@v3
 
