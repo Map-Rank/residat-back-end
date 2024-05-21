@@ -42,15 +42,7 @@ jobs:
           php-version: '8.2' # Spécifiez la version PHP 8.2
           extensions: mbstring, pdo, pdo_mysql
           ini-values: post_max_size=256M, upload_max_filesize=256M
-
-      - name: Configurer Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.10.0' # Spécifiez la version de Node.js que vous souhaitez utiliser
-
-      - name: Installer les dépendances Node.js
-        run: npm install
-
+          
       - name: Obtenir le code
         uses: actions/checkout@v3
 
@@ -65,9 +57,6 @@ jobs:
 
       - name: Exécuter les migrations
         run: php artisan migrate --env=testing --force
-
-      - name: Build Frontend Assets
-        run: npm run build
 
       - name: Exécuter les tests avec couverture
         run: php artisan test --coverage --coverage-text
