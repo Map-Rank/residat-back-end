@@ -11,15 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'  
-      - name: Setup PHP with PECL extension
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: imagick, swoole
-
       - name: Obtenir le code
         uses: actions/checkout@v3
 
@@ -33,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
-          path: ./coverage/coverage-text.html
+          path: ./coverage  # Adjust path if needed
