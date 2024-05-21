@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('sub_metric_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('metric_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('metric_type_id')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
