@@ -36,12 +36,15 @@ jobs:
       - name: Obtenir le code
         uses: actions/checkout@v3
 
-      - name: Installer PHP et Composer
+      - name: Configurer PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: '8.2' # Spécifiez la version PHP 8.2
           extensions: mbstring, pdo, pdo_mysql
           ini-values: post_max_size=256M, upload_max_filesize=256M
+          
+      - name: Obtenir le code
+        uses: actions/checkout@v3
 
       - name: Copier le fichier .env.testing
         run: cp .env.testing .env
