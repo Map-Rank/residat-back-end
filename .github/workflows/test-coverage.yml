@@ -1,47 +1,32 @@
-name: Test Coverage
+name: Générer la couverture des tests
 
 on:
   push:
-    branches: [feature/GithubActionTestCoverage]
+    branches: [ feature/GithubActionTestCoverage ]
   pull_request:
-    branches: [feature/GithubActionTestCoverage]
+    branches: [ feature/GithubActionTestCoverage ]
 
 jobs:
-  test:
+  test-coverage:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [3.10]
-
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
+      - name: Configurer PHP
+        uses: actions/setup-php@v3
+        with:
+          php-version: '8.0'
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Obtenir le code
+        uses: actions/checkout@v3
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest coverage
+      - name: Installer les dépendances
+        run: composer install
 
-    - name: Run tests with coverage
-      run: |
-        coverage run -m pytest
-        coverage xml
+      - name: Exécuter les tests avec couverture
+        run: php artisan test --coverage --coverage-text
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-
-    - name: Upload coverage to Coveralls
-      uses: coverallsapp/github-action@v2
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Générer le rapport de couverture HTML
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: ./coverage/coverage-text.html
