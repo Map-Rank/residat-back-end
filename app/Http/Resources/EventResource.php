@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
@@ -16,7 +17,10 @@ class EventResource extends JsonResource
             'organized_by' => $this->organized_by,
             'user_id' => $this->user_id,
             'published_at' => $this->published_at,
+            'date_debut' => $this->date_debut,
+            'date_fin' => $this->date_fin,
             'image' => env('APP_URL').'/'.$this->media,
+            'humanize_date_creation' => Carbon::parse($this->created_at)->diffForHumans(),
             'is_valid' => $this->is_valid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
