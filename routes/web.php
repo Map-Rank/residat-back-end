@@ -73,6 +73,10 @@ Route::middleware('auth')->group(function () {
     Route::post('health-report-items', [ReportController::class, 'healthStore'])->name('health-report-items.store');
 
 
+    Route::get('create/agriculture-report-items', [ReportController::class, 'createAgriculture'])->name('agriculture.report.items.create');
+    Route::post('agriculture-report-items', [ReportController::class, 'agricultureStore'])->name('agriculture.report.items.store');
+
+
     //ban user
     Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');
     //active user

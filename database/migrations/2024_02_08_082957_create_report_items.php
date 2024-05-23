@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('report_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_id');
-            $table->foreignId('sub_metric_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('sub_metric_type_id')->onDelete('cascade');
             $table->integer('value')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
