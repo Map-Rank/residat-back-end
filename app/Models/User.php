@@ -60,6 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'zone_id',
         'type',
         'profession',
+        'description'
     ];
 
     /**

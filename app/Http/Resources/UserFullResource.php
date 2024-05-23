@@ -25,6 +25,7 @@ class UserFullResource extends JsonResource
             'phone' => $this['phone'],
             'address' => $this['address'],
             'profession' => $this['profession'],
+            'description' => $this['description'],
             'active' => $this['active'],
             'verified' => $this['verified'],
             'activated_at' => $this['activated_at'],
