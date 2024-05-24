@@ -21,6 +21,7 @@ class EventResource extends JsonResource
             'date_fin' => $this->date_fin,
             'image' => env('APP_URL').'/'.$this->media,
             'humanize_date_creation' => Carbon::parse($this->created_at)->diffForHumans(),
+            'sector' => $this->sector,
             'is_valid' => $this->is_valid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
