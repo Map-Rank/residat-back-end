@@ -44,7 +44,7 @@ class FollowController extends Controller
     }
 
     /**
-     * Follow user
+     * Follower of specific user
      */
     public function followers($id)
     {
@@ -52,6 +52,9 @@ class FollowController extends Controller
         return response()->success($user->followers, __('Successfully unfollowed user.'), 200);
     }
 
+    /**
+     * Following of specific user
+     */
     public function following($id)
     {
         $user = User::with('following')->findOrFail($id);
