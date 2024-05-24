@@ -44,6 +44,13 @@ class ReportController extends Controller
         return view('reports.agriculture-create', compact('zones'));
     }
 
+    public function createInfrastructure(){
+
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.infrastructure-create', compact('zones'));
+    }
+
     public function store(ReportRequest $request){
 
         // dd($request->all());

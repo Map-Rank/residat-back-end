@@ -31,6 +31,17 @@
                             <p class="card-text">
                                 <strong>Last Modified:</strong> {{$post->updated_at->format('d/m/Y')}}
                             </p>
+                            <p class="card-text">
+                                <strong>Sectors:</strong> 
+                                @foreach($post->sectors as $sector)
+                                <ul>
+                                    <li>
+                                        {{$sector->name}}
+                                    </li>
+                                </ul>
+                                   
+                                @endforeach
+                            </p>
                         </div>
                     </div>
                         <!-- Contenu de l'onglet Posts -->
