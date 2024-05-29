@@ -20,7 +20,7 @@
         <div class="row mb-3 card card-style-1">
             <div class="card-header">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
-                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-5") }}
+                        {{ $reports->appends(request()->query())->render("pagination::bootstrap-4") }}
                         <a href="{{ route('reports.create') }}" class="btn btn-info text-white" > Add a report</a>
                 </div>
             </div>
@@ -29,26 +29,7 @@
                 <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
 
                     <thead class="fw-semibold text-nowrap">
-                        <tr class="column-filter dt-column-filter">
-                            <th></th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th>
-                                <input type="text" class="form-control" placeholder="">
-                            </th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
                         <tr class="align-middle">
-                            <th>#</th>
                             <th>Zone</th>
                             <th>Creator</th>
                             <th>Type</th>
@@ -59,7 +40,38 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($reports as $report)
+                        <tr class="align-middle">
+                            <td>{{ $report->zone->name ?? ''}}</td>
+                            <td>{{ $report->creator->first_name. ' ' .$report->creator->last_name }}</td>
+                            <td>{{ $report->type }}</td>
+                            <td>{{ $report->start_date }}</td>
+                            <td>{{ $report->end_date }}</td>
+                            <td><img src="{{ env('APP_URL').'/storage/'.$report->vector?->path  }}" height="50" width="50"/></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        <svg class="icon">
+                                            <use
+                                                xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
+                                            </use>
+                                        </svg>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item btn {{ $report->active ? 'btn-warning' : 'btn-success' }}" href="#" data-coreui-toggle="modal" data-coreui-target="#activatePostModal-{{$report->id}}" data-coreui-whatever="@mdo">
+                                            {{ $report->active ? 'Deactivate' : 'Activate' }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{route('reports.show',$report->id)}}" >View</a>
+                                        <a class="dropdown-item" href="{{route('reports.edit',$report->id)}}">Edit</a>
+                                        <a class="dropdown-item text-danger" data-coreui-toggle="modal" data-coreui-target="#deleteModal-{{$report->id}}" data-coreui-whatever="@mdo" href="#">Delete</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
+                        @include('reports.delete')
+                        @endforeach
                     </tbody>
                 </table>
             </div>

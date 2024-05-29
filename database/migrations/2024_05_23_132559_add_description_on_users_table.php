@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_metric_types', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('metric_type_id')->onDelete('cascade');
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        if (!Schema::hasColumn('users', 'description')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->text('description')->nullable();
+            });
+        }
     }
 
     /**
@@ -25,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_metric_types');
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('description')->nullable();
+        });
     }
 };

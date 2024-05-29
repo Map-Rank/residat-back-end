@@ -42,7 +42,7 @@ class ZoneController extends Controller
 
         $data = Zone::with('children');
         if(isset($validated['name'])){
-            $data = $data->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($validated['name']) . '%']);
+            $data = $data->whereRaw('LOWER(name) = ?', [strtolower($validated['name'])]);
         }
 
         if(isset($validated['parent_id'])){

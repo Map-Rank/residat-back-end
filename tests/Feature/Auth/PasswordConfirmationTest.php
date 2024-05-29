@@ -41,7 +41,7 @@ class PasswordConfirmationTest extends TestCase
             'password' => 'Abcd123!',
         ]);
 
-        // $response->assertSessionHasErrors();
+        $response->assertStatus(302);
     }
 
     /**

@@ -15,17 +15,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReportRequest;
+use App\Http\Resources\ReportResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
     public function  index(Request $request){
-        
+
         $validator = Validator::make($request->all(), [
             'page' => ['sometimes','numeric'],
             'size'=> ['sometimes', 'numeric'],
-            'type'=> ['sometimes', 'numeric'],
+            'type'=> ['sometimes', 'string'],
             'start_date'=> ['sometimes', 'date'],
             'end_date'=> ['sometimes', 'date'],
             'zone_id'=> ['sometimes', 'integer', 'exists:zones,id'],
@@ -40,7 +41,7 @@ class ReportController extends Controller
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
 
-        $data = Report::with('zone', 'items', 'vector.keys');
+        $data = Report::with('zone', 'items', 'vector.vectorKeys');
 
         if (isset($validated['zone_id'])) {
             $data->where('zone_id', $validated['zone_id']);
@@ -63,7 +64,7 @@ class ReportController extends Controller
 
         $reports =  $data->offSet($page * $size)->take($size)->latest()->get();
 
-        return response()->success($reports, __('Reports charged successfully'), 200);
+        return response()->success(ReportResource::collection($reports), __('Reports charged successfully'), 200);
     }
 
     public function store(ReportRequest $request){
@@ -119,17 +120,12 @@ class ReportController extends Controller
         return response()->success($report, __('Reports charged successfully'), 200);
     }
 
-    public function show(Report $report)
+    public function show($zoneId)
     {
-        // Vérifier si l'utilisateur authentifié est autorisé à afficher le rapport
-        if (Auth::user()->id !== $report->user_id) {
-            return response()->errors([], __('Unauthorized'), 401);
-        }
-
+        $report = Report::with('items.report', 'creator', 'vector.vectorKeys')->where('zone_id', $zoneId)->first();
         // Charger les éléments associés au rapport
-        $report->load('items', 'vector.keys');
 
-        return response()->success($report, __('Report details retrieved successfully'), 200);
+        return response()->success(ReportResource::make($report), __('Report details retrieved successfully'), 200);
     }
 
     public function update(ReportRequest $request, Report $report)

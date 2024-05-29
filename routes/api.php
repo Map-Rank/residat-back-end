@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ZoneController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\ProfileController;
@@ -58,6 +59,11 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
     Route::put('/password/update', [PasswordController::class, 'updatePassword']);
+
+    Route::post('follow/{id}', [FollowController::class, 'follow']);
+    Route::post('unfollow/{id}', [FollowController::class, 'unfollow']);
+    Route::get('followers/{id}', [FollowController::class, 'followers']);
+    Route::get('following/{id}', [FollowController::class, 'following']);
 });
 
 
