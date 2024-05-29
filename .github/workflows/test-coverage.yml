@@ -1,0 +1,94 @@
+name: Générer la couverture des tests
+
+on:
+  push:
+    branches: [ feature/GithubActionTestCoverage ]
+  pull_request:
+    branches: [ feature/GithubActionTestCoverage ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testing
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 3306:3306
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: root
+
+    steps:
+      - name: Obtenir le code
+        uses: actions/checkout@v3
+
+      - name: Configurer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # Spécifiez la version PHP 8.2
+          extensions: mbstring, pdo, pdo_mysql
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          
+      - name: Obtenir le code
+        uses: actions/checkout@v3
+
+      - name: Copier le fichier .env.testing
+        run: cp .env.testing .env
+
+      - name: Installer les dépendances
+        run: composer install
+
+      - name: Attendre que MySQL soit prêt
+        run: sleep 15
+
+      - name: Exécuter les migrations
+        run: php artisan migrate --env=testing --force
+
+      - name: Exécuter les tests avec couverture
+        run: php artisan test --coverage-html reports/
+
+      - name: Upload Coverage Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: ./reports
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test-coverage
+
+    steps:
+      - name: Obtenir le code
+        uses: actions/checkout@v3
+
+      - name: Copier le fichier .env.testing
+        run: cp .env.testing .env
+
+      - name: Installer les dépendances
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Déployer le rapport de couverture HTML
+        env:
+          RSYNC_DEPLOY_KEY: ${{ secrets.RSYNC_DEPLOY_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.RSYNC_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H yourserver.com >> ~/.ssh/known_hosts
+          rsync -avz --delete-after ./reports/ user@yourserver.com:/path/to/your/reports
+
+      - name: Nettoyer les clés SSH
+        run: rm -rf ~/.ssh

@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('report_items', function (Blueprint $table) {
+        Schema::create('follows', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_id');
-            $table->foreignId('sub_metric_type_id')->onDelete('cascade');
-            $table->integer('value')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('follower_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('followed_id')->constrained('users')->onDelete('cascade');
+            $table->unique(['follower_id', 'followed_id']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('report_items');
+        Schema::dropIfExists('follows');
     }
 };

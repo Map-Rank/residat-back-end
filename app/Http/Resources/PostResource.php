@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\ImageResource;
 use App\Http\Resources\TopicResource;
+use App\Http\Resources\SectorResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PostResource extends JsonResource
@@ -36,7 +37,7 @@ class PostResource extends JsonResource
             'comments' => CommentResource::collection($this->whenLoaded('postComments')),
             'shares' => UserResource::collection($this->whenLoaded('shares')),
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
-            'sectors' => $this->sectors,
+            'sectors' => SectorResource::collection($this['sectors']),
 
         ];
     }

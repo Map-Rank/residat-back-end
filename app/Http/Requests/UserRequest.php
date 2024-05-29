@@ -36,6 +36,7 @@ class UserRequest extends FormRequest
                 'gender' => 'nullable|in:male,female',
                 'zone_id' => 'exists:zones,id',
                 'profession' => 'nullable|string',
+                'description' => 'nullable|string',
                 ];
         }
         return [
@@ -50,6 +51,7 @@ class UserRequest extends FormRequest
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'exists:zones,id',
             'profession' => 'nullable|string',
+            'description' => 'nullable|string',
         ];
     }
 

@@ -78,6 +78,6 @@ class Post extends Model
     }
 
     public function sectors() : BelongsToMany{
-        return $this->belongsToMany(Sector::class, 'sector_post', 'post_id');
+        return $this->belongsToMany(Sector::class, 'sector_post', 'post_id', 'sector_id');
     }
 }
