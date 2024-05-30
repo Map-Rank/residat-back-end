@@ -55,17 +55,25 @@
             border-color: #636B6F;
             }
 
-            a:first-of-type{
+            /* a:first-of-type{
             margin-right: 40px;
-            }
+            } */
         </style>
     </head>
     <body class="antialiased">
         <div class="container">
             <p class="title">Map&Rank - Residat</p>
-            <a href="{{ route('login') }}" class="inline-block px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out hover:bg-blue-600">
-                Log in
-            </a>
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ route('dashboard') }}" class="inline-block px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out hover:bg-blue-600">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="inline-block px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg shadow-lg transition duration-300 ease-in-out hover:bg-blue-600">
+                        Log in
+                    </a>
+                @endauth
+            @endif
           </div>
     </body>
 </html>

@@ -31,7 +31,7 @@ class EventFactory extends Factory
 
         return [
             'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph(),
+            'description' => $this->faker->sentence(),
             'location' => $this->faker->address(),
             'organized_by' => $this->faker->company(),
             'media' => $file,

@@ -34,6 +34,10 @@ class EventControllerTest extends TestCase
     /** @test */
     public function it_can_list_events()
     {
+        $user = User::first();
+        // dd($user->id);
+        Sanctum::actingAs($user);
+        
         Event::factory()->count(20)->create();
 
         $response = $this->getJson('/api/events?page=0&size=10');
