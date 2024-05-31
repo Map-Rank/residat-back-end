@@ -78,6 +78,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('create/infrastructure-report-items', [ReportController::class, 'createInfrastructure'])->name('infrastructure.report.items.create');
     Route::post('infrastructure-report-items', [ReportController::class, 'infrastructureStore'])->name('infrastructure.report.items.store');
+
+    Route::get('create/social-report-items', [ReportController::class, 'createSocial'])->name('social.report.items.create');
+    Route::post('social-report-items', [ReportController::class, 'socialStore'])->name('social.report.items.store');
+
+    Route::get('create/select-security-report-items', [ReportController::class, 'createSelectSecurity'])->name('select.security.report.items.create');
+    Route::post('select-security-report-items', [ReportController::class, 'selectSecurity'])->name('select.security.report.items.store');
     // infrastructure-create.blade.php
 
 

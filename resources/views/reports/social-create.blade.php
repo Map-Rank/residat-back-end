@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Create Agriculture report
+    Create Social report
 @endsection
 
 @section('content')
@@ -10,26 +10,27 @@
     <ol class="breadcrumb breadc    rumb-style2">
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
         <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Reports</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Infrastructure Report Creation</li>
+        <li class="breadcrumb-item active" aria-current="page">Social Report Creation</li>
     </ol>
 </nav>
 
 <div class="body flex-grow-1 bg-light">
     <div class="container px-4 my-4">
 
-        <form action="{{ route('infrastructure.report.items.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('social.report.items.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">Percentage exposure</label>
+                    <label for="percentage_health_vulnerability" class="col-form-label">High risk social group</label>
                     <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
                     <label for="desc_report_health_case" class="col-form-label">Description</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
+
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">At risk Critical infrastructure</label>
+                    <label for="desc_health_vulnerability" class="col-form-label">Local climate  literacy</label>
                     <textarea type="text" class="form-control" id="desc_health_vulnerability" name="desc_health_vulnerability"></textarea>
                 </div>
                 <div class="mb-3">
@@ -38,7 +39,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">At risk Social infrastructure</label>
+                    <label for="report_health_case" class="col-form-label">Social stability</label>
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
@@ -46,7 +47,7 @@
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Number of Evacuation sites</label>
+                    <label for="desc_report_health_case" class="col-form-label">Poverty index</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
@@ -74,7 +75,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Infrastructure report</button>
+                <button type="submit" class="btn btn-primary">Add Social report</button>
             </div>
         </form>
     </div>
