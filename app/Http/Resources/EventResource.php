@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Carbon\Carbon;
+use App\Http\Resources\ZoneResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
@@ -22,6 +23,7 @@ class EventResource extends JsonResource
             'image' => env('APP_URL').'/'.$this->media,
             'humanize_date_creation' => Carbon::parse($this->created_at)->diffForHumans(),
             'sector' => $this->sector,
+            'zone' => ZoneResource::make($this->whenLoaded('zone')),
             'is_valid' => $this->is_valid,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
