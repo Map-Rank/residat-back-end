@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Zone;
 use App\Models\Event;
 use App\Models\Interaction;
+use App\Models\Notification;
 use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -60,7 +61,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'zone_id',
         'type',
         'profession',
-        'description'
+        'description',
+        'fcm_token'
     ];
 
     /**
@@ -165,6 +167,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function following()
     {
         return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followed_id');
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 
 }
