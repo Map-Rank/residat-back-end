@@ -324,7 +324,7 @@
                                     </div>
                                     <div v-if="floodSecurity">
                                         <div class="form-group">
-                                            <select class="form-select" autofocus name="floodSecurity" id="floodSecurity" v-model="selectedSecurity">
+                                            <select class="form-select" autofocus name="selectedSecurity" id="selectedSecurity" v-model="selectedSecurity">
                                                 <option value="">--- Select level ---</option>
                                                 <option value="CurrentLevel">Current level</option>
                                                 <option value="CrisisLevel">Crisis level</option>

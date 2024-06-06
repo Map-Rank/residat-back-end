@@ -91,7 +91,7 @@ class EventController extends Controller
 
         if ($request->hasFile('media')) {
             $mediaFile = $request->file('media');
-            $mediaPath = $mediaFile->store('media/events'.auth()->user()->email, 'public');
+            $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 'public');
             $event['media'] = Storage::url($mediaPath);
             $event->save();
         }
@@ -119,13 +119,8 @@ class EventController extends Controller
 
         if ($request->hasFile('media')) {
             $file = $request->file('media');
-
-            $fileName = uniqid('media_'. $event->id) . '.' . $file->getClientOriginalExtension();
-
-            $filePath = $file->storeAs('storage/media/events/', $fileName);
-
-            $event->media = $filePath;
-
+            $mediaPath = $file->store('media/events/'.auth()->user()->email, 'public');
+            $event['media'] = Storage::url($mediaPath);
             $event->save();
         }
 

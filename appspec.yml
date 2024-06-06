@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/residat-back-end
+hooks:
+  AfterInstall:
+    - location: scripts/generate-env.sh
+      timeout: 300
+      runas: root
+    - location: scripts/install_dependencies_and_configure.sh
+      timeout: 300
+      runas: root
+  ApplicationStart:
+    - location: scripts/configure_server.sh
+      timeout: 300
+      runas: root

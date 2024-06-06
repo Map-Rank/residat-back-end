@@ -51,6 +51,22 @@ class ReportController extends Controller
         return view('reports.infrastructure-create', compact('zones'));
     }
 
+    public function createSocial(){
+
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.social-create', compact('zones'));
+    }
+
+    public function createSelectSecurity(){
+
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.selectedSecurity-create', compact('zones'));
+    }
+    
+    
+
     public function store(ReportRequest $request){
 
         // dd($request->all());

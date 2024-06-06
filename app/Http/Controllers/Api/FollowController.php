@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 /**
- * @group Module Permissions
+ * @group Module Follow
  */
 class FollowController extends Controller
 {
@@ -18,11 +18,17 @@ class FollowController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if($user->following->where('id', $id)->count() > 0){
+        $authUser = $request->user();
+
+        // Check if already following
+        $alreadyFollowing = $authUser->following()->where('followed_id', $id)->exists();
+
+        if ($alreadyFollowing) {
             return response()->success([], __('You already follow this user.'), 200);
         }
 
-        $request->user()->following()->attach($user->id);
+        // Follow the user
+        $authUser->following()->attach($user->id);
 
         return response()->success([], __('Successfully followed user.'), 200);
     }
@@ -33,14 +39,19 @@ class FollowController extends Controller
     public function unfollow(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        $authUser = $request->user();
 
-        if($user->following->where('id', $id)->count() == 0){
+        // Check if not following
+        $alreadyFollowing = $authUser->following()->where('followed_id', $id)->exists();
+
+        if (!$alreadyFollowing) {
             return response()->success([], __('You don\'t follow this user.'), 200);
         }
 
-        $request->user()->following()->detach($user->id);
+        // Unfollow the user
+        $authUser->following()->detach($user->id);
 
-        return response()->success([], __('Successfully unfollowed user.'), 200);
+        return response()->success([], __('You Successfully unfollowed user.'), 200);
     }
 
     /**

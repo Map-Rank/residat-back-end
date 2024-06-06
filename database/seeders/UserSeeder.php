@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'last_name' => 'last name 1',
             'phone' => '237698803158',
             'date_of_birth' => '1996-03-12',
-            'email' => 'user@user.com',
+            'email' => 'admin1234@admin.com',
             'password' => bcrypt('password!'),
             'gender' => 'male',
             'zone_id' => $zone->id,

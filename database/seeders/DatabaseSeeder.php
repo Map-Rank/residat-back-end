@@ -40,13 +40,13 @@ class DatabaseSeeder extends Seeder
             DivisionSeeder::class,
             SubDivisionSeeder::class,
             UserSeeder::class,
-            PostSeeder::class,
+            // PostSeeder::class,
 
             MetricTypeSeeder::class,
-            ReportsSeeder::class,
-            ReportItemsSeeder::class,
-            VectorsSeeder::class,
-            VectorKeysSeeder::class,
+            // ReportsSeeder::class,
+            // ReportItemsSeeder::class,
+            // VectorsSeeder::class,
+            // VectorKeysSeeder::class,
         ]);
     }
 }

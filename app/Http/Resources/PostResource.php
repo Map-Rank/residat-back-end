@@ -19,14 +19,17 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
+        $authUser = auth()->user();
+        $creator = $this->creator()->first();
+        
         return [
             'id' => $this['id'],
             'content' => $this['content'],
             'images' => ImageResource::collection($this->whenLoaded('medias')),
             'creator' => UserResource::collection($this->whenLoaded('creator')),
             'topic' => TopicResource::make($this->whenLoaded('topic')),
-            'liked' => $this->interactions->where('user_id', auth()->id())->where('type_interaction_id', 2)->first() != null   ,
+            'liked' => $this->interactions->where('user_id', auth()->id())->where('type_interaction_id', 2)->first() != null,
+            'is_following' => $authUser && $creator ? $authUser->following()->where('followed_id', $creator->id)->exists() : false,
             'like_count' => $this->likes()->count(),
             'comment_count' => $this->comments()->count(),
             'share_count' => $this->shares()->count(),
