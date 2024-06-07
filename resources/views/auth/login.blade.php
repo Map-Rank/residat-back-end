@@ -19,14 +19,14 @@
                                     @csrf
                                     <div class="input-group mb-3"><span class="input-group-text">
                                             <svg class="icon">
-                                                <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
+                                                <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
                                             </svg></span>
                                         <input class="form-control" name="email" type="text" placeholder="email" id="email" :value="old('email')" required>
                                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger" />
                                     </div>
                                     <div class="input-group mb-4"><span class="input-group-text">
                                             <svg class="icon">
-                                                <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}">
+                                                <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}">
                                                 </use>
                                             </svg></span>
                                         <input class="form-control" name="password" type="password" placeholder="Password" :value="old('password')">

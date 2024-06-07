@@ -15,27 +15,27 @@
                             <p class="text-body-secondary">Create your account</p>
                             <div class="input-group mb-3"><span class="input-group-text">
                                     <svg class="icon">
-                                        <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
+                                        <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
 
                                     </svg></span>
                                 <input class="form-control" type="text" placeholder="Username">
                             </div>
                             <div class="input-group mb-3"><span class="input-group-text">
                                     <svg class="icon">
-                                        <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-envelope-open')}}">
+                                        <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-envelope-open')}}">
                                         </use>
                                     </svg></span>
                                 <input class="form-control" type="text" placeholder="Email">
                             </div>
                             <div class="input-group mb-3"><span class="input-group-text">
                                     <svg class="icon">
-                                        <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
+                                        <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
                                     </svg></span>
                                 <input class="form-control" type="password" placeholder="Password">
                             </div>
                             <div class="input-group mb-4"><span class="input-group-text">
                                     <svg class="icon">
-                                        <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
+                                        <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-lock-locked')}}"></use>
                                     </svg></span>
                                 <input class="form-control" type="password" placeholder="Repeat password">
                             </div>

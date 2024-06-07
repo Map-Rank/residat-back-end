@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                     @foreach ($divisions as $key => $division)
                     {{-- {{dd($post->creator[0]->avatar)}} --}}
                         <tr class="align-middle">
@@ -37,7 +37,7 @@
                                         aria-haspopup="true" aria-expanded="false">
                                         <svg class="icon">
                                             <use
-                                                xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
+                                                xlink:href="{{ secure_asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
                                             </use>
                                         </svg>
                                     </button>
