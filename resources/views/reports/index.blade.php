@@ -47,7 +47,7 @@
                             <td>{{ $report->type }}</td>
                             <td>{{ $report->start_date }}</td>
                             <td>{{ $report->end_date }}</td>
-                            <td><img src="{{ env('APP_URL').'/storage/'.$report->vector?->path  }}" height="50" width="50"/></td>
+                            <td><img src="{{ env('FRONT_URL').'/storage/'.$report->vector?->path  }}" height="50" width="50"/></td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
