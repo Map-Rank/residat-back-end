@@ -3,7 +3,7 @@
         onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()"
         style="margin-inline-start: -14px;">
         <svg class="icon icon-lg">
-            <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-menu')}}"></use>
+            <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-menu')}}"></use>
         </svg>
     </button>
     <ul class="header-nav d-none d-lg-flex">
@@ -12,15 +12,15 @@
     <ul class="header-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="#">
                 <svg class="icon icon-lg">
-                    <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-bell') }}"></use>
+                    <use xlink:href="{{ secure_asset('assets/@coreui/icons/sprites/free.svg#cil-bell') }}"></use>
                 </svg></a></li>
         <li class="nav-item"><a class="nav-link" href="#">
                 <svg class="icon icon-lg">
-                    <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-list-rich') }}"></use>
+                    <use xlink:href="{{ secure_asset('assets/@coreui/icons/sprites/free.svg#cil-list-rich') }}"></use>
                 </svg></a></li>
         <li class="nav-item"><a class="nav-link" href="#">
                 <svg class="icon icon-lg">
-                    <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-envelope-open') }}">
+                    <use xlink:href="{{ secure_asset('assets/@coreui/icons/sprites/free.svg#cil-envelope-open') }}">
                     </use>
                 </svg></a></li>
     </ul>
@@ -32,7 +32,7 @@
             <button class="btn btn-link nav-link py-2 px-2 d-flex align-items-center" type="button"
                 aria-expanded="false" data-coreui-toggle="dropdown">
                 <svg class="icon icon-lg theme-icon-active">
-                    <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-contrast')}}"></use>
+                    <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-contrast')}}"></use>
                 </svg>
             </button>
             <ul class="dropdown-menu dropdown-menu-end" style="--cui-dropdown-min-width: 8rem;">
@@ -40,7 +40,7 @@
                     <button class="dropdown-item d-flex align-items-center" type="button"
                         data-coreui-theme-value="light">
                         <svg class="icon icon-lg me-3">
-                            <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-sun')}}"></use>
+                            <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-sun')}}"></use>
                         </svg>Light
                     </button>
                 </li>
@@ -48,7 +48,7 @@
                     <button class="dropdown-item d-flex align-items-center" type="button"
                         data-coreui-theme-value="dark">
                         <svg class="icon icon-lg me-3">
-                            <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-moon')}}"></use>
+                            <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-moon')}}"></use>
                         </svg>Dark
                     </button>
                 </li>
@@ -56,7 +56,7 @@
                     <button class="dropdown-item d-flex align-items-center active" type="button"
                         data-coreui-theme-value="auto">
                         <svg class="icon icon-lg me-3">
-                            <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-contrast')}}"></use>
+                            <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-contrast')}}"></use>
                         </svg>Auto
                     </button>
                 </li>
@@ -76,8 +76,8 @@
                 </div>
                 <a class="dropdown-item" href="{{route('profile.edit')}}">
                     <svg class="icon me-2">
-                        <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
-                    </svg> 
+                        <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-user')}}"></use>
+                    </svg>
                     Profile
                 </a>
                 <div class="dropdown-divider"></div>
@@ -86,7 +86,7 @@
                     <a class="dropdown-item" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); this.closest('form').submit();">
                         <svg class="icon me-2">
-                            <use xlink:href="{{asset('assets/@coreui/icons/sprites/free.svg#cil-account-logout')}}"></use>
+                            <use xlink:href="{{secure_asset('assets/@coreui/icons/sprites/free.svg#cil-account-logout')}}"></use>
                         </svg>
                         Logout
                     </a>

@@ -6,33 +6,33 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title> @yield('title') </title>
-        <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/brand/logo.jpg')}}">
-        <link rel="manifest" href="{{ asset('assets/favicon/manifest.json') }}">
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ secure_asset('assets/brand/logo.jpg')}}">
+        <link rel="manifest" href="{{ secure_asset('assets/favicon/manifest.json') }}">
         <meta name="msapplication-TileColor" content="#ffffff">
-        <meta name="msapplication-TileImage" content="{{ asset('assets/brand/logo.jpg') }}">
+        <meta name="msapplication-TileImage" content="{{ secure_asset('assets/brand/logo.jpg') }}">
         <meta name="theme-color" content="#ffffff">
         <!-- Vendors styles-->
 
-        <link rel="stylesheet" href="{{ asset('css/vendors/simplebar.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/simplebar.css') }}">
+        <link rel="stylesheet" href="{{ secure_asset('css/vendors/simplebar.css') }}">
+        <link rel="stylesheet" href="{{ secure_asset('css/simplebar.css') }}">
         <!-- Main styles for this application-->
-        <link href="{{ asset('css/style.css')}}" rel="stylesheet">
-        <link href="{{ asset('css/examples.css')}}" rel="stylesheet">
-        <script src="{{ asset('js/config.js')}}"></script>
-        <script src="{{ asset('js/color-modes.js')}}"></script>
-        <link href="{{ asset('css/coreui-chartjs.css') }}" rel="stylesheet">
+        <link href="{{ secure_asset('css/style.css')}}" rel="stylesheet">
+        <link href="{{ secure_asset('css/examples.css')}}" rel="stylesheet">
+        <script src="{{ secure_asset('js/config.js')}}"></script>
+        <script src="{{ secure_asset('js/color-modes.js')}}"></script>
+        <link href="{{ secure_asset('css/coreui-chartjs.css') }}" rel="stylesheet">
         <link rel="canonical" href="https://coreui.io/docs/components/modal/">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
 
@@ -61,11 +61,11 @@
             @yield('content')
             @include('layouts.footer')
         </div>
-        
+
         <!-- CoreUI and necessary plugins-->
-        <script src="{{ asset('js/coreui.bundle.min.js') }}"></script>
-        <script src="{{ asset('js/simplebar.min.js') }}"></script>
-        <script src="{{ asset('js/popovers.js' )}}"></script>
+        <script src="{{ secure_asset('js/coreui.bundle.min.js') }}"></script>
+        <script src="{{ secure_asset('js/simplebar.min.js') }}"></script>
+        <script src="{{ secure_asset('js/popovers.js' )}}"></script>
         <script src="js/tooltips.js"></script>
         <script>
         const header = document.querySelector('header.header');
@@ -78,10 +78,10 @@
 
         </script>
         <!-- Plugins and scripts required by this view-->
-        <script src="{{ asset('js/chart.umd.js') }}"></script>
-        <script src="{{ asset('js/coreui-chartjs.js') }}"></script>
-        <script src="{{ asset('js/index.js') }}"></script>
-        <script src="{{ asset('js/main.js')}}"></script>
+        <script src="{{ secure_asset('js/chart.umd.js') }}"></script>
+        <script src="{{ secure_asset('js/coreui-chartjs.js') }}"></script>
+        <script src="{{ secure_asset('js/index.js') }}"></script>
+        <script src="{{ secure_asset('js/main.js')}}"></script>
 
         @yield('script')
         <script>
