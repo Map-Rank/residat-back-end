@@ -8,7 +8,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'node_modules/@coreui/icons/sprites',
+                // 'node_modules/@coreui/icons/sprites',
             ],
             refresh: true,
             sprites: {

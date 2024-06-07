@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Level;
 use App\Models\Media;
+use App\Models\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -52,5 +53,10 @@ class Zone extends Model
     public function events()
     {
         return $this->hasMany(Event::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
     }
 }

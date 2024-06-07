@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\PasswordController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
 
 /*
@@ -40,6 +41,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::resource('post', PostController::class);
     Route::resource('events', EventController::class);
     Route::resource('reports', ReportController::class);
+    Route::resource('notifications', NotificationController::class);
     // Route::get('post', [PostController::class, 'index']);
     // Route::post('post', [PostController::class, 'store']);
     // Route::get('/show/{id}', [PostController::class, 'show']);
