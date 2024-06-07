@@ -10,7 +10,7 @@ sudo systemctl restart apache2
 ### Check if directory of laravel supervisor exist ###
 if [ -d "/etc/supervisor/conf.d" ]
 then
-    # add the supervisor config
+    # add the supervisor configa
     sudo cp scripts/templates/laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
 
     # read the new config
