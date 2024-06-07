@@ -41,11 +41,6 @@
 
 <body>
     @yield('auth-content')
-    <!-- CoreUI and necessary plugins-->
-    {{-- <script src="node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js"></script> --}}
-    @import "~node_modules/@coreui/coreui/dist/js/coreui.bundle.min.js";
-    {{-- <script src="node_modules/simplebar/dist/simplebar.min.js"></script> --}}
-    @import "~node_modules/simplebar/dist/simplebar.min.js";
     <script>
         const header = document.querySelector('header.header');
 

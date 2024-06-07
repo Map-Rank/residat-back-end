@@ -32,6 +32,7 @@ class UserFullResource extends JsonResource
             'verified_at' => $this['verified_at'],
             'gender' => $this['gender'],
             'type' => $this['type'],
+            'fcm_token' => $this['fcm_token'],
             'avatar' => env('APP_URL').''.$this->avatar,
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
             'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
