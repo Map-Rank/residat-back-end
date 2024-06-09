@@ -37,7 +37,7 @@
                                         aria-haspopup="true" aria-expanded="false">
                                         <svg class="icon">
                                             <use
-                                                xlink:href="{{ secure_asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
+                                                xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-options') }}">
                                             </use>
                                         </svg>
                                     </button>

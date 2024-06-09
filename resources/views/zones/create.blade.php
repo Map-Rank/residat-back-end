@@ -234,7 +234,7 @@
 @endsection
 
 @section('script')
-    <script src="{{ URL::secure_asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vee-validate@2.2.15"></script>
