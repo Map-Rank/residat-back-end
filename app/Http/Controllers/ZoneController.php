@@ -133,7 +133,7 @@ class ZoneController extends Controller
 
         if ($request->hasFile('data')) {
             $mediaFile = $request->file('data');
-            $mediaPath = $mediaFile->store('media/zone', 'public');
+            $mediaPath = $mediaFile->store('media/zone', 's3');
             $datum->banner = Storage::url($mediaPath);
         }
 
@@ -142,7 +142,7 @@ class ZoneController extends Controller
 
         if($request->hasFile('image')){
             $vectorFile = $request->file('image');
-            $vectorPath =  $vectorFile->store('media/zone', 'public');
+            $vectorPath =  $vectorFile->store('media/zone', 's3');
 
             $vector = Vector::create([
                 'path' => Storage::url($vectorPath),
@@ -197,13 +197,13 @@ class ZoneController extends Controller
         if ($request->hasFile('data')) {
             $mediaFile = $request->file('data');
 
-            $mediaPath = $mediaFile->store('media/zone', 'public');
+            $mediaPath = $mediaFile->store('media/zone', 's3');
             $updated['banner'] = Storage::url($mediaPath);
         }
 
         if($request->hasFile('image')){
             $vectorFile =  $request->file('image');
-            $vectorPath = $vectorFile->store('media/zone', 'public');
+            $vectorPath = $vectorFile->store('media/zone', 's3');
 
             if($zone->vector == null){
                 $vector = Vector::create([
