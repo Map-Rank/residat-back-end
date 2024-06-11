@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use Exception;
+use App\Models\User;
+use App\Models\Zone;
 use App\Models\Notification;
+use App\Service\UtilService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\NotificationRequest;
 
 class NotificationController extends Controller
@@ -15,8 +21,24 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'page' => ['sometimes','numeric'],
+            'size'=> ['sometimes', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->errors($validator->failed(),  __('bad params'), 400);
+        }
+        
+        $validated = $validator->validated();
+        
+
+        $page = $validated['page'] ?? 0;
+        $size = $validated['size'] ?? 10;
+
         $user = Auth::user();
 
         if (!$user) {
@@ -25,9 +47,23 @@ class NotificationController extends Controller
 
         $zoneId = $user->zone_id;
 
-        $notifications = Notification::where('zone_id', $zoneId)->get();
+        $data = Notification::with('user','zone');
 
-        return response()->success($notifications, __('Notifications charged successfully'), 200);
+        if(isset($zoneId)){
+            $zone = Zone::with('children')->find($zoneId);
+            $descendants = collect();
+            $descendants->push($zone);
+            if ($zone->children != null){
+                $descendants =  UtilService::get_descendants($zone->children, $descendants);
+            }
+            $descendantIds = $descendants->pluck('id');
+            $descendantIds->push($zoneId);
+            $data = $data->whereIn('zone_id',  $descendantIds);
+        }
+
+        $data =  $data->offSet($page * $size)->take($size)->latest()->get();
+
+        return response()->success($data, __('Notifications charged successfully'), 200);
     }
 
     /**
@@ -40,6 +76,22 @@ class NotificationController extends Controller
     {
         $notification = Notification::create($request->validated());
 
+        $descendants = collect();
+
+        $zone = Zone::with('children')->find($notification->zone_id);
+
+        $descendants = UtilService::get_descendants($zone->children, $descendants); 
+
+        $descendants->push($notification->zone);
+
+        $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token');
+
+        try{
+            UtilService::sendWebNotification($notification->title, $notification->content, $users_token);
+        }catch(Exception $ex){
+            Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
+        }
+        
         return response()->success($notification, __('Notification created successfully'), 200);
     }
 
