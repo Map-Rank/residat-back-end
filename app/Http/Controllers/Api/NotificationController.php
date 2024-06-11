@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\NotificationRequest;
 
+/**
+ * @group Module Notification
+ */
 class NotificationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * list your notifications
      *
      * @return \Illuminate\Http\Response
      */
@@ -67,7 +70,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create notification
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -87,7 +90,7 @@ class NotificationController extends Controller
         $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token');
 
         try{
-            UtilService::sendWebNotification($notification->title, $notification->content, $users_token);
+            UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);
         }catch(Exception $ex){
             Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
         }
@@ -96,7 +99,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show one notification
      *
      * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
@@ -121,7 +124,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete notification
      *
      * @param  \App\Models\Notification  $notification
      * @return \Illuminate\Http\Response
