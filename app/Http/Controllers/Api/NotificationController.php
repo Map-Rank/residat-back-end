@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\NotificationRequest;
 
@@ -86,6 +87,13 @@ class NotificationController extends Controller
         $descendants = UtilService::get_descendants($zone->children, $descendants); 
 
         $descendants->push($notification->zone);
+
+        if ($request->hasFile('image')) {
+            $mediaFile = $request->file('image');
+            $mediaPath = $mediaFile->store('media/notifications/'.auth()->user()->email, 's3');
+            $notification['media'] = Storage::url($mediaPath);
+            $notification->save();
+        }
 
         $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token');
 
