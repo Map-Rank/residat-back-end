@@ -78,7 +78,7 @@ class UserController extends Controller
             $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
             // Stockez l'avatar dans le dossier de stockage
-            $avatarPath = $avatar->storeAs('media/avatat/'.$user->email, $avatarName);
+            $avatarPath = $avatar->storeAs('media/avatat/'.$user->email, $avatarName, 's3');
 
             // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $user->avatar = $avatarPath;
@@ -149,7 +149,7 @@ class UserController extends Controller
             $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
             // Stockez l'avatar dans le dossier de stockage
-            $avatarPath = $avatar->storeAs('storage/media/avatar/'.$user->email, $avatarName);
+            $avatarPath = $avatar->storeAs('storage/media/avatar/'.$user->email, $avatarName, 's3');
 
             // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $user->avatar = $avatarPath;
