@@ -81,8 +81,6 @@ class NotificationController extends Controller
         $data = $request->validated();
         $data['user_id'] = Auth::user()->id;
 
-        // dd($request);
-
         $notification = Notification::create($data);
 
         $descendants = collect();
