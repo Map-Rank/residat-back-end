@@ -20,7 +20,7 @@ class EventResource extends JsonResource
             'published_at' => $this->published_at,
             'date_debut' => $this->date_debut,
             'date_fin' => $this->date_fin,
-            'image' => env('APP_URL').'/'.$this->media,
+            'image' => env('APP_URL').$this->media,
             'humanize_date_creation' => Carbon::parse($this->created_at)->diffForHumans(),
             'sector' => $this->sector,
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
