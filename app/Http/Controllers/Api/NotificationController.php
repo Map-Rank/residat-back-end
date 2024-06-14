@@ -78,7 +78,12 @@ class NotificationController extends Controller
      */
     public function store(NotificationRequest $request)
     {
-        $notification = Notification::create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = Auth::user()->id;
+
+        // dd($request);
+
+        $notification = Notification::create($data);
 
         $descendants = collect();
 
@@ -90,12 +95,12 @@ class NotificationController extends Controller
 
         if ($request->hasFile('image')) {
             $mediaFile = $request->file('image');
-            $mediaPath = $mediaFile->store('media/notifications/'.auth()->user()->email, 's3');
-            $notification['media'] = Storage::url($mediaPath);
+            $mediaPath = $mediaFile->storeAs('media/notifications/'.auth()->user()->email, 's3');
+            $notification['image'] = Storage::url($mediaPath);
             $notification->save();
         }
 
-        $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token');
+        $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
 
         try{
             UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);

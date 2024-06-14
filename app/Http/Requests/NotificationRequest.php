@@ -45,7 +45,6 @@ class NotificationRequest extends FormRequest
             'zone_id.exists' => 'The selected Zone ID is invalid.',
             'content_en.required' => 'The English content is required.',
             'content_fr.required' => 'The French content is required.',
-            'user_id.required' => 'The User ID is required.',
         ];
     }
 }
