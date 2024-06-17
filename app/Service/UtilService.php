@@ -26,6 +26,8 @@ class UtilService
 
         $serverKey = env('FCM_SERVER_KEY');
 
+        // dd($serverKey);
+
         $data = [
             "registration_ids" => $deviceKeys,
             "notification" => [
@@ -65,7 +67,7 @@ class UtilService
         // Close connection
         curl_close($ch);
 
-        Log::info(sprintf('%s: Message response is %s', _METHOD_, json_encode($res)));
+        Log::info(sprintf('%s: Message response is %s', __METHOD__, json_encode($res)));
 
         return $res;
     }
