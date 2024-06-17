@@ -98,7 +98,9 @@ class NotificationController extends Controller
             $notification->save();
         }
 
-        $users_token = User::whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
+        $users_token = User::whereNotNull('fcm_token')->whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
+        
+        // dd($users_token);
 
         try{
             UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);

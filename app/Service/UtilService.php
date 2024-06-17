@@ -26,6 +26,8 @@ class UtilService
 
         $serverKey = env('FCM_SERVER_KEY');
 
+        // dd($serverKey);
+
         $data = [
             "registration_ids" => $deviceKeys,
             "notification" => [
