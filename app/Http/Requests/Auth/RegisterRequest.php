@@ -41,6 +41,7 @@ class RegisterRequest extends FormRequest
             'gender' => 'nullable|in:male,female',
             'zone_id' => 'required|exists:zones,id',
             'profession' => 'nullable|string',
+            'fcm_token' => 'nullable|string', // Ajoutez cette ligne
         ];
     }
 

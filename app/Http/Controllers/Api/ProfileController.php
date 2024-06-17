@@ -104,7 +104,7 @@ class ProfileController extends Controller
             $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
             // Stockez l'avatar dans le dossier de stockage
-            $avatarPath = $avatar->storeAs('storage/media/avatar/'.$user->email, $avatarName, 's3');
+            $avatarPath = $avatar->storeAs('media/avatar/'.$user->email, $avatarName, 's3');
 
             // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
             $user->avatar = $avatarPath;

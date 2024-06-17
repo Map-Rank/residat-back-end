@@ -40,9 +40,14 @@ class AuthController extends Controller
 
         if ($request->hasFile('avatar')) {
             $mediaFile = $request->file('avatar');
-            $mediaPath = $mediaFile->store('media/avatar'.$user->email, 's3');
+            $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 's3');
             $user['avatar'] = Storage::url($mediaPath);
             $user->save;
+        }
+
+        // Mettre à jour le token FCM
+        if ($request->filled('fcm_token')) {
+            $user->update(['fcm_token' => $request->fcm_token]);
         }
 
 
@@ -105,6 +110,10 @@ class AuthController extends Controller
 
         $user = UserResource::make($user)->toArray($request);
         $user['token'] = $token->plainTextToken;
+
+        if ($request->filled('fcm_token')) {
+            $user->update(['fcm_token' => $request->fcm_token]);
+        }
 
         return response()->success($user, __('You are logged in'), 200);
     }
