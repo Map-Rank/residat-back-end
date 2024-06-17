@@ -45,6 +45,11 @@ class AuthController extends Controller
             $user->save;
         }
 
+        // Mettre à jour le token FCM
+        if ($request->filled('fcm_token')) {
+            $user->update(['fcm_token' => $request->fcm_token]);
+        }
+
 
         // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
         $defaultRole = Role::where('name', 'default')->first();
@@ -105,6 +110,10 @@ class AuthController extends Controller
 
         $user = UserResource::make($user)->toArray($request);
         $user['token'] = $token->plainTextToken;
+
+        if ($request->filled('fcm_token')) {
+            $user->update(['fcm_token' => $request->fcm_token]);
+        }
 
         return response()->success($user, __('You are logged in'), 200);
     }
