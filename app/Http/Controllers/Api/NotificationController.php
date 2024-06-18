@@ -53,16 +53,25 @@ class NotificationController extends Controller
 
         $data = Notification::with('user','zone');
 
-        if(isset($zoneId)){
-            $zone = Zone::with('children')->find($zoneId);
-            $descendants = collect();
-            $descendants->push($zone);
-            if ($zone->children != null){
-                $descendants =  UtilService::get_descendants($zone->children, $descendants);
+        // Vérification si l'utilisateur a le rôle d'administrateur
+        if ($user->hasRole('admin')) {
+            // Récupérer les notifications créées par l'administrateur
+            $data = $data->where('user_id', $user->id);
+        } else {
+            // Récupération des notifications basées sur la zone de l'utilisateur
+            $zoneId = $user->zone_id;
+
+            if (isset($zoneId)) {
+                $zone = Zone::with('children')->find($zoneId);
+                $descendants = collect();
+                $descendants->push($zone);
+                if ($zone->children != null) {
+                    $descendants = UtilService::get_descendants($zone->children, $descendants);
+                }
+                $descendantIds = $descendants->pluck('id');
+                $descendantIds->push($zoneId);
+                $data = $data->whereIn('zone_id', $descendantIds);
             }
-            $descendantIds = $descendants->pluck('id');
-            $descendantIds->push($zoneId);
-            $data = $data->whereIn('zone_id',  $descendantIds);
         }
 
         $data =  $data->offSet($page * $size)->take($size)->latest()->get();
