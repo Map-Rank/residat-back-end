@@ -36,9 +36,9 @@ class NotificationController extends Controller
         if ($validator->fails()) {
             return response()->errors($validator->failed(),  __('bad params'), 400);
         }
-        
+
         $validated = $validator->validated();
-        
+
 
         $page = $validated['page'] ?? 0;
         $size = $validated['size'] ?? 10;
@@ -68,6 +68,8 @@ class NotificationController extends Controller
                 if ($zone->children != null) {
                     $descendants = UtilService::get_descendants($zone->children, $descendants);
                 }
+
+                $descendants = UtilService::get_ascendants($zone, $descendants);
                 $descendantIds = $descendants->pluck('id');
                 $descendantIds->push($zoneId);
                 $data = $data->whereIn('zone_id', $descendantIds);
@@ -105,7 +107,7 @@ class NotificationController extends Controller
 
         $zone = Zone::with('children')->find($notification->zone_id);
 
-        $descendants = UtilService::get_descendants($zone->children, $descendants); 
+        $descendants = UtilService::get_descendants($zone->children, $descendants);
 
         $descendants->push($notification->zone);
 
@@ -117,7 +119,7 @@ class NotificationController extends Controller
         }
 
         $users_token = User::whereNotNull('fcm_token')->whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
-        
+
         // dd($users_token);
 
         try{
@@ -125,7 +127,7 @@ class NotificationController extends Controller
         }catch(Exception $ex){
             Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
         }
-        
+
         return response()->success($notification, __('Notification created successfully'), 200);
     }
 
