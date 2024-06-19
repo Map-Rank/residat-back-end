@@ -20,6 +20,18 @@ class UtilService
         return $descendants;
     }
 
+    public static function get_ascendants($child, $ascendants)
+    {
+        $parent = $child->parent;
+
+        while ($parent) {
+            $ascendants->push($parent);
+            $parent = $parent->parent;
+        }
+
+        return $ascendants;
+    }
+
     public static function sendWebNotification($title, $body, array $deviceKeys): array
     {
         $url = 'https://fcm.googleapis.com/fcm/send';

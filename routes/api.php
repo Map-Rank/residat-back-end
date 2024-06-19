@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
+use App\Models\Zone;
+use App\Service\UtilService;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,8 @@ Route::middleware(['auth:sanctum',])->group(function () {
     // Route::get('/show/{id}', [PostController::class, 'show']);
     // Route::put('/update/{id}', [PostController::class, 'update']);
     // Route::delete('/delete/{id}', [PostController::class, 'destroy']);
+    // testascendant
+    Route::get('/testascendant', [NotificationController::class, 'testascendant']);
 
     //interactions
     Route::post('post/like/{id}', [PostController::class, 'like']);
