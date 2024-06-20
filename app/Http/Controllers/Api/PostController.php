@@ -118,11 +118,11 @@ class PostController extends Controller
             $mediaPaths = [];
 
             foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('images', 's3');
-                // $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-                // $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                // $mediaPath = $mediaFile->store('images', 's3');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
                 $mediaPaths[] = [
-                    'url' => $mediaPath,
+                    'url' => $path,
                     'type' => $mediaFile->getClientMimeType(),
                 ];
             }
