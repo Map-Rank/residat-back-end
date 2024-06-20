@@ -11,7 +11,7 @@ class VectorKeyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'value' => $this->value,
+            'value' => env('FRONT_URL').'/'.$this->value,
             'type' => $this->type,
             'name' => $this->name,
             'vector_id' => $this->vector_id,
