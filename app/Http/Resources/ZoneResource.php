@@ -23,7 +23,7 @@ class ZoneResource extends JsonResource
             'parent' => ZoneResource::make($this->whenLoaded('zone')),
             'parent_id' => $this['parent_id'],
             'level_id' => $this['level_id'],
-            'banner' => env('APP_URL').$this['banner'],
+            'banner' => env('FRONT_URL').$this['banner'],
             'created_at' => $this['created_at'],
             'vector' => VectorResource::make($this->whenLoaded('vector')),
         ];
