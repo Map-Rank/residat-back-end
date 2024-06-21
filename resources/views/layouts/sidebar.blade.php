@@ -42,6 +42,11 @@
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
         </svg> Reports<span class="badge badge-sm bg-info ms-auto">Important</span></a>
     </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('feedbacks.index') ? 'active' : '' }}" href="{{ route('feedbacks.index') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+        </svg> Feedbacks<span class="badge badge-sm bg-info ms-auto">Important</span></a>
+    </li>
 </ul>
 <div class="sidebar-footer border-top d-none d-md-flex">
     <button class="sidebar-toggler" type="button" data-coreui-toggle="unfoldable"></button>

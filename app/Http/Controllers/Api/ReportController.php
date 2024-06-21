@@ -191,7 +191,7 @@ class ReportController extends Controller
     {
         // Vérifier si l'utilisateur authentifié est autorisé à supprimer le rapport
         $user = Auth::user();
-        if (!$user->hasRole('Admin') && $user->id !== $report->user_id) {
+        if (!$user->hasRole('admin') && $user->id !== $report->user_id) {
             return response()->errors([], __('Unauthorized'), 401);
         }
 
