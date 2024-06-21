@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->text('text');
-            $table->string('page_link');
+            $table->text('page_link');
             $table->integer('rating');
             $table->timestamps();
             $table->softDeletes();
