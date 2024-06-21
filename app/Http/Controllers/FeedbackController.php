@@ -48,6 +48,6 @@ class FeedbackController extends Controller
         
         $feedback->delete();
 
-        return response()->json(['message' => 'Feedback deleted successfully']);
+        return redirect()->back()->with('success', 'Feedback deleted successfully');
     }
 }
