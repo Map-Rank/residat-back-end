@@ -22,7 +22,7 @@
                             <thead class="fw-semibold text-nowrap">
                                 <tr class="">
                                     <th class="bg-body-secondary">users</th>
-                                    <th class="bg-body-secondary">text</th>
+                                    <th class="bg-body-secondary">Description</th>
                                     <th class="bg-body-secondary">page</th>
                                     <th class="bg-body-secondary">rating</th>
                                     <th class="bg-body-secondary"></th>
@@ -35,7 +35,7 @@
                                             <div class="text-nowrap">{{ $feedback->user->first_name }} {{ $feedback->user->last_name }}</div>
                                         </td>
                                         <td class="">
-                                            <div class="text-nowrap">{{ $feedback->text }}</div>
+                                            <div class="text-nowrap">{{ substr($feedback->text, 0, 30) }}{{ strlen($feedback->text) > 30 ? '...' : '' }}</div>
                                         </td>
                                         <td class="">
                                             <div class="text-nowrap">
@@ -113,20 +113,17 @@
 
                     <div class="modal-body">
                         <div class="mb-3">
-                            <h3>
-                                Do you want to delete this feedback?
-                            </h3>
                             <p>
-                                <h4 for="recipient-name" class="col-form-label"> FROM {{ $feedback->user->first_name }}  {{ $feedback->user->last_name }}</h4>
+                                <h4 for="recipient-name" class="col-form-label"> FROM <strong> {{ $feedback->user->first_name }}  {{ $feedback->user->last_name }}</strong></h4>
                             </p>
                             <p>
-                                <h4 for="recipient-name" class="col-form-label">{{ $feedback->text }}</h4>
+                                <h4 for="recipient-name" class="col-form-label"> <strong>Description :</strong> </br> {{ $feedback->text }}</h4>
                             </p>
                             <p>
-                                <h4 for="recipient-name" class="col-form-label"> {{ $feedback->page_link }}</h4>
+                                <h4 for="recipient-name" class="col-form-label"> <strong>Page :</strong> </br>  <a href="{{ $feedback->page_link }}" target="_blank" rel="noopener noreferrer">{{ $feedback->page_link }}</a> </h4>
                             </p>
                             <p>
-                                <h4 for="recipient-name" class="col-form-label"> {{ $feedback->rating }}</h4>
+                                <h4 for="recipient-name" class="col-form-label"> <strong>Rating :</strong> {{ $feedback->rating }}</h4>
                             </p>
                         </div>
 
@@ -156,16 +153,16 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <p>
-                            <h4 for="recipient-name" class="col-form-label"> FROM {{ $feedback->user->first_name }}  {{ $feedback->user->last_name }}</h4>
+                            <h4 for="recipient-name" class="col-form-label"> FROM <strong> {{ $feedback->user->first_name }}  {{ $feedback->user->last_name }}</strong></h4>
                         </p>
                         <p>
-                            <h4 for="recipient-name" class="col-form-label">{{ $feedback->text }}</h4>
+                            <h4 for="recipient-name" class="col-form-label"> <strong>Description :</strong> </br> {{ $feedback->text }}</h4>
                         </p>
                         <p>
-                            <h4 for="recipient-name" class="col-form-label"> {{ $feedback->page_link }}</h4>
+                            <h4 for="recipient-name" class="col-form-label"> <strong>Page :</strong> </br>  <a href="{{ $feedback->page_link }}" target="_blank" rel="noopener noreferrer">{{ $feedback->page_link }}</a> </h4>
                         </p>
                         <p>
-                            <h4 for="recipient-name" class="col-form-label"> {{ $feedback->rating }}</h4>
+                            <h4 for="recipient-name" class="col-form-label"> <strong>Rating :</strong> {{ $feedback->rating }}</h4>
                         </p>
                     </div>
                 </div>
