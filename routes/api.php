@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Zone;
 use App\Models\Media;
+use App\Service\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -11,11 +13,10 @@ use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
-use App\Models\Zone;
-use App\Service\UtilService;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,8 @@ Route::middleware(['auth:sanctum',])->group(function () {
     // Route::delete('/delete/{id}', [PostController::class, 'destroy']);
     // testascendant
     Route::get('/testascendant', [NotificationController::class, 'testascendant']);
+
+    Route::post('/create-feedback', [FeedbackController::class, 'store']);
 
     //interactions
     Route::post('post/like/{id}', [PostController::class, 'like']);
