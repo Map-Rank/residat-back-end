@@ -16,9 +16,27 @@ use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    public function  index(Request $request){
+    public function index(Request $request){
         $reports = Report::query()->paginate(50);
         return view('reports.index', compact('reports'));
+    }
+
+    public function createResourceCompletion(){
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.ressource-completion', compact('zones'));
+    }
+
+    public function createFishingVulnerability(){
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.fishing-vulnerability', compact('zones'));
+    }
+
+    public function createWaterStress(){
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.water-stress', compact('zones'));
     }
 
     public function create(){
@@ -62,7 +80,7 @@ class ReportController extends Controller
 
         $zones = Zone::query()->where('level_id', 4)->get();
 
-        return view('reports.selectedSecurity-create', compact('zones'));
+        return view('reports.food-security', compact('zones'));
     }
     
     

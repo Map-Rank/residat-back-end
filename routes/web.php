@@ -70,10 +70,11 @@ Route::middleware('auth')->group(function () {
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
     Route::resource('reports', ReportController::class);
+    
+
     Route::get('create/health-report-items', [ReportController::class, 'createHealth'])->name('health-report-items.create');
     Route::post('health-report-items', [ReportController::class, 'healthStore'])->name('health-report-items.store');
-
-
+    
     Route::get('create/agriculture-report-items', [ReportController::class, 'createAgriculture'])->name('agriculture.report.items.create');
     Route::post('agriculture-report-items', [ReportController::class, 'agricultureStore'])->name('agriculture.report.items.store');
 
@@ -83,9 +84,17 @@ Route::middleware('auth')->group(function () {
     Route::get('create/social-report-items', [ReportController::class, 'createSocial'])->name('social.report.items.create');
     Route::post('social-report-items', [ReportController::class, 'socialStore'])->name('social.report.items.store');
 
-    Route::get('create/select-security-report-items', [ReportController::class, 'createSelectSecurity'])->name('select.security.report.items.create');
-    Route::post('select-security-report-items', [ReportController::class, 'selectSecurity'])->name('select.security.report.items.store');
-    // infrastructure-create.blade.php
+    Route::get('create/food-security-report-items', [ReportController::class, 'createSelectSecurity'])->name('food.security.report.items.create');
+    Route::post('food-security-report-items', [ReportController::class, 'selectSecurity'])->name('food.security.report.items.store');
+
+    Route::get('create/ressource-completion-report-items', [ReportController::class, 'createResourceCompletion'])->name('ressource.completion.report.items.create');
+    Route::post('ressource-completion-items', [ReportController::class, 'selectSecurity'])->name('ressource.completion.items.store');
+
+    Route::get('create/fishing-vulnerability-report-items', [ReportController::class, 'createFishingVulnerability'])->name('fishing.vulnerability.report.items.create');
+    Route::post('fishing-vulnerability-items', [ReportController::class, 'fishingVulnerability'])->name('fishing.vulnerability.items.store');
+
+    Route::get('create/water-stress-report-items', [ReportController::class, 'createWaterStress'])->name('water.stress.report.items.create');
+    Route::post('water-stress-items', [ReportController::class, 'waterStress'])->name('water.stress.items.store');
 
 
     //ban user
