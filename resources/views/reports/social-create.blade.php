@@ -39,16 +39,16 @@
                     <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description High risk social group</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
 
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">Local climate  literacy</label>
-                    <textarea type="text" class="form-control" id="desc_health_vulnerability" name="desc_health_vulnerability"></textarea>
+                    <label for="desc_health_vulnerability" class="col-form-label">Local climate literacy</label>
+                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Local climate literacy</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
 
@@ -57,15 +57,15 @@
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Social stability</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="desc_report_health_case" class="col-form-label">Poverty index</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Poverty index</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
             </div>

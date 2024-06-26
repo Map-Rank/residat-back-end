@@ -10,7 +10,7 @@
     <ol class="breadcrumb breadc    rumb-style2">
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
         <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Reports</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Water Stress Report Creation</li>
+        <li class="breadcrumb-item active" aria-current="page">Migration Report Creation</li>
     </ol>
 </nav>
 
@@ -20,7 +20,7 @@
         <form action="{{ route('water.stress.items.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
-                <h3>Create Water Stress Report </h3>
+                <h3>Create Migration Report </h3>
 
                 <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
                     {!! Form::label('Sub Division', null, ['class' => '']) !!}
@@ -39,39 +39,31 @@
                     <label for="desc_report_health_case" class="col-form-label">Select type</label>
                     <select class="form-select" autofocus name="selectedType" id="selectedType">
                         <option value=""> --- Select type --- </option>
-                        <option value="current-level">Current level</option>
-                        <option value="crisis-level">Crisis level</option>
+                        <option value="current-level">Adult</option>
+                        <option value="crisis-level">Youth</option>
+                        <option value="crisis-level">Children</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">Low water stress</label>
+                    <label for="percentage_health_vulnerability" class="col-form-label">Urban to Rural </label>
                     <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Low water stress</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Urban to Rural</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">High water stressed</label>
+                    <label for="desc_health_vulnerability" class="col-form-label">Rural to Urban</label>
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description High water stressed</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">Severe water stress</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
-                </div>
-                <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Severe water stress</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Rural to Urban</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Water Stress report</button>
+                <button type="submit" class="btn btn-primary">Add Migration report</button>
             </div>
         </form>
     </div>

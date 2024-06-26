@@ -47,15 +47,15 @@
                     <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Farmer-Grazer conflicts</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="desc_health_vulnerability" class="col-form-label">Water conflicts</label>
-                    <textarea type="text" class="form-control" id="desc_health_vulnerability" name="desc_health_vulnerability"></textarea>
+                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Water conflicts</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
 
@@ -64,15 +64,15 @@
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Human-Wildlife conflicts</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
                 <div class="mb-3">
                     <label for="desc_report_health_case" class="col-form-label">Land conflicts</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Land conflicts</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
             </div>

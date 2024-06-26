@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::get('create/water-stress-report-items', [ReportController::class, 'createWaterStress'])->name('water.stress.report.items.create');
     Route::post('water-stress-items', [ReportController::class, 'waterStress'])->name('water.stress.items.store');
 
+    Route::get('create/migration-report-items', [ReportController::class, 'createMigration'])->name('migration.report.items.create');
+    Route::post('migration-items', [ReportController::class, 'migration'])->name('migration.items.store');
+
 
     //ban user
     Route::post('/users/{id}/ban', [UserController::class, 'banUser'])->name('ban.user');

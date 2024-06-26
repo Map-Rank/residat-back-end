@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Zone;
 use Illuminate\Support\Facades\Log;
 
 
@@ -30,6 +31,35 @@ class UtilService
         }
 
         return $ascendants;
+    }
+
+    public static function getZonesWithLevelId4ForUser($user)
+    {
+        if ($user->zone_id) {
+            // Récupérer la zone de l'utilisateur connecté
+            $zone = Zone::find($user->zone_id);
+            
+            // Initialiser une collection pour les descendants
+            $descendants = collect();
+            
+            // Ajouter la zone de l'utilisateur à la collection des descendants
+            $descendants->push($zone);
+            
+            // Récupérer tous les descendants de la zone de l'utilisateur
+            if ($zone->children != null) {
+                $descendants = UtilService::get_descendants($zone->children, $descendants);
+            }
+            
+            // Filtrer les descendants pour ne garder que ceux avec level_id égal à 4
+            $zones = $descendants->filter(function ($descendant) {
+                return $descendant->level_id == 4;
+            });
+        } else {
+            // Si l'utilisateur n'a pas de zone_id, retourner une collection vide
+            $zones = collect();
+        }
+
+        return $zones;
     }
 
     public static function sendWebNotification($title, $body, array $deviceKeys): array

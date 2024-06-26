@@ -35,9 +35,9 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label for="desc_report_health_case" class="col-form-label">Select level</label>
+                    <label for="desc_report_health_case" class="col-form-label">Select type</label>
                     <select class="form-select" autofocus name="selectedSecurity" id="selectedSecurity" v-model="selectedSecurity">
-                        <option value="">--- Select level ---</option>
+                        <option value="">--- Select type ---</option>
                         <option value="CurrentLevel">Current level</option>
                         <option value="CrisisLevel">Crisis level</option>
                     </select>
@@ -47,16 +47,16 @@
                     <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Food secure households</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="desc_health_vulnerability" class="col-form-label">Highly food insecure households</label>
-                    <textarea type="text" class="form-control" id="desc_health_vulnerability" name="desc_health_vulnerability"></textarea>
+                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Highly food insecure households</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
 
@@ -65,27 +65,9 @@
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
+                    <label for="desc_report_health_case" class="col-form-label">Description Low food secure households</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
                 </div>
-
-                {{-- <div class="mb-3">
-                    <label for="doc_to_patient_ratio" class="col-form-label">Doctor to patient ratio</label>
-                    <input type="number" class="form-control" id="doc_to_patient_ratio" name="doc_to_patient_ratio" required>
-                </div>
-                <div class="mb-3">
-                    <label for="desc_doc_to_patient_ratio" class="col-form-label">Description doctor to patient ratio</label>
-                    <textarea type="text" class="form-control" id="last_name" name="desc_doc_to_patient_ratio"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="total_health_unit" class="col-form-label">Total number of health units</label>
-                    <input type="number" class="form-control" id="total_health_unit" name="total_health_unit" required>
-                </div>
-                <div class="mb-3">
-                    <label for="desc_total_health_unit" class="col-form-label">Description number of health units</label>
-                    <textarea type="text" class="form-control" id="last_name" name="desc_total_health_unit"></textarea>
-                </div> --}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
