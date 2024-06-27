@@ -39,26 +39,26 @@
                     <label for="desc_report_health_case" class="col-form-label">Select type</label>
                     <select class="form-select" autofocus name="selectedType" id="selectedType">
                         <option value=""> --- Select type --- </option>
-                        <option value="current-level">Adult</option>
-                        <option value="crisis-level">Youth</option>
-                        <option value="crisis-level">Children</option>
+                        <option value="adult">Adult</option>
+                        <option value="youth">Youth</option>
+                        <option value="children">Children</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">Urban to Rural </label>
-                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
+                    <label for="urban_to_rural" class="col-form-label">Urban to Rural</label>
+                    <input type="number" class="form-control" id="urban_to_rural" name="urban_to_rural" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Urban to Rural</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_urban_to_rural" class="col-form-label">Description Urban to Rural</label>
+                    <textarea type="text" class="form-control" id="desc_urban_to_rural" name="desc_urban_to_rural"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">Rural to Urban</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="rural_to_urban" class="col-form-label">Rural to Urban</label>
+                    <input type="number" class="form-control" id="rural_to_urban" name="rural_to_urban" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Rural to Urban</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_rural_to_urban" class="col-form-label">Description Rural to Urban</label>
+                    <textarea type="text" class="form-control" id="desc_rural_to_urban" name="desc_rural_to_urban"></textarea>
                 </div>
             </div>
             <div class="modal-footer">

@@ -44,29 +44,30 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">Low water stress</label>
-                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
+                    <label for="low_water_stress" class="col-form-label">Low water stress</label>
+                    <input type="number" class="form-control" id="low_water_stress" name="low_water_stress" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Low water stress</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_low_water_stress" class="col-form-label">Description Low water stress</label>
+                    <textarea type="text" class="form-control" id="desc_low_water_stress" name="desc_low_water_stress"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="high_water_stressed" class="col-form-label">High water stressed</label>
+                    <input type="number" class="form-control" id="high_water_stressed" name="high_water_stressed" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">High water stressed</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="desc_high_water_stressed" class="col-form-label">Description High water stressed</label>
+                    <textarea type="text" class="form-control" id="desc_high_water_stressed" name="desc_high_water_stressed"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="severe_water_stress" class="col-form-label">Severe water stress</label>
+                    <input type="number" class="form-control" id="severe_water_stress" name="severe_water_stress" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description High water stressed</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">Severe water stress</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
-                </div>
-                <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Severe water stress</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_severe_water_stress" class="col-form-label">Description Severe water stress</label>
+                    <textarea type="text" class="form-control" id="desc_severe_water_stress" name="desc_severe_water_stress"></textarea>
                 </div>
             </div>
             <div class="modal-footer">

@@ -43,30 +43,30 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">Food secure households</label>
-                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
+                    <label for="food_secure_households" class="col-form-label">Food secure households</label>
+                    <input type="number" class="form-control" id="food_secure_households" name="food_secure_households" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Food secure households</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_food_secure_households" class="col-form-label">Description Food secure households</label>
+                    <textarea type="text" class="form-control" id="desc_food_secure_households" name="desc_food_secure_households"></textarea>
                 </div>
-
+                
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">Highly food insecure households</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
-                </div>
-                <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Highly food insecure households</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">Low food secure households</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="highly_food_insecure_households" class="col-form-label">Highly food insecure households</label>
+                    <input type="number" class="form-control" id="highly_food_insecure_households" name="highly_food_insecure_households" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Low food secure households</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_highly_food_insecure_households" class="col-form-label">Description Highly food insecure households</label>
+                    <textarea type="text" class="form-control" id="desc_highly_food_insecure_households" name="desc_highly_food_insecure_households"></textarea>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="low_food_secure_households" class="col-form-label">Low food secure households</label>
+                    <input type="number" class="form-control" id="low_food_secure_households" name="low_food_secure_households" required>
+                </div>
+                <div class="mb-3">
+                    <label for="desc_low_food_secure_households" class="col-form-label">Description Low food secure households</label>
+                    <textarea type="text" class="form-control" id="desc_low_food_secure_households" name="desc_low_food_secure_households"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
