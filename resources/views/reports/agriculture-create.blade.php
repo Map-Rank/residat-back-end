@@ -63,7 +63,7 @@
                     <label for="desc_report_health_case" class="col-form-label">Contribution to local economy</label>
                     <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="desc_report_health_case" class="col-form-label">Description Contribution to local economy</label>
                     <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
@@ -83,7 +83,8 @@
 
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
 
     <script>
 
@@ -152,6 +153,20 @@
 
         })
     </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#desc_report_health_case'), {
+
+                ckfinder: {
+                    uploadUrl: '/api/upload-image' // This should be the URL to your image upload handler on the server
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 
 @endsection
 
