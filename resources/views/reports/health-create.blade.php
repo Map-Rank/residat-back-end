@@ -20,6 +20,7 @@
         <form action="{{ route('health-report-items.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
+                <h3>Create Health Report</h3>
                 <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
                     {!! Form::label('Sub Division', null, ['class' => '']) !!}
                     <input v-model="division_name" onfocusout="hidePanel" type="text" class="form-control"

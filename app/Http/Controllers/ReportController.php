@@ -9,6 +9,7 @@ use App\Models\VectorKey;
 use App\Models\MetricType;
 use App\Models\ReportItem;
 use Illuminate\Support\Str;
+use App\Service\UtilService;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,47 @@ use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
 {
-    public function  index(Request $request){
+    public function index(Request $request){
         $reports = Report::query()->paginate(50);
         return view('reports.index', compact('reports'));
+    }
+
+    public function createResourceCompletion(){
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
+
+        return view('reports.ressource-completion', compact('zones'));
+    }
+
+    public function createFishingVulnerability(){
+        $zones = Zone::query()->where('level_id', 4)->get();
+
+        return view('reports.fishing-vulnerability', compact('zones'));
+    }
+
+    public function createWaterStress(){
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
+
+        return view('reports.water-stress', compact('zones'));
+    }
+
+    public function createMigration(){
+        
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
+
+        // Passer les zones à la vue
+        return view('reports.migration', compact('zones'));
     }
 
     public function create(){
@@ -32,37 +71,57 @@ class ReportController extends Controller
 
     public function createHealth(){
 
-        $zones = Zone::query()->where('level_id', 4)->get();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
 
         return view('reports.health-create', compact('zones'));
     }
 
     public function createAgriculture(){
 
-        $zones = Zone::query()->where('level_id', 4)->get();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
 
         return view('reports.agriculture-create', compact('zones'));
     }
 
     public function createInfrastructure(){
 
-        $zones = Zone::query()->where('level_id', 4)->get();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
 
         return view('reports.infrastructure-create', compact('zones'));
     }
 
     public function createSocial(){
 
-        $zones = Zone::query()->where('level_id', 4)->get();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
 
         return view('reports.social-create', compact('zones'));
     }
 
     public function createSelectSecurity(){
 
-        $zones = Zone::query()->where('level_id', 4)->get();
+        // Récupérer l'utilisateur connecté
+        $user = auth()->user();
+        
+        // Obtenir les zones avec level_id égal à 4
+        $zones = UtilService::getZonesWithLevelId4ForUser($user);
 
-        return view('reports.selectedSecurity-create', compact('zones'));
+        return view('reports.food-security', compact('zones'));
     }
     
     

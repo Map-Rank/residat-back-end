@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Create Agriculture report
+    Create Ressource completion report
 @endsection
 
 @section('content')
@@ -10,17 +10,17 @@
     <ol class="breadcrumb breadc    rumb-style2">
         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
         <li class="breadcrumb-item"><a href="{{ route('reports.index') }}">Reports</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Infrastructure Report Creation</li>
+        <li class="breadcrumb-item active" aria-current="page">Ressource completion Report Creation</li>
     </ol>
 </nav>
 
 <div class="body flex-grow-1 bg-light" id="elt">
     <div class="container px-4 my-4">
 
-        <form action="{{ route('infrastructure.report.items.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('ressource.completion.items.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
-                <h3>Create Infrastructure Report</h3>
+                <h3>Create Ressource completion Report</h3>
                 <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
                     {!! Form::label('Sub Division', null, ['class' => '']) !!}
                     <input v-model="division_name" onfocusout="hidePanel" type="text" class="form-control"
@@ -34,43 +34,51 @@
                             @{{ division.name }} </li>
                     </ul>
                 </div>
-                <div class="mb-3">
-                    <label for="percentage_exposure" class="col-form-label">Percentage exposure</label>
-                    <input type="number" class="form-control" id="percentage_exposure" name="percentage_exposure" required>
+                <div class="form-group">
+                    <label for="desc_report_health_case" class="col-form-label">Select level</label>
+                    <select class="form-select" autofocus name="selectedType" id="selectedType">
+                        <option value=""> --- Select type --- </option>
+                        <option value="Current">Current</option>
+                        <option value="projected">Projected</option>
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_percentage_exposure" class="col-form-label">Description Percentage exposure</label>
-                    <textarea type="text" class="form-control" id="desc_percentage_exposure" name="desc_percentage_exposure"></textarea>
+                    <label for="farmer_grazer_conflicts" class="col-form-label">Farmer-Grazer conflicts</label>
+                    <input type="number" class="form-control" id="farmer_grazer_conflicts" name="farmer_grazer_conflicts" required>
                 </div>
                 <div class="mb-3">
-                    <label for="at_risk_critical_infrastructure" class="col-form-label">At risk Critical infrastructure</label>
-                    <input type="number" class="form-control" id="at_risk_critical_infrastructure" name="at_risk_critical_infrastructure" required>
+                    <label for="desc_farmer_grazer_conflicts" class="col-form-label">Description Farmer-Grazer conflicts</label>
+                    <textarea type="text" class="form-control" id="desc_farmer_grazer_conflicts" name="desc_farmer_grazer_conflicts"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_at_risk_critical_infrastructure" class="col-form-label">Description At risk Critical infrastructure</label>
-                    <textarea type="text" class="form-control" id="desc_at_risk_critical_infrastructure" name="desc_at_risk_critical_infrastructure"></textarea>
+                    <label for="water_conflicts" class="col-form-label">Water conflicts</label>
+                    <input type="number" class="form-control" id="water_conflicts" name="water_conflicts" required>
+                </div>
+                <div class="mb-3">
+                    <label for="desc_water_conflicts" class="col-form-label">Description Water conflicts</label>
+                    <textarea type="text" class="form-control" id="desc_water_conflicts" name="desc_water_conflicts"></textarea>
                 </div>
                 
                 <div class="mb-3">
-                    <label for="at_risk_social_infrastructure" class="col-form-label">At risk Social infrastructure</label>
-                    <input type="number" class="form-control" id="at_risk_social_infrastructure" name="at_risk_social_infrastructure" required>
+                    <label for="human_wildlife_conflicts" class="col-form-label">Human-Wildlife conflicts</label>
+                    <input type="number" class="form-control" id="human_wildlife_conflicts" name="human_wildlife_conflicts" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_at_risk_social_infrastructure" class="col-form-label">Description At risk Social infrastructure</label>
-                    <textarea type="text" class="form-control" id="desc_at_risk_social_infrastructure" name="desc_at_risk_social_infrastructure"></textarea>
+                    <label for="desc_human_wildlife_conflicts" class="col-form-label">Description Human-Wildlife conflicts</label>
+                    <textarea type="text" class="form-control" id="desc_human_wildlife_conflicts" name="desc_human_wildlife_conflicts"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="number_evacuation_sites" class="col-form-label">Number of Evacuation sites</label>
-                    <input type="number" class="form-control" id="number_evacuation_sites" name="number_evacuation_sites" required>
+                    <label for="land_conflicts" class="col-form-label">Land conflicts</label>
+                    <input type="number" class="form-control" id="land_conflicts" name="land_conflicts" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_number_evacuation_sites" class="col-form-label">Description Number of Evacuation sites</label>
-                    <textarea type="text" class="form-control" id="desc_number_evacuation_sites" name="desc_number_evacuation_sites"></textarea>
+                    <label for="desc_land_conflicts" class="col-form-label">Description Land conflicts</label>
+                    <textarea type="text" class="form-control" id="desc_land_conflicts" name="desc_land_conflicts"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add Infrastructure report</button>
+                <button type="submit" class="btn btn-primary">Add Ressource completion report</button>
             </div>
         </form>
     </div>
