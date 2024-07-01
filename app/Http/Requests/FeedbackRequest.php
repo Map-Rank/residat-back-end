@@ -25,6 +25,7 @@ class FeedbackRequest extends FormRequest
             'text' => 'required|string',
             'page_link' => 'required|url',
             'rating' => 'required|integer',
+            'file' => 'nullable|string|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3|max:2048',
         ];
     }
 }

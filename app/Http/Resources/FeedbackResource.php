@@ -20,6 +20,7 @@ class FeedbackResource extends JsonResource
             'text' => $this->text,
             'page_link' => $this->page_link,
             'rating' => $this->rating,
+            'file' => env('FRONT_URL').'/'.$this->file,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
