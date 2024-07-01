@@ -9,6 +9,9 @@ use App\Http\Requests\FeedbackRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\FeedbackResource;
 
+/**
+ * @group Module Feedback
+ */
 class FeedbackController extends Controller
 {
     /**
