@@ -31,8 +31,8 @@ class FeedbackController extends Controller
 
         if ($request->hasFile('file')) {
             $mediaFile = $request->file('file');
-            $mediaPath = $mediaFile->storeAs('media/feedbacks/'.auth()->user()->email, 's3');
-            $feedback['file'] = Storage::url($mediaPath);
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            $feedback['file'] = Storage::disk('s3')->putFileAs('feedbacks', $mediaFile, $imageName);
             $feedback->save();
         }
 
