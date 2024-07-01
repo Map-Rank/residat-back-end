@@ -20,12 +20,18 @@ class FeedbackController extends Controller
     public function store(FeedbackRequest $request)
     {
         $validatedData = $request->validated();
+
+        // Get the currently logged-in user's ID
+        $userId = auth()->user()->id;
+
+        // Add user ID to the validated data
+        $validatedData['user_id'] = $userId;
         
         $feedback = Feedback::create($validatedData);
 
         if ($request->hasFile('file')) {
             $mediaFile = $request->file('file');
-            $mediaPath = $mediaFile->store('media/feedbacks/'.auth()->user()->email, 's3');
+            $mediaPath = $mediaFile->storeAs('media/feedbacks/'.auth()->user()->email, 's3');
             $feedback['file'] = Storage::url($mediaPath);
             $feedback->save();
         }
