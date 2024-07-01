@@ -91,8 +91,11 @@ class EventController extends Controller
 
         if ($request->hasFile('media')) {
             $mediaFile = $request->file('media');
-            $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 's3');
-            $event['media'] = Storage::url($mediaPath);
+            // $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 's3');
+
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+            $event['media'] = $path;
             $event->save();
         }
 

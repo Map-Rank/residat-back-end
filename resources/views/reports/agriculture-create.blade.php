@@ -81,7 +81,8 @@
 
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
 
     <script>
 
@@ -150,6 +151,20 @@
 
         })
     </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#desc_report_health_case'), {
+
+                ckfinder: {
+                    uploadUrl: '/api/upload-image' // This should be the URL to your image upload handler on the server
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 
 @endsection
 
