@@ -108,12 +108,12 @@ class AuthController extends Controller
 
         $user = User::with('zone')->where('id', Auth::user()->id)->first();
 
-        $user = UserResource::make($user)->toArray($request);
-        $user['token'] = $token->plainTextToken;
-
         if ($request->filled('fcm_token')) {
             $user->update(['fcm_token' => $request->fcm_token]);
         }
+
+        $user = UserResource::make($user)->toArray($request);
+        $user['token'] = $token->plainTextToken;
 
         return response()->success($user, __('You are logged in'), 200);
     }

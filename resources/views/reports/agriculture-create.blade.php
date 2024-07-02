@@ -35,38 +35,36 @@
                     </ul>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">% Population Vulnerable</label>
-                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
+                    <label for="percentage_vulnerability" class="col-form-label">% Population Vulnerable</label>
+                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description % Population Vulnerable</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_percentage_vulnerability" class="col-form-label">Description % Population Vulnerable</label>
+                    <textarea type="text" class="form-control" id="desc_percentage_vulnerability" name="desc_percentage_vulnerability"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">Last annual output</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="last_annual_output" class="col-form-label">Last annual output</label>
+                    <input type="number" class="form-control" id="last_annual_output" name="last_annual_output" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Last annual output</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">Number of farmers</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="desc_last_annual_output" class="col-form-label">Description Last annual output</label>
+                    <textarea type="text" class="form-control" id="desc_last_annual_output" name="desc_last_annual_output"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Number of farmers</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="number_of_farmers" class="col-form-label">Number of farmers</label>
+                    <input type="number" class="form-control" id="number_of_farmers" name="number_of_farmers" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Contribution to local economy</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="desc_number_of_farmers" class="col-form-label">Description Number of farmers</label>
+                    <textarea type="text" class="form-control" id="desc_number_of_farmers" name="desc_number_of_farmers"></textarea>
                 </div>
-
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description Contribution to local economy</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="contribution_to_local_economy" class="col-form-label">Contribution to local economy</label>
+                    <input type="number" class="form-control" id="contribution_to_local_economy" name="contribution_to_local_economy" required>
+                </div>
+                <div class="mb-3">
+                    <label for="desc_contribution_to_local_economy" class="col-form-label">Description Contribution to local economy</label>
+                    <textarea type="text" class="form-control" id="desc_contribution_to_local_economy" name="desc_contribution_to_local_economy"></textarea>
                 </div>
             </div>
             <div class="modal-footer">

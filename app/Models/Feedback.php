@@ -16,6 +16,8 @@ class Feedback extends Model
         'user_id',
         'text',
         'page_link',
+        'rating',
+        'file'
     ];
 
     public function user()

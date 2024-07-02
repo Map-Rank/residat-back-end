@@ -37,10 +37,77 @@
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
         </svg> Zones<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
     </li>
-    <li class="nav-item"><a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="{{ route('reports.index') }}">
-        <svg class="nav-icon">
-            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
-        </svg> Reports<span class="badge badge-sm bg-info ms-auto">Important</span></a>
+    <li class="nav-group">
+        {{-- {{route('reports.index')}} --}}
+        <a class="nav-link nav-group-toggle" href="">
+            <svg class="nav-icon">
+                <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+            </svg> 
+            Reports
+        </a>
+        <ul class="nav-group-items compact">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('health-report-items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Health Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('agriculture.report.items.create') ? 'active' : '' }}" href="{{ route('agriculture.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Agriculture Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('infrastructure.report.items.create') ? 'active' : '' }}" href="{{ route('infrastructure.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Infrastructure Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('social.report.items.create') ? 'active' : '' }}" href="{{ route('social.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Social Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('food.security.report.items.create') ? 'active' : '' }}" href="{{ route('food.security.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Food Security Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('ressource.completion.report.items.create') ? 'active' : '' }}" href="{{ route('ressource.completion.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Completion Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('fishing.vulnerability.report.items.create') ? 'active' : '' }}" href="{{ route('fishing.vulnerability.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Fishing Vulnerability Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('water.stress.report.items.create') ? 'active' : '' }}" href="{{ route('water.stress.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Water Stress Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('migration.report.items.create') ? 'active' : '' }}" href="{{ route('migration.report.items.create') }}">
+                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Migration Reports
+                </a>
+            </li>
+        </ul>
+        {{-- <ul class="nav-dropdown-items">
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="{{ route('health-report-items.create') }}">
+                    <svg class="nav-icon">
+                        <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-calendar') }}"></use>
+                    </svg> Health Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('reports.index') ? 'active' : '' }}" href="{{ route('agriculture.report.items.create') }}">
+                    <svg class="nav-icon">
+                        <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-calendar-check') }}"></use>
+                    </svg> Agriculture Reports
+                </a>
+            </li>
+        </ul> --}}
     </li>
     <li class="nav-item"><a class="nav-link {{ request()->routeIs('feedbacks.index') ? 'active' : '' }}" href="{{ route('feedbacks.index') }}">
         <svg class="nav-icon">
