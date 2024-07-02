@@ -20,6 +20,7 @@
         <form action="{{ route('agriculture.report.items.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-body">
+                <h3>Create Agriculture Report</h3>
                 <div class="form-group {!! $errors->has('division') ? 'has-error' : '' !!}">
                     {!! Form::label('Sub Division', null, ['class' => '']) !!}
                     <input v-model="division_name" onfocusout="hidePanel" type="text" class="form-control"
@@ -34,57 +35,37 @@
                     </ul>
                 </div>
                 <div class="mb-3">
-                    <label for="percentage_health_vulnerability" class="col-form-label">% Population Vulnerable</label>
-                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_health_vulnerability" required>
+                    <label for="percentage_vulnerability" class="col-form-label">% Population Vulnerable</label>
+                    <input type="number" class="form-control" id="percentage_vulnerability" name="percentage_vulnerability" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="desc_percentage_vulnerability" class="col-form-label">Description % Population Vulnerable</label>
+                    <textarea type="text" class="form-control" id="desc_percentage_vulnerability" name="desc_percentage_vulnerability"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_health_vulnerability" class="col-form-label">Last annual output</label>
-                    <textarea type="text" class="form-control" id="desc_health_vulnerability" name="desc_health_vulnerability"></textarea>
+                    <label for="last_annual_output" class="col-form-label">Last annual output</label>
+                    <input type="number" class="form-control" id="last_annual_output" name="last_annual_output" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="report_health_case" class="col-form-label">Number of farmers</label>
-                    <input type="number" class="form-control" id="report_health_case" name="report_health_case" required>
+                    <label for="desc_last_annual_output" class="col-form-label">Description Last annual output</label>
+                    <textarea type="text" class="form-control" id="desc_last_annual_output" name="desc_last_annual_output"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
+                    <label for="number_of_farmers" class="col-form-label">Number of farmers</label>
+                    <input type="number" class="form-control" id="number_of_farmers" name="number_of_farmers" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Contribution to local economy</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label for="desc_report_health_case" class="col-form-label">Description</label>
-                    <textarea type="text" class="form-control" id="desc_report_health_case" name="desc_report_health_case"></textarea>
-                </div>
-
-                {{-- <div class="mb-3">
-                    <label for="doc_to_patient_ratio" class="col-form-label">Doctor to patient ratio</label>
-                    <input type="number" class="form-control" id="doc_to_patient_ratio" name="doc_to_patient_ratio" required>
+                    <label for="desc_number_of_farmers" class="col-form-label">Description Number of farmers</label>
+                    <textarea type="text" class="form-control" id="desc_number_of_farmers" name="desc_number_of_farmers"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_doc_to_patient_ratio" class="col-form-label">Description doctor to patient ratio</label>
-                    <textarea type="text" class="form-control" id="last_name" name="desc_doc_to_patient_ratio"></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="total_health_unit" class="col-form-label">Total number of health units</label>
-                    <input type="number" class="form-control" id="total_health_unit" name="total_health_unit" required>
+                    <label for="contribution_to_local_economy" class="col-form-label">Contribution to local economy</label>
+                    <input type="number" class="form-control" id="contribution_to_local_economy" name="contribution_to_local_economy" required>
                 </div>
                 <div class="mb-3">
-                    <label for="desc_total_health_unit" class="col-form-label">Description number of health units</label>
-                    <textarea type="text" class="form-control" id="last_name" name="desc_total_health_unit"></textarea>
-                </div> --}}
+                    <label for="desc_contribution_to_local_economy" class="col-form-label">Description Contribution to local economy</label>
+                    <textarea type="text" class="form-control" id="desc_contribution_to_local_economy" name="desc_contribution_to_local_economy"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-coreui-dismiss="modal">Close</button>
@@ -100,7 +81,8 @@
 
     <script src="{{ URL::asset('plugins/datatables/jquery.dataTables.bootstrap4.responsive.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
-
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
+    <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
 
     <script>
 
@@ -169,6 +151,20 @@
 
         })
     </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#desc_report_health_case'), {
+
+                ckfinder: {
+                    uploadUrl: '/api/upload-image' // This should be the URL to your image upload handler on the server
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
 
 @endsection
 
