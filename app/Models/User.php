@@ -14,6 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
 use App\Notifications\CustomVerificationNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -177,6 +178,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function feedbacks()
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param string $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
 }
