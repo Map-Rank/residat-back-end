@@ -67,7 +67,7 @@ class ZoneController extends Controller
 
         $divisions = $data->where('parent_id' , $id)->get();
 
-        return view('zones.divisions', compact('divisions'));
+        return view('zones.divisions', compact(' divisions'));
     }
 
     public function subdivisions(Request $request, $id) {
