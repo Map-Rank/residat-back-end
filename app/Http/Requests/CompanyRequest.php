@@ -21,15 +21,17 @@ class CompanyRequest extends FormRequest
      */
     public function rules(): array
     {
+        $companyId = $this->route('company') ? $this->route('company')->id : null;
+
         return [
             'company_name' => 'required|string|max:255',
             'owner_name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'email' => 'required|email|unique',
+            'email' => 'required|email|unique:companies,email,' . $companyId,
             'phone' => 'required|string|max:255',
             'profile_picture' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
             'official_document' => 'nullable|file|mimes:pdf,doc,docx',
-            'zone_id' => 'required|integer|exists:zone,id',
+            'zone_id' => 'required|integer|exists:zones,id',
         ];
     }
 }

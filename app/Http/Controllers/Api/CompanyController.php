@@ -38,7 +38,8 @@ class CompanyController extends Controller
 
         $company = Company::create($data);
 
-        return new CompanyResource($company);
+        // return new CompanyResource($company);
+        return response()->success(new CompanyResource($company), __('Company created successfully'), 201);
     }
 
     /**
