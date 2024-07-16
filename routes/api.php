@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
+use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
@@ -72,6 +73,9 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::post('unfollow/{id}', [FollowController::class, 'unfollow']);
     Route::get('followers/{id}', [FollowController::class, 'followers']);
     Route::get('following/{id}', [FollowController::class, 'following']);
+
+
+    Route::post('/create/request', [CompanyController::class, 'store']);
 });
 
 
