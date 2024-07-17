@@ -9,12 +9,12 @@
         <div class="img-cont">
             <img class="img" src="{{asset('assets/brand/logo.jpg')}}">
         </div>
-        <h1>Company Created</h1>
+        <h3>Request registered</h3>
         <p>Dear <strong class="color-text">{{ $company->owner_name }},</strong></p>
-        <p>Your company <strong class="color-text"> "{{ $company->company_name }}"</strong> has been created successfully and is awaiting validation by the administrators.</p>
-        <p>Thank you for registering with us.</p>
+        <p>Your request for<strong class="color-text"> "{{ $company->company_name }}"</strong> has Been registered. Our team will revert to you as soon as possible .</p>
+        <p>Thanks for using our app.</p>
     
-        <h2>Follow Us On Social Media</h2>
+        <h4>Follow Us On Social Media</h4>
     
         <div class="social">
         {{-- <a href="https://twitter.com/traversymedia" target="_blank"><i class="fab fa-twitter fa-3x"></i></a> --}}
@@ -49,7 +49,7 @@ a {
 	color: var(--primary-color);
 }
 
-h1 {
+h3 {
 	font-weight: 800;
 	font-size: 3rem;
 	line-height: 1.2;
@@ -62,16 +62,16 @@ h1 {
 
 #about {
 	padding: 40px;
-	text-align: center;
+	text-align: left;
 }
 
 #about p {
 	font-size: 1.2rem;
 	max-width: 600px;
-	margin: auto;
+	/* margin: auto; */
 }
 
-#about h2 {
+#about h4 {
 	margin: 30px 0;
 	color: rgb(122, 166, 78);
 }
