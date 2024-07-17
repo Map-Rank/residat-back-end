@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Company;
+use App\Mail\CompanyCreated;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use Illuminate\Support\Facades\Storage;
@@ -37,6 +39,11 @@ class CompanyController extends Controller
         }
 
         $company = Company::create($data);
+
+        if($company){
+            // Envoyer l'email de notification
+            Mail::to($company->email)->send(new CompanyCreated($company));
+        }
 
         // return new CompanyResource($company);
         return response()->success(new CompanyResource($company), __('Company created successfully'), 201);

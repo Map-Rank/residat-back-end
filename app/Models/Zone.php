@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Level;
 use App\Models\Media;
+use App\Models\Company;
 use App\Models\Notification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -58,5 +59,10 @@ class Zone extends Model
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function compagnies()
+    {
+        return $this->hasMany(Company::class);
     }
 }

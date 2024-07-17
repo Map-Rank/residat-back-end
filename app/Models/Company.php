@@ -20,4 +20,9 @@ class Company extends Model
         'official_document',
         'zone_id',
     ];
+
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
 }
