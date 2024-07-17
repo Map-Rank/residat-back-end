@@ -75,7 +75,6 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::get('following/{id}', [FollowController::class, 'following']);
 
 
-    Route::post('/create/request', [CompanyController::class, 'store']);
 });
 
 
@@ -87,5 +86,5 @@ Route::get('sector', [SectorController::class, 'index'])->name('sector.index');
 Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show');
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
 Route::post('/reset-password', [PasswordController::class, 'reset']);
-
+Route::post('/create/request', [CompanyController::class, 'store']);
 
