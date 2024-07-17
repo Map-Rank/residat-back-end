@@ -97,6 +97,47 @@
 
         </div>
     </div>
+
+    <!-- Modal delete Event -->
+    @foreach ($companies as $company)
+        <div class="modal fade" id="deleteModal-{{$company->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
+                        Delete company
+                    </h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{route('companies.destroy', $company->id)}}">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label"> FROM <strong> {{ $company->company_name }}</strong></h4>
+                            </p>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label"> <strong>Title :</strong> </br> {{ $company->owner_name }}</h4>
+                            </p>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label"> <strong>Description :</strong> </br> {{ $company->email }}</h4>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
+    <!-- Modal end -->
 @endsection
 
 @section('script')

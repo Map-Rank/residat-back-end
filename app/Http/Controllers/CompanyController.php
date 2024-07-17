@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -25,6 +26,29 @@ class CompanyController extends Controller
     {
         $company->load('zone');
         return view('companies.show', compact('company'));
+    }
+
+    /**
+     * Delete event.
+     */
+    public function destroy($id)
+    {
+        $datum = Company::query()->find($id);
+        $user = Auth::user();
+
+        if (!$datum) {
+            return redirect()->back()->with('errors', 'Company not found');
+        }
+
+        if (!$user->hasRole('admin')) {
+            return redirect()->back()->with('errors', 'Unauthorized deletion to this resource');
+        }
+
+        if(!$datum->delete()){
+            return redirect()->back()->with('errors', 'Unable to update the resource');
+        }
+
+        return redirect()->back()->with('success', 'Company deleted successfully');
     }
         
 }
