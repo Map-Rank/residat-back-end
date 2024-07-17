@@ -95,25 +95,48 @@ class ProfileController extends Controller
             }
         }
 
-        // Vérifiez si un fichier d'avatar a été téléchargé
-        if ($request->hasFile('avatar')) {
-            // Récupérez le fichier d'avatar téléchargé
-            $avatar = $request->file('avatar');
-            
-            // Générez un nom de fichier unique pour l'avatar
-            $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+            // Vérifiez si un fichier d'avatar a été téléchargé
+            if ($request->hasFile('avatar')) {
+                // Récupérez le fichier d'avatar téléchargé
+                $avatar = $request->file('avatar');
+                
+                // Générez un nom de fichier unique pour l'avatar
+                $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
-            // Stockez l'avatar dans le dossier de stockage
-            $avatarPath = $avatar->storeAs('media/avatar/'.$user->email, $avatarName, 's3');
+                // Stockez l'avatar dans le dossier de stockage
+                $avatarPath = $avatar->storeAs('media/avatar/'.$user->email, $avatarName, 'public');
 
-            // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
-            $user->avatar = $avatarPath;
+                // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
+                $user->avatar = $avatarPath;
 
 
-            $user->load('zone');
+                $user->load('zone');
 
-            // Sauvegardez les modifications apportées à l'utilisateur
-            $user->save();
+                // Sauvegardez les modifications apportées à l'utilisateur
+                $user->save();
+            }
+        }else{
+            // Vérifiez si un fichier d'avatar a été téléchargé
+            if ($request->hasFile('avatar')) {
+                // Récupérez le fichier d'avatar téléchargé
+                $avatar = $request->file('avatar');
+                
+                // Générez un nom de fichier unique pour l'avatar
+                $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
+
+                // Stockez l'avatar dans le dossier de stockage
+                $avatarPath = $avatar->storeAs('media/avatar/'.$user->email, $avatarName, 's3');
+
+                // Mettez à jour l'attribut d'avatar de l'utilisateur avec le chemin d'accès au fichier
+                $user->avatar = $avatarPath;
+
+
+                $user->load('zone');
+
+                // Sauvegardez les modifications apportées à l'utilisateur
+                $user->save();
+            }
         }
 
         return response()->success(UserResource::make($user), __('User profile retrieved successfully'), 200);

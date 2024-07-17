@@ -29,12 +29,22 @@ class FeedbackController extends Controller
         
         $feedback = Feedback::create($validatedData);
 
-        if ($request->hasFile('file')) {
-            $mediaFile = $request->file('file');
-            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-            $feedback['file'] = Storage::disk('s3')->putFileAs('feedbacks', $mediaFile, $imageName);
-            $feedback->save();
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+            if ($request->hasFile('file')) {
+                $mediaFile = $request->file('file');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $feedback['file'] = Storage::disk('public')->putFileAs('feedbacks', $mediaFile, $imageName);
+                $feedback->save();
+            }
+        }else{
+            if ($request->hasFile('file')) {
+                $mediaFile = $request->file('file');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $feedback['file'] = Storage::disk('s3')->putFileAs('feedbacks', $mediaFile, $imageName);
+                $feedback->save();
+            }
         }
+
 
         return response()->success(new FeedbackResource($feedback), __('Feedback created successfully'), 201);
     }

@@ -84,10 +84,18 @@ class ReportController extends Controller
         ]);
 
         // Enregistrer l'image si elle est fournie
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('report_images', 's3');
-            $report->image = $imagePath;
-            $report->save();
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('report_images', 'public');
+                $report->image = $imagePath;
+                $report->save();
+            }
+        }else{
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('report_images', 's3');
+                $report->image = $imagePath;
+                $report->save();
+            }
         }
 
         $vector = Vector::create([
@@ -147,10 +155,18 @@ class ReportController extends Controller
         ]);
 
         // Enregistrer l'image si elle est fournie
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('report_images', 's3');
-            $report->image = $imagePath;
-            $report->save();
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('report_images', 'public');
+                $report->image = $imagePath;
+                $report->save();
+            }
+        }else{
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('report_images', 's3');
+                $report->image = $imagePath;
+                $report->save();
+            }
         }
 
         // Mettre à jour le vecteur associé au rapport
