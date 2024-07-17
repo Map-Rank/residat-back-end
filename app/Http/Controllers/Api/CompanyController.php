@@ -24,19 +24,39 @@ class CompanyController extends Controller
     {
         $data = $request->validated();
 
-        if ($request->hasFile('profile')) {
-            $mediaFileProfile = $request->file('profile');
-            $imageNameProfile = time().'.'.$mediaFileProfile->getClientOriginalExtension();
-            $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
-            $data['profile'] = $path;
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+
+            if ($request->hasFile('profile')) {
+                $mediaFileProfile = $request->file('profile');
+                $imageNameProfile = time().'.'.$mediaFileProfile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
+                $data['profile'] = $path;
+            }
+    
+            if ($request->hasFile('official_document')) {
+                $mediaFileDoc = $request->file('official_document');
+                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileDoc, $imageNameDoc);
+                $data['official_document'] = $path;
+            }
+        }else{
+
+            if ($request->hasFile('profile')) {
+                $mediaFileProfile = $request->file('profile');
+                $imageNameProfile = time().'.'.$mediaFileProfile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
+                $data['profile'] = $path;
+            }
+    
+            if ($request->hasFile('official_document')) {
+                $mediaFileDoc = $request->file('official_document');
+                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('company_profile_pictures', $mediaFileDoc, $imageNameDoc);
+                $data['official_document'] = $path;
+            }
         }
 
-        if ($request->hasFile('official_document')) {
-            $mediaFileDoc = $request->file('official_document');
-            $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-            $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileDoc, $imageNameDoc);
-            $data['official_document'] = $path;
-        }
+        
 
         $company = Company::create($data);
 
