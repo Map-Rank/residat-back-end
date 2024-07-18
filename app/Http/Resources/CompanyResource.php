@@ -23,7 +23,7 @@ class CompanyResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'profile' => env('FRONT_URL').'/'.$this->profile,
-            'official_document' => $this->official_document,
+            'official_document' => env('FRONT_URL').'/'.$this->official_document,
             'zone_id' => $this->region_id,
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
             'created_at' => $this->created_at,

@@ -13,6 +13,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
@@ -123,6 +124,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('feedbacks', FeedbackController::class);
     Route::resource('evenements', EventController::class);
+
+    Route::get('companies', [CompanyController::class, 'index'])->name('companies.index');
+    Route::get('companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+    Route::delete('companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
 });
 Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');

@@ -89,14 +89,28 @@ class EventController extends Controller
         //     $event->save();
         // }
 
-        if ($request->hasFile('media')) {
-            $mediaFile = $request->file('media');
-            // $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 's3');
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
 
-            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-            $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
-            $event['media'] = $path;
-            $event->save();
+            if ($request->hasFile('media')) {
+                $mediaFile = $request->file('media');
+                // $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 's3');
+
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
+                $event['media'] = $path;
+                $event->save();
+            }
+
+        }else {
+            if ($request->hasFile('media')) {
+                $mediaFile = $request->file('media');
+                // $mediaPath = $mediaFile->store('media/events/'.auth()->user()->email, 's3');
+
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                $event['media'] = $path;
+                $event->save();
+            }
         }
 
 
@@ -120,13 +134,21 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $event->update($validatedData);
 
-        if ($request->hasFile('media')) {
-            $file = $request->file('media');
-            $mediaPath = $file->store('media/events/'.auth()->user()->email, 's3');
-            $event['media'] = Storage::url($mediaPath);
-            $event->save();
+        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+            if ($request->hasFile('media')) {
+                $file = $request->file('media');
+                $mediaPath = $file->store('media/events/'.auth()->user()->email, 'public');
+                $event['media'] = Storage::url($mediaPath);
+                $event->save();
+            }
+        }else{
+            if ($request->hasFile('media')) {
+                $file = $request->file('media');
+                $mediaPath = $file->store('media/events/'.auth()->user()->email, 's3');
+                $event['media'] = Storage::url($mediaPath);
+                $event->save();
+            }
         }
-
 
         return response()->success(new EventResource($event), __('Event updated successfully'), 200);
     }
