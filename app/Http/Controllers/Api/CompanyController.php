@@ -24,7 +24,7 @@ class CompanyController extends Controller
     {
         $data = $request->validated();
 
-        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
 
             if ($request->hasFile('profile')) {
                 $mediaFileProfile = $request->file('profile');
@@ -36,7 +36,7 @@ class CompanyController extends Controller
             if ($request->hasFile('official_document')) {
                 $mediaFileDoc = $request->file('official_document');
                 $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileDoc, $imageNameDoc);
+                $path = Storage::disk('public')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
                 $data['official_document'] = $path;
             }
         }else{
@@ -51,7 +51,7 @@ class CompanyController extends Controller
             if ($request->hasFile('official_document')) {
                 $mediaFileDoc = $request->file('official_document');
                 $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('s3')->putFileAs('company_profile_pictures', $mediaFileDoc, $imageNameDoc);
+                $path = Storage::disk('s3')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
                 $data['official_document'] = $path;
             }
         }
@@ -67,14 +67,6 @@ class CompanyController extends Controller
 
         // return new CompanyResource($company);
         return response()->success(new CompanyResource($company), __('Company created successfully'), 201);
-    }
-
-    /**
-     * Update Request
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
 }

@@ -80,15 +80,19 @@ class PostControllerTest extends TestCase
             // Si le type d'interaction n'existe pas, créez-le
             $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         }
-        sleep(3);
+
         // Créez des fichiers temporaires pour simuler le téléchargement
-        $file1 = UploadedFile::fake()->image('image1.jpg');
-        $file2 = UploadedFile::fake()->image('image2.jpg');
+        Storage::fake(env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3');
+        $file1 = UploadedFile::fake()->image('media1.jpg');
+        $file2 = UploadedFile::fake()->image('media2.jpg');
+
+        // Créez des zones et récupérez les ID nécessaires
+        $zoneId = Zone::factory()->create()->id;
 
         $data = [
             'content' => $this->faker->sentence(),
             'published_at' => Carbon::now()->toDateTimeString(),
-            'zone_id' => Zone::factory()->create()->id,
+            'zone_id' => $zoneId,
             'sectors' => [1, 2],
             'media' => [$file1, $file2],
         ];
@@ -104,13 +108,22 @@ class PostControllerTest extends TestCase
         $this->assertNotNull($post);
 
         foreach ($data['media'] as $mediaFile) {
-            $mediaPath = $mediaFile->store('media/' . auth()->user()->email);
+            // Créez un nom de fichier unique
+            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
+    
+            // Stocker le fichier avec le nom unique dans le disque 'public'
+            $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
+    
+            // Vérifiez que le fichier est bien stocké dans le disque 'public'
+            Storage::disk('public')->assertExists($mediaPath);
+    
+            // Vérifiez que le chemin correspond à ce qui est dans la base de données
             $this->assertDatabaseHas('medias', [
-              'url' => Storage::url($mediaPath),
-              'post_id' => $post->id,
-              'type' => $mediaFile->getClientMimeType(),
+                'url' => $mediaPath,
+                'post_id' => $post->id,
+                'type' => $mediaFile->getClientMimeType(),
             ]);
-          }
+        }
     }
 
     public function test_show()
@@ -153,6 +166,7 @@ class PostControllerTest extends TestCase
         Sanctum::actingAs($user); // Assurez-vous que l'utilisateur est authentifié
 
         // Créez un nouveau fichier temporaire pour simuler la mise à jour du média
+        Storage::fake(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing" ? 'public' : 's3');
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
 
         $data = [
@@ -176,8 +190,23 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['zone_id'], $post->zone_id);
 
         // Vérifiez également que le nouveau média est associé au post
-        $storedMediaUrl = Storage::url($newMediaFile->store('media/' . auth()->user()->email));
-        $this->assertDatabaseHas('medias', ['url' => $storedMediaUrl, 'post_id' => $post->id]);
+        foreach ($data['media'] as $mediaFile) {
+            // Créez un nom de fichier unique
+            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
+    
+            // Stocker le fichier avec le nom unique dans le disque 'public'
+            $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
+    
+            // Vérifiez que le fichier est bien stocké dans le disque 'public'
+            Storage::disk('public')->assertExists($mediaPath);
+    
+            // Vérifiez que le chemin correspond à ce qui est dans la base de données
+            $this->assertDatabaseHas('medias', [
+                'url' => Storage::url($mediaPath),
+                'post_id' => $post->id,
+                'type' => $mediaFile->getClientMimeType(),
+            ]);
+        }
     }
 
     public function test_destroy()

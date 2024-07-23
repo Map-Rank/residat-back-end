@@ -112,7 +112,7 @@ class PostController extends Controller
 
         $post = Post::create($request->all());
 
-        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
             if ($request->hasFile('media')) {
                 $mediaFiles = $request->file('media');
 
@@ -209,16 +209,18 @@ class PostController extends Controller
         }
 
         // Mettez à jour les médias si de nouveaux fichiers sont fournis
-        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
             if ($request->hasFile('media')) {
                 $mediaFiles = $request->file('media');
 
                 $mediaPaths = [];
 
                 foreach ($mediaFiles as $mediaFile) {
-                    $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 'public');
+                    // $mediaPath = $mediaFile->store('images', 's3');
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
                     $mediaPaths[] = [
-                        'url' => Storage::url($mediaPath),
+                        'url' => Storage::url($path),
                         'type' => $mediaFile->getClientMimeType(),
                     ];
                 }
@@ -236,7 +238,8 @@ class PostController extends Controller
                 $mediaPaths = [];
 
                 foreach ($mediaFiles as $mediaFile) {
-                    $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 's3');
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $mediaPath = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
                     $mediaPaths[] = [
                         'url' => Storage::url($mediaPath),
                         'type' => $mediaFile->getClientMimeType(),
