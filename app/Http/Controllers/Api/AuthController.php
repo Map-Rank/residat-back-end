@@ -38,12 +38,22 @@ class AuthController extends Controller
         // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
 
-        if ($request->hasFile('avatar')) {
-            $mediaFile = $request->file('avatar');
-            $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 's3');
-            $user['avatar'] = Storage::url($mediaPath);
-            $user->save;
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+            if ($request->hasFile('avatar')) {
+                $mediaFile = $request->file('avatar');
+                $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 'public');
+                $user['avatar'] = Storage::url($mediaPath);
+                $user->save;
+            }
+        }else{
+            if ($request->hasFile('avatar')) {
+                $mediaFile = $request->file('avatar');
+                $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 's3');
+                $user['avatar'] = Storage::url($mediaPath);
+                $user->save;
+            }
         }
+        
 
         // Mettre à jour le token FCM
         if ($request->filled('fcm_token')) {
