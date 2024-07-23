@@ -14,7 +14,7 @@ class VectorKeyResource extends JsonResource
         $url =  env('FRONT_URL').'/'.$this->value;
 
         if (in_array($appEnv, $environments, true)) {
-            $url = env('APP_URL').'/'.$this->value;
+            $url = env('APP_URL'). '/storage/' .$this->value;
         }
 
         return [

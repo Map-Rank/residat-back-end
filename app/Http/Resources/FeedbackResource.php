@@ -19,7 +19,7 @@ class FeedbackResource extends JsonResource
         $url =  env('FRONT_URL').'/'.$this->file;
 
         if (in_array($appEnv, $environments, true)) {
-            $url = env('APP_URL').'/'.$this->file;
+            $url = env('APP_URL'). '/storage/' .$this->file;
         }
 
         return [

@@ -20,7 +20,7 @@ class CompanyResource extends JsonResource
         $url =  env('FRONT_URL').'/'.$this->profile;
 
         if (in_array($appEnv, $environments, true)) {
-            $url = env('APP_URL').'/'.$this->profile;
+            $url = env('APP_URL'). '/storage/' .$this->profile;
         }
 
         return [

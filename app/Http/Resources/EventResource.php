@@ -15,7 +15,7 @@ class EventResource extends JsonResource
         $url =  env('FRONT_URL').'/'.$this->media;
 
         if (in_array($appEnv, $environments, true)) {
-            $url = env('APP_URL').'/'.$this->media;
+            $url = env('APP_URL'). '/storage/' .$this->media;
         }
 
         return [
