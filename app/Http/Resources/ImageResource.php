@@ -14,10 +14,18 @@ class ImageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url = env('FRONT_URL') . '/' . $this['url'];
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL') . '/' . $this['url'];
+        }
+        
         return [
             'id' => $this['id'],
             'type' => $this['type'],
-            'url' => env('FRONT_URL').'/'.$this['url'],
+            'url' => $url,
         ];
 
     }

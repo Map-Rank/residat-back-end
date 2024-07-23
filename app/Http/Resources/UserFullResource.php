@@ -14,6 +14,14 @@ class UserFullResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url =  env('FRONT_URL').'/'.$this->avatar;
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL').'/'.$this->avatar;
+        }
+
         return [
             'id' => $this['id'],
             'first_name' => $this['first_name'],
@@ -33,7 +41,7 @@ class UserFullResource extends JsonResource
             'gender' => $this['gender'],
             'type' => $this['type'],
             'fcm_token' => $this['fcm_token'],
-            'avatar' => env('FRONT_URL').'/'.$this->avatar,
+            'avatar' => $url,
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
             'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
             'posts' => PostResource::collection($this->whenLoaded('posts')),

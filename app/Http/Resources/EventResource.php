@@ -10,6 +10,14 @@ class EventResource extends JsonResource
 {
     public function toArray($request)
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url =  env('FRONT_URL').'/'.$this->media;
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL').'/'.$this->media;
+        }
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -20,7 +28,7 @@ class EventResource extends JsonResource
             'published_at' => $this->published_at,
             'date_debut' => $this->date_debut,
             'date_fin' => $this->date_fin,
-            'image' => env('FRONT_URL').'/'.$this->media,
+            'image' => $url,
             'humanize_date_creation' => Carbon::parse($this->created_at)->diffForHumans(),
             'sector' => $this->sector,
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
