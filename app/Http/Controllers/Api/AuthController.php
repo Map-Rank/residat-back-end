@@ -35,21 +35,22 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
 
         if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
             if ($request->hasFile('avatar')) {
                 $mediaFile = $request->file('avatar');
-                $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 'public');
-                $user['avatar'] = Storage::url($mediaPath);
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('avatar', $mediaFile, $imageName);
+                $user['avatar'] = Storage::url($path);
                 $user->save;
             }
         }else{
             if ($request->hasFile('avatar')) {
                 $mediaFile = $request->file('avatar');
-                $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 's3');
-                $user['avatar'] = Storage::url($mediaPath);
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('avatar', $mediaFile, $imageName);
+                $user['avatar'] = Storage::url($path);
                 $user->save;
             }
         }
