@@ -29,7 +29,7 @@ class FeedbackController extends Controller
         
         $feedback = Feedback::create($validatedData);
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('file')) {
                 $mediaFile = $request->file('file');
                 $imageName = time().'.'.$mediaFile->getClientOriginalExtension();

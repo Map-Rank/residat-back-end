@@ -37,7 +37,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->all());
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('avatar')) {
                 $mediaFile = $request->file('avatar');
                 $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
