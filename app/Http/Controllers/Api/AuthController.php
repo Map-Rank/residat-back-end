@@ -35,15 +35,26 @@ class AuthController extends Controller
      */
     public function register(RegisterRequest $request)
     {
-        // $user['avatar'] = '/storage/media/profile.png';
         $user = User::create($request->all());
 
-        if ($request->hasFile('avatar')) {
-            $mediaFile = $request->file('avatar');
-            $mediaPath = $mediaFile->storeAs('media/avatar/'.$user->email, 's3');
-            $user['avatar'] = Storage::url($mediaPath);
-            $user->save;
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
+            if ($request->hasFile('avatar')) {
+                $mediaFile = $request->file('avatar');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('avatar', $mediaFile, $imageName);
+                $user['avatar'] = Storage::url($path);
+                $user->save;
+            }
+        }else{
+            if ($request->hasFile('avatar')) {
+                $mediaFile = $request->file('avatar');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('avatar', $mediaFile, $imageName);
+                $user['avatar'] = Storage::url($path);
+                $user->save;
+            }
         }
+        
 
         // Mettre à jour le token FCM
         if ($request->filled('fcm_token')) {

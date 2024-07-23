@@ -87,7 +87,7 @@ class ReportController extends Controller
         ]);
 
         // Enregistrer l'image si elle est fournie
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('report_images', 'public');
                 $report->image = $imagePath;
@@ -164,7 +164,7 @@ class ReportController extends Controller
         ]);
 
         // Enregistrer l'image si elle est fournie
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('report_images', 'public');
                 $report->image = $imagePath;

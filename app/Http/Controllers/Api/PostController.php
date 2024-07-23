@@ -112,7 +112,7 @@ class PostController extends Controller
 
         $post = Post::create($request->all());
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('media')) {
                 $mediaFiles = $request->file('media');
 
@@ -209,7 +209,7 @@ class PostController extends Controller
         }
 
         // Mettez à jour les médias si de nouveaux fichiers sont fournis
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('media')) {
                 $mediaFiles = $request->file('media');
 

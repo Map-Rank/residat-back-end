@@ -95,7 +95,7 @@ class ProfileController extends Controller
             }
         }
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             // Vérifiez si un fichier d'avatar a été téléchargé
             if ($request->hasFile('avatar')) {
                 // Récupérez le fichier d'avatar téléchargé
