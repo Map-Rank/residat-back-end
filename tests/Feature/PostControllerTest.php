@@ -166,7 +166,7 @@ class PostControllerTest extends TestCase
         Sanctum::actingAs($user); // Assurez-vous que l'utilisateur est authentifié
 
         // Créez un nouveau fichier temporaire pour simuler la mise à jour du média
-        Storage::fake(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing" ? 'public' : 's3');
+        Storage::fake(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3');
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
 
         $data = [

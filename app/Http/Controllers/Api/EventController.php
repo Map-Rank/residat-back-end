@@ -89,7 +89,7 @@ class EventController extends Controller
         //     $event->save();
         // }
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
 
             if ($request->hasFile('media')) {
                 $mediaFile = $request->file('media');
@@ -134,18 +134,20 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $event->update($validatedData);
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('media')) {
-                $file = $request->file('media');
-                $mediaPath = $file->store('media/events/'.auth()->user()->email, 'public');
-                $event['media'] = Storage::url($mediaPath);
+                $mediaFile = $request->file('media');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
+                $event['media'] = Storage::url($path);
                 $event->save();
             }
         }else{
             if ($request->hasFile('media')) {
-                $file = $request->file('media');
-                $mediaPath = $file->store('media/events/'.auth()->user()->email, 's3');
-                $event['media'] = Storage::url($mediaPath);
+                $mediaFile = $request->file('media');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                $event['media'] = Storage::url($path);
                 $event->save();
             }
         }

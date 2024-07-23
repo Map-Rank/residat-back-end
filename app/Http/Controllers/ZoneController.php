@@ -131,7 +131,7 @@ class ZoneController extends Controller
         $datum->level_id = $request['level_id'];
         $datum->name = $request['name'];
 
-        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing" ? 'public' : 's3'){
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3'){
             if ($request->hasFile('data')) {
                 $mediaFile = $request->file('data');
                 $mediaPath = $mediaFile->store('media/zone', 'public');

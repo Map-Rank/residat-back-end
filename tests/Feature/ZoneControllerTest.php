@@ -65,7 +65,7 @@ class ZoneControllerTest extends TestCase
 
         $this->actingAs($user); // Authenticate if applicable
 
-        Storage::fake(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing" ? 'public' : 's3');
+        Storage::fake(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3');
 
         $level = Level::factory()->create(['name' => 'Country']);
         
