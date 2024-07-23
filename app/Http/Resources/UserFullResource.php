@@ -41,6 +41,7 @@ class UserFullResource extends JsonResource
             'my_shares' => InteractionResource::collection($this->whenLoaded('shareInteractions')),
             'my_comments' => InteractionResource::collection($this->whenLoaded('commentInteractions')),
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
+            'events' => $this['events'],
             'created_at' => $this['created_at'],
         ];
     }

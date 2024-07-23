@@ -7,12 +7,16 @@ use App\Models\User;
 use Database\Seeders\RoleSeeder;
 use Spatie\Permission\Models\Role;
 use Database\Seeders\PermissionSeeder;
+use Spatie\Permission\Models\Permission;
+use Database\Factories\PermissionFactory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PermissionControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    
 
     public function testGetAllRolesWithPermissions()
     {
@@ -72,25 +76,214 @@ class PermissionControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    // public function testShowRole()
-    // {
-    //     $role = Role::factory()->create();
+    public function testStoreRole()
+    {
+        $user = User::first();
 
-    //     $response = $this->get("/your_route_to_show_role/{$role->id}");
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
 
-    //     $response->assertStatus(200);
-    // }
+        $this->actingAs($user); // Authenticate if applicable
 
-    // public function testUpdatePermissions()
-    // {
-    //     $role = Role::factory()->create();
-    //     $user = User::factory()->create();
-    //     $permissions = []; // Specify your permissions array here
+        $response = $this->post('/create-role', [
+            'name' => 'newRole',
+        ]);
 
-    //     $response = $this->post("/your_route_to_update_permissions/{$role->id}", [
-    //         'permissions' => $permissions,
-    //     ]);
+        $response->assertRedirect();
+        $this->assertDatabaseHas('roles', ['name' => 'newRole']);
+    }
 
-    //     $response->assertStatus(200); // Assuming you return a view with HTTP 200
-    // }
+    public function testStoreRoleValidationFails()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        $response = $this->post('/create-role', [
+            'name' => '',
+        ]);
+
+        $response->assertSessionHas('error', 'Please check the fields.');
+    }
+
+    public function testUpdateRole()
+    {
+        // Créer un utilisateur et le connecter
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Créer un rôle
+        $response = $this->post('/create-role', [
+            'name' => 'existingRole',
+        ]);
+
+        // Vérifiez que le rôle a été créé
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'Rôle created successfully');
+
+        // Récupérer le rôle créé
+        $role = Role::where('name', 'existingRole')->first();
+
+        // Mettre à jour le rôle
+        $updateResponse = $this->put("/update-role/{$role->id}", [
+            'name' => 'updatedRole',
+        ]);
+
+        // Vérifiez que le rôle a été mis à jour
+        $updateResponse->assertRedirect();
+        $updateResponse->assertSessionHas('success', 'Rôle updated successfully');
+
+        // Vérifiez que la base de données contient le rôle mis à jour
+        $this->assertDatabaseHas('roles', ['name' => 'updatedRole']);
+    }
+
+    public function testUpdateRoleValidationFails()
+    {
+        // Créer un utilisateur et le connecter
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        // Créer un rôle
+        $response = $this->post('/create-role', [
+            'name' => 'existingRole',
+        ]);
+
+        // Vérifiez que le rôle a été créé
+        $response->assertRedirect();
+        $response->assertSessionHas('success', 'Rôle created successfully');
+
+        // Récupérer le rôle créé
+        $role = Role::where('name', 'existingRole')->first();
+
+        // Mettre à jour le rôle
+        $updateResponse = $this->put("/update-role/{$role->id}", [
+            'name' => '',
+        ]);
+
+        $response->assertSessionHas('error', 'Please check the fields.');
+    }
+
+    public function testStorePermission()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+        
+        $response = $this->post('/create-permissions', [
+            'name' => 'newPermission',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('permissions', ['name' => 'newPermission']);
+    }
+
+    public function testStorePermissionValidationFails()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+        $response = $this->post('/create-permissions', [
+            'name' => '',
+        ]);
+
+        $response->assertSessionHas('error', 'Please check the fields.');
+    }
+
+    public function testGetAllPermissions()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        PermissionFactory::new()->count(20)->create();
+
+        $response = $this->get('/all-permissions');
+
+        $response->assertStatus(200);
+        $response->assertViewHas('permissions');
+    }
+
+    public function testUpdateUniqPermission()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        $permission = PermissionFactory::new()->create(['name' => 'existingPermission']);
+
+        $response = $this->put("/update-permissions/{$permission->id}", [
+            'name' => 'updatedPermission',
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('permissions', ['name' => 'updatedPermission']);
+    }
+
+    public function testUpdateUniqPermissionValidationFails()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        $permission = PermissionFactory::new()->create(['name' => 'existingPermission']);
+
+        $response = $this->put("/update-permissions/{$permission->id}", [
+            'name' => '',
+        ]);
+
+        $response->assertSessionHas('error', 'Please check the fields.');
+    }
+
+    public function testDeletePermission()
+    {
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
+        $this->actingAs($user); // Authenticate if applicable
+
+        $permission = PermissionFactory::new()->create(['name' => 'existingPermission']);
+
+        $response = $this->delete("/delete-permission/{$permission->id}");
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('permissions', ['id' => $permission->id]);
+    }
+
+
 }

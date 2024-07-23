@@ -146,9 +146,13 @@ class PermissionController extends Controller
 
     public function storePermission(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:permissions,name',
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Please check the fields.');
+        }
 
         $permission = Permission::create([
             'name' => $request->input('name'),
@@ -169,9 +173,13 @@ class PermissionController extends Controller
 
     public function updateUniqPermission(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|unique:permissions,name,' . $id,
         ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', 'Please check the fields.');
+        }
 
         $permission = Permission::findOrFail($id);
 

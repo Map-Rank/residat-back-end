@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
@@ -48,13 +50,13 @@ Route::middleware('auth')->group(function () {
     Route::get('roles', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('permissions', [PermissionController::class, 'getAllRolesWithPermissions'])->name('permissions.index');
     Route::get('/role/{id}', [PermissionController::class, 'showRole'])->name('role.show');
-    Route::put('/permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
+    Route::put('/update-permissions/{id}', [PermissionController::class, 'updatePermissions'])->name('permissions.update');
 
     Route::put('/update-permissions/{id}', [PermissionController::class, 'updateUniqPermission'])->name('update.uniq.permissions');
 
     Route::post('/create-role', [PermissionController::class, 'store'])->name('create.role');
     Route::put('/update-role/{id}', [PermissionController::class, 'update'])->name('update.role');
-    Route::put('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
+    Route::delete('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete.permission');
     Route::post('/create-permissions', [PermissionController::class, 'storePermission'])->name('create.permissions');
     Route::get('/all-permissions', [PermissionController::class, 'getAllPermissions'])->name('all.permissions');
 
@@ -121,6 +123,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('feedbacks', FeedbackController::class);
+    Route::resource('evenements', EventController::class);
+
+    Route::get('companies', [CompanyController::class, 'index'])->name('companies.index');
+    Route::get('companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+    Route::delete('companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
 });
 Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');

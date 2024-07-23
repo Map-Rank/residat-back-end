@@ -55,4 +55,44 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/');
     }
+
+    /**
+     * Test verifyToken with valid token.
+     *
+     * @return void
+     */
+    public function test_verify_token_with_valid_token()
+    {
+        // Crée un utilisateur
+        $user = User::factory()->create();
+
+        // Agis en tant que cet utilisateur
+        $this->actingAs($user, 'sanctum');
+
+        // Envoie une requête POST à la route /verify-token
+        $response = $this->postJson('api/verify-token');
+
+        // Vérifie la réponse
+        $response->assertStatus(200)
+                 ->assertJson(['message' => 'Token is valid']);
+    }
+
+    /**
+     * Test verifyToken with invalid token.
+     *
+     * @return void
+     */
+    public function test_verify_token_with_invalid_token()
+    {
+        // Désactive le middleware pour ce test spécifique
+        $this->withoutMiddleware();
+
+        // Envoie une requête POST à la route /verify-token sans authentification
+        $response = $this->postJson('api/verify-token');
+
+        // Vérifie la réponse
+        $response->assertStatus(401)
+                 ->assertJson(['message' => 'Token is not valid']);
+    }
+
 }

@@ -46,7 +46,7 @@ class NotificationController extends Controller
         $user = Auth::user();
 
         if (!$user) {
-            return response()->error([], __('User not authenticated'), 403);
+            return response()->errors([], __('User not authenticated'), 403);
         }
 
         $zoneId = $user->zone_id;
@@ -113,7 +113,7 @@ class NotificationController extends Controller
 
         if ($request->hasFile('image')) {
             $mediaFile = $request->file('image');
-            $mediaPath = $mediaFile->storeAs('media/notifications/'.auth()->user()->email, 's3');
+            $mediaPath = $mediaFile->storeAs('media/notifications/'.auth()->user()->email, 'public');
             $notification['image'] = Storage::url($mediaPath);
             $notification->save();
         }

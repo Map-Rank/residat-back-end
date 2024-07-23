@@ -21,7 +21,14 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        // Préparez l'utilisateur et les données nécessaires :
         $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->create();
+        }
+
         Sector::factory()->create();
         // Récupérer un ID aléatoire d'un secteur
         $sectorId = Sector::inRandomOrder()->first()->id;

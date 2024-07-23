@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Auth;
 
+use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
 class PasswordResetTest extends TestCase
 {
@@ -27,8 +28,10 @@ class PasswordResetTest extends TestCase
 
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
+       
+
         $response->assertStatus(200);
-        Notification::assertSentTo($user, ResetPassword::class);
+        Notification::assertSentTo($user, ResetPasswordNotification::class);
     }
 
     public function test_reset_password_screen_can_be_rendered(): void
@@ -41,7 +44,7 @@ class PasswordResetTest extends TestCase
         // Envoyez une demande de réinitialisation du mot de passe
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        Notification::assertSentTo($user, ResetPasswordNotification::class, function ($notification) use ($user) {
             $token = $notification->token;
 
             // Authentifiez l'utilisateur avant d'accéder à la route de réinitialisation du mot de passe
@@ -70,7 +73,7 @@ class PasswordResetTest extends TestCase
         // Envoyez une demande de réinitialisation du mot de passe
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        Notification::assertSentTo($user, ResetPasswordNotification::class, function ($notification) use ($user) {
             $token = $notification->token;
 
             // Authentifiez l'utilisateur avant d'accéder à la route de réinitialisation du mot de passe

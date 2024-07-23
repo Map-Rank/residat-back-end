@@ -112,22 +112,42 @@ class PostController extends Controller
 
         $post = Post::create($request->all());
 
-        if ($request->hasFile('media')) {
-            $mediaFiles = $request->file('media');
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+            if ($request->hasFile('media')) {
+                $mediaFiles = $request->file('media');
 
-            $mediaPaths = [];
+                $mediaPaths = [];
 
-            foreach ($mediaFiles as $mediaFile) {
-                // $mediaPath = $mediaFile->store('images', 's3');
-                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-                $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
-                $mediaPaths[] = [
-                    'url' => $path,
-                    'type' => $mediaFile->getClientMimeType(),
-                ];
+                foreach ($mediaFiles as $mediaFile) {
+                    // $mediaPath = $mediaFile->store('images', 's3');
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
+                    $mediaPaths[] = [
+                        'url' => $path,
+                        'type' => $mediaFile->getClientMimeType(),
+                    ];
+                }
+
+                $post->medias()->createMany($mediaPaths);
             }
+        }else{
+            if ($request->hasFile('media')) {
+                $mediaFiles = $request->file('media');
 
-            $post->medias()->createMany($mediaPaths);
+                $mediaPaths = [];
+
+                foreach ($mediaFiles as $mediaFile) {
+                    // $mediaPath = $mediaFile->store('images', 's3');
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                    $mediaPaths[] = [
+                        'url' => $path,
+                        'type' => $mediaFile->getClientMimeType(),
+                    ];
+                }
+
+                $post->medias()->createMany($mediaPaths);
+            }
         }
 
         // Récupérer les secteurs à partir de la requête
@@ -189,25 +209,51 @@ class PostController extends Controller
         }
 
         // Mettez à jour les médias si de nouveaux fichiers sont fournis
-        if ($request->hasFile('media')) {
-            $mediaFiles = $request->file('media');
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
+            if ($request->hasFile('media')) {
+                $mediaFiles = $request->file('media');
 
-            $mediaPaths = [];
+                $mediaPaths = [];
 
-            foreach ($mediaFiles as $mediaFile) {
-                $mediaPath = $mediaFile->store('media/'.auth()->user()->email, 's3');
-                $mediaPaths[] = [
-                    'url' => Storage::url($mediaPath),
-                    'type' => $mediaFile->getClientMimeType(),
-                ];
+                foreach ($mediaFiles as $mediaFile) {
+                    // $mediaPath = $mediaFile->store('images', 's3');
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
+                    $mediaPaths[] = [
+                        'url' => Storage::url($path),
+                        'type' => $mediaFile->getClientMimeType(),
+                    ];
+                }
+
+                // Supprimez les anciens médias associés au post
+                $post->medias()->delete();
+
+                // Créez les nouveaux médias associés au post
+                $post->medias()->createMany($mediaPaths);
             }
+        }else{
+            if ($request->hasFile('media')) {
+                $mediaFiles = $request->file('media');
 
-            // Supprimez les anciens médias associés au post
-            $post->medias()->delete();
+                $mediaPaths = [];
 
-            // Créez les nouveaux médias associés au post
-            $post->medias()->createMany($mediaPaths);
+                foreach ($mediaFiles as $mediaFile) {
+                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $mediaPath = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                    $mediaPaths[] = [
+                        'url' => Storage::url($mediaPath),
+                        'type' => $mediaFile->getClientMimeType(),
+                    ];
+                }
+
+                // Supprimez les anciens médias associés au post
+                $post->medias()->delete();
+
+                // Créez les nouveaux médias associés au post
+                $post->medias()->createMany($mediaPaths);
+            }
         }
+            
 
         return response()->success(PostResource::make($post->loadMissing('medias')), __('Post updated successfully'), 200);
     }

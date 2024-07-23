@@ -131,11 +131,20 @@ class ZoneController extends Controller
         $datum->level_id = $request['level_id'];
         $datum->name = $request['name'];
 
-        if ($request->hasFile('data')) {
-            $mediaFile = $request->file('data');
-            $mediaPath = $mediaFile->store('media/zone', 's3');
-            $datum->banner = Storage::url($mediaPath);
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing" ? 'public' : 's3'){
+            if ($request->hasFile('data')) {
+                $mediaFile = $request->file('data');
+                $mediaPath = $mediaFile->store('media/zone', 'public');
+                $datum->banner = Storage::url($mediaPath);
+            }
+        }else{
+            if ($request->hasFile('data')) {
+                $mediaFile = $request->file('data');
+                $mediaPath = $mediaFile->store('media/zone', 's3');
+                $datum->banner = Storage::url($mediaPath);
+            }
         }
+        
 
         if (!$datum->save())
             {redirect()->back()->with('Error while creating the zone');}
