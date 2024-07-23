@@ -89,7 +89,7 @@ class EventController extends Controller
         //     $event->save();
         // }
 
-        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
 
             if ($request->hasFile('media')) {
                 $mediaFile = $request->file('media');
@@ -134,7 +134,7 @@ class EventController extends Controller
         $validatedData = $request->validated();
         $event->update($validatedData);
 
-        if(env('APP_ENV') === "local" || env('APP_ENV') === "dev"){
+        if(env('APP_ENV') == "local" || env('APP_ENV')  == "dev" || env('APP_ENV') == "testing"){
             if ($request->hasFile('media')) {
                 $file = $request->file('media');
                 $mediaPath = $file->store('media/events/'.auth()->user()->email, 'public');
