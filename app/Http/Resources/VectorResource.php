@@ -8,17 +8,9 @@ class VectorResource extends JsonResource
 {
     public function toArray($request)
     {
-        $appEnv = env('APP_ENV');
-        $environments = ['local', 'dev', 'testing'];
-        $url =  env('FRONT_URL').$this->path;
-
-        if (in_array($appEnv, $environments, true)) {
-            $url = env('APP_URL').$this->path;
-        }
-
         return [
             'id' => $this->id,
-            'path' => $url,
+            'path' => env('FRONT_URL').$this->path,
             'model_id' => $this->model_id,
             'category' => $this->category,
             'type' => $this->type,
