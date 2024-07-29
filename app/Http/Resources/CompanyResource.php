@@ -15,6 +15,14 @@ class CompanyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url =  env('FRONT_URL').'/'.$this->profile;
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL'). '/storage/' .$this->profile;
+        }
+
         return [
             'id' => $this->id,
             'company_name' => $this->company_name,
@@ -22,8 +30,8 @@ class CompanyResource extends JsonResource
             'description' => $this->description,
             'email' => $this->email,
             'phone' => $this->phone,
-            'profile' => env('FRONT_URL').'/'.$this->profile,
-            'official_document' => env('FRONT_URL').'/'.$this->official_document,
+            'profile' => $url, 
+            'official_document' => $url,
             'zone_id' => $this->region_id,
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
             'created_at' => $this->created_at,

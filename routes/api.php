@@ -76,7 +76,13 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
 
 });
+//show all post and view one post without auth
 
+Route::get('/get-all-posts', [PostController::class, 'index']);
+Route::get('/one-post/{id}', [PostController::class, 'show']);
+
+Route::get('get-all-events', [EventController::class, 'index']);
+Route::get('one-event/{id}', [EventController::class, 'show']);
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);

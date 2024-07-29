@@ -17,13 +17,21 @@ class ZoneResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url =  env('FRONT_URL').$this['banner'];
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL').$this['banner'];
+        }
+
         return [
             'id' => $this['id'],
             'name' => $this['name'],
             'parent' => ZoneResource::make($this->whenLoaded('zone')),
             'parent_id' => $this['parent_id'],
             'level_id' => $this['level_id'],
-            'banner' => env('FRONT_URL').$this['banner'],
+            'banner' => $url,
             'created_at' => $this['created_at'],
             'vector' => VectorResource::make($this->whenLoaded('vector')),
         ];

@@ -9,9 +9,17 @@ class VectorKeyResource extends JsonResource
 {
     public function toArray($request)
     {
+        $appEnv = env('APP_ENV');
+        $environments = ['local', 'dev', 'testing'];
+        $url =  env('FRONT_URL').'/'.$this->value;
+
+        if (in_array($appEnv, $environments, true)) {
+            $url = env('APP_URL'). '/storage/' .$this->value;
+        }
+
         return [
             'id' => $this->id,
-            'value' => env('FRONT_URL').'/'.$this->value,
+            'value' => $url,
             'type' => $this->type,
             'name' => $this->name,
             'vector_id' => $this->vector_id,
