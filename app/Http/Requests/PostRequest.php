@@ -28,7 +28,6 @@ class PostRequest extends FormRequest
             'content' => 'required',
             'published_at' => 'nullable|date',
             'zone_id' => 'required|exists:zones,id',
-            'media' => 'nullable',
             'media.*' => 'nullable|mimes:jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3|max:2048', // Ajoute la règle pour le media
             'sectors' => 'nullable',
         ];
@@ -42,7 +41,7 @@ class PostRequest extends FormRequest
     {
         throw new HttpResponseException(response()->errors($validator->errors(), 'Validation errors', 422));
     }
-    
+
     /**
      * @codeCoverageIgnore
      */
@@ -69,7 +68,7 @@ class PostRequest extends FormRequest
                 'description' => 'Images of the post (jpeg,png,jpg,gif,pdf,mp4,mov,avi,wmv,mp3)',
                 'example' => 'path/image.jpg'
             ],
-            
+
         ];
     }
 }

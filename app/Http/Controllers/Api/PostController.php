@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 /**
  * @group Module Posts
@@ -120,7 +121,7 @@ class PostController extends Controller
 
                 foreach ($mediaFiles as $mediaFile) {
                     // $mediaPath = $mediaFile->store('images', 's3');
-                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $imageName = Str::uuid() .'.'.$mediaFile->getClientOriginalExtension();
                     $path = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
                     $mediaPaths[] = [
                         'url' => $path,
@@ -138,7 +139,7 @@ class PostController extends Controller
 
                 foreach ($mediaFiles as $mediaFile) {
                     // $mediaPath = $mediaFile->store('images', 's3');
-                    $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                    $imageName =  Str::uuid().'.'.$mediaFile->getClientOriginalExtension();
                     $path = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
                     $mediaPaths[] = [
                         'url' => $path,
@@ -253,7 +254,7 @@ class PostController extends Controller
                 $post->medias()->createMany($mediaPaths);
             }
         }
-            
+
 
         return response()->success(PostResource::make($post->loadMissing('medias')), __('Post updated successfully'), 200);
     }
