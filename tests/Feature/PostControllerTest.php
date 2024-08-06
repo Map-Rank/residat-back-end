@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Resources\SubscriptionResource;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 
 class PostControllerTest extends TestCase
 {
@@ -109,14 +110,14 @@ class PostControllerTest extends TestCase
 
         foreach ($data['media'] as $mediaFile) {
             // Créez un nom de fichier unique
-            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
-    
+            $imageName = Str::uuid()() . '.' . $mediaFile->getClientOriginalExtension();
+
             // Stocker le fichier avec le nom unique dans le disque 'public'
             $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
-    
+
             // Vérifiez que le fichier est bien stocké dans le disque 'public'
             Storage::disk('public')->assertExists($mediaPath);
-    
+
             // Vérifiez que le chemin correspond à ce qui est dans la base de données
             $this->assertDatabaseHas('medias', [
                 'url' => $mediaPath,
@@ -192,14 +193,14 @@ class PostControllerTest extends TestCase
         // Vérifiez également que le nouveau média est associé au post
         foreach ($data['media'] as $mediaFile) {
             // Créez un nom de fichier unique
-            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
-    
+            $imageName = Str::uuid() . '.' . $mediaFile->getClientOriginalExtension();
+
             // Stocker le fichier avec le nom unique dans le disque 'public'
             $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
-    
+
             // Vérifiez que le fichier est bien stocké dans le disque 'public'
             Storage::disk('public')->assertExists($mediaPath);
-    
+
             // Vérifiez que le chemin correspond à ce qui est dans la base de données
             $this->assertDatabaseHas('medias', [
                 'url' => Storage::url($mediaPath),

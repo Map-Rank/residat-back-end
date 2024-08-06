@@ -191,4 +191,12 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new ResetPasswordNotification($token));
     }
 
+    public function postCount()
+    {
+        return $this->hasMany(Interaction::class)
+                    ->where('type_interaction_id', 1)
+                    ->selectRaw('user_id, count(*) as count')
+                    ->groupBy('user_id');
+    }
+
 }

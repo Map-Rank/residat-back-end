@@ -29,6 +29,7 @@
                         <th class="bg-body-secondary">Gender</th>
                         <th class="bg-body-secondary">Type</th>
                         <th class="bg-body-secondary">Zone ID</th>
+                        <th class="bg-body-secondary">Post count</th>
                         <th class="bg-body-secondary"></th>
                     </tr>
                 </thead>
@@ -50,6 +51,7 @@
                             <td>{{ $user->gender }}</td>
                             <td>{{ $user->type }}</td>
                             <td>{{ $user->zone->name }}</td>
+                            <td>{{ $user->postCount->first()->count ?? 0 }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
