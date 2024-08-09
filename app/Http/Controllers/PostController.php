@@ -13,8 +13,18 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')->withCount('likes', 'comments', 'shares')->latest()->paginate(500);
-        // Post::with('creator', 'likes', 'comments', 'shares', 'medias')
+        // Récupérer tous les posts avec leurs relations et compter les interactions
+        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')
+            ->withCount('likes', 'comments', 'shares')
+            ->latest()
+            ->paginate(10);
+
+        // Calculer le total des interactions pour chaque post
+        foreach ($posts as $post) {
+            $post->total_interactions = $post->likes_count + $post->comments_count + $post->shares_count;
+        }
+
+        // Passer les données à la vue
         return view('posts.index', compact('posts'));
     }
 
