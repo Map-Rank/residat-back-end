@@ -93,7 +93,7 @@ class PostController extends Controller
             }
         }
 
-        $data =  $data->offSet($page * $size)->take($size)->latest()->get();
+        $data =  $data->offSet($page * $size)->take($size)->latest()->where("active", true)->get();
 
         return response()->success(PostResource::collection($data), __('Posts retrieved successfully'), 200);
     }
