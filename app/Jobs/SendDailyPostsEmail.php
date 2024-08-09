@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Mail\DailyPostsMail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -30,15 +31,16 @@ class SendDailyPostsEmail implements ShouldQueue
      */
     public function handle(): void
     {
-        // Récupérer les articles créés la veille
-        $posts  = Post::whereDate('published_at', Carbon::yesterday())->get();
-
-        // Récupérer tous les utilisateurs
-        $users = User::all();
-
-        // Envoyer un email à chaque utilisateur
-        foreach ($users as $user) {
-            Mail::to($user->email)->send(new DailyPostsMail($posts));
+        try {
+            $posts = Post::whereDate('published_at', Carbon::yesterday())->get();
+    
+            $users = User::all();
+    
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new DailyPostsMail($posts));
+            }
+        } catch (\Exception $e) {
+            Log::error('Erreur lors de l\'envoi du DailyPostsMail : ' . $e->getMessage());
         }
     }
 }
