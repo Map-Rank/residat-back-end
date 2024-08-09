@@ -31,16 +31,16 @@ class SendDailyPostsEmail implements ShouldQueue
      */
     public function handle(): void
     {
-        try {
             $posts = Post::whereDate('published_at', Carbon::yesterday())->get();
     
             $users = User::all();
     
             foreach ($users as $user) {
-                Mail::to($user->email)->send(new DailyPostsMail($posts));
+                try {
+                    Mail::to($user->email)->send(new DailyPostsMail($posts));
+                } catch (\Exception $e) {
+                    Log::error('Erreur lors de l\'envoi du DailyPostsMail : ' . $e->getMessage());
+                }
             }
-        } catch (\Exception $e) {
-            Log::error('Erreur lors de l\'envoi du DailyPostsMail : ' . $e->getMessage());
-        }
     }
 }
