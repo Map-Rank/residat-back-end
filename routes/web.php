@@ -19,6 +19,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\SectorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
     Route::resource('reports', ReportController::class);
+    Route::resource('sectors', SectorController::class);
     
 
     Route::get('create/health-report-items', [ReportController::class, 'createHealth'])->name('health-report-items.create');

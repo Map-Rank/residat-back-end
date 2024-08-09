@@ -28,6 +28,7 @@
                         <th class="bg-body-secondary">number of likes</th>
                         <th class="bg-body-secondary">number of comment </th>
                         <th class="bg-body-secondary">number of sharing </th>
+                        <th class="bg-body-secondary">Total interactions </th>
                         <th class="bg-body-secondary"></th>
                     </tr>
                 </thead>
@@ -49,6 +50,7 @@
                             <td>{{ $post->likes_count }}</td>
                             <td>{{ $post->comments_count }}</td>
                             <td>{{ $post->shares_count }}</td>
+                            <td>{{ $post->total_interactions  }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"

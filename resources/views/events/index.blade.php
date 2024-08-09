@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    List of users
+    List of events
 @endsection
 
 @section('content')

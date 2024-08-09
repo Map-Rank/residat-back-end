@@ -37,6 +37,11 @@
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
         </svg> Zones<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
     </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('sectors.index') ? 'active' : '' }}" href="{{ route('sectors.index') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+        </svg> Sectors<span class="badge badge-sm bg-info ms-auto">NEW</span></a>
+    </li>
     <li class="nav-group">
         {{-- {{route('reports.index')}} --}}
         <a class="nav-link nav-group-toggle" href="">

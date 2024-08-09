@@ -22,4 +22,11 @@ class Sector extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public static function sectorsWithMostPosts()
+    {
+        return Sector::withCount('posts')
+                    ->orderBy('posts_count', 'desc')
+                    ->get();
+    }
 }
