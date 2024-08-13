@@ -111,11 +111,22 @@ class NotificationController extends Controller
 
         $descendants->push($notification->zone);
 
-        if ($request->hasFile('image')) {
-            $mediaFile = $request->file('image');
-            $mediaPath = $mediaFile->storeAs('media/notifications/'.auth()->user()->email, 'public');
-            $notification['image'] = Storage::url($mediaPath);
-            $notification->save();
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
+            if ($request->hasFile('image')) {
+                $mediaFile = $request->file('image');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('public')->putFileAs('notifications', $mediaFile, $imageName);
+                $notification['image'] = Storage::url($path);
+                $notification->save;
+            }
+        }else{
+            if ($request->hasFile('image')) {
+                $mediaFile = $request->file('image');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $path = Storage::disk('s3')->putFileAs('notifications', $mediaFile, $imageName);
+                $notification['image'] = Storage::url($path);
+                $notification->save();
+            }
         }
 
         $users_token = User::whereNotNull('fcm_token')->whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
