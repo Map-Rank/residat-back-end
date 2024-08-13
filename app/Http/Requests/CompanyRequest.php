@@ -25,12 +25,10 @@ class CompanyRequest extends FormRequest
 
         return [
             'company_name' => 'required|string|max:255',
-            'owner_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'email' => 'required|email|unique:companies,email,' . $companyId,
             'phone' => 'required|string|max:255',
             'profile_picture' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
-            'official_document' => 'nullable|file|mimes:pdf,doc,docx,jpeg,png,jpg',
             'zone_id' => 'required|integer|exists:zones,id',
         ];
     }
