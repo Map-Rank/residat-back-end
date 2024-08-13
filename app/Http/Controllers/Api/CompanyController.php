@@ -32,13 +32,6 @@ class CompanyController extends Controller
                 $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
                 $data['profile'] = $path;
             }
-    
-            if ($request->hasFile('official_document')) {
-                $mediaFileDoc = $request->file('official_document');
-                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('public')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
-                $data['official_document'] = $path;
-            }
         }else{
 
             if ($request->hasFile('profile')) {
@@ -46,13 +39,6 @@ class CompanyController extends Controller
                 $imageNameProfile = time().'.'.$mediaFileProfile->getClientOriginalExtension();
                 $path = Storage::disk('s3')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
                 $data['profile'] = $path;
-            }
-    
-            if ($request->hasFile('official_document')) {
-                $mediaFileDoc = $request->file('official_document');
-                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('s3')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
-                $data['official_document'] = $path;
             }
         }
 
