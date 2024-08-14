@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
                 'first_name' => 'required|string|max:255',
                 'last_name' => 'nullable|string|max:255',
                 'phone' => 'required|string|max:20',
-                'date_of_birth' => 'required|date',
+                'date_of_birth' => 'nullable|date',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'profession' => 'nullable|string',
                 'password' => 'nullable|string|min:6',
@@ -37,6 +37,8 @@ class UserRequest extends FormRequest
                 'zone_id' => 'exists:zones,id',
                 'profession' => 'nullable|string',
                 'description' => 'nullable|string',
+                'language' => 'nullable|string',
+                
                 ];
         }
         return [
@@ -52,6 +54,7 @@ class UserRequest extends FormRequest
             'zone_id' => 'exists:zones,id',
             'profession' => 'nullable|string',
             'description' => 'nullable|string',
+            'language' => 'nullable|string',
         ];
     }
 

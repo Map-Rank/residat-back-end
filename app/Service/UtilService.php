@@ -109,7 +109,7 @@ class UtilService
         // Close connection
         curl_close($ch);
 
-        Log::info(sprintf('%s: Message response is %s', __METHOD__, json_encode($res)));
+        Log::info(sprintf('%s: Message response is %s', __METHOD__, $res['data']));
 
         return $res;
     }

@@ -63,7 +63,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'type',
         'profession',
         'description',
-        'fcm_token'
+        'fcm_token',
+        'language'
     ];
 
     /**

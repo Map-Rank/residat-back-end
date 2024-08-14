@@ -43,7 +43,7 @@ class UserResource extends JsonResource
             'date_of_birth' => $this->date_of_birth,
             'gender' => $this->gender,
             'zone_id' => $this->zone_id,
-            'zone_id' => $this->zone_id,
+            'language' => $this->language,
             'role' => $this->roles,
             'active' => $this->active,
             'verified' => $this->verified,
