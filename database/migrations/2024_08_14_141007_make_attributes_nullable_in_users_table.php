@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->date('date_of_birth')->nullable()->change();
-            $table->string('last_name')->nullable()->change();
+        if (Schema::hasTable('users') && !Schema::hasColumns('users', ['date_of_birth', 'last_name'])) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->date('date_of_birth')->nullable()->change();
+                $table->string('last_name')->nullable()->change();
 
-            $table->string('language')->default('en')->nullable();
-        });
+            });
+            Schema::table('users', function (Blueprint $table) {
+            });
+         }
     }
 
     /**
