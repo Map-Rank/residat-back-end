@@ -134,6 +134,7 @@ class NotificationController extends Controller
         // dd($users_token);
 
         try{
+            $users_token = ['fAqFKzkZANP0pMYlVarvFw:APA91bEDM0r-JszcTK6Of6uP3OKEE51vXv07RpMaP4U1YbOX_hnDzJiOAYHYi9fpweoI1tMXiX5_gvgURrEpM1-BxzSxW5JZgRrzpel88WoUT2cbznnXgRJEaTCihy9MDLnVyDEVI-1V'];
             UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);
         }catch(Exception $ex){
             Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
