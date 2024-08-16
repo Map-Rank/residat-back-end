@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('users') && !Schema::hasColumns('users', ['date_of_birth', 'last_name'])) {
             Schema::table('users', function (Blueprint $table) {
-                $table->date('date_of_birth')->default('1970-01-01')->nullable()->change();
+                $table->timestamp('date_of_birth')->nullable()->change();
                 $table->string('last_name')->nullable()->change();
-
+                $table->string('language')->default('en')->nullable();
             });
-         }
-
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('language')->default('en')->nullable();
-        });
     }
 
     /**
@@ -30,9 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('date_of_birth')->nullable(false)->change();
+            $table->timestamp('date_of_birth')->nullable(false)->change();
             $table->string('last_name')->nullable(false)->change();
-
             $table->dropColumn('language');
         });
     }
