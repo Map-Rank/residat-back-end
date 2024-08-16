@@ -17,9 +17,11 @@ return new class extends Migration
                 $table->string('last_name')->nullable()->change();
 
             });
-            Schema::table('users', function (Blueprint $table) {
-            });
          }
+         
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('language')->default('en')->nullable();
+        });
     }
 
     /**
