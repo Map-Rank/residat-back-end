@@ -35,7 +35,7 @@ class RegisterRequest extends FormRequest
             'last_name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users',
             'phone' => 'required|string|max:20',
-            'date_of_birth' => 'nullable|date',
+            // 'date_of_birth' => 'nullable|date',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'required|string|min:6',
             'gender' => 'nullable|in:male,female',

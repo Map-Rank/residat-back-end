@@ -13,7 +13,7 @@ return new class extends Migration
     {
         if (Schema::hasTable('users') && !Schema::hasColumns('users', ['date_of_birth', 'last_name'])) {
             Schema::table('users', function (Blueprint $table) {
-                $table->date('date_of_birth')->nullable()->change();
+                $table->date('date_of_birth')->default('1970-01-01')->nullable()->change();
                 $table->string('last_name')->nullable()->change();
 
             });
