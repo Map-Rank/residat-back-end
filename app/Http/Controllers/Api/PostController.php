@@ -320,8 +320,6 @@ class PostController extends Controller
                     'zone_id' => $post->zone_id,
                 ];
 
-                Notification::create($notificationData);
-
                 // Envoie la notification au créateur du post
                 $creatorToken = $post->creator->first()->fcm_token;
                 if ($creatorToken) {
@@ -371,8 +369,6 @@ class PostController extends Controller
             'zone_id' => $post->zone_id, 
         ];
 
-        Notification::create($notificationData);
-
         $creatorToken = $post->creator->first()->fcm_token;
 
         if ($creatorToken) {
@@ -403,8 +399,6 @@ class PostController extends Controller
             'content_fr' => auth()->user()->name . " a partager votre post.",
             'zone_id' => $post->zone_id, 
         ];
-
-        Notification::create($notificationData);
 
         $creatorToken = $post->creator->first()->fcm_token;
         if ($creatorToken) {
