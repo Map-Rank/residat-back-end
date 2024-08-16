@@ -50,7 +50,7 @@ class UserRequest extends FormRequest
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'profession' => 'nullable|string',
             'password' => 'required|string|min:6',
-            'gender' => 'nullable|in:male,female',
+            'gender' => 'nulla ble|in:male,female',
             'zone_id' => 'exists:zones,id',
             'profession' => 'nullable|string',
             'description' => 'nullable|string',
