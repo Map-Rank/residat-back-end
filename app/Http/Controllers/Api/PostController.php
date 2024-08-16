@@ -314,7 +314,7 @@ class PostController extends Controller
                 $notificationData = [
                     'user_id' => $post->creator->first()->id, // Créateur du post
                     'titre_en' => "New Like on Your Post",
-                    'titre_fr' => "Nouveau j'aime sur votre message",
+                    'titre_fr' => "Nouveau j'aime sur votre Post",
                     'content_en' => $user->first_name . " liked your post.",
                     'content_fr' => $user->first_name . " A aimé votre post.",
                     'zone_id' => $post->zone_id,
@@ -398,7 +398,9 @@ class PostController extends Controller
         $notificationData = [
             'user_id' => $post->creator->first()->id,
             'titre_en' => "Your Post Was Shared",
+            'titre_fr' => "Votre Post a été partagé",
             'content_en' => auth()->user()->name . " shared your post.",
+            'content_fr' => auth()->user()->name . " a partager votre post.",
             'zone_id' => $post->zone_id, 
         ];
 
