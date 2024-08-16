@@ -33,7 +33,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable(false)->change();
             $table->string('last_name')->nullable(false)->change();
 
-            // $table->dropColumn('language');
+            $table->dropColumn('language');
         });
     }
 };
