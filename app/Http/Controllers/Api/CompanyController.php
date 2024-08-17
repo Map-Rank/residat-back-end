@@ -59,7 +59,7 @@ class CompanyController extends Controller
                 'active' => 1,
                 'activated_at' => Carbon::now(),
                 'password' => Hash::make($data['password']),
-                'profession' => $data['email'],
+                'profession' => 'INSTITUTION',
                 'description' => $data['description'],
                 'language' => $data['language'],
                 'first_name' => $data['company_name'],
