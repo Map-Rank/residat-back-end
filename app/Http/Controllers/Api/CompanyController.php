@@ -66,6 +66,7 @@ class CompanyController extends Controller
                 'avatar' => isset($data['profile']) ? $data['profile'] : '',
                 'fcm_token' => isset($data['fcm_token']) ? $data['fcm_token'] : '',
                 'type' => 'COUNCIL',
+                'zone_id' => $data['zone_id']
             ];
             $user = User::create($userData);
             $token = $user->createToken('authtoken');
