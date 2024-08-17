@@ -70,7 +70,7 @@ class CompanyController extends Controller
             ];
             $user = User::create($userData);
             $token = $user->createToken('authtoken');
-            $userData = UserResource::make($user->loadMissing('zone'));
+            $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
             $userData['token'] = $token->plainTextToken;
 
             Mail::to($company->email)->send(new CompanyCreated($company));
