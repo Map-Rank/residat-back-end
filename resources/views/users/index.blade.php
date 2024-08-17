@@ -67,6 +67,8 @@
                                         <a class="dropdown-item btn btn-info" href="#" data-coreui-toggle="modal" data-coreui-target="#activateModal-{{$user->id}}" data-coreui-whatever="@mdo">Activate</a>
                                         <a class="dropdown-item" href="{{route('user.detail',$user->id)}}" >View</a>
                                         <a class="dropdown-item" href="{{route('users.edit',$user->id)}}" >Edit</a>
+                                        <button type="button" class="dropdown-item text-danger" data-coreui-toggle="modal" data-coreui-target="#deleteModal-{{ $user->id }}" data-coreui-whatever="@getbootstrap">Delete</button>
+                                        
                                     </div>
                                 </div>
                             </td>
@@ -202,6 +204,43 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Confirm</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    @endforeach
+    <!-- Modal end -->
+
+    <!-- Modal delete user -->
+    @foreach ($users as $user)
+        <div class="modal fade" id="deleteModal-{{$user->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        {{-- <i class="icon icon-xxl mt-5 mb-2 cil-warning"></i> --}}
+                        Delete a user
+                    </h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{route('users.delete',$user->id)}}">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <h3>
+                                Do you want to delete this user?
+                            </h3>
+                            <p>
+                                <h4 for="recipient-name" class="col-form-label">{{ $user->first_name }}  {{ $user->last_name }}</h4>
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary text-white" data-coreui-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                 </form>
             </div>

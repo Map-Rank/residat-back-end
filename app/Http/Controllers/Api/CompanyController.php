@@ -9,7 +9,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 /**
  * @group Module Requests
@@ -23,6 +28,7 @@ class CompanyController extends Controller
     public function store(CompanyRequest $request)
     {
         $data = $request->validated();
+        $path = '';
 
         if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
 
@@ -32,13 +38,6 @@ class CompanyController extends Controller
                 $path = Storage::disk('public')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
                 $data['profile'] = $path;
             }
-    
-            if ($request->hasFile('official_document')) {
-                $mediaFileDoc = $request->file('official_document');
-                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('public')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
-                $data['official_document'] = $path;
-            }
         }else{
 
             if ($request->hasFile('profile')) {
@@ -47,26 +46,46 @@ class CompanyController extends Controller
                 $path = Storage::disk('s3')->putFileAs('company_profile_pictures', $mediaFileProfile, $imageNameProfile);
                 $data['profile'] = $path;
             }
-    
-            if ($request->hasFile('official_document')) {
-                $mediaFileDoc = $request->file('official_document');
-                $imageNameDoc = time().'.'.$mediaFileDoc->getClientOriginalExtension();
-                $path = Storage::disk('s3')->putFileAs('company_official_document', $mediaFileDoc, $imageNameDoc);
-                $data['official_document'] = $path;
-            }
         }
 
-        
+
 
         $company = Company::create($data);
 
         if($company){
             // Envoyer l'email de notification
+            $userData = [
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'active' => 1,
+                'activated_at' => Carbon::now(),
+                'password' => Hash::make($data['password']),
+                'profession' => 'INSTITUTION',
+                'description' => $data['description'],
+                'language' => $data['language'],
+                'first_name' => $data['company_name'],
+                'avatar' => isset($data['profile']) ? $data['profile'] : '',
+                'fcm_token' => isset($data['fcm_token']) ? $data['fcm_token'] : '',
+                'type' => 'COUNCIL',
+                'zone_id' => $data['zone_id']
+            ];
+            $user = User::create($userData);
+            // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
+            $defaultRole = Role::where('name', 'default')->first();
+
+            if ($defaultRole) {
+                $user->assignRole($defaultRole);
+            }
+            $token = $user->createToken('authtoken');
+            $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
+            $userData['token'] = $token->plainTextToken;
+
             Mail::to($company->email)->send(new CompanyCreated($company));
         }
 
         // return new CompanyResource($company);
-        return response()->success(new CompanyResource($company), __('Company created successfully'), 201);
+        return response()->success(['company' => new CompanyResource($company),
+            'user' => $userData], __('Company created successfully'), 201);
     }
 
 }

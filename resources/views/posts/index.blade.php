@@ -28,6 +28,7 @@
                         <th class="bg-body-secondary">number of likes</th>
                         <th class="bg-body-secondary">number of comment </th>
                         <th class="bg-body-secondary">number of sharing </th>
+                        <th class="bg-body-secondary">Total interactions </th>
                         <th class="bg-body-secondary"></th>
                     </tr>
                 </thead>
@@ -49,6 +50,7 @@
                             <td>{{ $post->likes_count }}</td>
                             <td>{{ $post->comments_count }}</td>
                             <td>{{ $post->shares_count }}</td>
+                            <td>{{ $post->total_interactions  }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-transparent p-0" type="button" data-coreui-toggle="dropdown"
@@ -65,7 +67,8 @@
                                         </a>
                                         <a class="dropdown-item" href="{{route('post.detail',$post->id)}}" >View</a>
                                         <a class="dropdown-item" href="#">Edit</a>
-                                        <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        {{-- <a class="dropdown-item text-danger" href="#">Delete</a> --}}
+                                        <button type="button" class="dropdown-item text-danger" data-coreui-toggle="modal" data-coreui-target="#deleteModal-{{ $post->id }}" data-coreui-whatever="@getbootstrap">Delete</button>
                                     </div>
                                 </div>
                             </td>
@@ -160,6 +163,41 @@
     </div>
     @endforeach
     <!-- Modal end -->
+
+    @foreach ($posts as $post)
+        <div class="modal fade" id="deleteModal-{{$post->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            Delete Post
+                        </h5>
+                        <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="{{ route('posts.destroy', $post->id) }}">
+                        @csrf
+                        @method('DELETE')
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <h3>
+                                    Do you want to delete this post?
+                                </h3>
+                                <p>
+                                    <h4 for="recipient-name" class="col-form-label">{{ $post->content }}</h4>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger text-white" data-coreui-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">
+                               Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
 
 @section('script')

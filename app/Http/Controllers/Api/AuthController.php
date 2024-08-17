@@ -57,8 +57,8 @@ class AuthController extends Controller
         
 
         // Mettre à jour le token FCM
-        if ($request->filled('fcm_token')) {
-            $user->update(['fcm_token' => $request->fcm_token]);
+        if (isset($request['fcm_token'])) {
+            $user->update(['fcm_token' => $request['fcm_token'] ]);
         }
 
 

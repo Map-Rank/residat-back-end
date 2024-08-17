@@ -19,6 +19,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\SectorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +42,9 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('delete/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
     Route::post('/store-user', [UserController::class, 'store'])->name('users.store');
     Route::get('/create-user', [UserController::class, 'create'])->name('users.create');
     Route::get('/edit-user/{id}', [UserController::class, 'edit'])->name('users.edit');
@@ -63,6 +65,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('posts', [PostController::class, 'index'])->name('posts.index');
+    Route::delete('delete/posts/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
     Route::get('zones', [ZoneController::class, 'index'])->name('zones.index');
     Route::get('zones/division/{id}', [ZoneController::class, 'divisions'])->name('region.division');
     Route::get('zones/division/subdivisions/{id}', [ZoneController::class, 'subdivisions'])->name('region.division.subdivisions');
@@ -72,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::put('zones/{id}', [ZoneController::class, 'update'])->name('zone.update');
     Route::post('zone', [ZoneController::class, 'store'])->name('zone.store');
     Route::resource('reports', ReportController::class);
+    Route::resource('sectors', SectorController::class);
     
 
     Route::get('create/health-report-items', [ReportController::class, 'createHealth'])->name('health-report-items.create');

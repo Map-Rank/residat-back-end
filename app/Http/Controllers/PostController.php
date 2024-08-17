@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -13,8 +15,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')->withCount('likes', 'comments', 'shares')->latest()->paginate(500);
-        // Post::with('creator', 'likes', 'comments', 'shares', 'medias')
+        // Récupérer tous les posts avec leurs relations et compter les interactions
+        $posts = Post::with('creator', 'likes', 'comments', 'shares', 'medias')
+            ->withCount('likes', 'comments', 'shares')
+            ->where("active", true)
+            ->latest()
+            ->paginate(10);
+
+        // Calculer le total des interactions pour chaque post
+        foreach ($posts as $post) {
+            $post->total_interactions = $post->likes_count + $post->comments_count + $post->shares_count;
+        }
+
+        // Passer les données à la vue
         return view('posts.index', compact('posts'));
     }
 
@@ -67,7 +80,40 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::beginTransaction();
+
+        try {
+            $post = Post::findOrFail($id);
+
+            // Supprimer les médias associés au post
+            foreach ($post->medias as $media) {
+                // Supprimer le fichier du disque approprié
+                $disk = env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3';
+                Storage::disk($disk)->delete($media->url);
+
+                // Supprimer l'entrée de la base de données
+                $media->delete();
+            }
+
+            // Supprimer les relations associées
+            $post->likes()->delete();
+            $post->comments()->delete();
+            $post->shares()->delete();
+            $post->sectors()->detach();
+            $post->users()->detach();
+
+            // Supprimer le post
+            $post->delete();
+
+            // Valider la transaction
+            DB::commit();
+
+            return redirect()->route('posts.index')->with('success', 'Post deleted successfully !');
+        } catch (\Exception $e) {
+            // Annuler la transaction en cas d'erreur
+            DB::rollBack();
+            return redirect()->route('posts.index')->with('error', 'Something wrong!');
+        }
     }
 
     /**

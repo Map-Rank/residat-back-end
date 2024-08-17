@@ -12,12 +12,11 @@ class Company extends Model
 
     protected $fillable = [
         'company_name',
-        'owner_name',
+        'type',
         'description',
         'email',
         'phone',
         'profile',
-        'official_document',
         'zone_id',
     ];
 

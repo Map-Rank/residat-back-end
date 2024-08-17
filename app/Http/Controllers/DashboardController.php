@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Report;
+use App\Models\Sector;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -20,6 +21,9 @@ class DashboardController extends Controller
         $postCount = Post::count();
         $reportCount = Report::count();
 
-        return view('dashboard', compact('userCount', 'eventCount', 'postCount', 'reportCount'));
+        $postWithMostInteractions = Post::postWithMostInteractions();
+        $sectorsWithMostPosts = Sector::sectorsWithMostPosts();
+
+        return view('dashboard', compact('userCount', 'eventCount', 'postCount', 'reportCount','postWithMostInteractions','sectorsWithMostPosts'));
     }
 }

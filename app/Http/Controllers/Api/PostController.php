@@ -4,26 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use Exception;
 use App\Models\Post;
-use App\Models\Media;
-use App\Models\Interaction;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Requests\PostRequest;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\InteractionResource;
-use App\Http\Resources\PostResource;
-use App\Http\Resources\UserFullResource;
-use App\Models\TypeInteraction;
 use App\Models\User;
 use App\Models\Zone;
+use App\Models\Media;
+use App\Models\Interaction;
+use Illuminate\Support\Str;
+use App\Models\Notification;
 use App\Service\UtilService;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\TypeInteraction;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\PostRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\PostResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use App\Http\Resources\InteractionResource;
 
 /**
  * @group Module Posts
@@ -93,7 +94,7 @@ class PostController extends Controller
             }
         }
 
-        $data =  $data->offSet($page * $size)->take($size)->latest()->get();
+        $data =  $data->offSet($page * $size)->take($size)->latest()->where("active", true)->get();
 
         return response()->success(PostResource::collection($data), __('Posts retrieved successfully'), 200);
     }
@@ -308,6 +309,22 @@ class PostController extends Controller
                 // Sinon, ajoutez le like et mettez à jour liked à true
                 $post->users()->attach($user, ['type_interaction_id' => 2]);
                 $message = __('Post liked successfully');
+
+                // **Créer la notification pour le créateur du post**
+                $notificationData = [
+                    'user_id' => $post->creator->first()->id, // Créateur du post
+                    'titre_en' => "New Like on Your Post",
+                    'titre_fr' => "Nouveau j'aime sur votre Post",
+                    'content_en' => $user->first_name . " liked your post.",
+                    'content_fr' => $user->first_name . " A aimé votre post.",
+                    'zone_id' => $post->zone_id,
+                ];
+
+                // Envoie la notification au créateur du post
+                $creatorToken = $post->creator->first()->fcm_token;
+                if ($creatorToken) {
+                    UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+                }
             }
 
             return response()->success(PostResource::make($post->loadMissing('interactions')), $message, 200);
@@ -343,6 +360,21 @@ class PostController extends Controller
 
         $post->users()->attach(auth()->user(), ['type_interaction_id'=> 3, 'text' => $validated['text']]);
 
+        $notificationData = [
+            'user_id' => $post->creator->first()->id, 
+            'titre_en' => "New Comment on Your Post",
+            'titre_fr' => "Nouveau Commentaire sur Votre Post",
+            'content_en' => auth()->user()->first_name . " commented on your post. ",
+            'content_fr' => auth()->user()->first_name . " commented on your post. ",
+            'zone_id' => $post->zone_id, 
+        ];
+
+        $creatorToken = $post->creator->first()->fcm_token;
+
+        if ($creatorToken) {
+            UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+        }
+
         return response()->success(PostResource::make($post->loadMissing('postComments')), __('Comment added successfully'), 200);
     }
 
@@ -358,6 +390,20 @@ class PostController extends Controller
         }
 
         $post->users()->attach(auth()->user(), ['type_interaction_id'=> 4]);
+
+        $notificationData = [
+            'user_id' => $post->creator->first()->id,
+            'titre_en' => "Your Post Was Shared",
+            'titre_fr' => "Votre Post a été partagé",
+            'content_en' => auth()->user()->name . " shared your post.",
+            'content_fr' => auth()->user()->name . " a partager votre post.",
+            'zone_id' => $post->zone_id, 
+        ];
+
+        $creatorToken = $post->creator->first()->fcm_token;
+        if ($creatorToken) {
+            UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+        }
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
     }

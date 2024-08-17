@@ -9,8 +9,11 @@ use App\Mail\WelcomeEmail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -165,12 +168,59 @@ class UserController extends Controller
      * @codeCoverageIgnore
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        // Démarrer la transaction
+        DB::beginTransaction();
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès');
+        try {
+            // Trouver l'utilisateur par son ID
+            $user = User::findOrFail($id);
+
+            // Supprimer les interactions de l'utilisateur
+            $user->interactions()->delete();
+            $user->likeInteractions()->delete();
+            $user->commentInteractions()->delete();
+            $user->shareInteractions()->delete();
+
+            // Supprimer les abonnements de l'utilisateur
+            // $user->subscriptions()->detach();
+            // $user->activeSubscription()->detach();
+
+            // Supprimer les notifications de l'utilisateur
+            $user->notifications()->delete();
+
+            // Supprimer les feedbacks de l'utilisateur
+            $user->feedbacks()->delete();
+
+            // Supprimer les événements de l'utilisateur
+            $user->events()->delete();
+
+            // Supprimer les suivis de l'utilisateur
+            $user->followers()->detach();
+            $user->following()->detach();
+
+            // Supprimer l'avatar de l'utilisateur s'il existe
+            if ($user->avatar) {
+                $disk = env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3';
+                Storage::disk($disk)->delete($user->avatar);
+            }
+            // dd($user);
+
+            // Supprimer l'utilisateur
+            $user->delete();
+
+
+            // Valider la transaction
+            DB::commit();
+
+            return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès');
+        } catch (\Exception $e) {
+            // Annuler la transaction en cas d'erreur
+            DB::rollBack();
+            Log::error('Erreur lors de la suppression de l\'utilisateur' . $e->getMessage());
+            return redirect()->route('users.index')->with('error', 'Erreur lors de la suppression de l\'utilisateur');
+        }
     }
 
     /**
