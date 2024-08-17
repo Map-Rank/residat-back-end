@@ -14,6 +14,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Models\Role;
 
 /**
  * @group Module Requests
@@ -69,6 +70,12 @@ class CompanyController extends Controller
                 'zone_id' => $data['zone_id']
             ];
             $user = User::create($userData);
+            // Attribuer le rôle par défaut (par exemple, 'default') à l'utilisateur
+            $defaultRole = Role::where('name', 'default')->first();
+
+            if ($defaultRole) {
+                $user->assignRole($defaultRole);
+            }
             $token = $user->createToken('authtoken');
             $userData = UserResource::make($user->loadMissing('zone'))->toArray($request);
             $userData['token'] = $token->plainTextToken;
