@@ -11,6 +11,7 @@ use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -54,6 +55,9 @@ class CompanyController extends Controller
             // Envoyer l'email de notification
             $userData = [
                 'email' => $data['email'],
+                'phone' => $data['phone'],
+                'active' => 1,
+                'activated_at' => Carbon::now(),
                 'password' => Hash::make($data['password']),
                 'profession' => $data['email'],
                 'description' => $data['description'],
