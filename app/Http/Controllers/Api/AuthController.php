@@ -54,7 +54,7 @@ class AuthController extends Controller
                 $user->save;
             }
         }
-        
+
 
         // Mettre à jour le token FCM
         if (isset($request['fcm_token'])) {
@@ -101,11 +101,15 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $request->authenticate();
+
+        $validated = $request->validated();
+
         $token = $request->user()->createToken('authtoken');
 
         Session::put('token', $token->plainTextToken);
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'))
+            && !Auth::attempt(['phone' => $validated['email'], 'password' => $validated['password']])) {
             return response()->success([], __('Invalid login credentials') , 200);
         }
 
