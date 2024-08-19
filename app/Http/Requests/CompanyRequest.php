@@ -30,6 +30,8 @@ class CompanyRequest extends FormRequest
             'phone' => 'required|string|max:255',
             'profile_picture' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg',
             'zone_id' => 'required|integer|exists:zones,id',
+            'language' => 'nullable|string',
+            'password' => 'required|string|min:6',
         ];
     }
 }

@@ -54,7 +54,7 @@ class NotificationController extends Controller
         $data = Notification::with('user','zone');
 
         // Vérification si l'utilisateur a le rôle d'administrateur
-        if ($user->hasRole('admin')) {
+        if (strcmp($user->type, 'COUNCIL') == 0) {
             // Récupérer les notifications créées par l'administrateur
             $data = $data->where('user_id', $user->id);
         } else {
@@ -99,6 +99,9 @@ class NotificationController extends Controller
     public function store(NotificationRequest $request)
     {
         $data = $request->validated();
+        if(strcmp(Auth::user()->type, 'COUNCIL') != 0){
+            return response()->error([], __('Unauthorized'), 403);
+        }
         $data['user_id'] = Auth::user()->id;
 
         $notification = Notification::create($data);

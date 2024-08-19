@@ -38,7 +38,7 @@ class UserRequest extends FormRequest
                 'profession' => 'nullable|string',
                 'description' => 'nullable|string',
                 'language' => 'nullable|string',
-                
+
                 ];
         }
         return [
@@ -50,7 +50,7 @@ class UserRequest extends FormRequest
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'profession' => 'nullable|string',
             'password' => 'required|string|min:6',
-            'gender' => 'nulla ble|in:male,female',
+            'gender' => 'nullable|in:male,female',
             'zone_id' => 'exists:zones,id',
             'profession' => 'nullable|string',
             'description' => 'nullable|string',
@@ -104,7 +104,7 @@ class UserRequest extends FormRequest
                 'description' => 'id of zone',
                 'example' => 1
             ]
-            
+
         ];
     }
 
