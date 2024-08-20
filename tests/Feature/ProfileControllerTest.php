@@ -16,7 +16,7 @@ class ProfileControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $response = $this->actingAs($user)->get('api/profile');
@@ -33,7 +33,7 @@ class ProfileControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $response = $this->actingAs($user)->get('api/profile-interaction');

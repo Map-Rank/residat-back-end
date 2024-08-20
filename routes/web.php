@@ -42,7 +42,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::delete('delete/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
     Route::post('/store-user', [UserController::class, 'store'])->name('users.store');

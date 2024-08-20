@@ -3,8 +3,10 @@
 namespace Database\Factories;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Zone;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -32,6 +34,7 @@ class UserFactory extends Factory
             'email' => 'users@user.com',
             'password' => bcrypt('password'),
             'gender' => 'male',
+            'type' => $this->faker->randomElement(['COUNCIL', 'default']),
             'zone_id' => $latestZoneWithLevelFour->id,
             'active' => 1,
             'verified' => 1,
@@ -49,5 +52,21 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+            $user->assignRole($adminRole);
+        });
+    }
+
+    public function default(): static
+    {
+        return $this->afterCreating(function (User $user) {
+            $default = Role::firstOrCreate(['name' => 'default', 'guard_name' => 'web']);
+            $user->assignRole($default);
+        });
     }
 }
