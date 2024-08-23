@@ -21,7 +21,7 @@ class FeedbackControllerTest extends TestCase
     public function test_store_feedback_without_file()
     {
         // Crée un utilisateur
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         // Agis en tant que cet utilisateur
         $this->actingAs($user, 'sanctum');
@@ -58,7 +58,7 @@ class FeedbackControllerTest extends TestCase
         Storage::fake('public');
 
         // Crée un utilisateur
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         // Agis en tant que cet utilisateur
         $this->actingAs($user, 'sanctum');

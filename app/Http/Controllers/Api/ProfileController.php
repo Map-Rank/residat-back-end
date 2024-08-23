@@ -7,9 +7,13 @@ use App\Models\Interaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\ProfileUpdateRequest;
@@ -140,6 +144,65 @@ class ProfileController extends Controller
         }
 
         return response()->success(UserResource::make($user), __('User profile retrieved successfully'), 200);
+    }
+    
+    /**
+     * Delete own account
+     */
+    public function destroy()
+    {
+        // Démarrer la transaction
+        DB::beginTransaction();
+
+        try {
+            // Trouver l'utilisateur par son ID*
+            $id =  Auth::id();
+            $user = User::findOrFail($id);
+
+            // Supprimer les interactions de l'utilisateur
+            $user->interactions()->delete();
+            $user->likeInteractions()->delete();
+            $user->commentInteractions()->delete();
+            $user->shareInteractions()->delete();
+
+            // Supprimer les abonnements de l'utilisateur
+            // $user->subscriptions()->detach();
+            // $user->activeSubscription()->detach();
+
+            // Supprimer les notifications de l'utilisateur
+            $user->notifications()->delete();
+
+            // Supprimer les feedbacks de l'utilisateur
+            $user->feedbacks()->delete();
+
+            // Supprimer les événements de l'utilisateur
+            $user->events()->delete();
+
+            // Supprimer les suivis de l'utilisateur
+            $user->followers()->detach();
+            $user->following()->detach();
+
+            // Supprimer l'avatar de l'utilisateur s'il existe
+            if ($user->avatar) {
+                $disk = env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3';
+                Storage::disk($disk)->delete($user->avatar);
+            }
+            // dd($user);
+
+            // Supprimer l'utilisateur
+            $user->delete();
+
+
+            // Valider la transaction
+            DB::commit();
+
+            return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès');
+        } catch (\Exception $e) {
+            // Annuler la transaction en cas d'erreur
+            DB::rollBack();
+            Log::error('Erreur lors de la suppression de l\'utilisateur' . $e->getMessage());
+            return redirect()->route('users.index')->with('error', 'Erreur lors de la suppression de l\'utilisateur');
+        }
     }
 
 }

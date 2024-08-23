@@ -24,7 +24,7 @@ class PasswordResetTest extends TestCase
     {
         Notification::fake();
 
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
 
@@ -39,7 +39,7 @@ class PasswordResetTest extends TestCase
         Notification::fake();
 
         // Créez un utilisateur
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         // Envoyez une demande de réinitialisation du mot de passe
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);
@@ -68,7 +68,7 @@ class PasswordResetTest extends TestCase
         Notification::fake();
 
         // Créez un utilisateur
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         // Envoyez une demande de réinitialisation du mot de passe
         $response = $this->postJson('/api/forgot-password', ['email' => $user->email]);

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Zone;
 use App\Models\Level;
 use App\Models\Topic;
+use Illuminate\Support\Str;
 use App\Models\Interaction;
 use App\Models\Subscription;
 use Laravel\Sanctum\Sanctum;
@@ -34,7 +35,6 @@ use App\Http\Controllers\Api\PostController;
 use App\Http\Resources\SubscriptionResource;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Str;
 
 class PostControllerTest extends TestCase
 {
@@ -108,22 +108,18 @@ class PostControllerTest extends TestCase
         $post = Post::where('content', $data['content'])->first();
         $this->assertNotNull($post);
 
-        foreach ($data['media'] as $mediaFile) {
-            // Créez un nom de fichier unique
-            $imageName = Str::uuid()() . '.' . $mediaFile->getClientOriginalExtension();
+        // Récupérer les médias associés au post depuis la base de données
+        $mediasInDb = $post->medias()->get();
 
-            // Stocker le fichier avec le nom unique dans le disque 'public'
-            $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
+        // Vérifiez que le nombre de médias dans la base de données correspond au nombre de fichiers téléchargés
+        $this->assertCount(count($data['media']), $mediasInDb);
 
-            // Vérifiez que le fichier est bien stocké dans le disque 'public'
-            Storage::disk('public')->assertExists($mediaPath);
+        foreach ($mediasInDb as $key => $mediaInDb) {
+            // Vérifiez que les fichiers existent dans le disque 'public'
+            Storage::disk('public')->assertExists($mediaInDb->url);
 
-            // Vérifiez que le chemin correspond à ce qui est dans la base de données
-            $this->assertDatabaseHas('medias', [
-                'url' => $mediaPath,
-                'post_id' => $post->id,
-                'type' => $mediaFile->getClientMimeType(),
-            ]);
+            // Vérifiez que les données dans la base de données correspondent bien à ce qui est attendu
+            $this->assertEquals($mediaInDb->type, $data['media'][$key]->getClientMimeType());
         }
     }
 
@@ -139,9 +135,10 @@ class PostControllerTest extends TestCase
 
     public function test_update()
     {
+        // Vérifiez si la table TypeInteraction contient les entrées nécessaires
         $typeInteraction = TypeInteraction::where('name', 'created')->first();
 
-        if(!$typeInteraction){
+        if(!$typeInteraction) {
             $typeInteractions =  [
                 ['name'=> 'created', 'id'=> 1],
                 ['name'=> 'like', 'id'=> 2],
@@ -154,11 +151,10 @@ class PostControllerTest extends TestCase
 
         $typeInteraction = TypeInteraction::where('name', 'created')->first();
 
-        // $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
         // Créez un post pour la mise à jour
         $post = Post::factory()->creator()->create();
 
-        sleep(3);
+        sleep(3); // Assurez-vous qu'il y a un délai pour vérifier le timestamp des modifications si nécessaire
 
         // Récupérez l'utilisateur créateur du post
         $user = $post->creator->first();
@@ -167,7 +163,7 @@ class PostControllerTest extends TestCase
         Sanctum::actingAs($user); // Assurez-vous que l'utilisateur est authentifié
 
         // Créez un nouveau fichier temporaire pour simuler la mise à jour du média
-        Storage::fake(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3');
+        Storage::fake(env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3');
         $newMediaFile = UploadedFile::fake()->image('new_image.jpg');
 
         $data = [
@@ -190,23 +186,22 @@ class PostControllerTest extends TestCase
         $this->assertEquals($data['published_at'], $post->published_at);
         $this->assertEquals($data['zone_id'], $post->zone_id);
 
-        // Vérifiez également que le nouveau média est associé au post
-        foreach ($data['media'] as $mediaFile) {
-            // Créez un nom de fichier unique
-            $imageName = Str::uuid() . '.' . $mediaFile->getClientOriginalExtension();
+        // Récupérer les médias associés au post mis à jour depuis la base de données
+        $mediasInDb = $post->medias()->get();
+        // dd($mediasInDb);
 
-            // Stocker le fichier avec le nom unique dans le disque 'public'
-            $mediaPath = $mediaFile->storeAs('images', $imageName, 'public');
+        // Vérifiez que le nombre de médias dans la base de données correspond au nombre de fichiers téléchargés
+        $this->assertCount(count($data['media']), $mediasInDb);
 
-            // Vérifiez que le fichier est bien stocké dans le disque 'public'
-            Storage::disk('public')->assertExists($mediaPath);
-
-            // Vérifiez que le chemin correspond à ce qui est dans la base de données
-            $this->assertDatabaseHas('medias', [
-                'url' => Storage::url($mediaPath),
-                'post_id' => $post->id,
-                'type' => $mediaFile->getClientMimeType(),
-            ]);
+        foreach ($mediasInDb as $mediaInDb) {
+            // Utilisez le chemin relatif à partir de l'URL complète
+            $relativePath = str_replace('/storage/', '', $mediaInDb->url);
+    
+            // Vérifiez que le fichier est bien stocké dans le disque approprié
+            Storage::disk('public')->assertExists($relativePath);
+    
+            // Vérifiez que les données dans la base de données correspondent bien à ce qui est attendu
+            $this->assertEquals($mediaInDb->type, $data['media'][0]->getClientMimeType());
         }
     }
 

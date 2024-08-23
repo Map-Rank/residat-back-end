@@ -44,7 +44,7 @@ class UserControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         // Envoyer une requête GET pour afficher un utilisateur spécifié

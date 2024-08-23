@@ -19,12 +19,11 @@ class CompanyFactory extends Factory
     {
         return [
             'company_name' => $this->faker->company(),
-            'owner_name' => $this->faker->name(),
+            'type' => $this->faker->randomElement(['national','regional','divisional','subdivisional']),
             'description' => $this->faker->text(200),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->phoneNumber(),
-            'profile' => $this->faker->imageUrl(),
-            'official_document' => $this->faker->filePath(), 
+            'profile' => $this->faker->filePath(),
             'zone_id' => function () {
                 return $this->getRandomSubdivisionId();
             },

@@ -32,7 +32,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -66,7 +66,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -82,7 +82,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -101,7 +101,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -116,7 +116,7 @@ class PermissionControllerTest extends TestCase
     public function testUpdateRole()
     {
         // Créer un utilisateur et le connecter
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
         $this->actingAs($user);
 
         // Créer un rôle
@@ -147,7 +147,7 @@ class PermissionControllerTest extends TestCase
     public function testUpdateRoleValidationFails()
     {
         // Créer un utilisateur et le connecter
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
         $this->actingAs($user);
 
         // Créer un rôle
@@ -176,7 +176,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -195,7 +195,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -212,7 +212,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -231,7 +231,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -252,7 +252,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -272,7 +272,7 @@ class PermissionControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
