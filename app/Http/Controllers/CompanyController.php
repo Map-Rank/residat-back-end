@@ -37,15 +37,15 @@ class CompanyController extends Controller
         $user = Auth::user();
 
         if (!$datum) {
-            return redirect()->back()->with('errors', 'Company not found');
+            return redirect()->back()->with('error', 'Company not found');
         }
 
         if (!$user->hasRole('admin')) {
-            return redirect()->back()->with('errors', 'Unauthorized deletion to this resource');
+            return redirect()->back()->with('error', 'Unauthorized deletion to this resource');
         }
 
         if(!$datum->delete()){
-            return redirect()->back()->with('errors', 'Unable to update the resource');
+            return redirect()->back()->with('error', 'Unable to update the resource');
         }
 
         return redirect()->back()->with('success', 'Company deleted successfully');
