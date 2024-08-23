@@ -145,7 +145,7 @@ class ProfileController extends Controller
 
         return response()->success(UserResource::make($user), __('User profile retrieved successfully'), 200);
     }
-    
+
     /**
      * Delete own account
      */
@@ -196,12 +196,12 @@ class ProfileController extends Controller
             // Valider la transaction
             DB::commit();
 
-            return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès');
+            return response()->success([], __('User deleted successfully'), 200);
         } catch (\Exception $e) {
             // Annuler la transaction en cas d'erreur
             DB::rollBack();
             Log::error('Erreur lors de la suppression de l\'utilisateur' . $e->getMessage());
-            return redirect()->route('users.index')->with('error', 'Erreur lors de la suppression de l\'utilisateur');
+            return response()->errors([], __('Erreur lors de la suppression de l\'utilisateur'), 401);
         }
     }
 
