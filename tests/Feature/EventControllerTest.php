@@ -39,7 +39,7 @@ class EventControllerTest extends TestCase
     
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
     
         Sanctum::actingAs($user);
@@ -78,7 +78,7 @@ class EventControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
         
         Sanctum::actingAs($user);
@@ -135,7 +135,7 @@ class EventControllerTest extends TestCase
     
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
     
         // Exécuter le seeder des secteurs et créer une zone
@@ -170,7 +170,7 @@ class EventControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         Sanctum::actingAs($user);
@@ -257,7 +257,7 @@ class EventControllerTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
         
         Sanctum::actingAs($user);

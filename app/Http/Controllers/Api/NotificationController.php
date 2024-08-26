@@ -81,13 +81,6 @@ class NotificationController extends Controller
         return response()->success($data, __('Notifications charged successfully'), 200);
     }
 
-    public function testascendant($zoneId){
-        $zone = Zone::with('children')->find($zoneId);
-        if ($zone->children != null) {
-            $descendants = UtilService::get_descendants($zone->children, $descendants);
-        }
-    }
-
 
 
     /**

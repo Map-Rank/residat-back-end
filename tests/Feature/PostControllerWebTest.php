@@ -24,7 +24,7 @@ class PostControllerWebTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -80,7 +80,7 @@ class PostControllerWebTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable
@@ -126,7 +126,7 @@ class PostControllerWebTest extends TestCase
 
         // Si aucun utilisateur n'existe, créez-en un
         if (!$user) {
-            $user = User::factory()->create();
+            $user = User::factory()->admin()->create();
         }
 
         $this->actingAs($user); // Authenticate if applicable

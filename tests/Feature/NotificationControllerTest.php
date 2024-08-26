@@ -19,18 +19,32 @@ class NotificationControllerTest extends TestCase
     /** @test */
     public function it_can_list_notifications()
     {
-        // Crée un utilisateur et une notification
-        $user = User::factory()->create();
+        // Crée un utilisateur admin
+        $user = User::factory()->admin()->create();
+        
+        // Crée une zone et assigne-la à l'utilisateur
         $zone = Zone::factory()->create();
-        $notification = Notification::factory()->create(['user_id' => $user->id, 'zone_id' => $zone->id]);
-
+        $user->zone_id = $zone->id;
+        $user->save();
+        
+        // Crée des notifications pour ce user et sa zone
+        $notifications = Notification::factory()->count(5)->create([
+            'user_id' => $user->id,
+            'zone_id' => $zone->id,
+        ]);
+        
         // Agit en tant que cet utilisateur
         $this->actingAs($user, 'sanctum');
-
+        
+        // Fait la requête pour obtenir les notifications
         $response = $this->getJson('/api/notifications?page=0&size=10');
 
+        // Vérifie le statut de la réponse et le message JSON attendu
         $response->assertStatus(200)
-                 ->assertJsonFragment(['message'=>'Notifications charged successfully']);
+                ->assertJsonFragment(['message'=>'Notifications charged successfully']);
+        
+        // Vérifie que les notifications sont retournées
+        $response->assertJsonCount(5, 'data'); // Assure que 5 notifications sont présentes dans la réponse
     }
 
     /** @test */
@@ -51,7 +65,7 @@ class NotificationControllerTest extends TestCase
     //     Storage::fake('public');
 
     //     // Crée un utilisateur et une zone
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->admin()->create();
     //     $zone = Zone::factory()->create();
 
     //     // Agit en tant que cet utilisateur
@@ -121,7 +135,7 @@ class NotificationControllerTest extends TestCase
     //     $notification = Notification::factory()->create();
 
     //     // Crée un utilisateur
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->admin()->create();
 
     //     // Agit en tant que cet utilisateur
     //     $this->actingAs($user, 'sanctum');
@@ -141,7 +155,7 @@ class NotificationControllerTest extends TestCase
     //     $notification = Notification::factory()->create();
 
     //     // Crée un utilisateur
-    //     $user = User::factory()->create();
+    //     $user = User::factory()->admin()->create();
 
     //     // Agit en tant que cet utilisateur
     //     $this->actingAs($user, 'sanctum');

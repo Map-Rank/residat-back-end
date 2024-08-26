@@ -28,7 +28,7 @@ class AuthenticateTest extends TestCase
 
     public function test_it_allows_authenticated_users_for_web_requests()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         $this->actingAs($user);
 
@@ -39,7 +39,7 @@ class AuthenticateTest extends TestCase
 
     public function test_it_allows_json_requests_without_redirection()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->admin()->create();
 
         $this->actingAs($user);
 
