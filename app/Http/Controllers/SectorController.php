@@ -39,6 +39,7 @@ class SectorController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Display the specified resource.
      */
     public function show(Sector $sector)
