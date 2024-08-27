@@ -17,6 +17,7 @@ use App\Service\UtilService;
 use Laravel\Sanctum\Sanctum;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Database\Seeders\MetricTypeSeeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,15 +25,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ReportControllerTest extends TestCase
 {
     use RefreshDatabase;
-
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
-    //     // $this->seed();
-    //     Sanctum::actingAs(
-    //         User::first()
-    //     );
-    // }
 
     public function test_index_displays_reports()
     {
@@ -426,56 +418,92 @@ class ReportControllerTest extends TestCase
         $response->assertViewIs('reports.food-security');
     }
 
-    // public function test_store_creates_report_with_image_and_items()
-    // {
-    //     $user = User::first();
+    public function test_store_creates_report_with_image_and_items()
+    {
+        // Crée un utilisateur ou récupère un utilisateur existant
+        $user = User::first();
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
 
-    //     if (!$user) {
-    //         $user = User::factory()->admin()->create();
-    //     }
-        
-    //     $this->actingAs($user);
+        $this->actingAs($user);
 
-    //     // Simule les données de la requête
-    //     $data = Report::factory()->make()->toArray();
-    //     $data['vector_keys'] = [
-    //         ['value' => 'key1', 'type' => 'type1', 'name' => 'name1'],
-    //         ['value' => 'key2', 'type' => 'type2', 'name' => 'name2']
-    //     ];
-    //     $data['report_items'] = [
-    //         ['metric_type_id' => 1, 'value' => 100],
-    //         ['metric_type_id' => 2, 'value' => 200]
-    //     ];
+        // Supprimer toutes les zones existantes pour garantir que la table est vide
+        Zone::query()->delete();
 
-    //     // Simule le fichier image dans la requête
-    //     $file = UploadedFile::fake()->image('report_image.jpg');
-    //     $data['image'] = $file;
+        // Créer les niveaux nécessaires
+        $levels = [
+            Level::create(['name' => 'Country']),
+            Level::create(['name' => 'Region']),
+            Level::create(['name' => 'Division']),
+            Level::create(['name' => 'SubDivision']),
+        ];
 
-    //     // Simule la requête POST à la route store
-    //     $response = $this->post(route('reports.store'), $data);
+        // Utiliser le niveau approprié pour les zones
+        $level4 = $levels[3]; // Exemple: 'SubDivision'
 
-    //     // Vérifie que la redirection est correcte
-    //     $response->assertRedirect(route('reports.index'));
+        // Créer des zones
+        $zones = collect();
+        foreach (range(1, 10) as $index) {
+            $zones->push(Zone::create([
+                'name' => 'Test Zone ' . $index,
+                'level_id' => $level4->id,
+            ]));
+        }
 
-    //     // Vérifie que le rapport a été créé dans la base de données
-    //     $this->assertDatabaseHas('reports', [
-    //         'user_id' => $user->id,
-    //         'description' => $data['description']
-    //     ]);
+        $this->seed(MetricTypeSeeder::class); 
 
-    //     // Vérifie que le fichier a été uploadé sur le disque
-    //     Storage::disk('s3')->assertExists('report_images/' . $file->hashName());
+        $metricTypes = MetricType::get()->toArray();
 
-    //     // Vérifie que les report_items ont été créés
-    //     foreach ($data['report_items'] as $item) {
-    //         $this->assertDatabaseHas('report_items', $item);
-    //     }
+        $zone = Zone::factory()->create();
 
-    //     // Vérifie que les vector_keys ont été créées
-    //     foreach ($data['vector_keys'] as $key) {
-    //         $this->assertDatabaseHas('vector_keys', $key);
-    //     }
-    // }
+        // $metricType = MetricType::first();
+        $types = ["DROUGHT", "FLOOD", "WATER_STRESS"];
+        $vector_keys = ['COLOR','IMAGE','FIGURE'];
+        $image = UploadedFile::fake()->image('report-image.jpg');
+
+        $randomTypes = $types[array_rand($types)];
+        $randomVectorkeys = $vector_keys[array_rand($vector_keys)];
+        $randomMetricType = $metricTypes[array_rand($metricTypes)];
+
+        // Simule une requête POST avec les données nécessaires
+        $response = $this->post(route('reports.store'), [
+            'zone_id' => $zone->id,
+            'description' => 'Test Report Description',
+            'type' => $randomTypes,
+            'start_date' => now()->subDays(5)->toDateString(),
+            'end_date' => now()->toDateString(),
+            'image' => $image,
+            'vector_keys' => [
+                [
+                    'value' => 'KeyValue',
+                    'type' => $randomVectorkeys,
+                    'name' => 'KeyName',
+                ],
+            ],
+            'sub_metric_types' => [
+                [
+                    'metric_type_id' => $randomMetricType,
+                    'name' => 1,
+                ],
+            ],
+        ]);
+
+        // Vérifie que la requête a été traitée avec succès
+        $response->assertRedirect(route('reports.index'));
+        $response->assertSessionHas('success', 'Report created successfully');
+
+         // Vérifiez que le rapport a été créé
+        $report = Report::first();
+        $this->assertNotNull($report);
+
+        // Vérifiez que le vecteur a été créé
+        $vector = Vector::where('model_id', $report->id)->first();
+        $this->assertNotNull($vector);
+        $this->assertEquals($report->id, $vector->model_id);
+        $this->assertEquals('SVG', $vector->type);
+        $this->assertEquals(get_class($report), $vector->model_type); // Utilisez get_class pour obtenir le nom complet
+    }
 
     public function test_destroy_deletes_report()
     {
