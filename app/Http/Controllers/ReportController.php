@@ -12,7 +12,9 @@ use Illuminate\Support\Str;
 use App\Service\UtilService;
 use Illuminate\Http\Request;
 use App\Http\Requests\ReportRequest;
+use App\Models\SubMetricType;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ReportController extends Controller
@@ -134,6 +136,8 @@ class ReportController extends Controller
 
         $user = Auth::user();
 
+        $metricTypes = MetricType::all();
+
         $report = Report::create([
             'code' => Str::uuid(),
             'user_id' => $user->id,
@@ -145,10 +149,24 @@ class ReportController extends Controller
         ]);
 
         // Enregistrer l'image si elle est fournie
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('report_images/', 's3');
-            $report->image = $imagePath;
-            $report->save();
+        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
+            if ($request->hasFile('image')) {
+
+                $mediaFile = $request->file('image');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $imagePath = Storage::disk('public')->putFileAs('images', $mediaFile, $imageName);
+                $report->image = $imagePath;
+                $report->save();
+            }
+
+        }else{
+            if ($request->hasFile('image')) {
+                $mediaFile = $request->file('image');
+                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+                $imagePath = Storage::disk('s3')->putFileAs('images', $mediaFile, $imageName);
+                $report->image = $imagePath;
+                $report->save();
+            }
         }
 
         $vector = Vector::create([
@@ -167,17 +185,6 @@ class ReportController extends Controller
                     'type' => $keyData['type'],
                     'name' => $keyData['name'],
                     'vector_id' => $vector->id,
-                ]);
-            }
-        }
-
-        if(isset($validatedData['report_items'])){
-            // Création des éléments de rapport
-            foreach ($validatedData['report_items'] as $itemData) {
-                $reportItem = ReportItem::create([
-                    'report_id' => $report->id,
-                    'metric_type_id' => $itemData['metric_type_id'],
-                    'value' => $itemData['value'],
                 ]);
             }
         }

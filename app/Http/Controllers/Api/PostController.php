@@ -165,6 +165,20 @@ class PostController extends Controller
             return response()->errors([], __('Post was\'nt saved error', 400));
         }
 
+        $users_token = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
+
+        $users = User::whereNotNull('fcm_token')->get();
+
+        foreach ($users as $user) {
+            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat: {$post->published_at} - {$post->sectors}";
+
+            try {
+                UtilService::sendWebNotification($post->published_at, $customMessage, $users_token);
+            } catch (Exception $ex) {
+                Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
+            }
+        }
+
         DB::commit();
 
         return response()->success($post, __('Post created successfully'), 200);
@@ -411,7 +425,7 @@ class PostController extends Controller
     /**
      * Delete the specified interaction
      */
-    public function deleteInteraction( $id)
+    public function deleteInteraction($id)
     {
 
         $interaction = Interaction::with('typeInteraction')->find($id);

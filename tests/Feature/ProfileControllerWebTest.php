@@ -16,8 +16,12 @@ class ProfileControllerWebTest extends TestCase
     /** @test */
     public function it_can_display_the_profile_edit_form()
     {
-        // Créer un utilisateur dans la base de données
         $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
 
         // Authentifier l'utilisateur
         $this->actingAs($user);
@@ -33,8 +37,12 @@ class ProfileControllerWebTest extends TestCase
     /** @test */
     public function it_can_update_the_user_profile_information()
     {
-        // Créer un utilisateur dans la base de données
         $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
 
         // Authentifier l'utilisateur
         $this->actingAs($user);
@@ -69,8 +77,12 @@ class ProfileControllerWebTest extends TestCase
     /** @test */
     public function it_can_delete_the_user_account()
     {
-        // Créer un utilisateur dans la base de données
         $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
 
         // Authentifier l'utilisateur
         $this->actingAs($user);

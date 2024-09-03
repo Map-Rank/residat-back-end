@@ -4,6 +4,11 @@
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Event;
+use App\Models\Feedback;
+use App\Models\Interaction;
+use App\Models\Notification;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileControllerTest extends TestCase
 {

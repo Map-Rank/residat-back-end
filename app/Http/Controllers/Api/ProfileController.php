@@ -165,6 +165,9 @@ class ProfileController extends Controller
             $user->commentInteractions()->delete();
             $user->shareInteractions()->delete();
 
+            // Supprimer les notifications de l'utilisateur
+            $user->myPosts()->delete();
+
             // Supprimer les abonnements de l'utilisateur
             // $user->subscriptions()->detach();
             // $user->activeSubscription()->detach();

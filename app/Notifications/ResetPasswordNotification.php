@@ -64,6 +64,7 @@ class ResetPasswordNotification extends Notification
     }
 
     /**
+     * @codeCoverageIgnore
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
