@@ -29,6 +29,7 @@ class CompanyFactory extends Factory
             },
         ];
     }
+    
     /**
      * Get a random subdivision ID.
      *
