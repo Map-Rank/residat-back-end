@@ -183,6 +183,8 @@ class UserController extends Controller
             $user->commentInteractions()->delete();
             $user->shareInteractions()->delete();
 
+            $user->myPosts()->delete();
+
             // Supprimer les abonnements de l'utilisateur
             // $user->subscriptions()->detach();
             // $user->activeSubscription()->detach();
