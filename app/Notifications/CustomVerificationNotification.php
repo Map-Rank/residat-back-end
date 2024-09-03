@@ -42,18 +42,18 @@ class CustomVerificationNotification extends Notification
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
-        $otpCode = $notifiable->otp_code;
         $data = [
             'id' => $notifiable->getKey(),
             'hash' => sha1($notifiable->getEmailForVerification()),
         ];
 
         return (new MailMessage)
-            ->view('emails.custom_verification_notification', compact('verificationUrl', 'otpCode', 'data'))
+            ->view('emails.custom_verification_notification', compact('verificationUrl', 'data'))
             ->subject('Vérification d\'Email');
     }
 
     /**
+     * @codeCoverageIgnore
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable

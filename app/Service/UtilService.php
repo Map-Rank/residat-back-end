@@ -39,13 +39,18 @@ class UtilService
             // Récupérer la zone de l'utilisateur connecté
             $zone = Zone::find($user->zone_id);
             
+            // Vérifier que la zone existe
+            if (!$zone) {
+                return collect(); // Retourner une collection vide si la zone n'est pas trouvée
+            }
+            
             // Initialiser une collection pour les descendants
             $descendants = collect();
             
             // Ajouter la zone de l'utilisateur à la collection des descendants
             $descendants->push($zone);
             
-            // Récupérer tous les descendants de la zone de l'utilisateur
+            // Récupérer tous les descendants de la zone de l'utilisateur, si la relation children est disponible
             if ($zone->children != null) {
                 $descendants = UtilService::get_descendants($zone->children, $descendants);
             }
@@ -58,7 +63,7 @@ class UtilService
             // Si l'utilisateur n'a pas de zone_id, retourner une collection vide
             $zones = collect();
         }
-
+    
         return $zones;
     }
 
