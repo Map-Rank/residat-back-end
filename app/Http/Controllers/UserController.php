@@ -165,7 +165,6 @@ class UserController extends Controller
     }
 
     /**
-     * @codeCoverageIgnore
      * Remove the specified resource from storage.
      */
     public function destroy($id)

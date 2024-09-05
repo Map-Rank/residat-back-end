@@ -2,15 +2,17 @@
 
 namespace Tests\Feature;
 
+use Mockery;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Zone;
 use App\Models\Notification;
+use App\Service\UtilService;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class NotificationControllerTest extends TestCase
 {
@@ -58,57 +60,65 @@ class NotificationControllerTest extends TestCase
         $response->assertStatus(403)->assertJsonFragment(['message'=>'User not authenticated']);
     }
 
-    // /** @test */
-    // public function it_can_create_a_notification_with_valid_data()
-    // {
-    //     // Fake le disque public pour les environnements locaux/dev/testing
-    //     Storage::fake('public');
+    /** @test */
+    public function test_store_creates_notification()
+    {
+        // Créer un utilisateur avec le rôle COUNCIL
+        $user = User::first();
 
-    //     // Crée un utilisateur et une zone
-    //     $user = User::factory()->admin()->create();
-    //     $zone = Zone::factory()->create();
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->council()->create();
+        }
 
-    //     // Agit en tant que cet utilisateur
-    //     $this->actingAs($user, 'sanctum');
+        // Créer une zone
+        $zone = Zone::factory()->create();
 
-    //     // Crée un fichier simulé
-    //     Storage::fake(env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3');
-    //     $file = UploadedFile::fake()->image('notification_image.jpg');
+        // Simuler la requête avec des données valides
+        $data = [
+            'titre_en' => 'Test Notification Title EN',
+            'titre_fr' => 'Test Notification Title FR',
+            'firebase_id' => null,
+            'zone_id' => $zone->id,
+            'content_en' => 'This is a test notification content EN',
+            'content_fr' => 'This is a test notification content FR',
+        ];
 
-    //     // Envoie une requête POST pour créer une notification
-    //     $response = $this->postJson('/api/notifications', [
-    //         'titre_en' => 'Test Title EN',
-    //         'titre_fr' => 'Test Title FR',
-    //         'firebase_id' => 'firebase_id',
-    //         'zone_id' => $zone->id,
-    //         'content_en' => 'Test Content EN',
-    //         'content_fr' => 'Test Content FR',
-    //         'image' => Storage::url($file),
-    //     ]);
+        // Simuler l'authentification de l'utilisateur
+        $this->actingAs($user);
 
-    //     // Vérifie la réponse
-    //     $response->assertStatus(200)
-    //              ->assertJson(['message' => 'Notification created successfully']);
+        // Simuler l'upload d'une image
+        $file = UploadedFile::fake()->image('notification.jpg');
 
-    //     // Vérifie que le fichier a été stocké
-    //     if (env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing') {
-    //     Storage::disk('public')->assertExists('media/notifications/' . $user->email . '/' . $file->hashName());
-    //     }else{
-    //         Storage::disk('s3')->assertExists('media/notifications/' . $user->email . '/' . $file->hashName());
-    //     }
+        // Créer le nom d'image basé sur le temps
+        $imageName = time().'.'.$file->getClientOriginalExtension();
 
-    //     // Vérifie que la notification a été créée avec les données correctes
-    //     $this->assertDatabaseHas('notifications', [
-    //         'titre_en' => 'Test Title EN',
-    //         'titre_fr' => 'Test Title FR',
-    //         'firebase_id' => 'firebase_id',
-    //         'zone_id' => $zone->id,
-    //         'content_en' => 'Test Content EN',
-    //         'content_fr' => 'Test Content FR',
-    //         'image' => 'media/notifications/' . $user->email . '/' . $file->hashName(),
-    //         'user_id' => $user->id,
-    //     ]);
-    // }
+        // Ajouter l'image à la requête
+        $data['image'] = $file;
+
+        // Appeler la méthode store
+        $response = $this->postJson(route('notifications.store'), $data);
+        // dd($response);
+
+        // Vérifier le statut de la réponse
+        $response->assertStatus(200);
+
+        // Vérifier que la notification a été créée dans la base de données
+        $this->assertDatabaseHas('notifications', [
+            'titre_en' => 'Test Notification Title EN',
+            'titre_fr' => 'Test Notification Title FR',
+            'firebase_id' => null,
+            'zone_id' => $zone->id,
+            'content_en' => 'This is a test notification content EN',
+            'content_fr' => 'This is a test notification content FR',
+            'user_id' => $user->id,
+            'image' => Storage::url('notifications/' . $imageName),
+        ]);
+
+        // Vérifier que le fichier a été stocké
+        Storage::disk('public')->assertExists('notifications/' . $imageName);
+    }
+
 
     // /** @test */
     // public function it_cannot_create_notification_without_authentication()

@@ -69,4 +69,14 @@ class UserFactory extends Factory
             $user->assignRole($default);
         });
     }
+
+    /**
+     * Create a COUNCIL type user.
+     */
+    public function council(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'COUNCIL',
+        ]);
+    }
 }
