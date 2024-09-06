@@ -27,7 +27,7 @@ class NotificationRequest extends FormRequest
             'zone_id' => 'required|exists:zones,id',
             'content_en' => 'required|string',
             'content_fr' => 'required|string',
-            'image' => 'nullable|file',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 

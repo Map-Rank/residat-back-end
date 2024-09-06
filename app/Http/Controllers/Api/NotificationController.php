@@ -99,6 +99,19 @@ class NotificationController extends Controller
 
         $notification = Notification::create($data);
 
+         // Gestion de l'image en fonction de l'environnement
+         if ($request->hasFile('image')) {
+            $mediaFile = $request->file('image');
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+
+            $disk = env('APP_ENV') === 'production' ? 's3' : 'public';
+            $path = Storage::disk($disk)->putFileAs('notifications', $mediaFile, $imageName);
+
+            // Mettre à jour le champ image de la notification
+            $notification->image = Storage::url($path);
+            $notification->save();  // Sauvegarder les modifications
+        }
+
         $descendants = collect();
 
         $zone = Zone::with('children')->find($notification->zone_id);
@@ -107,23 +120,7 @@ class NotificationController extends Controller
 
         $descendants->push($notification->zone);
 
-        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
-            if ($request->hasFile('image')) {
-                $mediaFile = $request->file('image');
-                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-                $path = Storage::disk('public')->putFileAs('notifications', $mediaFile, $imageName);
-                $notification['image'] = Storage::url($path);
-                $notification->save;
-            }
-        }else{
-            if ($request->hasFile('image')) {
-                $mediaFile = $request->file('image');
-                $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-                $path = Storage::disk('s3')->putFileAs('notifications', $mediaFile, $imageName);
-                $notification['image'] = Storage::url($path);
-                $notification->save();
-            }
-        }
+
 
         $users_token = User::whereNotNull('fcm_token')->whereIn('zone_id',$descendants->pluck('id'))->pluck('fcm_token')->toArray();
 

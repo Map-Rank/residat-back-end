@@ -2,12 +2,15 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Zone;
 use App\Models\TypeInteraction;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -162,5 +165,69 @@ class PostControllerWebTest extends TestCase
         $this->assertNotEquals($originalActiveValue, $posts->first()->active);
     }
 
-    // D'autres fonctions de test pour les méthodes create(), store(), edit(), update(), destroy() peuvent être ajoutées selon les besoins.
+    /** @test */
+    public function it_can_delete_a_post_with_media_and_associations()
+    {
+        // Préparer les données nécessaires
+        $user = User::first();
+
+        // Si aucun utilisateur n'existe, créez-en un
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
+
+        $this->actingAs($user); // Authentification en tant qu'utilisateur admin
+
+        // Vérifiez si la table TypeInteraction est vide
+        $typeInteraction = TypeInteraction::where('name', 'created')->first();
+
+        if (!$typeInteraction) {
+            // Si le type d'interaction n'existe pas, créez-le
+            $typeInteraction = TypeInteraction::factory()->create(['name' => 'created']);
+        }
+
+        // Créez des fichiers temporaires pour simuler le téléchargement
+        Storage::fake(env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3');
+        $file1 = UploadedFile::fake()->image('media1.jpg');
+        $file2 = UploadedFile::fake()->image('media2.jpg');
+
+        // Créez des zones et récupérez les ID nécessaires
+        $zoneId = Zone::factory()->create()->id;
+
+        $data = [
+            'content' => $this->faker->sentence(),
+            'published_at' => Carbon::now()->toDateTimeString(),
+            'zone_id' => $zoneId,
+            'sectors' => [1, 2],
+            'media' => [$file1, $file2],
+        ];
+
+        $response = $this->postJson(route('post.store'), $data);
+        
+
+        // Récupérez le post créé depuis la réponse
+        $postId = $response->json('data.id');
+        // dd($postId);
+        
+        $post = Post::find($postId);
+        
+
+        // Simuler la suppression du post via la route destroy
+        $deleteResponse = $this->delete(route('posts.destroy', $post->id));
+
+        // Vérifier que le post a été supprimé
+        $this->assertSoftDeleted('posts', ['id' => $post->id]);
+
+        // Vérifier que les médias associés ont été supprimés
+        foreach ($post->medias as $media) {
+            $this->assertDatabaseMissing('media', ['id' => $media->id]);
+        }
+
+        // Vérifier que la redirection s'est faite correctement
+        $deleteResponse->assertRedirect(route('posts.index'));
+
+        // Vérifier le message de succès
+        $deleteResponse->assertSessionHas('success', 'Post deleted successfully !');
+    }
+    
 }
