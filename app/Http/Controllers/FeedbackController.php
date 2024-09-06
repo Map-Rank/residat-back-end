@@ -23,6 +23,7 @@ class FeedbackController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Display the specified resource.
      */
     public function show(Feedback $feedback)

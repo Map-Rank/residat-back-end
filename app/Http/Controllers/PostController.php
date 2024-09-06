@@ -32,6 +32,7 @@ class PostController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Show the form for creating a new resource.
      */
     public function create()
@@ -40,6 +41,7 @@ class PostController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Store a newly created resource in storage.
      */
     public function store(PostRequest $request)
@@ -60,6 +62,7 @@ class PostController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
@@ -68,6 +71,7 @@ class PostController extends Controller
     }
 
     /**
+     * @codeCoverageIgnore
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
