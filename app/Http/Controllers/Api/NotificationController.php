@@ -93,7 +93,7 @@ class NotificationController extends Controller
     {
         $data = $request->validated();
         if(strcmp(Auth::user()->type, 'COUNCIL') != 0){
-            return response()->error([], __('Unauthorized'), 403);
+            return response()->errors([], __('Unauthorized'), 403);
         }
         $data['user_id'] = Auth::user()->id;
 
