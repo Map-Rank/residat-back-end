@@ -173,7 +173,7 @@ class PostController extends Controller
             $customMessage = "Salut {$user->first_name}, regarde ce post sur residat: {$post->published_at} - {$post->sectors}";
 
             try {
-                UtilService::sendWebNotification($post->published_at, $customMessage, $users_token);
+                UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
             } catch (Exception $ex) {
                 Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
             }
