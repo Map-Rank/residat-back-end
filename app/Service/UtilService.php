@@ -3,11 +3,22 @@
 namespace App\Service;
 
 use App\Models\Zone;
+use Kreait\Firebase\Messaging;
 use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Exception\MessagingException;
+
 
 
 class UtilService
 {
+    protected $messaging;
+
+    public function __construct(Messaging $messaging)
+    {
+        $this->messaging = $messaging;
+    }
 
     public static function get_descendants ($children, $descendants)
     {
@@ -118,5 +129,19 @@ class UtilService
         Log::info(sprintf('%s: Message response is %s', __METHOD__, $res['data']));
 
         return $res;
+    }
+
+    public function sendNotification($title, $body, array $deviceTokens): array
+    {
+        $notification = Notification::create($title, $body);
+        $message = CloudMessage::new()
+            ->withNotification($notification)
+            ->withData(['key' => 'value']); 
+        try {
+            $this->messaging->sendMulticast($message, $deviceTokens);
+            return ['success' => true, 'message' => 'Notification sent successfully'];
+        } catch (MessagingException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
 }
