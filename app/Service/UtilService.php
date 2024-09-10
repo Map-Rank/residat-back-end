@@ -141,6 +141,11 @@ class UtilService
             $this->messaging->sendMulticast($message, $deviceTokens);
             return ['success' => true, 'message' => 'Notification sent successfully'];
         } catch (MessagingException $e) {
+            Log::error('Failed to send notification', [
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+                'deviceTokens' => $deviceTokens
+            ]);
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
