@@ -170,7 +170,8 @@ class PostController extends Controller
         $users = User::whereNotNull('fcm_token')->get();
 
         foreach ($users as $user) {
-            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat: {$post->published_at} - {$post->sectors->name}";
+            $sectorNames = $post->sectors->pluck('name')->implode(', ');
+            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat publié le {$post->published_at}. Secteurs: {$sectorNames}.";
 
             try {
                 // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
