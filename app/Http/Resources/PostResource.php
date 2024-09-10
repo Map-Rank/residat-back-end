@@ -31,7 +31,7 @@ class PostResource extends JsonResource
             'liked' => $this->interactions->where('user_id', auth()->id())->where('type_interaction_id', 2)->first() != null,
             'is_following' => $authUser && $creator ? $authUser->following()->where('followed_id', $creator->id)->exists() : false,
             'like_count' => $this->likes()->count(),
-            'comment_count' => $this->comments()->count(),
+            'comment_count' => $this->comments()->whereNotNull('deleted_at')->count(),
             'share_count' => $this->shares()->count(),
             'published_at' => $this['published_at'],
             'humanize_date_creation' => Carbon::parse($this['created_at'])->diffForHumans(),
