@@ -170,10 +170,12 @@ class PostController extends Controller
         $users = User::whereNotNull('fcm_token')->get();
 
         foreach ($users as $user) {
-            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat: {$post->published_at} - {$post->sectors}";
+            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat publié le {$post->published_at}. Zone: {$post->zone->name}.";
 
             try {
-                UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
+                // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
+                $notificationService = app(UtilService::class);
+                $notificationService->sendNotification($post->published_at, $customMessage, [$user->fcm_token]);
             } catch (Exception $ex) {
                 Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
             }
@@ -337,7 +339,9 @@ class PostController extends Controller
                 // Envoie la notification au créateur du post
                 $creatorToken = $post->creator->first()->fcm_token;
                 if ($creatorToken) {
-                    UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+                    // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+                    $notificationService = app(UtilService::class);
+                    $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
                 }
             }
 
@@ -386,7 +390,9 @@ class PostController extends Controller
         $creatorToken = $post->creator->first()->fcm_token;
 
         if ($creatorToken) {
-            UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            $notificationService = app(UtilService::class);
+            $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
         }
 
         return response()->success(PostResource::make($post->loadMissing('postComments')), __('Comment added successfully'), 200);
@@ -416,7 +422,9 @@ class PostController extends Controller
 
         $creatorToken = $post->creator->first()->fcm_token;
         if ($creatorToken) {
-            UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            $notificationService = app(UtilService::class);
+            $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
         }
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);

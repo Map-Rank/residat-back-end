@@ -22,7 +22,8 @@ class ReportItemsSeeder extends Seeder
             foreach ($metricTypes as $metricType) {
                 ReportItem::create([
                     'report_id' => $report->id,
-                    'metric_type_id' => $metricType->id,
+                    'sub_metric_type_id' => $metricType->id,
+                    'description' => 'description',
                     'value' => rand(1, 100), // Just an example value, you may adjust it as needed
                 ]);
             }

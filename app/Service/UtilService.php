@@ -3,11 +3,22 @@
 namespace App\Service;
 
 use App\Models\Zone;
+use Kreait\Firebase\Messaging;
 use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Exception\MessagingException;
+
 
 
 class UtilService
 {
+    protected $messaging;
+
+    public function __construct(Messaging $messaging)
+    {
+        $this->messaging = $messaging;
+    }
 
     public static function get_descendants ($children, $descendants)
     {
@@ -69,23 +80,27 @@ class UtilService
 
     public static function sendWebNotification($title, $body, array $deviceKeys): array
     {
-        $url = 'https://fcm.googleapis.com/fcm/send';
-
+        $url = 'https://fcm.googleapis.com/v1/projects/rankit-74583/messages:send';
         $serverKey = env('FCM_SERVER_KEY');
-
-        // dd($serverKey);
 
         $data = [
             "registration_ids" => $deviceKeys,
             "notification" => [
                 "title" => $title,
                 "body" => $body,
+                "sound" => "default",
+                "click_action" => "FLUTTER_NOTIFICATION_CLICK"
+            ],
+            "priority" => "high",
+            "data" => [
+                "custom_key" => "custom_value"
             ]
         ];
+        
         $encodedData = json_encode($data);
 
         $headers = [
-            'Authorization:key=' . $serverKey,
+            'Authorization: key=' . $serverKey,
             'Content-Type: application/json',
         ];
 
@@ -96,26 +111,37 @@ class UtilService
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        // Disabling SSL Certificate support temporarly
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
-        // Execute post
+
         $result = curl_exec($ch);
         $res = array();
         if (!$result) {
             $res['success'] = false;
-            $res['data'] =  curl_error($ch);
-
-        }else {
+            $res['data'] = curl_error($ch);
+        } else {
             $res['success'] = true;
-            $res['data'] =  $result;
+            $res['data'] = $result;
         }
-        // Close connection
+
         curl_close($ch);
 
         Log::info(sprintf('%s: Message response is %s', __METHOD__, $res['data']));
 
         return $res;
+    }
+
+    public function sendNotification($title, $body, array $deviceTokens): array
+    {
+        $notification = Notification::create($title, $body);
+        $message = CloudMessage::new()
+            ->withNotification($notification)
+            ->withData(['key' => 'value']); 
+        try {
+            $this->messaging->sendMulticast($message, $deviceTokens);
+            return ['success' => true, 'message' => 'Notification sent successfully'];
+        } catch (MessagingException $e) {
+            return ['success' => false, 'message' => $e->getMessage()];
+        }
     }
 }

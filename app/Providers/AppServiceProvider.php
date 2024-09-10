@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use Illuminate\Routing\Route;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
@@ -14,7 +18,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(Messaging::class, function ($app) {
+            $factory = (new Factory)
+                ->withServiceAccount(config('firebase.projects.app.credentials'))
+                ->withDatabaseUri(config('firebase.projects.app.database.url'));
+                
+            return $factory->createMessaging();
+        });
     }
 
     /**
