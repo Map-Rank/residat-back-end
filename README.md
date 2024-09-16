@@ -195,3 +195,7 @@ This file is part of MapAndRank - Residat.
 ## Change Log 📝
 
 // Log of changes and version history.
+
+## Documentation
+
+https://backend-doc.residat.com/#introduction

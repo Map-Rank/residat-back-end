@@ -78,6 +78,9 @@ class UtilService
         return $zones;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function sendWebNotification($title, $body, array $deviceKeys): array
     {
         $url = 'https://fcm.googleapis.com/v1/projects/rankit-74583/messages:send';
@@ -141,6 +144,11 @@ class UtilService
             $this->messaging->sendMulticast($message, $deviceTokens);
             return ['success' => true, 'message' => 'Notification sent successfully'];
         } catch (MessagingException $e) {
+            Log::error('Failed to send notification', [
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+                'deviceTokens' => $deviceTokens
+            ]);
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }

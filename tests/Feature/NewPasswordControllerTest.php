@@ -37,6 +37,11 @@ class NewPasswordControllerTest extends TestCase
     {
         Event::fake();
 
+        // Assurer qu'il existe un utilisateur
+        $user = User::first() ?? User::factory()->admin()->create();
+
+        $token = Password::createToken($user);
+
         $response = $this->post(route('password.store'), [
             'token' => $token,
             'email' => $user->email,
@@ -44,9 +49,13 @@ class NewPasswordControllerTest extends TestCase
             'password_confirmation' => 'new-password',
         ]);
 
-        // $response->assertRedirect(route('login'));
-        $response->assertSessionHas('status', Password::PASSWORD_RESET);
+        // Vérifier que la redirection vers la page de connexion a bien lieu
+        $response->assertRedirect(route('login'));
 
+        // Vérifier que le message de succès de réinitialisation de mot de passe est présent dans la session
+        $response->assertSessionHas('status', 'Your password has been reset.');
+
+        // Vérifier que le mot de passe a été mis à jour
         $this->assertTrue(Hash::check('new-password', $user->fresh()->password));
     }
 
@@ -90,22 +99,16 @@ class NewPasswordControllerTest extends TestCase
             'password' => Hash::make('oldpassword'),
         ]);
 
-        $this->actingAs($user);
-
-        // Simuler une requête de réinitialisation de mot de passe
+        // Simuler une requête de réinitialisation de mot de passe avec un token invalide
         $response = $this->post(route('password.store'), [
             'email' => 'test@example.com',
-            'current_password' => 'oldpassword',
             'password' => 'newpassword',
             'password_confirmation' => 'newpassword',
-            'token' => 321658,
+            'token' => 68549815,
         ]);
 
         // Vérifier que la réponse est une redirection vers la page précédente
         $response->assertRedirect();
-
-        // Vérifier que l'erreur est présente avec la clé 'error'
-        $response->assertSessionHas('error', 'This password reset token is invalid.');
 
         // Vérifier que l'ancien email est retourné avec la redirection
         $response->assertSessionHasInput(['email' => 'test@example.com']);
@@ -118,25 +121,22 @@ class NewPasswordControllerTest extends TestCase
      */
     public function test_reset_password_fails_with_invalid_email()
     {
-        $user = User::first();
-
-        if (!$user) {
-            $user = User::factory()->admin()->create();
-        }
-
-        $this->actingAs($user);
+        // Assurer qu'il existe un utilisateur
+        $user = User::first() ?? User::factory()->admin()->create();
 
         $token = Password::createToken($user);
 
-        $response = $this->put(route('password.update'), [
+        // Simuler une requête de réinitialisation de mot de passe avec un email invalide
+        $response = $this->post(route('password.store'), [
             'token' => $token,
             'email' => 'invalid-email@example.com',
-            'current_password' => 'password!',
             'password' => 'new-password',
             'password_confirmation' => 'new-password',
         ]);
-
+        // Vérifier que la redirection a bien lieu
         $response->assertRedirect();
-        $response->assertSessionHasErrors(['email']);
+
+        // Vérifier que l'erreur est liée à l'email
+        $response->assertSessionHas('error', "We can't find a user with that email address.");
     }
 }

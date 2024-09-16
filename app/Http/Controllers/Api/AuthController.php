@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Mail\WelcomeEmail;
 use App\Services\User\UserCreate;
 use Illuminate\Http\JsonResponse;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Support\Facades\Session;
 use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Validation\ValidationException;
 
@@ -36,6 +38,8 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create($request->all());
+        // Envoyer un e-mail à l'utilisateur
+        Mail::to($user->email)->send(new WelcomeEmail($user, $request['password']));
 
         if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('avatar')) {
