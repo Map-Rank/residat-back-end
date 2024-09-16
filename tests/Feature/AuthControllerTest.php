@@ -6,6 +6,10 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Zone;
+use App\Mail\WelcomeEmail;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
@@ -83,15 +87,56 @@ class AuthControllerTest extends TestCase
 
     public function testRegister()
     {
+        // Empêcher les exceptions d'être masquées
         $this->withoutExceptionHandling();
-        $this->postJson('/api/register', $this->dataRegister())
-            ->assertStatus(201)
+
+        // Simuler l'envoi d'un e-mail
+        Mail::fake();
+
+        // Simuler le fichier avatar
+        $avatar = UploadedFile::fake()->image('avatar.jpg');
+
+        // Données de test avec avatar et fcm_token
+        $data = array_merge($this->dataRegister(), [
+            'avatar' => $avatar,
+            'fcm_token' => 'fake_fcm_token',
+        ]);
+
+        // Appel à l'API de registre
+        $response = $this->postJson('/api/register', $data);
+
+        // Vérification du succès et absence d'erreurs
+        $response->assertStatus(201)
             ->assertSessionHasNoErrors();
 
-        // We check if we have a user on the database
-        $this->assertDatabaseHas(User::class, ['email' => 'test@gmail.com']);
+        // Vérifiez que le mail de création de compte a bien été envoyé
+        Mail::assertSent(WelcomeEmail::class, function ($mail) use ($data) {
+            return $mail->hasTo($data['email']);
+        });
 
+        $imageName = time() . '.' . $avatar->getClientOriginalExtension();
+
+        if (env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing') {
+            Storage::disk('public')->assertExists('avatar/' . $imageName);
+        } else {
+            Storage::disk('s3')->assertExists('avatar/' . $imageName);
+        }
+
+        // Vérifiez que l'utilisateur a bien été créé dans la base de données
+        $this->assertDatabaseHas('users', [
+            'email' => $data['email'],
+            'fcm_token' => 'fake_fcm_token', // Vérification du token FCM
+        ]);
+
+        // Vérifiez que l'avatar a bien été stocké et attribué à l'utilisateur
+        $user = User::where('email', $data['email'])->first();
+        $this->assertNotNull($user->avatar);
+        $this->assertStringContainsString('avatar/', $user->avatar);
+
+        // Vérification que le token a été généré pour l'utilisateur
+        $this->assertNotNull($user->tokens->first());
     }
+
 
     public function testLogout()
     {

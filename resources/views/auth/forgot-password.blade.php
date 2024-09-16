@@ -23,14 +23,13 @@
         </div>
     </form>
 </x-guest-layout> --}}
-
-@extends('layouts.auth-styles')
+@extends('layouts.app')
 
 @section('title')
-    Reset Passwoard
+    Forgot Password
 @endsection
 
-@section('auth-content')
+@section('content')
     <div class="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
         <div class="container">
             <div class="row justify-content-center">

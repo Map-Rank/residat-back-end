@@ -64,9 +64,25 @@ class CompanyControllerTest extends TestCase
         $profilePath = 'company_profile_pictures/' . time() . '.' . $profileImage->getClientOriginalExtension();
         Storage::disk(env('APP_ENV') == 'local' || env('APP_ENV') == 'dev' || env('APP_ENV') == 'testing' ? 'public' : 's3')->assertExists($profilePath);
 
-        // Vérifiez que le mail a été envoyé
+        // // Vérifiez que le mail a été envoyé
+        // Mail::assertSent(CompanyCreated::class, function ($mail) use ($data) {
+        //     return $mail->hasTo($data['email']);
+        // });
+
         Mail::assertSent(CompanyCreated::class, function ($mail) use ($data) {
-            return $mail->hasTo($data['email']);
+            // Vérifier que l'e-mail a été envoyé à la bonne adresse
+            $hasTo = $mail->hasTo($data['email']);
+    
+            // Vérifier que le contenu de l'e-mail utilise la vue correcte avec la bonne donnée
+            $content = $mail->content();
+            $contentView = $content->view === 'emails.company_created';
+            $contentHasCompany = isset($content->with['company']) && $content->with['company']->company_name === $data['company_name'];
+    
+            // Vérifier qu'aucune pièce jointe n'est présente
+            $attachments = $mail->attachments();
+            $noAttachments = empty($attachments);
+    
+            return $hasTo && $contentView && $contentHasCompany && $noAttachments;
         });
 
         // Vérifiez que l'utilisateur a été créé et qu'il a le rôle par défaut

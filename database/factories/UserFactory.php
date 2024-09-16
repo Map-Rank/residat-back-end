@@ -38,6 +38,7 @@ class UserFactory extends Factory
             'zone_id' => $latestZoneWithLevelFour->id,
             'active' => 1,
             'verified' => 1,
+            'fcm_token' => $this->faker->uuid(),
             'email_verified_at' => Carbon::now(),
             'activated_at' => Carbon::now(),
             'verified_at' => Carbon::now(),

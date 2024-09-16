@@ -129,6 +129,20 @@ docker-compose up -d
 php artisan migrate --seed
 ```
 
+## NOTIFICATION WITH FIREBASE IN .env file
+
+```sh
+get your firebase_credentials.json
+```
+
+```sh
+FIREBASE_CREDENTIALS=/storage/fullpath/firebase_credentials.json (fullpath)
+FIREBASE_PROJECT=projet_id
+FIREBASE_DATABASE_URL=https://projet_id.firebaseio.com
+FIREBASE_STORAGE_DEFAULT_BUCKET=projet_id.appspot.com
+```
+
+
 ### Run Unit Tests with [PHPUnit](https://laravel.com/docs/11.x/testing)
 
 ### Generate report 
@@ -181,3 +195,7 @@ This file is part of MapAndRank - Residat.
 ## Change Log 📝
 
 // Log of changes and version history.
+
+## Documentation
+
+https://backend-doc.residat.com/#introduction
