@@ -14,6 +14,7 @@ class UserFullResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $authUser = auth()->user();
         $appEnv = env('APP_ENV');
         $environments = ['local', 'dev', 'testing'];
         $url =  env('FRONT_URL').'/'.$this->avatar;
@@ -43,6 +44,7 @@ class UserFullResource extends JsonResource
             'type' => $this['type'],
             'fcm_token' => $this['fcm_token'],
             'avatar' => $url,
+            'liked' => $authUser && $this->interactions->where('user_id', $authUser->id)->where('type_interaction_id', 2)->first() != null,
             'activeSubscription' => SubscriptionResource::collection($this->whenLoaded('activeSubscription')),
             'my_posts' => PostResource::collection($this->whenLoaded('myPosts')),
             'posts' => PostResource::collection($this->whenLoaded('posts')),

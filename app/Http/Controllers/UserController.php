@@ -38,7 +38,7 @@ class UserController extends Controller
     }
 
     /**
-     * @codeCoverageIgnore
+     * 
      * Store a newly created resource in storage.
      */
     public function store(UserRequest $request)

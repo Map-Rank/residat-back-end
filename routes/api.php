@@ -62,7 +62,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'profile']);
     Route::get('/profile/detail/{id}', [ProfileController::class, 'showProfile']);
-    Route::put('/profile/update/{id}', [ProfileController::class, 'update']);
+    Route::put('/profile/update/{id}', [ProfileController::class, 'update'])->name('update.profile');
     Route::delete('/delete-user', [ProfileController::class, 'destroy'])->name('delete.user');
 
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);

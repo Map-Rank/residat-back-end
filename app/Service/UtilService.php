@@ -78,6 +78,9 @@ class UtilService
         return $zones;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function sendWebNotification($title, $body, array $deviceKeys): array
     {
         $url = 'https://fcm.googleapis.com/v1/projects/rankit-74583/messages:send';
