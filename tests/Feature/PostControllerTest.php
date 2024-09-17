@@ -120,7 +120,19 @@ class PostControllerTest extends TestCase
 
             // Vérifiez que les données dans la base de données correspondent bien à ce qui est attendu
             $this->assertEquals($mediaInDb->type, $data['media'][$key]->getClientMimeType());
+
+            $this->assertEquals($mediaInDb->post->id, $post->id);
         }
+
+        $interaction = $post->interactions()
+            ->where('type_interaction_id', $typeInteraction->id)
+            ->first();
+
+        // **Vérifier si une interaction est trouvée**
+        $this->assertNotNull($interaction, 'Aucune interaction trouvée pour ce post et ce type d\'interaction.');
+
+        // **Vérifier que l'interaction est bien liée au type d'interaction**
+        $this->assertTrue($typeInteraction->interactions->contains($interaction), 'L\'interaction est bien associée au type d\'interaction.');
     }
 
     public function test_show()

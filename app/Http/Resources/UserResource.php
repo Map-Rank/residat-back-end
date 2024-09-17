@@ -19,6 +19,7 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $authUser = auth()->user();
         $appEnv = env('APP_ENV');
         $environments = ['local', 'dev', 'testing'];
         $url =  env('FRONT_URL').'/'.$this->avatar;
@@ -52,6 +53,7 @@ class UserResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'zone' => ZoneResource::make($this->whenLoaded('zone')),
+            'liked' => $authUser && $this->interactions->where('user_id', $authUser->id)->where('type_interaction_id', 2)->first() != null,
 
         ];
     }
