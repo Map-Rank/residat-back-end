@@ -125,6 +125,20 @@ class AuthController extends Controller
         //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         // }
 
+        // Récupération de l'utilisateur authentifié
+        $user = Auth::user();
+
+        // Vérification du type d'utilisateur
+        if ($user->type === 'COUNCIL') {
+            // Vérifier si l'email n'est pas vérifié
+            if (!$user->email_verified_at) {
+                return response()->success([
+                    'token' => $token->plainTextToken, 
+                    'verified' => false
+                ], __('Please verify your email'), 200);
+            }
+        }
+
         $user = User::with('zone')->where('id', Auth::user()->id)->first();
 
         if ($request->filled('fcm_token')) {

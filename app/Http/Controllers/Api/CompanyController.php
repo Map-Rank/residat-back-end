@@ -62,6 +62,7 @@ class CompanyController extends Controller
                 'password' => Hash::make($data['password']),
                 'profession' => 'INSTITUTION',
                 'description' => $data['description'],
+                'email_verified_at' => false,
                 'language' => $data['language'],
                 'first_name' => $data['company_name'],
                 'avatar' => isset($data['profile']) ? $data['profile'] : '',
@@ -81,6 +82,10 @@ class CompanyController extends Controller
             $userData['token'] = $token->plainTextToken;
 
             Mail::to($company->email)->send(new CompanyCreated($company));
+        }
+
+        if (!$userData['email_verified_at']) {
+            return response()->success(['token' => $token->plainTextToken, "verified" => false], __('Please verify you mail') , 200);
         }
 
         // return new CompanyResource($company);
