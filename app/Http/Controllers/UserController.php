@@ -26,6 +26,13 @@ class UserController extends Controller
         return view('users.index', ['users' => $users]);
     }
 
+    public function getUserCouncil()
+    {
+        $users = User::where('type', 'COUNCIL')->get();
+
+        return view('users.council', ['users' => $users]);
+    }
+
     /**
      * @codeCoverageIgnore
      * Show the form for creating a new resource.
