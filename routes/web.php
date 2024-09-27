@@ -45,6 +45,7 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashb
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('get-council-user', [UserController::class, 'getUserCouncil'])->name('users.council');
+    Route::post('/validate-institution/{userId}', [UserController::class, 'validateInstitution'])->name('validate.council');
     
     Route::delete('delete/users/{id}', [UserController::class, 'destroy'])->name('users.delete');
     Route::post('/store-user', [UserController::class, 'store'])->name('users.store');
