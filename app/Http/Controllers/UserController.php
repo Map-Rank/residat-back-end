@@ -12,6 +12,7 @@ use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,6 +25,31 @@ class UserController extends Controller
     {
         $users = User::with(['zone', 'postCount'])->paginate(100); // 100 utilisateurs par page, ajustez selon vos besoins
         return view('users.index', ['users' => $users]);
+    }
+
+    public function getUserCouncil()
+    {
+        $users = User::where('type', 'COUNCIL')->whereNull('email_verified_at')->paginate(100);
+
+        return view('users.council', ['users' => $users]);
+    }
+
+    public function validateInstitution($userId)
+    {
+        // Trouver l'utilisateur par ID
+        $user = User::find($userId);
+
+        // Vérifier si l'utilisateur existe
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found');
+        }
+
+        // Mettre à jour l'attribut email_verified_at à la date et l'heure actuelles
+        $user->email_verified_at = now();
+        $user->save();
+
+        // Retourner une réponse
+        return redirect()->back()->with('success', 'Account validated successfully');
     }
 
     /**
