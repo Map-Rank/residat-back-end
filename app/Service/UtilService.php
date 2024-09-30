@@ -136,18 +136,35 @@ class UtilService
 
     public function sendNotification($title, $body, array $deviceTokens): array
     {
+        Log::debug('Device Tokens:', $deviceTokens);  // Log received tokens
+
         $notification = Notification::create($title, $body);
         $message = CloudMessage::new()
             ->withNotification($notification)
-            ->withData(['key' => 'value']); 
+            ->withData(['key' => 'value']);
+
         try {
-            $this->messaging->sendMulticast($message, $deviceTokens);
+            // Validate tokens using kreait/laravel-firebase (if applicable)
+            $firebase = app('firebase.messaging');
+            $validTokens = [];
+            foreach ($deviceTokens as $token) {
+            if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
+                $validTokens[] = $token;
+            }
+            }
+
+            // Send notification only with valid tokens
+            if (!empty($validTokens)) {
+            $this->messaging->sendMulticast($message, $validTokens);
             return ['success' => true, 'message' => 'Notification sent successfully'];
+            } else {
+            return ['success' => false, 'message' => 'No valid registration tokens found'];
+            }
         } catch (MessagingException $e) {
             Log::error('Failed to send notification', [
-                'error' => $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
-                'deviceTokens' => $deviceTokens
+            'error' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(),
+            'deviceTokens' => $deviceTokens
             ]);
             return ['success' => false, 'message' => $e->getMessage()];
         }

@@ -97,6 +97,16 @@ class ZoneControllerTest extends TestCase
         // $this->assertSessionHas('success', 'Zone Test Zone created successfully!');
         $this->assertTrue(session()->has('success'), 'Zone'.$validZoneData['name'].' created successfully!');
 
+        // **Vérifier que la zone est associée au bon niveau (Level) via la relation zones():**
+        $this->assertDatabaseHas('zones', ['name' => $validZoneData['name']]);
+
+        // Récupérer le niveau (Level) créé et vérifier qu'il contient bien la zone nouvellement créée
+        $zoneInDb = Zone::where('name', $validZoneData['name'])->first();
+        $this->assertNotNull($zoneInDb);
+
+        // Vérifier la relation entre Level et Zone
+        $this->assertTrue($level->zones->contains($zoneInDb), 'La zone est bien associée au niveau.');
+
          // Vérifiez que la redirection s'est effectuée vers la route 'zones.index'
         $response->assertRedirect(route('zones.index'));
     }
