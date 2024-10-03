@@ -133,31 +133,19 @@ class ZoneController extends Controller
         $datum->latitude = $request['latitude'];
         $datum->longitude = $request['longitude'];
 
-        if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3'){
-            if ($request->hasFile('data')) {
-                $mediaFile = $request->file('data');
-                $mediaPath = $mediaFile->store('media/zone', 'public');
-                $datum->banner = Storage::url($mediaPath);
-            }
+        $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
-            if ($request->hasFile('geojson')) {
-                $mediaFile = $request->file('geojson');
-                $geojsonPath = $mediaFile->store('media/geojson', 'public');
-                $datum->geojson = Storage::url($geojsonPath);
-            }
+        if ($request->hasFile('data')) {
+            $mediaFile = $request->file('data');
+            $mediaPath = $mediaFile->store('media/zone', $storageDisk);
+            $datum->banner = Storage::url($mediaPath);
+        }
 
-        }else{
-            if ($request->hasFile('data')) {
-                $mediaFile = $request->file('data');
-                $mediaPath = $mediaFile->store('media/zone', 's3');
-                $datum->banner = Storage::url($mediaPath);
-            }
-
-            if ($request->hasFile('geojson')) {
-                $mediaFile = $request->file('geojson');
-                $geojsonPath = $mediaFile->store('media/geojson', 's3');
-                $datum->geojson = Storage::url($geojsonPath);
-            }
+        // Vérifier et stocker le fichier 'geojson'
+        if ($request->hasFile('geojson')) {
+            $geojsonFile = $request->file('geojson');
+            $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
+            $datum->geojson = Storage::url($geojsonPath);
         }
         
 
