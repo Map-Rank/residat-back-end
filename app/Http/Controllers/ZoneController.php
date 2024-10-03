@@ -130,6 +130,8 @@ class ZoneController extends Controller
         $datum->parent()->associate($parent);
         $datum->level_id = $request['level_id'];
         $datum->name = $request['name'];
+        $datum->latitude = $request['latitude'];
+        $datum->longitude = $request['longitude'];
 
         if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0 ? 'public' : 's3'){
             if ($request->hasFile('data')) {
@@ -137,11 +139,24 @@ class ZoneController extends Controller
                 $mediaPath = $mediaFile->store('media/zone', 'public');
                 $datum->banner = Storage::url($mediaPath);
             }
+
+            if ($request->hasFile('geojson')) {
+                $mediaFile = $request->file('geojson');
+                $geojsonPath = $mediaFile->store('media/geojson', 'public');
+                $datum->geojson = Storage::url($geojsonPath);
+            }
+
         }else{
             if ($request->hasFile('data')) {
                 $mediaFile = $request->file('data');
                 $mediaPath = $mediaFile->store('media/zone', 's3');
                 $datum->banner = Storage::url($mediaPath);
+            }
+
+            if ($request->hasFile('geojson')) {
+                $mediaFile = $request->file('geojson');
+                $geojsonPath = $mediaFile->store('media/geojson', 's3');
+                $datum->geojson = Storage::url($geojsonPath);
             }
         }
         
@@ -203,11 +218,33 @@ class ZoneController extends Controller
             $updated['name'] = $request['name'];
         }
 
+        if ($request->has('latitude')) {
+            $updated['latitude'] = $request['latitude'];
+        }
+
+        if ($request->has('longitude')) {
+            $updated['longitude'] = $request['longitude'];
+        }
+
         if ($request->hasFile('data')) {
             $mediaFile = $request->file('data');
 
             $mediaPath = $mediaFile->store('media/zone', 's3');
             $updated['banner'] = Storage::url($mediaPath);
+        }
+
+        $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
+
+        if ($request->hasFile('data')) {
+            $mediaFile = $request->file('data');
+            $mediaPath = $mediaFile->store('media/zone', $storageDisk);
+            $updated['banner'] = Storage::url($mediaPath);
+        }
+
+        if ($request->hasFile('geojson')) {
+            $geojsonFile = $request->file('geojson');
+            $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
+            $updated['geojson'] = Storage::url($geojsonPath);
         }
 
         if($request->hasFile('image')){

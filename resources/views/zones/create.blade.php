@@ -80,6 +80,21 @@
                             {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
                         </div>
 
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="" class="d-block">Latitude</label>
+                                <input class="form-control" type="number" step="any" name="latitude" placeholder="Enter latitude" required>
+                            </div>
+                            <div  class="form-group">
+                                <label for="" class="d-block">Longitude</label>
+                                <input class="form-control" type="number" step="any" name="longitude" placeholder="Enter longitude" required>
+                            </div>
+                            <div  class="form-group">
+                                <label for="" class="d-block">Select geojson file</label>
+                                <input class="form-control" type="file" name="geojson" placeholder="Enter geojson" required>
+                            </div>
+                        </div>
+
 
                         <div class="col-sm-12">
                             <div class="form-group">
