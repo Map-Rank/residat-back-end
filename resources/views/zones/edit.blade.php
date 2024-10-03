@@ -50,6 +50,21 @@
                             {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
                         </div>
 
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="" class="d-block">Latitude</label>
+                                <input class="form-control" type="number" value="{{ $zone->latitude }}" step="any" name="latitude" placeholder="Enter latitude" required>
+                            </div>
+                            <div  class="form-group">
+                                <label for="" class="d-block">Longitude</label>
+                                <input class="form-control" type="number" value="{{ $zone->longitude }}" step="any" name="longitude" placeholder="Enter longitude" required>
+                            </div>
+                            <div  class="form-group">
+                                <label for="" class="d-block">Select geojson file</label>
+                                <input class="form-control" type="file" name="geojson" placeholder="Enter geojson">
+                            </div>
+                        </div>
+
                         <div class="form-group {!! $errors->has('data') ? 'has-error' : '' !!}">
                             {!! Form::label('Banner image', null, ['class' => '',])     !!}
                             {!! Form::file('data', ['place_holder'=> 'Drop the file here', 'accept'=> 'image/*'])!!}
@@ -261,6 +276,9 @@
                 zone_name: @json($zone->parent->name ?? ''),
                 selected_zone : @json($zone->parent ?? ''),
                 selected_zone_id : @json($zone->parent->id ?? 0),
+                latitude: '',
+                longitude: '',
+                geojson: '',
                 vectorType: '',
                 vectorValue: '',
                 vectorName: '',
