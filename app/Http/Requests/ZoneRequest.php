@@ -26,9 +26,9 @@ class ZoneRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
                 'name' => ['sometimes','string'],
-                'latitude' => ['sometimes','double'],
-                'longitude' => ['sometimes','double'],
-                'geojson' => ['sometimes','string'],
+                'latitude' => ['required','numeric'],
+                'longitude' => ['required','numeric'],
+                'geojson' => ['sometimes', 'file', 'mimes:json,geojson', 'max:2048'],
                 'parent_id' => ['sometimes','int',],
                 'data' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
                 'image' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
@@ -40,9 +40,9 @@ class ZoneRequest extends FormRequest
         }
         return [
             'name' => ['required','string'],
-            'latitude' => ['sometimes','double'],
-            'longitude' => ['sometimes','double'],
-            'geojson' => ['sometimes','string'],
+            'latitude' => ['required','numeric'],
+            'longitude' => ['required','numeric'],
+            'geojson' => ['sometimes', 'file', 'mimes:json,geojson', 'max:2048'],
             'division_id' => ['sometimes','exists:zones,id',],
             'region_id' => ['sometimes','exists:zones,id',],
             'level_id' => ['sometimes','exists:levels,id',],
