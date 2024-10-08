@@ -33,7 +33,7 @@ class ZoneResource extends JsonResource
             'level_id' => $this['level_id'],
             'latitude' => $this['latitude'],
             'longitude' => $this['longitude'],
-            'geojson' => $this['geojson'],
+            'geojson' => env('FRONT_URL').$this['geojson'],
             'banner' => $url,
             'created_at' => $this['created_at'],
             'vector' => VectorResource::make($this->whenLoaded('vector')),
