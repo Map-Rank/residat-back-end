@@ -16,6 +16,8 @@ class Zone extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'zones_updated';
+
     protected $fillable = ['name', 'parent_id', 'level_id', 'banner','latitude','longitude','geojson'];
 
     public function parent()
