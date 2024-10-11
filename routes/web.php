@@ -137,7 +137,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
     Route::delete('companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
-    Route::resource('disasters', DisasterController::class)->except(['create', 'edit']);
+    Route::resource('disasters', DisasterController::class);
 
 });
 Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');
