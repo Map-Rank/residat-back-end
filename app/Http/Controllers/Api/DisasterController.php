@@ -6,16 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DisasterResource;
 use App\Models\Disaster;
 
+/**
+ * @group Module Requests
+ */
 class DisasterController extends Controller
 {
-    // API: Get all disasters
+    /**
+     * List all disasters
+     */
     public function index()
     {
         $disasters = Disaster::all();
         return response()->success(DisasterResource::collection($disasters), __('Disaster charged successfully'), 200);
     }
 
-    // API: Get a single disaster
+    /**
+     * Show disaster
+     */
     public function show(Disaster $disaster)
     {;
         return response()->success(new DisasterResource($disaster), __('Disaster charged successfully'), 200);

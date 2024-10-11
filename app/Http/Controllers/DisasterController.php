@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\DisasterRequest;
+use App\Models\Zone;
+use App\Models\Level;
 use App\Models\Disaster;
+use App\Http\Requests\DisasterRequest;
 
 class DisasterController extends Controller
 {
@@ -15,6 +17,16 @@ class DisasterController extends Controller
         // Récupère tous les désastres et les renvoie à la vue 'disasters.index'
         $disasters = Disaster::all();
         return view('disasters.index', compact('disasters'));
+    }
+
+    public function create()
+    {
+        // Récupérer les zones dont level_id est 4
+        $zones = Zone::where('level_id', 4)->get();
+        $levels = Level::query()->get();
+        $types = ["DROUGHT", "FLOOD"];
+        
+        return view('disasters.create', compact('zones','levels','types'));
     }
 
     /**
@@ -32,8 +44,17 @@ class DisasterController extends Controller
      */
     public function show(Disaster $disaster)
     {
-        // Affiche un désastre spécifique
+
         return view('disasters.show', compact('disaster'));
+    }
+
+    public function edit(Disaster $disaster)
+    {
+        $zones = Zone::where('level_id', 4)->get();
+        $levels = Level::query()->get();
+        $types = ["DROUGHT", "FLOOD"];
+        
+        return view('disasters.edit', compact('disaster','zones','levels','types'));
     }
 
     /**

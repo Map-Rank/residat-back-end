@@ -129,6 +129,11 @@
             <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
         </svg> Requests <span class="badge badge-sm bg-danger ms-auto">Very Important</span></a>
     </li>
+    <li class="nav-item"><a class="nav-link {{ request()->routeIs('disasters') ? 'active' : '' }}" href="{{ route('disasters.index') }}">
+        <svg class="nav-icon">
+            <use xlink:href="{{ asset('assets/@coreui/icons/sprites/free.svg#cil-user') }}"></use>
+        </svg> Disaster <span class="badge badge-sm bg-danger ms-auto">Very Important</span></a>
+    </li>
     
 </ul>
 <div class="sidebar-footer border-top d-none d-md-flex">
