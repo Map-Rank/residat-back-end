@@ -13,13 +13,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZoneController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SectorController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DisasterController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\SectorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,6 +136,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('companies', [CompanyController::class, 'index'])->name('companies.index');
     Route::get('companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
     Route::delete('companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
+
+    Route::resource('disasters', DisasterController::class)->except(['create', 'edit']);
 
 });
 Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');

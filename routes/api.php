@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
+use App\Http\Controllers\Api\DisasterController as ApiDisasterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,7 +77,10 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::get('followers/{id}', [FollowController::class, 'followers']);
     Route::get('following/{id}', [FollowController::class, 'following']);
 
-
+    Route::prefix('disasters')->group(function () {
+        Route::get('/', [ApiDisasterController::class, 'index']);
+        Route::get('/{disaster}', [ApiDisasterController::class, 'show']);
+    });
 });
 //show all post and view one post without auth
 

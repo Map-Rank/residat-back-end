@@ -56,10 +56,6 @@ class ZoneRequest extends FormRequest
         ];
     }
 
-//     latitude
-// longitude
-// geojson
-
     /**
      * @param Validator $validator
      */
