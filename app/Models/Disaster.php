@@ -11,7 +11,7 @@ class Disaster extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['description','locality','latitude','longitude','image','zone_id','level','type'];
+    protected $fillable = ['description','locality','latitude','longitude','image','zone_id','level','type', 'end_period', 'start_period'];
 
     public function zone (){
         return $this->belongsTo(Zone::class);

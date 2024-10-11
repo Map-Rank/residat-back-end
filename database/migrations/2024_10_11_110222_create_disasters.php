@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId('zone_id');
             $table->integer('level')->default(1);
             $table->enum('type', ['FLOOD', 'DROUGHT']);
+            $table->timestampTz('start_period')->nullable();
+            $table->timestampTz('end_period')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
