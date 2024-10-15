@@ -49,11 +49,11 @@
                 </div>
                 <div class="form-group">
                     <label for="latitude">Latitude</label>
-                    <input type="number" class="form-control" name="latitude" value="{{ old('latitude') }}" required>
+                    <input type="number" class="form-control" step="any" name="latitude" value="{{ old('latitude') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="longitude">Longitude</label>
-                    <input type="number" class="form-control" name="longitude" value="{{ old('longitude') }}" required>
+                    <input type="number" class="form-control" step="any" name="longitude" value="{{ old('longitude') }}" required>
                 </div>
                 <div class="form-group">
                     <label for="start_period">Start Period</label>
