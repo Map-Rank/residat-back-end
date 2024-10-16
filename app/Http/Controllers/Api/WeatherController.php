@@ -56,7 +56,9 @@ class WeatherController extends Controller
         }
         if ($end_date) {
             $queryParams['end_date'] = $end_date;
-        } else {
+        }
+         
+        if($past_days) {
             $queryParams['past_days'] = $past_days;
         }
 
