@@ -145,7 +145,7 @@ class ZoneController extends Controller
         if ($request->hasFile('geojson')) {
             $geojsonFile = $request->file('geojson');
             $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
-            $datum->geojson = ($geojsonPath);
+            $datum->geojson = Storage::url($geojsonPath);
         }
 
 
