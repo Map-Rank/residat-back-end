@@ -229,10 +229,16 @@ class ZoneController extends Controller
             $updated['banner'] = Storage::url($mediaPath);
         }
 
+        // if ($request->hasFile('geojson')) {
+        //     $geojsonFile = $request->file('geojson');
+        //     $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
+        //     $updated['geojson'] = Storage::url($geojsonPath);
+        // }
+
         if ($request->hasFile('geojson')) {
-            $geojsonFile = $request->file('geojson');
-            $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
-            $updated['geojson'] = Storage::url($geojsonPath);
+            $mediaFile = $request->file('geojson');
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
         }
 
         if($request->hasFile('image')){

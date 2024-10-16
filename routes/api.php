@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\WeatherController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
@@ -99,4 +100,5 @@ Route::get('sector/{id}', [SectorController::class, 'show'])->name('sector.show'
 Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->name('password.reset');
 Route::post('/reset-password', [PasswordController::class, 'reset']);
 Route::post('/create/request', [CompanyController::class, 'store']);
+Route::get('/weather', [WeatherController::class, 'getWeatherData']);
 
