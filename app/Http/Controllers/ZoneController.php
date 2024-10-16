@@ -227,11 +227,11 @@ class ZoneController extends Controller
         }
 
         if ($request->hasFile('geojson')) {
-<<<<<<< HEAD
-            $mediaFile = $request->file('geojson');
-            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
-=======
+// <<<<<<< HEAD
+            // $mediaFile = $request->file('geojson');
+            // $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            // $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
+// =======
             $geojsonFile = $request->file('geojson');
             $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
             $storagePath = Storage::url($geojsonPath);
@@ -239,7 +239,7 @@ class ZoneController extends Controller
                 $storagePath = str_replace('/storage', '', $storagePath);
             }
             $updated['geojson'] = $storagePath;
->>>>>>> 6d70700 (fix path)
+// >>>>>>> 6d70700 (fix path)
         }
 
         if($request->hasFile('image')){
