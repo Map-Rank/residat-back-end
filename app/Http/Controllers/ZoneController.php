@@ -145,9 +145,9 @@ class ZoneController extends Controller
         if ($request->hasFile('geojson')) {
             $geojsonFile = $request->file('geojson');
             $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
-            $datum->geojson = Storage::url($geojsonPath);
+            $datum->geojson = ($geojsonPath);
         }
-        
+
 
         if (!$datum->save())
             {redirect()->back()->with('Error while creating the zone');}
@@ -315,17 +315,17 @@ class ZoneController extends Controller
 
     public function edit($id) {
         $zone = Zone::with('parent', 'vector.vectorKeys')->find($id);
-    
+
         // Vérifiez si la zone est null et lancez une exception si c'est le cas
         if (!$zone) {
             throw new ModelNotFoundException("Zone not found");
         }
-    
+
         $zones = null;
         if ($zone->parent != null) {
             $zones = Zone::query()->where('level_id', $zone->parent->level_id)->get();
         }
-    
+
         return view('zones.edit', compact('zones', 'zone'));
     }
 }
