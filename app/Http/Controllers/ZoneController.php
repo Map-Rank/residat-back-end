@@ -136,18 +136,19 @@ class ZoneController extends Controller
         $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
         if ($request->hasFile('data')) {
-            $mediaFile = $request->file('data');
-            $mediaPath = $mediaFile->store('media/zone', $storageDisk);
-            $datum->banner = Storage::url($mediaPath);
+            $mediaFileData = $request->file('data');
+            $imageNameData = time().'.'.$mediaFileData->getClientOriginalExtension();
+            $mediaPath = $mediaFileData->store('media/zone', $storageDisk);
+            $datum->banner = Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
         }
 
         // Vérifier et stocker le fichier 'geojson'
         if ($request->hasFile('geojson')) {
-            $geojsonFile = $request->file('geojson');
-            $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
-            $datum->geojson = Storage::url($geojsonPath);
+            $mediaFile = $request->file('geojson');
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
         }
-        
+
 
         if (!$datum->save())
             {redirect()->back()->with('Error while creating the zone');}
@@ -214,25 +215,21 @@ class ZoneController extends Controller
             $updated['longitude'] = $request['longitude'];
         }
 
-        if ($request->hasFile('data')) {
-            $mediaFile = $request->file('data');
 
-            $mediaPath = $mediaFile->store('media/zone', 's3');
-            $updated['banner'] = Storage::url($mediaPath);
-        }
 
         $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
         if ($request->hasFile('data')) {
-            $mediaFile = $request->file('data');
-            $mediaPath = $mediaFile->store('media/zone', $storageDisk);
-            $updated['banner'] = Storage::url($mediaPath);
+            $mediaFileData = $request->file('data');
+            $imageNameData = time().'.'.$mediaFileData->getClientOriginalExtension();
+            $mediaPath = $mediaFileData->store('media/zone', 's3');
+            $updated['banner'] = Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
         }
 
         if ($request->hasFile('geojson')) {
-            $geojsonFile = $request->file('geojson');
-            $geojsonPath = $geojsonFile->store('media/geojson', $storageDisk);
-            $updated['geojson'] = Storage::url($geojsonPath);
+            $mediaFile = $request->file('geojson');
+            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
+            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
         }
 
         if($request->hasFile('image')){
@@ -315,17 +312,17 @@ class ZoneController extends Controller
 
     public function edit($id) {
         $zone = Zone::with('parent', 'vector.vectorKeys')->find($id);
-    
+
         // Vérifiez si la zone est null et lancez une exception si c'est le cas
         if (!$zone) {
             throw new ModelNotFoundException("Zone not found");
         }
-    
+
         $zones = null;
         if ($zone->parent != null) {
             $zones = Zone::query()->where('level_id', $zone->parent->level_id)->get();
         }
-    
+
         return view('zones.edit', compact('zones', 'zone'));
     }
 }

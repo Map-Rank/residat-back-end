@@ -47,12 +47,12 @@
             
                 <div class="form-group">
                     <label for="latitude">Latitude</label>
-                    <input type="number" class="form-control" name="latitude" value="{{ old('latitude', $disaster->latitude) }}" required>
+                    <input type="number" class="form-control" name="latitude" step="any" value="{{ old('latitude', $disaster->latitude) }}" required>
                 </div>
             
                 <div class="form-group">
                     <label for="longitude">Longitude</label>
-                    <input type="number" class="form-control" name="longitude" value="{{ old('longitude', $disaster->longitude) }}" required>
+                    <input type="number" class="form-control" name="longitude" step="any" value="{{ old('longitude', $disaster->longitude) }}" required>
                 </div>
 
                 <div class="form-group">
