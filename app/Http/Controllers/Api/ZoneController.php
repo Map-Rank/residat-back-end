@@ -41,8 +41,13 @@ class ZoneController extends Controller
         $validated = $validator->validated();
 
         $data = Zone::with('children');
+
         if(isset($validated['name'])){
             $data = $data->whereRaw('LOWER(name) = ?', [strtolower($validated['name'])]);
+        }
+
+        if(isset($validated['code'])){
+            $data = $data->whereRaw('LOWER(code) = ?', [strtolower($validated['code'])]);
         }
 
         if(isset($validated['parent_id'])){

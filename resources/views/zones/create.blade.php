@@ -82,6 +82,13 @@
 
                         <div class="mb-3">
                             <div class="form-group">
+                                <label for="" class="d-block">Code</label>
+                                <input class="form-control" type="text" name="code" placeholder="Enter code of zone" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-group">
                                 <label for="" class="d-block">Latitude</label>
                                 <input class="form-control" type="number" step="any" name="latitude" placeholder="Enter latitude" required>
                             </div>

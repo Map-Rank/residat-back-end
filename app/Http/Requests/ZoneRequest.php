@@ -26,6 +26,7 @@ class ZoneRequest extends FormRequest
         if (in_array($this->method(), ['PUT', 'PATCH'])) {
             return [
                 'name' => ['sometimes','string'],
+                'code' => ['sometimes','string'],
                 'latitude' => ['required','numeric'],
                 'longitude' => ['required','numeric'],
                 'geojson' => ['sometimes', 'file', 'mimes:json,geojson', 'max:2048'],
@@ -40,6 +41,7 @@ class ZoneRequest extends FormRequest
         }
         return [
             'name' => ['required','string'],
+            'code' => ['required','string'],
             'latitude' => ['required','numeric'],
             'longitude' => ['required','numeric'],
             'geojson' => ['sometimes', 'file', 'mimes:json,geojson', 'max:2048'],
