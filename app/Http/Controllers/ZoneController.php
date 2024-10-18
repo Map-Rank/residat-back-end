@@ -133,20 +133,34 @@ class ZoneController extends Controller
         $datum->latitude = $request['latitude'];
         $datum->longitude = $request['longitude'];
 
+
+        // Gestion du disque en fonction de l'environnement
         $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
+        // Gestion de la bannière
         if ($request->hasFile('data')) {
             $mediaFileData = $request->file('data');
-            $imageNameData = time().'.'.$mediaFileData->getClientOriginalExtension();
-            $mediaPath = $mediaFileData->store('media/zone', $storageDisk);
-            $datum->banner = Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
+            $imageNameData = time() . '.' . $mediaFileData->getClientOriginalExtension();
+
+            if (in_array(env('APP_ENV'), ['local', 'dev', 'testing'])) {
+                $mediaPath = $mediaFileData->store('media/zone', $storageDisk);
+                $datum->banner = Storage::url($mediaPath);  // Utilisation de Storage::url en local
+            } else {
+                $datum->banner = '/'.Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
+            }
         }
 
-        // Vérifier et stocker le fichier 'geojson'
+        // Gestion du fichier geojson
         if ($request->hasFile('geojson')) {
             $mediaFile = $request->file('geojson');
-            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
+            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
+
+            if (in_array(env('APP_ENV'), ['local', 'dev', 'testing'])) {
+                $geojsonPath = $mediaFile->store('media/zone', $storageDisk);
+                $datum->geojson = Storage::url($geojsonPath);  
+            } else {
+                $datum->geojson = '/'.Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
+            }
         }
 
 
@@ -217,19 +231,33 @@ class ZoneController extends Controller
 
 
 
+        // Gestion du disque en fonction de l'environnement
         $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
+        // Gestion de la bannière
         if ($request->hasFile('data')) {
             $mediaFileData = $request->file('data');
-            $imageNameData = time().'.'.$mediaFileData->getClientOriginalExtension();
-            $mediaPath = $mediaFileData->store('media/zone', 's3');
-            $updated['banner'] = Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
+            $imageNameData = time() . '.' . $mediaFileData->getClientOriginalExtension();
+
+            if (in_array(env('APP_ENV'), ['local', 'dev', 'testing'])) {
+                $mediaPath = $mediaFileData->store('media/zone', $storageDisk);
+                $updated['banner'] = Storage::url($mediaPath);  // Utilisation de Storage::url en local
+            } else {
+                $updated['banner'] = '/'.Storage::disk($storageDisk)->putFileAs('banner', $mediaFileData, $imageNameData);
+            }
         }
 
+        // Gestion du fichier geojson
         if ($request->hasFile('geojson')) {
             $mediaFile = $request->file('geojson');
-            $imageName = time().'.'.$mediaFile->getClientOriginalExtension();
-            $updated['geojson'] = Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
+            $imageName = time() . '.' . $mediaFile->getClientOriginalExtension();
+
+            if (in_array(env('APP_ENV'), ['local', 'dev', 'testing'])) {
+                $geojsonPath = $mediaFile->store('media/zone', $storageDisk);
+                $updated['geojson'] = Storage::url($geojsonPath);  
+            } else {
+                $updated['geojson'] = '/'.Storage::disk($storageDisk)->putFileAs('geojson', $mediaFile, $imageName);
+            }
         }
 
         if($request->hasFile('image')){
