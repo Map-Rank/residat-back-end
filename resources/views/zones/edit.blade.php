@@ -49,6 +49,12 @@
                                 placeholder="Name of the zone" value="{{ $zone->name ?? '' }}"/>
                             {!! $errors->first('name', '<small class="help-block">:message</small>') !!}
                         </div>
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label for="" class="d-block">Code</label>
+                                <input class="form-control" type="text" name="code" value="{{ $zone->code }}" placeholder="Enter code of zone" required>
+                            </div>
+                        </div>
 
                         <div class="mb-3">
                             <div class="form-group">

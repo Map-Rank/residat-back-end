@@ -28,6 +28,7 @@ class ZoneResource extends JsonResource
         return [
             'id' => $this['id'],
             'name' => $this['name'],
+            'code' => $this['code'],
             'parent' => ZoneResource::make($this->whenLoaded('zone')),
             'parent_id' => $this['parent_id'],
             'level_id' => $this['level_id'],
