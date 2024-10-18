@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-class FloodService{
+class FloodAIService{
     private $data;
     private $featureRanges;
 
