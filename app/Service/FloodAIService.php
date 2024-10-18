@@ -2,9 +2,17 @@
 
 namespace App\Service;
 
+use Exception;
+use Phpml\Classification\Ensemble\RandomForest;
+use Phpml\CrossValidation\StratifiedRandomSplit;
+use Phpml\Dataset\ArrayDataset;
+use Phpml\Metric\Accuracy;
+
 class FloodAIService{
     private $data;
     private $featureRanges;
+    private $labels;
+    private $model;
 
     public function loadData($filename) {
         // Load data from CSV file
@@ -185,5 +193,59 @@ class FloodAIService{
             }
         }
         return null;
+    }
+
+    public function prepareDataForTraining() {
+        $features = [];
+        $this->labels = [];
+
+        foreach ($this->data as $row) {
+            $features[] = $this->extractFeatures($row);
+            $this->labels[] = $row['flood_occurred'] ?? 0; // Assuming 'flood_occurred' is our target variable
+        }
+
+        return new ArrayDataset($features, $this->labels);
+    }
+
+    private function extractFeatures($row) {
+        return [
+            $row['temperature'],
+            $row['precipitation'],
+            $row['river_level'],
+            $row['soil_moisture'],
+            $row['temp_7day_avg'],
+            $row['precip_7day_avg'],
+            $row['days_since_rainfall'],
+            $row['soil_moisture_precip_interaction'],
+            $row['sin_day'],
+            $row['cos_day'],
+            $row['river_level_change']
+        ];
+    }
+
+    public function trainModel() {
+        $dataset = $this->prepareDataForTraining();
+
+        // Split the dataset into training and testing sets
+        $split = new StratifiedRandomSplit($dataset, 0.2);
+
+        // Initialize and train the model
+        $this->model = new RandomForest();
+        $this->model->train($split->getTrainSamples(), $split->getTrainLabels());
+
+        // Evaluate the model
+        $predictions = $this->model->predict($split->getTestSamples());
+        $accuracy = Accuracy::score($split->getTestLabels(), $predictions);
+
+        echo "Model accuracy: " . $accuracy . "\n";
+    }
+
+    public function predict($inputData) {
+        if (!$this->model) {
+            throw new Exception("Model has not been trained yet.");
+        }
+
+        $features = $this->extractFeatures($inputData);
+        return $this->model->predict([$features])[0];
     }
 }
