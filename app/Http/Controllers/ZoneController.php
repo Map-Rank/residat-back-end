@@ -132,6 +132,7 @@ class ZoneController extends Controller
         $datum->name = $request['name'];
         $datum->latitude = $request['latitude'];
         $datum->longitude = $request['longitude'];
+        $datum->code = $request['code'];
 
         $storageDisk = in_array(env('APP_ENV'), ['local', 'dev', 'testing']) ? 'public' : 's3';
 
@@ -213,6 +214,10 @@ class ZoneController extends Controller
 
         if ($request->has('longitude')) {
             $updated['longitude'] = $request['longitude'];
+        }
+
+        if ($request->has('code')) {
+            $updated['code'] = $request['code'];
         }
 
 
