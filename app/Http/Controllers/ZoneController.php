@@ -132,6 +132,7 @@ class ZoneController extends Controller
         $datum->name = $request['name'];
         $datum->latitude = $request['latitude'];
         $datum->longitude = $request['longitude'];
+        $datum->code = $request['code'];
 
 
         // Gestion du disque en fonction de l'environnement
@@ -227,6 +228,10 @@ class ZoneController extends Controller
 
         if ($request->has('longitude')) {
             $updated['longitude'] = $request['longitude'];
+        }
+
+        if ($request->has('code')) {
+            $updated['code'] = $request['code'];
         }
 
 
