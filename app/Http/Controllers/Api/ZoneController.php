@@ -31,6 +31,7 @@ class ZoneController extends Controller
             'level_id'=> ['sometimes', 'int'],
             'size'=> ['sometimes', 'int'],
             'page'=> ['sometimes', 'int'],
+            'code' => ['sometimes', 'string'],
             'with_vector'=> ['sometimes', 'int']
         ]);
 
