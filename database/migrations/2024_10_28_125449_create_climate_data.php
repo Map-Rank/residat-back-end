@@ -14,6 +14,10 @@ return new class extends Migration
         Schema::create('weather_predictions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->foreignId('zone_id');
+            $table->text('path');
+            $table->date('date');
+            $table->softDeletes();
         });
     }
 
