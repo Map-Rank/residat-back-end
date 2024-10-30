@@ -199,3 +199,8 @@ This file is part of MapAndRank - Residat.
 ## Documentation
 
 https://backend-doc.residat.com/#introduction
+
+
+## Discussion
+
+**https://github.com/Map-Rank/residat-back-end/discussions**
