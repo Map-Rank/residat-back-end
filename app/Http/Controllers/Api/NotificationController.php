@@ -126,25 +126,12 @@ class NotificationController extends Controller
 
         // dd($users_token);
 
-        // try{
-        //     // UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);
-        //     $notificationService = app(UtilService::class);
-        //     $notificationService->sendNotification($notification->titre_en, $notification->content_en, $users_token);
-        // }catch(Exception $ex){
-        //     Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
-        // }
-
-        // Envoi de la notification via Firebase
-        $title = $notification->title; // Assure-toi que $data contient les attributs 'title' et 'body' ou remplace par des valeurs statiques si nécessaire
-        $body = $notification->body;
-        $firebaseResult = $firebaseService->sendNewNotification($title, $body, $users_token);
-
-        // Vérifie les résultats d'envoi
-        if ($firebaseResult['failure'] > 0) {
-            return response()->json([
-                'message' => 'Notification created, but some notifications failed to send.',
-                'details' => $firebaseResult['failures']
-            ], 200);
+        try{
+            // UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);
+            $notificationService = app(UtilService::class);
+            $notificationService->sendNewNotification($notification->titre_en, $notification->content_en, $users_token);
+        }catch(Exception $ex){
+            Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
         }
 
         return response()->success($notification, __('Notification created successfully'), 200);
