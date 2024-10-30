@@ -137,7 +137,7 @@ class NotificationController extends Controller
         // Envoi de la notification via Firebase
         $title = $notification->title; // Assure-toi que $data contient les attributs 'title' et 'body' ou remplace par des valeurs statiques si nécessaire
         $body = $notification->body;
-        $firebaseResult = $firebaseService->sendNotification($title, $body, $users_token);
+        $firebaseResult = $firebaseService->sendNewNotification($title, $body, $users_token);
 
         // Vérifie les résultats d'envoi
         if ($firebaseResult['failure'] > 0) {
