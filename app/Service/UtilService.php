@@ -15,9 +15,9 @@ class UtilService
 {
     protected $messaging;
 
-    public function __construct(Messaging $messaging)
+    public function __construct()
     {
-        $this->messaging = $messaging;
+        $this->messaging = app('firebase.messaging');
     }
 
     public static function get_descendants ($children, $descendants)
