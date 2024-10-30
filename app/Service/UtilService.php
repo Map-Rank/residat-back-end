@@ -143,28 +143,50 @@ class UtilService
             ->withNotification($notification)
             ->withData(['key' => 'value']);
 
-        try {
-            // Validate tokens using kreait/laravel-firebase (if applicable)
-            $firebase = app('firebase.messaging');
-            $validTokens = [];
-            foreach ($deviceTokens as $token) {
-            if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
-                $validTokens[] = $token;
-            }
-            }
+        // try {
+        //     // Validate tokens using kreait/laravel-firebase (if applicable)
+        //     $firebase = app('firebase.messaging');
+        //     $validTokens = [];
+        //     foreach ($deviceTokens as $token) {
+        //     if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
+        //         $validTokens[] = $token;
+        //     }
+        //     }
 
-            // Send notification only with valid tokens
+        //     // Send notification only with valid tokens
+        //     if (!empty($validTokens)) {
+        //     $this->messaging->sendMulticast($message, $validTokens);
+        //     return ['success' => true, 'message' => 'Notification sent successfully'];
+        //     } else {
+        //     return ['success' => false, 'message' => 'No valid registration tokens found'];
+        //     }
+        // } catch (MessagingException $e) {
+        //     Log::error('Failed to send notification', [
+        //     'error' => $e->getMessage(),
+        //     'stack' => $e->getTraceAsString(),
+        //     'deviceTokens' => $deviceTokens
+        //     ]);
+        //     return ['success' => false, 'message' => $e->getMessage()];
+        // }
+
+        try {
+            // Batch validate tokens in chunks of 100
+            $validTokens = [];
+            foreach (array_chunk($deviceTokens, 100) as $tokenChunk) {
+                $validTokens = array_merge($validTokens, $firebase->messaging()->registrationToken()->areRegistered($tokenChunk));
+            }
+    
             if (!empty($validTokens)) {
-            $this->messaging->sendMulticast($message, $validTokens);
-            return ['success' => true, 'message' => 'Notification sent successfully'];
+                $this->messaging->sendMulticast($message, $validTokens);
+                return ['success' => true, 'message' => 'Notification sent successfully'];
             } else {
-            return ['success' => false, 'message' => 'No valid registration tokens found'];
+                return ['success' => false, 'message' => 'No valid registration tokens found'];
             }
         } catch (MessagingException $e) {
             Log::error('Failed to send notification', [
-            'error' => $e->getMessage(),
-            'stack' => $e->getTraceAsString(),
-            'deviceTokens' => $deviceTokens
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+                'deviceTokens' => $deviceTokens
             ]);
             return ['success' => false, 'message' => $e->getMessage()];
         }
