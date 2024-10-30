@@ -7,6 +7,8 @@ use Kreait\Firebase\Messaging;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
+use Kreait\Firebase\Messaging\AndroidConfig;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Exception\MessagingException;
 
 
@@ -143,52 +145,86 @@ class UtilService
             ->withNotification($notification)
             ->withData(['key' => 'value']);
 
-        // try {
-        //     // Validate tokens using kreait/laravel-firebase (if applicable)
-        //     $firebase = app('firebase.messaging');
-        //     $validTokens = [];
-        //     foreach ($deviceTokens as $token) {
-        //     if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
-        //         $validTokens[] = $token;
-        //     }
-        //     }
-
-        //     // Send notification only with valid tokens
-        //     if (!empty($validTokens)) {
-        //     $this->messaging->sendMulticast($message, $validTokens);
-        //     return ['success' => true, 'message' => 'Notification sent successfully'];
-        //     } else {
-        //     return ['success' => false, 'message' => 'No valid registration tokens found'];
-        //     }
-        // } catch (MessagingException $e) {
-        //     Log::error('Failed to send notification', [
-        //     'error' => $e->getMessage(),
-        //     'stack' => $e->getTraceAsString(),
-        //     'deviceTokens' => $deviceTokens
-        //     ]);
-        //     return ['success' => false, 'message' => $e->getMessage()];
-        // }
-
         try {
-            // Batch validate tokens in chunks of 100
+            // Validate tokens using kreait/laravel-firebase (if applicable)
+            $firebase = app('firebase.messaging');
             $validTokens = [];
-            foreach (array_chunk($deviceTokens, 100) as $tokenChunk) {
-                $validTokens = array_merge($validTokens, $firebase->messaging()->registrationToken()->areRegistered($tokenChunk));
+            foreach ($deviceTokens as $token) {
+            if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
+                $validTokens[] = $token;
             }
-    
+            }
+
+            // Send notification only with valid tokens
             if (!empty($validTokens)) {
-                $this->messaging->sendMulticast($message, $validTokens);
-                return ['success' => true, 'message' => 'Notification sent successfully'];
+            $this->messaging->sendMulticast($message, $validTokens);
+            return ['success' => true, 'message' => 'Notification sent successfully'];
             } else {
-                return ['success' => false, 'message' => 'No valid registration tokens found'];
+            return ['success' => false, 'message' => 'No valid registration tokens found'];
             }
         } catch (MessagingException $e) {
             Log::error('Failed to send notification', [
-                'error' => $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
-                'deviceTokens' => $deviceTokens
+            'error' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(),
+            'deviceTokens' => $deviceTokens
             ]);
             return ['success' => false, 'message' => $e->getMessage()];
         }
+
+        // try {
+        //     // Batch validate tokens in chunks of 100
+        //     $validTokens = [];
+        //     foreach (array_chunk($deviceTokens, 100) as $tokenChunk) {
+        //         $validTokens = array_merge($validTokens, $firebase->messaging()->registrationToken()->areRegistered($tokenChunk));
+        //     }
+    
+        //     if (!empty($validTokens)) {
+        //         $this->messaging->sendMulticast($message, $validTokens);
+        //         return ['success' => true, 'message' => 'Notification sent successfully'];
+        //     } else {
+        //         return ['success' => false, 'message' => 'No valid registration tokens found'];
+        //     }
+        // } catch (MessagingException $e) {
+        //     Log::error('Failed to send notification', [
+        //         'error' => $e->getMessage(),
+        //         'stack' => $e->getTraceAsString(),
+        //         'deviceTokens' => $deviceTokens
+        //     ]);
+        //     return ['success' => false, 'message' => $e->getMessage()];
+        // }
+    }
+
+    public function sendNewNotification(string $title, string $body, array $tokens): array
+    {
+        $messaging = Firebase::messaging();
+
+        // Crée une notification
+        $notification = Notification::create($title, $body);
+
+        // Crée un message avec la notification
+        $message = CloudMessage::new()
+            ->withNotification($notification);
+
+        // Envoie le message aux tokens spécifiques
+        $response = $messaging->sendMulticast($message, $tokens);
+
+        return [
+            'success' => $response->successCount(),
+            'failure' => $response->failureCount(),
+            'failures' => $response->failures()->all(),
+        ];
+    }
+
+    public function sendAnotherNotification($tokens, $title, $body)
+    {
+        $messaging = app('firebase.messaging');
+
+        $message = CloudMessage::withTarget('token', $tokens)
+            ->withNotification(Notification::create($title, $body))
+            ->withAndroidConfig(AndroidConfig::create()
+                ->withPriority('normal')
+            );
+
+        $messaging->send($message);
     }
 }
