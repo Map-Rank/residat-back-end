@@ -10,8 +10,7 @@ use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Exception\MessagingException;
-
-
+use Kreait\Firebase\Factory;
 
 class UtilService
 {
@@ -51,23 +50,23 @@ class UtilService
         if ($user->zone_id) {
             // Récupérer la zone de l'utilisateur connecté
             $zone = Zone::find($user->zone_id);
-            
+
             // Vérifier que la zone existe
             if (!$zone) {
                 return collect(); // Retourner une collection vide si la zone n'est pas trouvée
             }
-            
+
             // Initialiser une collection pour les descendants
             $descendants = collect();
-            
+
             // Ajouter la zone de l'utilisateur à la collection des descendants
             $descendants->push($zone);
-            
+
             // Récupérer tous les descendants de la zone de l'utilisateur, si la relation children est disponible
             if ($zone->children != null) {
                 $descendants = UtilService::get_descendants($zone->children, $descendants);
             }
-            
+
             // Filtrer les descendants pour ne garder que ceux avec level_id égal à 4
             $zones = $descendants->filter(function ($descendant) {
                 return $descendant->level_id == 4;
@@ -76,7 +75,7 @@ class UtilService
             // Si l'utilisateur n'a pas de zone_id, retourner une collection vide
             $zones = collect();
         }
-    
+
         return $zones;
     }
 
@@ -101,7 +100,7 @@ class UtilService
                 "custom_key" => "custom_value"
             ]
         ];
-        
+
         $encodedData = json_encode($data);
 
         $headers = [
@@ -177,7 +176,7 @@ class UtilService
         //     foreach (array_chunk($deviceTokens, 100) as $tokenChunk) {
         //         $validTokens = array_merge($validTokens, $firebase->messaging()->registrationToken()->areRegistered($tokenChunk));
         //     }
-    
+
         //     if (!empty($validTokens)) {
         //         $this->messaging->sendMulticast($message, $validTokens);
         //         return ['success' => true, 'message' => 'Notification sent successfully'];
@@ -226,5 +225,48 @@ class UtilService
             );
 
         $messaging->send($message);
+    }
+
+    function test(){
+        $token = "f8004cshTcuE8BYmxBUN9B:APA91bFNd3hcTHmz8ButxzYofEQBr3QqDmFYPRX-Nulx_Rv5nb_3NWHoT8yS9LRcMv1f435GtxngVDXoVPGJsd8sxSibFYfH_jVjhSI7xiSmUGr6ZEC4MujiuVS7ZK4IgPhlaRRCSEZV";
+
+        $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
+        $messaging = $firebase->createMessaging();
+
+        // Define message content
+        $message = [
+            'notification' => [
+                'title' => 'Hello!',
+                'body' => 'Test ronald 1.',
+            ],
+            // 'token' => $token,  // Specify the recipient device token
+        ];
+
+
+        $deviceTokens = [
+            $token,
+            'DEVICE_TOKEN_2',
+            'DEVICE_TOKEN_3',
+            // Add more tokens as needed
+        ];
+
+        try {
+            // Send the multicast message
+            $report = $messaging->sendMulticast($message, $deviceTokens);
+
+            echo "Messages sent successfully! \n";
+            echo "Success count: " . $report->successes()->count() . "\n";
+            echo "Failure count: " . $report->failures()->count() . "\n";
+
+            dd($report);
+            // Check for failed tokens
+            // foreach ($report->failures()->all() as $failure) {
+            //     echo "Failed to send to: " . $failure->target()->value() . "\n";
+            //     echo "Reason: " . $failure->error()->getMessage() . "\n";
+            // }
+        } catch (MessagingException $e) {
+            // Handle any unexpected errors
+            echo "Error sending multicast message: " . $e->getMessage();
+        }
     }
 }
