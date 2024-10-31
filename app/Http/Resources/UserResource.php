@@ -22,7 +22,7 @@ class UserResource extends JsonResource
         $authUser = auth()->user();
         $appEnv = env('APP_ENV');
         $environments = ['local', 'dev', 'testing'];
-        $url =  env('FRONT_URL').'/'.$this->avatar;
+        $url =  env('FRONT_URL').''.$this->avatar;
 
         if (in_array($appEnv, $environments, true)) {
             $url = env('APP_URL'). '/storage/' .$this->avatar;
