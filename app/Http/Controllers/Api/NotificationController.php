@@ -89,7 +89,7 @@ class NotificationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(NotificationRequest $request)
+    public function store(NotificationRequest $request, UtilService $firebaseService)
     {
         $data = $request->validated();
         if(strcmp(Auth::user()->type, 'COUNCIL') != 0){
@@ -129,7 +129,7 @@ class NotificationController extends Controller
         try{
             // UtilService::sendWebNotification($notification->titre_en, $notification->content_en, $users_token);
             $notificationService = app(UtilService::class);
-            $notificationService->sendNotification($notification->titre_en, $notification->content_en, $users_token);
+            $notificationService->sendNewNotification($notification->titre_en, $notification->content_en, $users_token);
         }catch(Exception $ex){
             Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
         }

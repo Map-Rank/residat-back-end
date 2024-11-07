@@ -22,6 +22,5 @@ class WeatherPredictionController extends Controller
 {
     public function index(Request $request)  {
         return WeatherPrediction::all();
-    }   
-
+    }
 }

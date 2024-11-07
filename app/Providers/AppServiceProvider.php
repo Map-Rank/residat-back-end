@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
             $factory = (new Factory)
                 ->withServiceAccount(config('firebase.projects.app.credentials'))
                 ->withDatabaseUri(config('firebase.projects.app.database.url'));
-                
+
             return $factory->createMessaging();
         });
     }

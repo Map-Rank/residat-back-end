@@ -51,6 +51,7 @@ return [
              */
 
             'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
+            'credentials' => __DIR__ . '/../storage/app/firebase_credentials.json',
 
             /*
              * ------------------------------------------------------------------------

@@ -70,7 +70,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::get('/profile-interaction', [ProfileController::class, 'interactions']);
 
     Route::delete('/delete-interaction/{id}', [PostController::class, 'deleteInteraction'])->name('delete.interaction');
-    
+
     Route::put('/password/update', [PasswordController::class, 'updatePassword']);
 
     Route::post('follow/{id}', [FollowController::class, 'follow']);
@@ -101,4 +101,5 @@ Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->
 Route::post('/reset-password', [PasswordController::class, 'reset']);
 Route::post('/create/request', [CompanyController::class, 'store']);
 Route::get('/weather', [WeatherController::class, 'getWeatherData']);
+Route::get('/test-notif', [UtilService::class, 'test']);
 
