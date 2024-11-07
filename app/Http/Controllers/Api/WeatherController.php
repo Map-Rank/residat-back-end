@@ -72,4 +72,19 @@ class WeatherController extends Controller
 
         return response()->success($response, __('Unable to fetch weather data'), 400);
     }
+
+    public function processData(Request $request)
+    {
+        // Chemin du fichier à traiter
+        $filePath = storage_path('app/data.csv');
+
+        // Exécuter le script Python
+        $command = escapeshellcmd("python3 " . base_path('scripts/data_processing.py') . " " . $filePath);
+        $output = shell_exec($command);
+
+        // Convertir la sortie JSON en tableau PHP
+        $data = json_decode($output, true);
+
+        return response()->json($data);
+    }
 }
