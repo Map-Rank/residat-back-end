@@ -195,36 +195,31 @@ class UtilService
 
     public function sendNewNotification(string $title, string $body, array $tokens): array
     {
-        $messaging = Firebase::messaging();
+        $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
+        $messaging = $firebase->createMessaging();
 
-        // Crée une notification
-        $notification = Notification::create($title, $body);
-
-        // Crée un message avec la notification
-        $message = CloudMessage::new()
-            ->withNotification($notification);
-
-        // Envoie le message aux tokens spécifiques
-        $response = $messaging->sendMulticast($message, $tokens);
-
-        return [
-            'success' => $response->successCount(),
-            'failure' => $response->failureCount(),
-            'failures' => $response->failures()->all(),
+        // Définir le contenu du message
+        $message = [
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+            ],
         ];
-    }
 
-    public function sendAnotherNotification($tokens, $title, $body)
-    {
-        $messaging = app('firebase.messaging');
+        try {
+            // Envoyer le message multicast
+            $report = $messaging->sendMulticast($message, $tokens);
 
-        $message = CloudMessage::withTarget('token', $tokens)
-            ->withNotification(Notification::create($title, $body))
-            ->withAndroidConfig(AndroidConfig::create()
-                ->withPriority('normal')
-            );
+            $successes = $report->successes()->count();
+            $failures = $report->failures()->count();
+            
+            return response()->success([$successes, $failures], __('Firebase notification send successfully'), 200);
 
-        $messaging->send($message);
+        } catch (MessagingException $e) {
+            // Gérer les erreurs imprévues
+            echo "Erreur lors de l'envoi du message multicast : " . $e->getMessage();
+            return null;
+        }
     }
 
     function test(){
