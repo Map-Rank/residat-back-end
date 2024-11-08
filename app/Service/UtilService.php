@@ -3,14 +3,15 @@
 namespace App\Service;
 
 use App\Models\Zone;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Factory;
 
 class UtilService
 {
@@ -193,7 +194,7 @@ class UtilService
         // }
     }
 
-    public function sendNewNotification(string $title, string $body, array $tokens): array
+    public function sendNewNotification(string $title, string $body, array $tokens): JsonResponse
     {
         $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
         $messaging = $firebase->createMessaging();
@@ -214,10 +215,7 @@ class UtilService
             $failures = $report->failures()->count();
             Log::info(sprintf('%s: Message response is %s', __METHOD__, $report));
             
-            $response = response()->success($report, __('Firebase notification send successfully'), 200);
-            $data = $response->getData(true); // Get data as an array
-
-            return $data;
+            return response()->success($report, __('Firebase notification send successfully'), 200);
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
