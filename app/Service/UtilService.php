@@ -208,7 +208,6 @@ class UtilService
         ];
 
         try {
-            return [$tokens];
             // Envoyer le message multicast
             $report = $messaging->sendMulticast($message, $tokens);
 
