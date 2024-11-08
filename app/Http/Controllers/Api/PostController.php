@@ -171,15 +171,14 @@ class PostController extends Controller
 
         foreach ($users as $user) {
             $customMessage = "Salut {$user->first_name}, regarde ce post sur residat publié le {$post->published_at}. Zone: {$post->zone->name}.";
-            dd($user->fcm_token);
 
-            // try {
-            //     // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
-            //     $notificationService = app(UtilService::class);
-            //     $notificationService->sendNewNotification($post->published_at, $customMessage, [$user->fcm_token]);
-            // } catch (Exception $ex) {
-            //     Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
-            // }
+            try {
+                // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
+                $notificationService = app(UtilService::class);
+                $notificationService->sendNewNotification($post->published_at, $customMessage, [$user->fcm_token]);
+            } catch (Exception $ex) {
+                Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
+            }
         }
 
         DB::commit();
