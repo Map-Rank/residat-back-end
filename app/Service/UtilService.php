@@ -194,7 +194,7 @@ class UtilService
         // }
     }
 
-    public function sendNewNotification(string $title, string $body, array $tokens): Array
+    public function sendNewNotification(string $title, string $body, array $tokens)
     {
         $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
         $messaging = $firebase->createMessaging();
@@ -213,16 +213,18 @@ class UtilService
 
             $successes = $report->successes()->count();
             $failures = $report->failures()->count();
+
             Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
             Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
+
 
             $data = [
                 'successes' => $successes,
                 'failures' => $failures,
                 'message' => __('Firebase notification send successfully'),
             ];
-    
-            return $data;     
+            
+            return response()->success($report, __('Firebase notification send successfully'), 200);
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
