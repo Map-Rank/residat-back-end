@@ -213,7 +213,8 @@ class UtilService
 
             $successes = $report->successes()->count();
             $failures = $report->failures()->count();
-            Log::info(sprintf('%s: Message response is %s', __METHOD__, $report));
+            Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
+            Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
 
             $data = [
                 'successes' => $successes,
