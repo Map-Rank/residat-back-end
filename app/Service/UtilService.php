@@ -213,7 +213,7 @@ class UtilService
             $successes = $report->successes()->count();
             $failures = $report->failures()->count();
             
-            return response()->success([$successes, $failures], __('Firebase notification send successfully'), 200);
+            return response()->success($report, __('Firebase notification send successfully'), 200);
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
