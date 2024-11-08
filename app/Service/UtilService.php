@@ -3,14 +3,15 @@
 namespace App\Service;
 
 use App\Models\Zone;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Factory;
 
 class UtilService
 {
@@ -193,7 +194,7 @@ class UtilService
         // }
     }
 
-    public function sendNewNotification(string $title, string $body, array $tokens): array
+    public function sendNewNotification(string $title, string $body, array $tokens): Array
     {
         $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
         $messaging = $firebase->createMessaging();
@@ -212,12 +213,20 @@ class UtilService
 
             $successes = $report->successes()->count();
             $failures = $report->failures()->count();
-            
-            return response()->success([$successes, $failures], __('Firebase notification send successfully'), 200);
+            Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
+            Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
+
+            $data = [
+                'successes' => $successes,
+                'failures' => $failures,
+                'message' => __('Firebase notification send successfully'),
+            ];
+    
+            return $data;     
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
-            echo "Erreur lors de l'envoi du message multicast : " . $e->getMessage();
+            Log::info(sprintf('%s: Erreur lors de l\'envoi du message multicast %s', __METHOD__, $e->getMessage()));
             return null;
         }
     }

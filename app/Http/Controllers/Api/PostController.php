@@ -175,7 +175,7 @@ class PostController extends Controller
             try {
                 // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
                 $notificationService = app(UtilService::class);
-                $notificationService->sendNewNotification($post->published_at, $customMessage, [$user->fcm_token]);
+                $notificationService->sendNewNotification($post->published_at, $customMessage, $users_token);
             } catch (Exception $ex) {
                 Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
             }
