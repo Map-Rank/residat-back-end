@@ -3,14 +3,15 @@
 namespace App\Service;
 
 use App\Models\Zone;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Exception\MessagingException;
-use Kreait\Firebase\Factory;
 
 class UtilService
 {
@@ -193,38 +194,41 @@ class UtilService
         // }
     }
 
-    public function sendNewNotification(string $title, string $body, array $tokens): array
+    public function sendNewNotification(string $title, string $body, array $tokens): Array
     {
-        $messaging = Firebase::messaging();
+        $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
+        $messaging = $firebase->createMessaging();
 
-        // Crée une notification
-        $notification = Notification::create($title, $body);
-
-        // Crée un message avec la notification
-        $message = CloudMessage::new()
-            ->withNotification($notification);
-
-        // Envoie le message aux tokens spécifiques
-        $response = $messaging->sendMulticast($message, $tokens);
-
-        return [
-            'success' => $response->successCount(),
-            'failure' => $response->failureCount(),
-            'failures' => $response->failures()->all(),
+        // Définir le contenu du message
+        $message = [
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+            ],
         ];
-    }
 
-    public function sendAnotherNotification($tokens, $title, $body)
-    {
-        $messaging = app('firebase.messaging');
+        try {
+            // Envoyer le message multicast
+            $report = $messaging->sendMulticast($message, $tokens);
 
-        $message = CloudMessage::withTarget('token', $tokens)
-            ->withNotification(Notification::create($title, $body))
-            ->withAndroidConfig(AndroidConfig::create()
-                ->withPriority('normal')
-            );
+            $successes = $report->successes()->count();
+            $failures = $report->failures()->count();
+            Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
+            Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
 
-        $messaging->send($message);
+            $data = [
+                'successes' => $successes,
+                'failures' => $failures,
+                'message' => __('Firebase notification send successfully'),
+            ];
+    
+            return $data;     
+
+        } catch (MessagingException $e) {
+            // Gérer les erreurs imprévues
+            Log::info(sprintf('%s: Erreur lors de l\'envoi du message multicast %s', __METHOD__, $e->getMessage()));
+            return null;
+        }
     }
 
     function test(){

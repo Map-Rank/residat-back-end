@@ -341,7 +341,7 @@ class PostController extends Controller
                 if ($creatorToken) {
                     // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
                     $notificationService = app(UtilService::class);
-                    $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+                    $notificationService->sendNewNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
                 }
             }
 
@@ -392,7 +392,7 @@ class PostController extends Controller
         if ($creatorToken) {
             // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
             $notificationService = app(UtilService::class);
-            $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            $notificationService->sendNewNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
         }
 
         return response()->success(PostResource::make($post->loadMissing('postComments')), __('Comment added successfully'), 200);
@@ -424,7 +424,7 @@ class PostController extends Controller
         if ($creatorToken) {
             // UtilService::sendWebNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
             $notificationService = app(UtilService::class);
-            $notificationService->sendNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
+            $notificationService->sendNewNotification($notificationData['titre_en'], $notificationData['content_en'], [$creatorToken]);
         }
 
         return response()->success(PostResource::make($post), __('Post shared successfully'), 200);
