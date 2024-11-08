@@ -212,12 +212,16 @@ class UtilService
 
             $successes = $report->successes()->count();
             $failures = $report->failures()->count();
+            Log::info(sprintf('%s: Message response is %s', __METHOD__, $report));
             
-            return response()->success($report, __('Firebase notification send successfully'), 200);
+            $response = response()->success($report, __('Firebase notification send successfully'), 200);
+            $data = $response->getData(true); // Get data as an array
+
+            return $data;
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
-            echo "Erreur lors de l'envoi du message multicast : " . $e->getMessage();
+            Log::info(sprintf('%s: Erreur lors de l\'envoi du message multicast %s', __METHOD__, $e->getMessage()));
             return null;
         }
     }
