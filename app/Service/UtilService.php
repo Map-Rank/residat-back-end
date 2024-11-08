@@ -136,7 +136,7 @@ class UtilService
         return $res;
     }
 
-    public function sendNotification($title, $body, array $deviceTokens): array
+    public function sendNotification($title, $body, array $deviceTokens)
     {
         Log::debug('Device Tokens:', $deviceTokens);  // Log received tokens
 
@@ -194,7 +194,7 @@ class UtilService
         // }
     }
 
-    public function sendNewNotification(string $title, string $body, array $tokens): Array
+    public function sendNewNotification(string $title, string $body, array $tokens)
     {
         $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
         $messaging = $firebase->createMessaging();
@@ -221,8 +221,8 @@ class UtilService
                 'failures' => $failures,
                 'message' => __('Firebase notification send successfully'),
             ];
-    
-            return $data;     
+
+            return $data;
 
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues

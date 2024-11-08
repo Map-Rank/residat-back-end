@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\UserFullResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\InteractionResource;
+use App\Jobs\PostNotification;
 
 /**
  * @group Module Posts
@@ -167,21 +168,9 @@ class PostController extends Controller
 
         $users_token = User::whereNotNull('fcm_token')->pluck('fcm_token')->toArray();
 
-        $users = User::whereNotNull('fcm_token')->get();
-
-        foreach ($users as $user) {
-            $customMessage = "Salut {$user->first_name}, regarde ce post sur residat publié le {$post->published_at}. Zone: {$post->zone->name}.";
-
-            try {
-                // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
-                $notificationService = app(UtilService::class);
-                $notificationService->sendNewNotification($post->published_at, $customMessage, $users_token);
-            } catch (Exception $ex) {
-                Log::warning(sprintf('%s: The error is : %s', __METHOD__, $ex->getMessage()));
-            }
-        }
-
         DB::commit();
+
+        PostNotification::dispatch($post);
 
         return response()->success($post, __('Post created successfully'), 200);
     }
@@ -379,12 +368,12 @@ class PostController extends Controller
         $post->users()->attach(auth()->user(), ['type_interaction_id'=> 3, 'text' => $validated['text']]);
 
         $notificationData = [
-            'user_id' => $post->creator->first()->id, 
+            'user_id' => $post->creator->first()->id,
             'titre_en' => "New Comment on Your Post",
             'titre_fr' => "Nouveau Commentaire sur Votre Post",
             'content_en' => auth()->user()->first_name . " commented on your post. ",
             'content_fr' => auth()->user()->first_name . " commented on your post. ",
-            'zone_id' => $post->zone_id, 
+            'zone_id' => $post->zone_id,
         ];
 
         $creatorToken = $post->creator->first()->fcm_token;
@@ -417,7 +406,7 @@ class PostController extends Controller
             'titre_fr' => "Votre Post a été partagé",
             'content_en' => auth()->user()->name . " shared your post.",
             'content_fr' => auth()->user()->name . " a partager votre post.",
-            'zone_id' => $post->zone_id, 
+            'zone_id' => $post->zone_id,
         ];
 
         $creatorToken = $post->creator->first()->fcm_token;
