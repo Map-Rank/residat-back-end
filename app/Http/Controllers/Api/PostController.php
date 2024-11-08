@@ -174,6 +174,7 @@ class PostController extends Controller
 
             try {
                 // UtilService::sendWebNotification($post->published_at, $customMessage, $user->fcm_token);
+                dd($user->fcm_token);
                 $notificationService = app(UtilService::class);
                 $notificationService->sendNewNotification($post->published_at, $customMessage, [$user->fcm_token]);
             } catch (Exception $ex) {
