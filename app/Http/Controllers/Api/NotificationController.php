@@ -172,7 +172,7 @@ class NotificationController extends Controller
     {
         // Vérifier si l'utilisateur est authentifié et administrateur
         if (!Auth::check() || Auth::user()->role !== 'admin') {
-            return response()->error([], __('Unauthorized'), 403);
+            return response()->errors([], __('Unauthorized'), 403);
         }
 
         $notification->delete();

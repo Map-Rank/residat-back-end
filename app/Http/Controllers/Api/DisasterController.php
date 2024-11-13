@@ -7,7 +7,7 @@ use App\Http\Resources\DisasterResource;
 use App\Models\Disaster;
 
 /**
- * @group Module Requests
+ * @group Module Disaster
  */
 class DisasterController extends Controller
 {
