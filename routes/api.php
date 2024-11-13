@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\DisasterController as ApiDisasterController;
+use App\Jobs\WeatherFetchJob;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,5 +102,10 @@ Route::post('/forgot-password', [PasswordController::class, 'forgotPassword'])->
 Route::post('/reset-password', [PasswordController::class, 'reset']);
 Route::post('/create/request', [CompanyController::class, 'store']);
 Route::get('/weather', [WeatherController::class, 'getWeatherData']);
+
 // Route::get('/test-notif', [UtilService::class, 'test']);
 
+Route::get('/test-weather', [UtilService::class, 'test']);
+Route::get('weather-test', function(){
+    WeatherFetchJob::dispatch(6);
+});
