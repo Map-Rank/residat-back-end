@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\User;
 use App\Models\Zone;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging;
@@ -215,6 +216,38 @@ class UtilService
             $failures = $report->failures()->count();
             Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
             Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
+
+            $successesUser = $report->successes();
+            $failuresUser = $report->failures();
+
+            // Logger les utilisateurs avec succès
+            $successUserNames = [];
+            foreach ($successesUser as $success) {
+                $token = $success->target(); // Récupère le token
+                $userId = array_search($token, $tokens); // Trouve l'utilisateur correspondant
+                if ($userId) {
+                    $user = User::find($userId);
+                    if ($user) {
+                        $successUserNames[] = $user->name;
+                    }
+                }
+            }
+            Log::info(sprintf('%s: Users with successful notifications: %s', __METHOD__, implode(', ', $successUserNames)));
+
+            // Logger les utilisateurs avec des échecs
+            $failureUserNames = [];
+            foreach ($failuresUser as $failure) {
+                $token = $failure->target(); // Récupère le token
+                $userId = array_search($token, $tokens); // Trouve l'utilisateur correspondant
+                if ($userId) {
+                    $user = User::find($userId);
+                    if ($user) {
+                        $failureUserNames[] = $user->name;
+                    }
+                }
+            }
+            Log::info(sprintf('%s: Users with failed notifications: %s', __METHOD__, implode(', ', $failureUserNames)));
+
 
             $data = [
                 'successes' => $successes,
