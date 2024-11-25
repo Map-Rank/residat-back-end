@@ -2,16 +2,15 @@
 
 namespace App\Service;
 
+use App\Models\User;
 use App\Models\Zone;
+use Illuminate\Support\Facades\Log;
+use Kreait\Firebase\Exception\MessagingException;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
-use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Laravel\Firebase\Facades\Firebase;
-use Kreait\Firebase\Exception\MessagingException;
 
 class UtilService
 {
@@ -22,7 +21,7 @@ class UtilService
         $this->messaging = $messaging;
     }
 
-    public static function get_descendants ($children, $descendants)
+    public static function get_descendants($children, $descendants)
     {
         foreach ($children as $child) {
             $child = $child->load('children');
@@ -31,6 +30,7 @@ class UtilService
                 $descendants = UtilService::get_descendants($child->children, $descendants);
             }
         }
+
         return $descendants;
     }
 
@@ -53,7 +53,7 @@ class UtilService
             $zone = Zone::find($user->zone_id);
 
             // Vérifier que la zone existe
-            if (!$zone) {
+            if (! $zone) {
                 return collect(); // Retourner une collection vide si la zone n'est pas trouvée
             }
 
@@ -89,23 +89,23 @@ class UtilService
         $serverKey = env('FCM_SERVER_KEY');
 
         $data = [
-            "registration_ids" => $deviceKeys,
-            "notification" => [
-                "title" => $title,
-                "body" => $body,
-                "sound" => "default",
-                "click_action" => "FLUTTER_NOTIFICATION_CLICK"
+            'registration_ids' => $deviceKeys,
+            'notification' => [
+                'title' => $title,
+                'body' => $body,
+                'sound' => 'default',
+                'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
             ],
-            "priority" => "high",
-            "data" => [
-                "custom_key" => "custom_value"
-            ]
+            'priority' => 'high',
+            'data' => [
+                'custom_key' => 'custom_value',
+            ],
         ];
 
         $encodedData = json_encode($data);
 
         $headers = [
-            'Authorization: key=' . $serverKey,
+            'Authorization: key='.$serverKey,
             'Content-Type: application/json',
         ];
 
@@ -120,8 +120,8 @@ class UtilService
         curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
 
         $result = curl_exec($ch);
-        $res = array();
-        if (!$result) {
+        $res = [];
+        if (! $result) {
             $res['success'] = false;
             $res['data'] = curl_error($ch);
         } else {
@@ -150,24 +150,26 @@ class UtilService
             $firebase = app('firebase.messaging');
             $validTokens = [];
             foreach ($deviceTokens as $token) {
-            if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
-                $validTokens[] = $token;
-            }
+                if ($firebase->messaging()->registrationToken()->isRegistered($token)) {
+                    $validTokens[] = $token;
+                }
             }
 
             // Send notification only with valid tokens
-            if (!empty($validTokens)) {
-            $this->messaging->sendMulticast($message, $validTokens);
-            return ['success' => true, 'message' => 'Notification sent successfully'];
+            if (! empty($validTokens)) {
+                $this->messaging->sendMulticast($message, $validTokens);
+
+                return ['success' => true, 'message' => 'Notification sent successfully'];
             } else {
-            return ['success' => false, 'message' => 'No valid registration tokens found'];
+                return ['success' => false, 'message' => 'No valid registration tokens found'];
             }
         } catch (MessagingException $e) {
             Log::error('Failed to send notification', [
-            'error' => $e->getMessage(),
-            'stack' => $e->getTraceAsString(),
-            'deviceTokens' => $deviceTokens
+                'error' => $e->getMessage(),
+                'stack' => $e->getTraceAsString(),
+                'deviceTokens' => $deviceTokens,
             ]);
+
             return ['success' => false, 'message' => $e->getMessage()];
         }
 
@@ -216,6 +218,37 @@ class UtilService
             Log::info(sprintf('%s: Message failures is %s', __METHOD__, $failures));
             Log::info(sprintf('%s: Message successes is %s', __METHOD__, $successes));
 
+            $successesUser = $report->successes();
+            $failuresUser = $report->failures();
+
+            // Logger les utilisateurs avec succès
+            $successUserNames = [];
+            foreach ($successesUser as $success) {
+                $token = $success->target(); // Récupère le token
+                $userId = array_search($token, $tokens); // Trouve l'utilisateur correspondant
+                if ($userId) {
+                    $user = User::find($userId);
+                    if ($user) {
+                        $successUserNames[] = $user->first_name;
+                    }
+                }
+            }
+            Log::info(sprintf('%s: Users with successful notifications: %s', __METHOD__, implode(', ', $successUserNames)));
+
+            // Logger les utilisateurs avec des échecs
+            $failureUserNames = [];
+            foreach ($failuresUser as $failure) {
+                $token = $failure->target(); // Récupère le token
+                $userId = array_search($token, $tokens); // Trouve l'utilisateur correspondant
+                if ($userId) {
+                    $user = User::find($userId);
+                    if ($user) {
+                        $failureUserNames[] = $user->first_name;
+                    }
+                }
+            }
+            Log::info(sprintf('%s: Users with failed notifications: %s', __METHOD__, implode(', ', $failureUserNames)));
+
             $data = [
                 'successes' => $successes,
                 'failures' => $failures,
@@ -227,12 +260,14 @@ class UtilService
         } catch (MessagingException $e) {
             // Gérer les erreurs imprévues
             Log::info(sprintf('%s: Erreur lors de l\'envoi du message multicast %s', __METHOD__, $e->getMessage()));
+
             return null;
         }
     }
 
-    function test(){
-        $token = "f8004cshTcuE8BYmxBUN9B:APA91bFNd3hcTHmz8ButxzYofEQBr3QqDmFYPRX-Nulx_Rv5nb_3NWHoT8yS9LRcMv1f435GtxngVDXoVPGJsd8sxSibFYfH_jVjhSI7xiSmUGr6ZEC4MujiuVS7ZK4IgPhlaRRCSEZV";
+    public function test()
+    {
+        $token = 'f8004cshTcuE8BYmxBUN9B:APA91bFNd3hcTHmz8ButxzYofEQBr3QqDmFYPRX-Nulx_Rv5nb_3NWHoT8yS9LRcMv1f435GtxngVDXoVPGJsd8sxSibFYfH_jVjhSI7xiSmUGr6ZEC4MujiuVS7ZK4IgPhlaRRCSEZV';
 
         $firebase = (new Factory)->withServiceAccount(config('firebase.projects.app.credentials'));
         $messaging = $firebase->createMessaging();
@@ -246,7 +281,6 @@ class UtilService
             // 'token' => $token,  // Specify the recipient device token
         ];
 
-
         $deviceTokens = [
             $token,
             'DEVICE_TOKEN_2',
@@ -259,8 +293,8 @@ class UtilService
             $report = $messaging->sendMulticast($message, $deviceTokens);
 
             echo "Messages sent successfully! \n";
-            echo "Success count: " . $report->successes()->count() . "\n";
-            echo "Failure count: " . $report->failures()->count() . "\n";
+            echo 'Success count: '.$report->successes()->count()."\n";
+            echo 'Failure count: '.$report->failures()->count()."\n";
 
             dd($report);
             // Check for failed tokens
@@ -270,7 +304,7 @@ class UtilService
             // }
         } catch (MessagingException $e) {
             // Handle any unexpected errors
-            echo "Error sending multicast message: " . $e->getMessage();
+            echo 'Error sending multicast message: '.$e->getMessage();
         }
     }
 }

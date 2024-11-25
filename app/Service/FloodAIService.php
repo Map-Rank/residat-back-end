@@ -248,4 +248,38 @@ class FloodAIService{
         $features = $this->extractFeatures($inputData);
         return $this->model->predict([$features])[0];
     }
+
+
+    function calculateFloodRisk($rainfall, $soilMoisture, $temperature, $humidity, $riverLevel, $landUsage) {
+        // Updated weights for each factor
+        $weights = [
+            'rainfall' => 0.3,
+            'soilMoisture' => 0.2,
+            'temperature' => 0.15,
+            'humidity' => 0.1,
+            'riverLevel' => 0.15,
+            'landUsage' => 0.1
+        ];
+
+        // Normalize each factor between 0 and 1
+        $rainfallNorm = min($rainfall / 100, 1); // Assume 100mm as the max value
+        $soilMoistureNorm = min($soilMoisture / 100, 1);
+        $temperatureNorm = min(($temperature - 20) / 15, 1); // Adjust based on typical range
+        $humidityNorm = min($humidity / 100, 1);
+        $riverLevelNorm = min($riverLevel / 10, 1); // Assume 10m as a critical threshold for river level
+        $landUsageNorm = $landUsage; // Assume landUsage is pre-normalized (0-1 based on flood risk potential)
+
+        // Calculate risk score with the additional factors
+        $riskScore = ($weights['rainfall'] * $rainfallNorm) +
+                     ($weights['soilMoisture'] * $soilMoistureNorm) +
+                     ($weights['temperature'] * $temperatureNorm) +
+                     ($weights['humidity'] * $humidityNorm) +
+                     ($weights['riverLevel'] * $riverLevelNorm) +
+                     ($weights['landUsage'] * $landUsageNorm);
+
+        // Convert to percentage
+        return min($riskScore * 100, 100);
+    }
+
+
 }

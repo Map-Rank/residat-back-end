@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
  * @group Module WeatherPrediction
  */
 class WeatherController extends Controller
-{   
+{
     /**
      * Get Weather Data
      *
@@ -57,7 +57,7 @@ class WeatherController extends Controller
         if ($end_date) {
             $queryParams['end_date'] = $end_date;
         }
-         
+
         if($past_days) {
             $queryParams['past_days'] = $past_days;
         }
