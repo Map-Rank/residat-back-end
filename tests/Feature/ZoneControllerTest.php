@@ -70,8 +70,11 @@ class ZoneControllerTest extends TestCase
         $level = Level::factory()->create(['name' => 'Country']);
         
         DB::table('zones')->insert([
-            'name' => $this->faker->word(),
+            'name' => 'Test Zone',
+            'code' => 'Test zone',
             'parent_id' => null,
+            'latitude' => 1,
+            'longitude' => 1,
             'level_id' => $level->id,
         ]);
         $parentZone = Zone::first(); // Ensure valid parent
@@ -80,6 +83,9 @@ class ZoneControllerTest extends TestCase
         // **Create valid zone data:**
         $validZoneData = [
             'name' => 'Test Zone',
+            'code' => 'Test zone',
+            'latitude' => 1,
+            'longitude' => 1,
             'parent_id' => $parentZone->id ?? null,
             'level_id' => $level->id,
         ];
@@ -169,7 +175,10 @@ class ZoneControllerTest extends TestCase
         $level = Level::first();
         
         DB::table('zones')->insert([
-            'name' => $this->faker->word(),
+            'name' => 'Test zone',
+            'code' => 'Test zone',
+            'latitude' => 1,
+            'longitude' => 1,
             'parent_id' => null,
             'level_id' => $level->id,
         ]);
@@ -177,8 +186,11 @@ class ZoneControllerTest extends TestCase
         $parentZone = Zone::first(); // Ensure valid parent
 
         $validZoneData = [
+            'code' => 'Test zone',
             'name' => 'Test zone',
-            'parent_id' => $parentZone->id, 
+            'parent_id' => $parentZone->id,
+            'latitude' => 1,
+            'longitude' => 1,
             'level_id' => $level->id, 
         ];
 
@@ -187,8 +199,11 @@ class ZoneControllerTest extends TestCase
 
         // Données pour mettre à jour la zone
         $data = [
+            'code' => 'Test zone',
             'name' => 'Updated Zone Name',
-            'parent_id' => $parentZone->id, 
+            'parent_id' => $parentZone->id,
+            'latitude' => 1,
+            'longitude' => 1,
             'level_id' => $level->id,
         ];
 
@@ -204,8 +219,11 @@ class ZoneControllerTest extends TestCase
         // Vérifier que la zone a été correctement mise à jour dans la base de données
         $this->assertDatabaseHas('zones', [
             'id' => $parentZone->id,
+            'code' => 'Test zone',
             'name' => 'Updated Zone Name',
             'parent_id' => $parentZone->id, // Assurez-vous de mettre à jour cela si nécessaire
+            'latitude' => 1,
+            'longitude' => 1,
             'level_id' => $level->id, // Assurez-vous de mettre à jour cela si nécessaire
             // Ajoutez d'autres champs si nécessaire
         ]);

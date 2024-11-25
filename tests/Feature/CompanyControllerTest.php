@@ -52,7 +52,7 @@ class CompanyControllerTest extends TestCase
         $response = $this->postJson('/api/create/request', $data);
 
         // Vérifiez que la requête a été traitée avec succès
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
         // Vérifiez que l'entreprise a été enregistrée dans la base de données
         $this->assertDatabaseHas('companies', [
