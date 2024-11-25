@@ -17,6 +17,9 @@ class ZoneFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'parent_id' => null,
+            'latitude' => null,
+            'longitude' => null,
+            'code' => null,
             'level_id' => Level::factory(),
         ];
     }

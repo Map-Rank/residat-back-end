@@ -90,7 +90,7 @@ class CompanyController extends Controller
 
         // return new CompanyResource($company);
         return response()->success(['company' => new CompanyResource($company),
-            'user' => $userData], __('Company created successfully'), 201);
+            'user' => $userData], __('Company created successfully'), 200);
     }
 
 }

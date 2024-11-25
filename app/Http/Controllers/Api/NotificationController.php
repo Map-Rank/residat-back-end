@@ -171,9 +171,10 @@ class NotificationController extends Controller
     public function destroy(Notification $notification)
     {
         $user = Auth::user();
+        
         // Vérifier si l'utilisateur est authentifié et administrateur
-        if (!Auth::check() || !$user->hasRole('admin')) {
-            return response()->errors([], __('Unauthorized'), 403);
+        if ($user->id !== $notification->user_id || !$user->hasRole('admin')) {
+            return response()->errors([], __('You are not authorized to delete this notification'), 403);
         }
 
         $notification->delete();
