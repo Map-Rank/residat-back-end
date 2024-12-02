@@ -29,7 +29,8 @@ class ProfileController extends Controller
      */
     public function profile(Request $request): JsonResponse
     {
-        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments', 'myPosts.zone','events');
+        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments',
+            'myPosts.zone','events', 'following', 'followers');
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
@@ -72,7 +73,7 @@ class ProfileController extends Controller
 
         return response()->success(InteractionResource::collection($interactions->get()), __('Interactions'), 200);
     }
-    
+
     /**
      * Update profil user
      */
@@ -88,7 +89,7 @@ class ProfileController extends Controller
         if ($role_id) {
             // Récupérer le rôle correspondant à l'ID
             $role = Role::findById($role_id);
-            
+
             // Vérifier si le rôle existe
             if ($role) {
                 // Attribuer le rôle à l'utilisateur
@@ -104,7 +105,7 @@ class ProfileController extends Controller
             if ($request->hasFile('avatar')) {
                 // Récupérez le fichier d'avatar téléchargé
                 $avatar = $request->file('avatar');
-                
+
                 // Générez un nom de fichier unique pour l'avatar
                 $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
@@ -125,7 +126,7 @@ class ProfileController extends Controller
             if ($request->hasFile('avatar')) {
                 // Récupérez le fichier d'avatar téléchargé
                 $avatar = $request->file('avatar');
-                
+
                 // Générez un nom de fichier unique pour l'avatar
                 $avatarName = uniqid('avatar_') . '.' . $avatar->getClientOriginalExtension();
 
