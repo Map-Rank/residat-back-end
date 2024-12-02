@@ -29,8 +29,9 @@ class ProfileController extends Controller
      */
     public function profile(Request $request): JsonResponse
     {
-        $user = $request->user()->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments',
-            'myPosts.zone','events', 'following', 'followers');
+
+        $user = User::with('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments',
+            'myPosts.zone','events')->withCount('following', 'followers')->where('id', $request->user()->id)->first();
 
         return response()->success(UserFullResource::make($user), __('User profile retrieved successfully'), 200);
     }
