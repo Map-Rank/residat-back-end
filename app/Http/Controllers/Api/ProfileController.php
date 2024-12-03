@@ -42,7 +42,8 @@ class ProfileController extends Controller
     public function showProfile($id): JsonResponse
     {
         $user = User::find($id);
-        $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments', 'myPosts.zone');
+        $user->loadMissing('interactions.typeInteraction', 'zone', 'myPosts.medias', 'myPosts.postComments', 'myPosts.zone')
+        ->loadCount('followers', 'following');
         if(!$user){
             return response()->errors([], __('User not found !'), 404);
         }
