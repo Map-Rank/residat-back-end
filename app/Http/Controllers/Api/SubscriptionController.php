@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Http\Resources\SubscriptionResource;
@@ -30,66 +31,73 @@ class SubscriptionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(SubscriptionRequest $request)
+    public function store(SubscriptionRequest $request) 
     {
         return DB::transaction(function () use ($request) {
+            try {
+                // Fetch the package
+                $package = Package::findOrFail($request->input('package_id'));
 
-            $package = Package::findOrFail($request->input('package_id'));
-    
-            // Vérification de souscription active existante
-            $existingSubscription = Subscription::where('user_id', auth()->id())
-                ->where('status', 'active')
-                ->first();
-    
-            if ($existingSubscription) {
-                return response()->errors([], __('You already have an active subscription'), 400);
-            }
-    
-            // Validation du montant du paiement
-            $paymentAmount = $request->input('amount');
-            if ($paymentAmount < $package->price) {
-                return response()->errors([], __('Payment amount is insufficient for the subscription package'), 400);
-            }
-    
-            // Création de la souscription
-            $subscription = Subscription::create([
-                'user_id' => auth()->id(),
-                'package_id' => $package->id,
-                'zone_id' => $request->input('zone_id'),
-                'start_date' => now()->toDateString(),
-                'end_date' => now()->addMonth()->toDateString(), // Durée par défaut : 1 mois
-                'status' => 'pending', // Initialement en attente jusqu'à la réussite du paiement
-                'notes' => $request->input('notes')
-            ]);
-    
-            // Création du paiement
-            $payment = Payment::create([
-                'subscription_id' => $subscription->id,
-                'amount' => $paymentAmount,
-                'currency' => 'XAF',
-                'transaction_id' => $this->generateUniqueTransactionId(),
-                'payment_method' => $request->input('payment_method'),
-                'status' => $request->input('status', 'pending'),
-                'payment_date' => now(),
-                'payment_details' => $request->input('payment_details')
-            ]);
-    
-            // Mise à jour de la souscription si le paiement est réussi
-            if ($payment->status === 'completed') {
-                $subscription->update([
-                    'status' => 'active'
+                // Check for existing active subscription
+                $existingSubscription = Subscription::where('user_id', auth()->id())
+                    ->where('status', 'active')
+                    ->first();
+
+                if ($existingSubscription) {
+                    throw new \Exception('You already have an active subscription');
+                }
+
+                // Validate payment amount
+                $paymentAmount = $request->input('amount');
+                if ($paymentAmount < $package->price) {
+                    throw new \Exception('Payment amount is insufficient for the selected package');
+                }
+
+                // Create subscription
+                $subscription = Subscription::create([
+                    'user_id' => auth()->id(),
+                    'package_id' => $package->id,
+                    'zone_id' => $request->input('zone_id'),
+                    'start_date' => now()->toDateString(),
+                    'end_date' => now()->addMonth()->toDateString(),
+                    'status' => 'pending',
+                    'notes' => $request->input('notes')
                 ]);
-            } else {
-                // Si le paiement échoue, la souscription reste en attente ou est annulée
-                $subscription->update(['status' => 'cancelled']);
-                return response()->errors([], __('Payment failed, subscription could not be activated'), 400);
+
+                // Create payment
+                $payment = Payment::create([
+                    'subscription_id' => $subscription->id,
+                    'amount' => $paymentAmount,
+                    'currency' => 'XAF',
+                    'transaction_id' => $this->generateUniqueTransactionId(),
+                    'payment_method' => $request->input('payment_method'),
+                    'status' => $request->input('status', 'pending'),
+                    'payment_date' => now(),
+                    'payment_details' => json_encode($request->input('payment_details', []))
+                ]);
+
+                // Update subscription status based on payment
+                if ($payment->status === 'completed') {
+                    $subscription->update(['status' => 'active']);
+                } else {
+                    $subscription->update(['status' => 'cancelled']);
+                    throw new \Exception('Payment failed, subscription could not be activated');
+                }
+
+                // Load relationships for the response
+                $subscription->load('package', 'zone', 'payments');
+
+                return response()->success(new SubscriptionResource($subscription), 'Subscription created and payment processed successfully', 200);
+
+            } catch (\Exception $e) {
+                // Rollback the transaction in case of any error
+                DB::rollBack();
+
+                // Log the error for debugging
+                Log::error('Subscription creation failed: ' . $e->getMessage());
+
+                return response()->errors([], $e->getMessage(),400);
             }
-    
-            return response()->success(
-                new SubscriptionResource($subscription->load('package', 'zone', 'payments')),
-                __('Subscription created and payment completed successfully'),
-                200
-            );
         });
     }
 
@@ -121,12 +129,36 @@ class SubscriptionController extends Controller
      */
     public function update(SubscriptionRequest $request, Subscription $subscription)
     {
-        // Ensure the subscription belongs to the authenticated user
         $this->authorize('update', $subscription);
 
-        $subscription->update($request->validated());
-        
-        return response()->success(new SubscriptionResource($subscription->load('package', 'zone')), __('Subscription updated successfully'), 200);
+        return DB::transaction(function () use ($request, $subscription) {
+            try {
+                $validatedData = $request->validated();
+
+                if (isset($validatedData['status'])) {
+                    switch ($validatedData['status']) {
+                        case 'cancelled':
+                            $validatedData['end_date'] = now();
+                            break;
+                        case 'expired':
+                            $validatedData['end_date'] = $validatedData['end_date'] ?? now();
+                            break;
+                    }
+                }
+
+                $subscription->update($validatedData);
+
+                $subscription->refresh();
+
+                return response()->success(new SubscriptionResource($subscription->load('package', 'zone', 'payments')), __('Subscription updated successfully'),200);
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                Log::error('Subscription update failed: ' . $e->getMessage());
+
+                return response()->errors([], __('Failed to update subscription: ') . $e->getMessage(),400);
+            }
+        });
     }
 
     /**
@@ -136,35 +168,87 @@ class SubscriptionController extends Controller
     {
         $this->authorize('cancel', $subscription);
 
+        if ($subscription->status !== 'active') {
+            return response()->errors([],__('Impossible d\'annuler un abonnement qui n\'est pas actif'), 400);
+        }
+
         $subscription->update([
             'status' => 'cancelled',
             'end_date' => now()->toDateString()
         ]);
 
-        return response()->success(new SubscriptionResource($subscription), __('Subscription cancelled successfully'), 200);
+        // Créer un enregistrement de paiement ou journal si nécessaire
+        // $this->createCancellationLog($subscription);
+
+        return response()->success(new SubscriptionResource($subscription), __('Abonnement annulé avec succès'),200);
     }
 
     /**
      * Renew an expired subscription.
      */
-    public function renew(Subscription $subscription)
+    public function renew(SubscriptionRequest $request, Subscription $subscription)
     {
-        return DB::transaction(function () use ($subscription) {
-
+        return DB::transaction(function () use ($request, $subscription) {
             $this->authorize('renew', $subscription);
 
-            // Create a new subscription based on the previous one
+            if (!$this->isEligibleForRenewal($subscription)) {
+                return response()->errors(
+                    [], 
+                    __('Cet abonnement ne peut pas être renouvelé'), 
+                    400
+                );
+            }
+
+            // Récupérer le package existant
+            $package = $subscription->package;
+
+            // Vérifier le montant du paiement
+            $paymentAmount = $request->input('amount');
+            if ($paymentAmount < $package->price) {
+                return response()->errors(
+                    [], 
+                    __('Le montant du paiement est insuffisant'), 
+                    400
+                );
+            }
+
             $newSubscription = Subscription::create([
                 'user_id' => $subscription->user_id,
-                'package_id' => $subscription->package_id,
+                'package_id' => $package->id,
                 'zone_id' => $subscription->zone_id,
                 'start_date' => now()->toDateString(),
                 'end_date' => now()->addMonth()->toDateString(),
-                'status' => 'active',
-                'notes' => 'Renewal of previous subscription'
+                'status' => 'pending', // Initialement en attente
+                'notes' => 'Renouvellement de l\'abonnement précédent'
             ]);
 
-            return response()->success(new SubscriptionResource($newSubscription->load('package', 'zone')), __('Subscription renewed successfully'), 200);
+            $payment = Payment::create([
+                'subscription_id' => $newSubscription->id,
+                'amount' => $paymentAmount,
+                'currency' => 'XAF',
+                'transaction_id' => $this->generateUniqueTransactionId(),
+                'payment_method' => $request->input('payment_method'),
+                'status' => $request->input('status', 'pending'),
+                'payment_date' => now(),
+                'payment_details' => json_encode($request->input('payment_details', []))
+            ]);
+
+            // Mettre à jour le statut de l'abonnement en fonction du paiement
+            if ($payment->status === 'completed') {
+                $newSubscription->update(['status' => 'active']);
+                
+                // Mettre à jour l'ancien abonnement
+                $subscription->update([
+                    'status' => 'renewed',
+                    'end_date' => now()->toDateString()
+                ]);
+            } else {
+                $newSubscription->update(['status' => 'cancelled']);
+                
+                return response()->errors([], __('Le paiement a échoué, le renouvellement n\'a pas pu être effectué'),400);
+            }
+
+            return response()->success(new SubscriptionResource($newSubscription->load('package', 'zone', 'payments')), __('Abonnement renouvelé avec succès'),200);
         });
     }
 
@@ -194,4 +278,13 @@ class SubscriptionController extends Controller
     {
         return 'PAY-' . Str::upper(Str::random(10)) . '-' . now()->timestamp;
     }
+
+    /**
+ * Vérifier l'éligibilité au renouvellement.
+ */
+protected function isEligibleForRenewal(Subscription $subscription): bool
+{
+    return in_array($subscription->status, ['expired', 'cancelled']) 
+        && $subscription->end_date < now();
+}
 }

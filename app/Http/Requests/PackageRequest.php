@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PackageRequest extends FormRequest
@@ -11,7 +12,7 @@ class PackageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,30 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'level' => [
+                'required', 
+                Rule::in(['National', 'Regional', 'Divisional', 'Subdivisional'])
+            ],
+            'price' => ['required', 'integer', 'min:0'],
+            'description' => ['nullable', 'string'],
+            'is_active' => ['boolean']
+        ];
+    }
+
+    /**
+     * Get custom error messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The package name is required.',
+            'level.in' => 'Invalid package level selected.',
+            'price.required' => 'The price is required.',
+            'price.integer' => 'The price must be a number.',
+            'price.min' => 'The price must be a positive number.'
         ];
     }
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('zone_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
+            $table->enum('status', ['active', 'expired', 'cancelled','renewed'])->default('active');
             $table->text('notes')->nullable();
             $table->timestamps();
         });
