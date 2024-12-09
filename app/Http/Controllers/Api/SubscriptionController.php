@@ -280,11 +280,11 @@ class SubscriptionController extends Controller
     }
 
     /**
- * Vérifier l'éligibilité au renouvellement.
- */
-protected function isEligibleForRenewal(Subscription $subscription): bool
-{
-    return in_array($subscription->status, ['expired', 'cancelled']) 
-        && $subscription->end_date < now();
-}
+     * Vérifier l'éligibilité au renouvellement.
+     */
+    protected function isEligibleForRenewal(Subscription $subscription): bool
+    {
+        return in_array($subscription->status, ['expired', 'cancelled']) 
+            && $subscription->end_date < now();
+    }
 }
