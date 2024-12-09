@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_fr');
+            $table->string('name_en');
             $table->enum('level', ['National', 'Regional', 'Divisional', 'Subdivisional']);
             $table->integer('price');
-            $table->text('description')->nullable();
+            $table->text('description_fr')->nullable();
+            $table->text('description_en')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

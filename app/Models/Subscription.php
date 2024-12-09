@@ -20,10 +20,41 @@ class Subscription extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'periodicity', 'price'];
+    protected $fillable = [
+        'user_id', 
+        'package_id', 
+        'zone_id', 
+        'start_date', 
+        'end_date', 
+        'status', 
+        'notes'
+    ];
 
-    public function subscription()
+    protected $dates = [
+        'start_date', 
+        'end_date'
+    ];
+
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'user_subscription', 'subscription_id');
+        return $this->belongsTo(User::class);
+    }
+
+    // Relation avec le package
+    public function package()
+    {
+        return $this->belongsTo(Package::class);
+    }
+
+    // Relation avec la zone
+    public function zone()
+    {
+        return $this->belongsTo(Zone::class);
+    }
+
+    // Relation avec les paiements
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

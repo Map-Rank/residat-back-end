@@ -14,6 +14,18 @@ class PackageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name_fr' => $this->name_fr,
+            'name_en' => $this->name_en,
+            'level' => $this->level,
+            'price' => $this->price,
+            'description_fr' => $this->description_fr,
+            'description_en' => $this->description_en,
+            'is_active' => $this->is_active,
+            'subscriptions_count' => $this->subscriptions()->count(),
+            'created_at' => $this->created_at ? $this->created_at->toDateTimeString() : null,
+            'updated_at' => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
+        ];
     }
 }

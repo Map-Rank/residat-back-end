@@ -21,7 +21,7 @@ class SubscriptionController extends Controller
     public function index()
     {
         $subscriptions = Subscription::with(['package', 'zone'])
-            // ->where('user_id', auth()->id())
+            ->where('user_id', auth()->id())
             ->orderByDesc('created_at')
             ->paginate(10);
         
@@ -164,9 +164,13 @@ class SubscriptionController extends Controller
     /**
      * Cancel an active subscription.
      */
-    public function cancel(Subscription $subscription)
+    public function cancel(Request $request, Subscription $subscription)
     {
         $this->authorize('cancel', $subscription);
+
+        $validatedData = $request->validate([
+            'reason' => ['required','string','max:500'],
+        ]);
 
         if ($subscription->status !== 'active') {
             return response()->errors([],__('Impossible d\'annuler un abonnement qui n\'est pas actif'), 400);
@@ -174,7 +178,8 @@ class SubscriptionController extends Controller
 
         $subscription->update([
             'status' => 'cancelled',
-            'end_date' => now()->toDateString()
+            'end_date' => now()->toDateString(),
+            'notes' => $validatedData['reason'],
         ]);
 
         // Créer un enregistrement de paiement ou journal si nécessaire
