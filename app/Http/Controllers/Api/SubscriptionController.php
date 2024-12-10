@@ -41,23 +41,17 @@ class SubscriptionController extends Controller
                 // Check for existing active subscription
                 $existingSubscription = Subscription::where('user_id', auth()->id())
                     ->where('status', 'active')
+                    ->where('end_date', '>=', now()->toDateString())
                     ->first();
 
                 if ($existingSubscription) {
                     throw new \Exception('You already have an active subscription');
                 }
 
+                // Validate payment amount
                 $paymentAmount = $request->input('amount');
-                $expectedAmount = match ($package->periodicity) {
-                    'Month' => $package->price,
-                    'Quarter' => $package->price * 3,
-                    'Half' => $package->price * 6,
-                    'Annual' => $package->price * 12,
-                    default => throw new \Exception('Invalid package periodicity'),
-                };
-
-                if ($paymentAmount < $expectedAmount) {
-                    throw new \Exception('Payment amount is insufficient for the selected package and periodicity');
+                if ($paymentAmount < $package->price) {
+                    throw new \Exception('Payment amount is insufficient for the selected package');
                 }
 
                 // Determine the end date based on periodicity
@@ -224,22 +218,10 @@ class SubscriptionController extends Controller
             // Récupérer le package existant
             $package = $subscription->package;
 
-            // Calculer le montant attendu en fonction de la périodicité
+            // Validate payment amount
             $paymentAmount = $request->input('amount');
-            $expectedAmount = match ($package->periodicity) {
-                'Month' => $package->price,
-                'Quarter' => $package->price * 3,
-                'Half' => $package->price * 6,
-                'Annual' => $package->price * 12,
-                default => throw new \Exception('Invalid package periodicity'),
-            };
-
-            if ($paymentAmount < $expectedAmount) {
-                return response()->errors(
-                    [], 
-                    __('Le montant du paiement est insuffisant pour la périodicité sélectionnée'), 
-                    400
-                );
+            if ($paymentAmount < $package->price) {
+                throw new \Exception('Payment amount is insufficient for the selected package');
             }
 
             // Calculer les dates de début et de fin

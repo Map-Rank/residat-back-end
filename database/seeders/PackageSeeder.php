@@ -13,7 +13,9 @@ class PackageSeeder extends Seeder
      */
     public function run(): void
     {
-        $packages = [
+        $periods = ['Month', 'Quarter', 'Half', 'Annual'];
+
+        $basePackages = [
             [
                 'name_fr' => 'Package National',
                 'name_en' => 'National Package',
@@ -38,8 +40,6 @@ class PackageSeeder extends Seeder
                     'Customizable data dashboard'
                 ]),
                 'is_active' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
             ],
             [
                 'name_fr' => 'Package Regional',
@@ -59,14 +59,11 @@ class PackageSeeder extends Seeder
                     'Unlimited mass messaging', 
                     'AI assistant (upcoming)', 
                     'Support services', 
-                    'Request Hazard simulations for locations', 
+                    'Request hazard simulations for locations', 
                     'Stakeholder collaboration'
                 ]),
                 'is_active' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
             ],
-
             [
                 'name_fr' => 'Package Divisionnel',
                 'name_en' => 'Divisional Package',
@@ -85,8 +82,6 @@ class PackageSeeder extends Seeder
                     'Hazard simulations for locations (divisional)'
                 ]),
                 'is_active' => false,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
             ],
             [
                 'name_fr' => 'Package subdivisionnel',
@@ -100,18 +95,27 @@ class PackageSeeder extends Seeder
                     'Services de support pour la planification des risques'
                 ]),
                 'description_en' => json_encode([
-                    'Location based mass Message',
+                    'Location-based mass messaging',
                     'Unlimited ads for registered location', 
                     'Hazard risks simulations', 
                     'Support services for hazard planning'
                 ]),
                 'is_active' => true,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
             ]
         ];
 
-        // Insert the packages into the database
+        $packages = [];
+
+        foreach ($basePackages as $basePackage) {
+            foreach ($periods as $period) {
+                $packages[] = array_merge($basePackage, [
+                    'periodicity' => $period,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
+
         DB::table('packages')->insert($packages);
     }
 }
