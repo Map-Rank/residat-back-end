@@ -14,7 +14,8 @@ class Package extends Model
         'name_fr',
         'name_en',
         'level', 
-        'price', 
+        'price',
+        'periodicity',
         'description_fr', 
         'description_en', 
         'is_active'

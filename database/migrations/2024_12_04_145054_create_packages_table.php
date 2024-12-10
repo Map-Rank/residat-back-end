@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name_fr');
             $table->string('name_en');
             $table->enum('level', ['National', 'Regional', 'Divisional', 'Subdivisional']);
+            $table->enum('periodicity', ['Month', 'Quarter', 'Half', 'Annual']);
             $table->integer('price');
             $table->text('description_fr')->nullable();
             $table->text('description_en')->nullable();

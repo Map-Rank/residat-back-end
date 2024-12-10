@@ -23,13 +23,19 @@ class PackageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name_fr' => ['required', 'string', 'max:255'],
+            'name_en' => ['required', 'string', 'max:255'],
             'level' => [
                 'required', 
                 Rule::in(['National', 'Regional', 'Divisional', 'Subdivisional'])
             ],
+            'periodicity' => [
+                'required', 
+                Rule::in(['Month', 'Quarter', 'Half', 'Annual'])
+            ],
             'price' => ['required', 'integer', 'min:0'],
-            'description' => ['nullable', 'string'],
+            'description_fr' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'is_active' => ['boolean']
         ];
     }

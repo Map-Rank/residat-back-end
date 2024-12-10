@@ -47,19 +47,36 @@ class SubscriptionController extends Controller
                     throw new \Exception('You already have an active subscription');
                 }
 
-                // Validate payment amount
                 $paymentAmount = $request->input('amount');
-                if ($paymentAmount < $package->price) {
-                    throw new \Exception('Payment amount is insufficient for the selected package');
+                $expectedAmount = match ($package->periodicity) {
+                    'Month' => $package->price,
+                    'Quarter' => $package->price * 3,
+                    'Half' => $package->price * 6,
+                    'Annual' => $package->price * 12,
+                    default => throw new \Exception('Invalid package periodicity'),
+                };
+
+                if ($paymentAmount < $expectedAmount) {
+                    throw new \Exception('Payment amount is insufficient for the selected package and periodicity');
                 }
+
+                // Determine the end date based on periodicity
+                $startDate = now();
+                $endDate = match ($package->periodicity) {
+                    'Month' => $startDate->copy()->addMonth(),
+                    'Quarter' => $startDate->copy()->addMonths(3),
+                    'Half' => $startDate->copy()->addMonths(6),
+                    'Annual' => $startDate->copy()->addYear(),
+                    default => throw new \Exception('Invalid package periodicity'),
+                };
 
                 // Create subscription
                 $subscription = Subscription::create([
                     'user_id' => auth()->id(),
                     'package_id' => $package->id,
                     'zone_id' => $request->input('zone_id'),
-                    'start_date' => now()->toDateString(),
-                    'end_date' => now()->addMonth()->toDateString(),
+                    'start_date' => $startDate->toDateString(),
+                    'end_date' => $endDate->toDateString(),
                     'status' => 'pending',
                     'notes' => $request->input('notes')
                 ]);
@@ -207,26 +224,46 @@ class SubscriptionController extends Controller
             // Récupérer le package existant
             $package = $subscription->package;
 
-            // Vérifier le montant du paiement
+            // Calculer le montant attendu en fonction de la périodicité
             $paymentAmount = $request->input('amount');
-            if ($paymentAmount < $package->price) {
+            $expectedAmount = match ($package->periodicity) {
+                'Month' => $package->price,
+                'Quarter' => $package->price * 3,
+                'Half' => $package->price * 6,
+                'Annual' => $package->price * 12,
+                default => throw new \Exception('Invalid package periodicity'),
+            };
+
+            if ($paymentAmount < $expectedAmount) {
                 return response()->errors(
                     [], 
-                    __('Le montant du paiement est insuffisant'), 
+                    __('Le montant du paiement est insuffisant pour la périodicité sélectionnée'), 
                     400
                 );
             }
 
+            // Calculer les dates de début et de fin
+            $startDate = now();
+            $endDate = match ($package->periodicity) {
+                'Month' => $startDate->copy()->addMonth(),
+                'Quarter' => $startDate->copy()->addMonths(3),
+                'Half' => $startDate->copy()->addMonths(6),
+                'Annual' => $startDate->copy()->addYear(),
+                default => throw new \Exception('Invalid package periodicity'),
+            };
+
+            // Créer un nouvel abonnement
             $newSubscription = Subscription::create([
                 'user_id' => $subscription->user_id,
                 'package_id' => $package->id,
                 'zone_id' => $subscription->zone_id,
-                'start_date' => now()->toDateString(),
-                'end_date' => now()->addMonth()->toDateString(),
+                'start_date' => $startDate->toDateString(),
+                'end_date' => $endDate->toDateString(),
                 'status' => 'pending', // Initialement en attente
                 'notes' => 'Renouvellement de l\'abonnement précédent'
             ]);
 
+            // Enregistrer le paiement
             $payment = Payment::create([
                 'subscription_id' => $newSubscription->id,
                 'amount' => $paymentAmount,
@@ -238,7 +275,7 @@ class SubscriptionController extends Controller
                 'payment_details' => json_encode($request->input('payment_details', []))
             ]);
 
-            // Mettre à jour le statut de l'abonnement en fonction du paiement
+            // Mettre à jour le statut de l'abonnement et du paiement
             if ($payment->status === 'completed') {
                 $newSubscription->update(['status' => 'active']);
                 
@@ -250,10 +287,18 @@ class SubscriptionController extends Controller
             } else {
                 $newSubscription->update(['status' => 'cancelled']);
                 
-                return response()->errors([], __('Le paiement a échoué, le renouvellement n\'a pas pu être effectué'),400);
+                return response()->errors(
+                    [], 
+                    __('Le paiement a échoué, le renouvellement n\'a pas pu être effectué'), 
+                    400
+                );
             }
 
-            return response()->success(new SubscriptionResource($newSubscription->load('package', 'zone', 'payments')), __('Abonnement renouvelé avec succès'),200);
+            return response()->success(
+                new SubscriptionResource($newSubscription->load('package', 'zone', 'payments')), 
+                __('Abonnement renouvelé avec succès'),
+                200
+            );
         });
     }
 
