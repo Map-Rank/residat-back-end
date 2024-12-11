@@ -114,6 +114,8 @@ Route::get('weather-test', function(){
 
 Route::middleware(['auth:sanctum',])->group(function () {
     //subscriptions with auth
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
     Route::put('subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
     Route::get('subscriptions/current', [SubscriptionController::class, 'currentSubscription'])->name('subscriptions.current');
     Route::patch('subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
@@ -123,8 +125,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 });
 
     //subscriptions without auth
-    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
-    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
+    
 
     //packages without auth
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
