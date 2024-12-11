@@ -19,6 +19,7 @@ class PackageResource extends JsonResource
             'name_fr' => $this->name_fr,
             'name_en' => $this->name_en,
             'level' => $this->level,
+            'periodicity' => $this->periodicity,
             'price' => $this->price,
             'description_fr' => $this->description_fr,
             'description_en' => $this->description_en,
