@@ -129,6 +129,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     //packages without auth
     Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
+    Route::get('packages/{id}', [PackageController::class, 'show'])->name('packages.show');
     // Route::post('packages', [PackageController::class, 'store'])->name('packages.store');
     // Route::put('packages/{package}', [PackageController::class, 'update'])->name('packages.update');
     // Route::delete('packages/{package}', [PackageController::class, 'destroy'])->name('packages.destroy');
