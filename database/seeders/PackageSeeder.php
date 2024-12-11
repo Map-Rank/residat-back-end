@@ -13,14 +13,19 @@ class PackageSeeder extends Seeder
      */
     public function run(): void
     {
-        $periods = ['Month', 'Quarter', 'Half', 'Annual'];
+        $periods = [
+            'Month' => 1,
+            'Quarter' => 3,
+            'Half' => 6,
+            'Annual' => 12,
+        ];
 
         $basePackages = [
             [
                 'name_fr' => 'Package National',
                 'name_en' => 'National Package',
                 'level' => 'National',
-                'price' => 50000,
+                'base_price' => 50000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées pour le territoire national',
                     'Messagerie de masse illimitée',
@@ -45,7 +50,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package Regional',
                 'name_en' => 'Regional Package',
                 'level' => 'Regional',
-                'price' => 35000,
+                'base_price' => 35000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées (régionales)',
                     'Messagerie de masse illimitée',
@@ -68,7 +73,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package Divisionnel',
                 'name_en' => 'Divisional Package',
                 'level' => 'Divisional',
-                'price' => 25000,
+                'base_price' => 25000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées pour la division enregistrée',
                     'Messagerie de masse (Divisionnelle)',
@@ -84,10 +89,10 @@ class PackageSeeder extends Seeder
                 'is_active' => false,
             ],
             [
-                'name_fr' => 'Package subdivisionnel',
+                'name_fr' => 'Package Subdivisionnel',
                 'name_en' => 'Subdivisional Package',
                 'level' => 'Subdivisional',
-                'price' => 15000,
+                'base_price' => 15000, // Base price per month
                 'description_fr' => json_encode([
                     'Messages localisés en masse',
                     'Annonces illimitées pour la localisation enregistrée',
@@ -107,8 +112,9 @@ class PackageSeeder extends Seeder
         $packages = [];
 
         foreach ($basePackages as $basePackage) {
-            foreach ($periods as $period) {
+            foreach ($periods as $period => $months) {
                 $packages[] = array_merge($basePackage, [
+                    'price' => $basePackage['base_price'] * $months, // Adjust price based on period
                     'periodicity' => $period,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
