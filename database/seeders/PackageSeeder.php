@@ -25,7 +25,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package National',
                 'name_en' => 'National Package',
                 'level' => 'National',
-                'base_price' => 50000, // Base price per month
+                'price' => 50000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées pour le territoire national',
                     'Messagerie de masse illimitée',
@@ -50,7 +50,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package Regional',
                 'name_en' => 'Regional Package',
                 'level' => 'Regional',
-                'base_price' => 35000, // Base price per month
+                'price' => 35000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées (régionales)',
                     'Messagerie de masse illimitée',
@@ -73,7 +73,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package Divisionnel',
                 'name_en' => 'Divisional Package',
                 'level' => 'Divisional',
-                'base_price' => 25000, // Base price per month
+                'price' => 25000, // Base price per month
                 'description_fr' => json_encode([
                     'Annonces illimitées pour la division enregistrée',
                     'Messagerie de masse (Divisionnelle)',
@@ -92,7 +92,7 @@ class PackageSeeder extends Seeder
                 'name_fr' => 'Package Subdivisionnel',
                 'name_en' => 'Subdivisional Package',
                 'level' => 'Subdivisional',
-                'base_price' => 15000, // Base price per month
+                'price' => 15000, // Base price per month
                 'description_fr' => json_encode([
                     'Messages localisés en masse',
                     'Annonces illimitées pour la localisation enregistrée',
@@ -114,7 +114,7 @@ class PackageSeeder extends Seeder
         foreach ($basePackages as $basePackage) {
             foreach ($periods as $period => $months) {
                 $packages[] = array_merge($basePackage, [
-                    'price' => $basePackage['base_price'] * $months, // Adjust price based on period
+                    'price' => $basePackage['price'] * $months, // Adjust price based on period
                     'periodicity' => $period,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
