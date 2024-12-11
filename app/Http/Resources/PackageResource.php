@@ -23,7 +23,6 @@ class PackageResource extends JsonResource
             'description_fr' => $this->description_fr,
             'description_en' => $this->description_en,
             'is_active' => $this->is_active,
-            'subscriptions_count' => $this->subscriptions()->count(),
             'created_at' => $this->created_at ? $this->created_at->toDateTimeString() : null,
             'updated_at' => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
         ];

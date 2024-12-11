@@ -8,6 +8,7 @@ use App\Models\Zone;
 use App\Models\Event;
 use App\Models\Interaction;
 use App\Models\Notification;
+use App\Models\Subscription;
 use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
