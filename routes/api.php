@@ -4,6 +4,7 @@ use App\Models\Zone;
 use App\Models\Media;
 use App\Service\UtilService;
 use Illuminate\Http\Request;
+use App\Jobs\WeatherFetchJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
@@ -13,14 +14,15 @@ use App\Http\Controllers\Api\FollowController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\WeatherController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\DisasterController as ApiDisasterController;
-use App\Jobs\WeatherFetchJob;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,3 +111,23 @@ Route::get('/test-weather', [UtilService::class, 'test']);
 Route::get('weather-test', function(){
     WeatherFetchJob::dispatch(6);
 });
+
+Route::middleware(['auth:sanctum',])->group(function () {
+    //subscriptions with auth
+    Route::put('subscriptions/{subscription}', [SubscriptionController::class, 'update'])->name('subscriptions.update');
+    Route::get('subscriptions/current', [SubscriptionController::class, 'currentSubscription'])->name('subscriptions.current');
+    Route::patch('subscriptions/{subscription}/cancel', [SubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
+    Route::post('subscriptions/{subscription}/renew', [SubscriptionController::class, 'renew'])->name('subscriptions.renew');
+    Route::get('subscriptions/history', [SubscriptionController::class, 'history'])->name('subscriptions.history');
+    Route::delete('subscriptions/{id}', [SubscriptionController::class, 'destroy'])->name('subscriptions.destroy');
+});
+
+    //subscriptions without auth
+    Route::get('subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
+    Route::post('subscriptions', [SubscriptionController::class, 'store'])->name('subscriptions.store');
+
+    //packages without auth
+    Route::get('packages', [PackageController::class, 'index'])->name('packages.index');
+    // Route::post('packages', [PackageController::class, 'store'])->name('packages.store');
+    // Route::put('packages/{package}', [PackageController::class, 'update'])->name('packages.update');
+    // Route::delete('packages/{package}', [PackageController::class, 'destroy'])->name('packages.destroy');
