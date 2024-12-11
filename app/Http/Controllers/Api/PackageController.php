@@ -23,6 +23,20 @@ class PackageController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $package = Package::where('is_active', true)->find($id);
+
+        if (!$package) {
+            return response()->error(__('Package not found or inactive'), 404);
+        }
+
+        return response()->success(new PackageResource($package), __('Package retrieved successfully'), 200);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(PackageRequest $request)
