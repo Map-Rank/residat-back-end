@@ -16,9 +16,8 @@ class PackageController extends Controller
     public function index()
     {
         $packages = Package::where('is_active', true)
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        
+            ->orderBy('created_at', 'desc')->get();
+
         return response()->success(PackageResource::collection($packages), __('Packages charged successfully'), 200);
     }
 
@@ -43,7 +42,7 @@ class PackageController extends Controller
     {
         $validatedData = $request->validated();
         $package = Package::create($validatedData);
-        
+
         return response()->success(new PackageResource($package), __('Package created successfully'), 200);
     }
 
@@ -54,7 +53,7 @@ class PackageController extends Controller
     {
         $validatedData = $request->validated();
         $package->update($validatedData);
-        
+
         return response()->success(new PackageResource($package), __('Package updated successfully'), 200);
     }
 
