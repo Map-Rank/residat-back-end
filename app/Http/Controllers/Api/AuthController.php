@@ -39,7 +39,7 @@ class AuthController extends Controller
     {
         $user = User::create($request->all());
         // Envoyer un e-mail à l'utilisateur
-        // Mail::to($user->email)->send(new WelcomeEmail($user, $request['password']));
+        Mail::to($user->email)->send(new WelcomeEmail($user, $request['password']));
 
         if(strcmp(env('APP_ENV'), 'local') == 0 || strcmp(env('APP_ENV'), 'dev') == 0 || strcmp(env('APP_ENV'), 'testing') == 0){
             if ($request->hasFile('avatar')) {

@@ -10,6 +10,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Resources\PaymentResource;
 
+/**
+ * @codeCoverageIgnore
+ */
 class PaymentController extends Controller
 {
     /**

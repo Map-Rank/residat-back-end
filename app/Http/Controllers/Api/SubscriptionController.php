@@ -118,12 +118,19 @@ class SubscriptionController extends Controller
     public function currentSubscription()
     {
         $subscription = Subscription::with(['package', 'zone'])
-            ->where('user_id', auth()->id())
-            ->where('status', 'active')
-            ->where('end_date', '>=', now())
-            ->first();
-        
-        return response()->errors($subscription ? new SubscriptionResource($subscription) : null, __('Subscription charged successfully'), 400);
+        ->where('user_id', auth()->id())
+        ->where('status', 'active')
+        ->where('end_date', '>=', now())
+        ->first();
+
+        if (!$subscription) {
+            return response()->errors([
+                'status' => false,
+                'message' => 'No active subscription found or the subscription has expired.',
+            ], 400);
+        }
+
+        return response()->success(new SubscriptionResource($subscription), 'Subscription charged successfully', 200);
 
     }
 

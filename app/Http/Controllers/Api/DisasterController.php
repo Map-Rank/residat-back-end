@@ -24,7 +24,7 @@ class DisasterController extends Controller
      * Show disaster
      */
     public function show(Disaster $disaster)
-    {;
+    {
         return response()->success(new DisasterResource($disaster), __('Disaster charged successfully'), 200);
     }
 }

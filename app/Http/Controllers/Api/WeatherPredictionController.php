@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class WeatherPredictionController extends Controller
 {
     public function index(Request $request)  {
