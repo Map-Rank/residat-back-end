@@ -38,6 +38,15 @@ jobs:
       # Install Composer dependencies
       - name: Install Dependencies
         run: composer update --prefer-dist --no-progress --no-suggest --ansi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install npm dependencies
+        run: npm install
+      - name: Compile assets
+        run: npm run dev  # Or `npm run dev` based on your setup
       
       # Setting Firebase credentials
       - name: Set up Firebase credentials
