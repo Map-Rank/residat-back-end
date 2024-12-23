@@ -46,7 +46,7 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       - name: Compile assets
-        run: npm run dev  # Or `npm run dev` based on your setup
+        run: npm run production  # Or `npm run dev` based on your setup
       
       # Setting Firebase credentials
       - name: Set up Firebase credentials
