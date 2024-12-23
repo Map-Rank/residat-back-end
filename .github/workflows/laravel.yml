@@ -38,7 +38,13 @@ jobs:
       # Install Composer dependencies
       - name: Install Dependencies
         run: composer update --prefer-dist --no-progress --no-suggest --ansi
-
+      # Setting Firebase credentials
+      - name: Set up Firebase credentials
+        run: |
+          mkdir -p public/storage
+          echo "$FIREBASE_CREDENTIALS_JSON" > public/storage/firebase_credentials.json
+        env:
+          FIREBASE_CREDENTIALS_JSON: ${{ secrets.FIREBASE_CREDENTIALS_JSON }}
       # Copy .env file
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
