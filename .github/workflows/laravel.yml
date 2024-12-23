@@ -85,4 +85,4 @@ jobs:
           QUEUE_CONNECTION: sync
           SESSION_DRIVER: array
           MAIL_MAILER: array
-        run: php artisan test --verbose
+        run: php artisan test
