@@ -38,6 +38,7 @@ jobs:
       # Install Composer dependencies
       - name: Install Dependencies
         run: composer update --prefer-dist --no-progress --no-suggest --ansi
+      
       # Setting Firebase credentials
       - name: Set up Firebase credentials
         run: |
