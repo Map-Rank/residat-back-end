@@ -17,7 +17,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_database
+          MYSQL_DATABASE: laravel
           MYSQL_USER: user
           MYSQL_PASSWORD: password
         ports:
@@ -37,7 +37,7 @@ jobs:
 
       # Install Composer dependencies
       - name: Install Dependencies
-        run: composer update --prefer-dist --no-progress --no-suggest --ansi
+        run: composer install --prefer-dist --no-progress --no-suggest --ansi
 
       # Copy .env file
       - name: Copy .env
@@ -55,7 +55,7 @@ jobs:
       - name: Set MySQL Database Configurations
         run: |
           sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env
-          sed -i 's/DB_DATABASE=database.sqlite/DB_DATABASE=test_database/' .env
+          sed -i 's/DB_DATABASE=database.sqlite/DB_DATABASE=laravel/' .env
           sed -i 's/DB_USERNAME=root/DB_USERNAME=user/' .env
           sed -i 's/DB_PASSWORD=/DB_PASSWORD=password/' .env
 
@@ -78,7 +78,7 @@ jobs:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
           DB_PORT: 3306
-          DB_DATABASE: test_database
+          DB_DATABASE: laravel
           DB_USERNAME: user
           DB_PASSWORD: password
           CACHE_DRIVER: array
