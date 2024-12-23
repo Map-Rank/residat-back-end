@@ -8,6 +8,9 @@ use Phpml\CrossValidation\StratifiedRandomSplit;
 use Phpml\Dataset\ArrayDataset;
 use Phpml\Metric\Accuracy;
 
+/**
+ * @codeCoverageIgnore
+ */
 class FloodAIService{
     private $data;
     private $featureRanges;

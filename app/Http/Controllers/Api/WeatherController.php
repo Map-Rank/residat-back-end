@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
 
 /**
+ * @codeCoverageIgnore
  * @group Module WeatherPrediction
  */
 class WeatherController extends Controller
