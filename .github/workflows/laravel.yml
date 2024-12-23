@@ -37,7 +37,7 @@ jobs:
 
       # Install Composer dependencies
       - name: Install Dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest --ansi
+        run: composer update --prefer-dist --no-progress --no-suggest --ansi
 
       # Copy .env file
       - name: Copy .env
