@@ -93,6 +93,8 @@ class NotificationControllerTest extends TestCase
         // Créer le nom d'image basé sur le temps
         $imageName = time().'.'.$file->getClientOriginalExtension();
 
+        $imageName = "notification.jpg";
+
         // Ajouter l'image à la requête
         $data['image'] = $file;
 
