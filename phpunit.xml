@@ -33,14 +33,16 @@
     </php>
     
     <coverage>
-        <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include>
-        <exclude>
-            <directory suffix=".php">./app/Models</directory>
-            <directory suffix=".php">./app/View</directory>
-            <directory suffix=".php">./resources/View</directory>
-            <directory suffix=".php">./app/Models/.*Test\.php</directory>
-        </exclude>
+        <filter>
+            <whitelist>
+                <directory suffix=".php">residat-back-end</directory>
+            </whitelist>
+            <blacklist>
+                <directory suffix=".php">./app/Models</directory>
+                <directory suffix=".php">./app/View</directory>
+                <directory suffix=".php">./resources/View</directory>
+                <directory suffix=".php">./app/Models/.*Test\.php</directory>
+            </blacklist>
+        </filter>
     </coverage>
 </phpunit>
