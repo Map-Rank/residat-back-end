@@ -22,6 +22,7 @@
             <directory suffix=".php">./app/Models</directory>
             <directory suffix=".php">./app/View</directory>
             <directory suffix=".php">./resources/View</directory>
+            <directory suffix=".php">./app/Jobs</directory>
             <directory suffix=".php">./app/Models/.*Test\.php</directory>
         </exclude>
         <!-- <include>
@@ -43,5 +44,14 @@
     </php>
     
     <coverage includeUncoveredFiles="true">
+        <report>
+            <clover outputFile="tests/coverage/clover.xml"/>
+            <cobertura outputFile="tests/coverage/cobertura.xml"/>
+            <crap4j outputFile="tests/coverage/crap4j.xml" threshold="50"/>
+            <html outputDirectory="tests/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <php outputFile="tests/coverage/coverage.php"/>
+            <text outputFile="tests/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+            <xml outputDirectory="tests/coverage/xml-coverage"/>
+        </report>
     </coverage>
 </phpunit>
