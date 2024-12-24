@@ -33,9 +33,9 @@
     </php>
     
     <coverage>
-        <include>
+        <!-- <include>
             <directory suffix=".php">residat-back-end</directory>
-        </include>
+        </include> -->
         <exclude>
             <directory suffix=".php">./app/Models</directory>
             <directory suffix=".php">./app/View</directory>
