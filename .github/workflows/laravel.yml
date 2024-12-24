@@ -43,11 +43,29 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+          
       - name: Install npm dependencies
         run: npm install
+        
       - name: Compile assets
         run: npm run build  # Or `npm run dev` based on your setup
-      
+        
+      - name: Send Email Notification
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "GitHub Actions Failure Notification"
+          body: |
+            Hello,
+            
+            The workflow on the repository has failed. Please check the logs for more details.
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
+          
       # Setting Firebase credentials
       - name: Set up Firebase credentials
         run: |
