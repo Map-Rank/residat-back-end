@@ -12,11 +12,24 @@
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+    
     <source>
         <include>
             <directory>app</directory>
+            <directory suffix=".php">residat-back-end</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">./app/Models</directory>
+            <directory suffix=".php">./app/View</directory>
+            <directory suffix=".php">./resources/View</directory>
+            <directory suffix=".php">./app/Jobs</directory>
+            <directory suffix=".php">./app/Models/.*Test\.php</directory>
+        </exclude>
+        <!-- <include>
+            <directory suffix=".php">residat-back-end</directory>
+        </include> -->
     </source>
+    
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
@@ -28,21 +41,17 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="MAIL_DRIVER" value="log"/>
         <ini name="xdebug.mode" value="coverage" />
-         
     </php>
-    <phpunit>
-        <coverage processUncoveredFiles="true">
-            <include>
-                <directory suffix=".php">residat-back-end</directory>
-            </include>
-            <filter>
-                <blacklist>
-                    <directory suffix=".php">./app/Models</directory>
-                    <directory suffix=".php">./app/View</directory>
-                    <directory suffix=".php">./resources/View</directory>
-                    <directory suffix=".php">./app/Models/.*Test\.php</directory>
-                </blacklist>
-            </filter>
-        </coverage>
-    </phpunit>
+    
+    <coverage includeUncoveredFiles="true">
+        <report>
+            <clover outputFile="tests/coverage/clover.xml"/>
+            <cobertura outputFile="tests/coverage/cobertura.xml"/>
+            <crap4j outputFile="tests/coverage/crap4j.xml" threshold="50"/>
+            <html outputDirectory="tests/coverage" lowUpperBound="50" highLowerBound="90"/>
+            <php outputFile="tests/coverage/coverage.php"/>
+            <text outputFile="tests/coverage/coverage.txt" showUncoveredFiles="false" showOnlySummary="true"/>
+            <xml outputDirectory="tests/coverage/xml-coverage"/>
+        </report>
+    </coverage>
 </phpunit>
