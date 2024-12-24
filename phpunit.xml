@@ -3,6 +3,7 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
+         processUncoveredFiles="true"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -12,11 +13,13 @@
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+    
     <source>
         <include>
             <directory>app</directory>
         </include>
     </source>
+    
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
@@ -28,21 +31,19 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="MAIL_DRIVER" value="log"/>
         <ini name="xdebug.mode" value="coverage" />
-         
     </php>
-    <phpunit>
-        <coverage processUncoveredFiles="true">
-            <include>
-                <directory suffix=".php">residat-back-end</directory>
-            </include>
-            <filter>
-                <blacklist>
-                    <directory suffix=".php">./app/Models</directory>
-                    <directory suffix=".php">./app/View</directory>
-                    <directory suffix=".php">./resources/View</directory>
-                    <directory suffix=".php">./app/Models/.*Test\.php</directory>
-                </blacklist>
-            </filter>
-        </coverage>
-    </phpunit>
+    
+    <coverage>
+        <include>
+            <directory suffix=".php">residat-back-end</directory>
+        </include>
+        <filter>
+            <blacklist>
+                <directory suffix=".php">./app/Models</directory>
+                <directory suffix=".php">./app/View</directory>
+                <directory suffix=".php">./resources/View</directory>
+                <directory suffix=".php">./app/Models/.*Test\.php</directory>
+            </blacklist>
+        </filter>
+    </coverage>
 </phpunit>
