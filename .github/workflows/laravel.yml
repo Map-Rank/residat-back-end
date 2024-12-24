@@ -83,7 +83,7 @@ jobs:
 
       # Set permissions for storage and cache
       - name: Set Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache public
+        run: chmod -R 777 storage bootstrap/cache
 
 
       # Update database configuration to MySQL
