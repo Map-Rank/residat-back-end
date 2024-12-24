@@ -32,7 +32,7 @@
         <ini name="xdebug.mode" value="coverage" />
     </php>
     
-    <coverage processUncoveredFiles="true">
+    <coverage>
         <include>
             <directory suffix=".php">residat-back-end</directory>
         </include>
