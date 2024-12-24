@@ -136,6 +136,9 @@ class UtilService
         return $res;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function sendNotification($title, $body, array $deviceTokens)
     {
         Log::debug('Device Tokens:', $deviceTokens);  // Log received tokens
@@ -265,6 +268,9 @@ class UtilService
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function test()
     {
         $token = 'f8004cshTcuE8BYmxBUN9B:APA91bFNd3hcTHmz8ButxzYofEQBr3QqDmFYPRX-Nulx_Rv5nb_3NWHoT8yS9LRcMv1f435GtxngVDXoVPGJsd8sxSibFYfH_jVjhSI7xiSmUGr6ZEC4MujiuVS7ZK4IgPhlaRRCSEZV';

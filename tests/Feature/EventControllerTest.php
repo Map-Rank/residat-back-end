@@ -253,6 +253,8 @@ class EventControllerTest extends TestCase
     /** @test */
     public function it_can_delete_event()
     {
+        Storage::fake('public');
+
         $user = User::first();
 
         // Si aucun utilisateur n'existe, créez-en un

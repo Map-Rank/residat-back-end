@@ -8,6 +8,7 @@ use App\Models\Zone;
 use App\Models\Event;
 use App\Models\Interaction;
 use App\Models\Notification;
+use App\Models\Subscription;
 use App\Models\UserSubscription;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -85,6 +86,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'active' => 'boolean',
+        'verified' => 'boolean'
     ];
 
 
@@ -142,7 +145,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function subscriptions()
     {
-        return $this->belongsToMany(Subscription::class, 'user_subscription', 'user_id');
+        return $this->hasMany(Subscription::class);
     }
 
     public function activeSubscription()
@@ -198,6 +201,15 @@ class User extends Authenticatable implements MustVerifyEmail
                     ->where('type_interaction_id', 1)
                     ->selectRaw('user_id, count(*) as count')
                     ->groupBy('user_id');
+    }
+
+    // Méthode pour obtenir la souscription active actuelle
+    public function currentSubscription()
+    {
+        return $this->subscriptions()
+            ->where('status', 'active')
+            ->where('end_date', '>=', now())
+            ->first();
     }
 
 }
