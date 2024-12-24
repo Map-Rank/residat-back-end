@@ -3,7 +3,6 @@
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
          colors="true"
-         processUncoveredFiles="true"
 >
     <testsuites>
         <testsuite name="Unit">
@@ -34,16 +33,16 @@
     </php>
     
     <coverage>
-        <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include>
         <filter>
-            <blacklist>
+            <include>
+                <directory suffix=".php">residat-back-end</directory>
+            </include>
+            <exclude>
                 <directory suffix=".php">./app/Models</directory>
                 <directory suffix=".php">./app/View</directory>
                 <directory suffix=".php">./resources/View</directory>
                 <directory suffix=".php">./app/Models/.*Test\.php</directory>
-            </blacklist>
+            </exclude>
         </filter>
     </coverage>
 </phpunit>
