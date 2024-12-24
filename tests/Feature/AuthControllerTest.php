@@ -111,7 +111,7 @@ class AuthControllerTest extends TestCase
 
         // Vérifiez que le mail de création de compte a bien été envoyé
         Mail::assertSent(WelcomeEmail::class, function ($mail) use ($data) {
-            return $mail->hasTo($data['email']);
+            return isset($data['email']) && $mail->hasTo($data['email']);
         });
         // Mail::assertSent(WelcomeEmail::class);
 
