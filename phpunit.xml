@@ -16,7 +16,17 @@
     <source>
         <include>
             <directory>app</directory>
+            <directory suffix=".php">residat-back-end</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">./app/Models</directory>
+            <directory suffix=".php">./app/View</directory>
+            <directory suffix=".php">./resources/View</directory>
+            <directory suffix=".php">./app/Models/.*Test\.php</directory>
+        </exclude>
+        <!-- <include>
+            <directory suffix=".php">residat-back-end</directory>
+        </include> -->
     </source>
     
     <php>
@@ -32,15 +42,6 @@
         <ini name="xdebug.mode" value="coverage" />
     </php>
     
-    <coverage>
-        <!-- <include>
-            <directory suffix=".php">residat-back-end</directory>
-        </include> -->
-        <exclude>
-            <directory suffix=".php">./app/Models</directory>
-            <directory suffix=".php">./app/View</directory>
-            <directory suffix=".php">./resources/View</directory>
-            <directory suffix=".php">./app/Models/.*Test\.php</directory>
-        </exclude>
+    <coverage includeUncoveredFiles="true">
     </coverage>
 </phpunit>
