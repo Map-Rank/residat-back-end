@@ -1,0 +1,863 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="Post.php" path="\Models">
+    <totals>
+      <lines total="90" comments="8" code="82" executable="20" executed="20" percent="100.00"/>
+      <methods count="12" tested="12" percent="100.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="1" percent="100.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="App\Models\Post" start="24" executable="20" executed="20" crap="12">
+      <namespace name="App\Models"/>
+      <method name="zone" signature="zone()" start="30" end="33" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="topic" signature="topic()" start="35" end="38" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="users" signature="users()" start="40" end="42" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="creator" signature="creator()" start="44" end="47" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="likes" signature="likes()" start="49" end="52" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="comments" signature="comments()" start="54" end="57" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="postComments" signature="postComments(): Illuminate\Database\Eloquent\Relations\HasMany" start="59" end="63" crap="1" executable="3" executed="3" coverage="100"/>
+      <method name="shares" signature="shares()" start="64" end="67" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="interactions" signature="interactions()" start="69" end="72" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="medias" signature="medias()" start="74" end="77" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="sectors" signature="sectors(): Illuminate\Database\Eloquent\Relations\BelongsToMany" start="79" end="81" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="postWithMostInteractions" signature="postWithMostInteractions()" start="83" end="88" crap="1" executable="3" executed="3" coverage="100"/>
+    </class>
+    <coverage>
+      <line nr="32">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_store"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="37">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+      </line>
+      <line nr="41">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_store"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="45">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_destroy"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+      </line>
+      <line nr="46">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_destroy"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+      </line>
+      <line nr="50">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="51">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="55">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="56">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="60">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+      </line>
+      <line nr="61">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+      </line>
+      <line nr="62">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+      </line>
+      <line nr="65">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="66">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="71">
+        <covered by="Tests\Feature\Auth\AuthenticationTest::test_users_can_authenticate_using_the_login_screen"/>
+        <covered by="Tests\Feature\Http\Middleware\AuthenticateTest::test_it_allows_authenticated_users_for_web_requests"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_store"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_destroy"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_allow_or_disallow_a_post"/>
+      </line>
+      <line nr="76">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_store"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_display_a_listing_of_posts"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="80">
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_index"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_store"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_show"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::test_update"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testLike"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testComment"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testShare"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerTest::testDeleteInteraction"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_show_a_specific_post"/>
+        <covered by="Tests\Feature\Http\Controllers\PostControllerWebTest::it_can_delete_a_post_with_media_and_associations"/>
+      </line>
+      <line nr="85">
+        <covered by="Tests\Feature\Auth\AuthenticationTest::test_users_can_authenticate_using_the_login_screen"/>
+        <covered by="Tests\Feature\Http\Middleware\AuthenticateTest::test_it_allows_authenticated_users_for_web_requests"/>
+      </line>
+      <line nr="86">
+        <covered by="Tests\Feature\Auth\AuthenticationTest::test_users_can_authenticate_using_the_login_screen"/>
+        <covered by="Tests\Feature\Http\Middleware\AuthenticateTest::test_it_allows_authenticated_users_for_web_requests"/>
+      </line>
+      <line nr="87">
+        <covered by="Tests\Feature\Auth\AuthenticationTest::test_users_can_authenticate_using_the_login_screen"/>
+        <covered by="Tests\Feature\Http\Middleware\AuthenticateTest::test_it_allows_authenticated_users_for_web_requests"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">App\Models</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="4"/>
+      <line no="5">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">App\Models\User</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="6">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">App\Models\Zone</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="7">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">App\Models\Media</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="8">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">App\Models\Interaction</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="9">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">Illuminate\Database\Eloquent\Model</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="10">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">Illuminate\Database\Eloquent\SoftDeletes</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="11">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">Illuminate\Database\Eloquent\Factories\HasFactory</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="12">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">Illuminate\Database\Eloquent\Relations\BelongsToMany</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="13">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">Illuminate\Database\Eloquent\Relations\HasMany</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="14"/>
+      <line no="15">
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="16">
+        <token name="T_DOC_COMMENT"> * App/Models/Post</token>
+      </line>
+      <line no="17">
+        <token name="T_DOC_COMMENT"> * @property int $id</token>
+      </line>
+      <line no="18">
+        <token name="T_DOC_COMMENT"> * @property string $content</token>
+      </line>
+      <line no="19">
+        <token name="T_DOC_COMMENT"> * @property datetime $published_at</token>
+      </line>
+      <line no="20">
+        <token name="T_DOC_COMMENT"> * @property int $zone_id</token>
+      </line>
+      <line no="21">
+        <token name="T_DOC_COMMENT"> * @mixin \Eloquent</token>
+      </line>
+      <line no="22">
+        <token name="T_DOC_COMMENT"> */</token>
+      </line>
+      <line no="23"/>
+      <line no="24">
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Post</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXTENDS">extends</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Model</token>
+      </line>
+      <line no="25">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="26">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">HasFactory</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">SoftDeletes</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="27"/>
+      <line no="28">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$fillable</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'content'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'published_at'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'zone_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'sector_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'active'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="29"/>
+      <line no="30">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">zone</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="31">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="32">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsTo</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Zone</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="33">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="34"/>
+      <line no="35">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">topic</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="36">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="37">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsTo</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Topic</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="38">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="39"/>
+      <line no="40">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">users</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="41">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">User</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="42">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="43"/>
+      <line no="44">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">creator</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="45">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">User</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="46">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">wherePivot</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'type_interaction_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="47">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="48"/>
+      <line no="49">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">likes</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="50">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">User</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="51">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">wherePivot</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'type_interaction_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">2</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="52">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="53"/>
+      <line no="54">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">comments</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="55">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">User</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="56">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">wherePivot</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'type_interaction_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">3</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">wherePivotNull</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions.deleted_at'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="57">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="58"/>
+      <line no="59">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">postComments</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">HasMany</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="60">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">hasMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Interaction</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="61">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">where</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'type_interaction_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">3</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="62">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">with</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'user'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="63">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="64">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">shares</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="65">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">User</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="66">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">wherePivot</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'type_interaction_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">4</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="67">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="68"/>
+      <line no="69">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">interactions</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="70">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="71">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">hasMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Interaction</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="72">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="73"/>
+      <line no="74">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">medias</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="75">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="76">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">hasMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Media</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="77">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="78"/>
+      <line no="79">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">sectors</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">BelongsToMany</token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="80">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">belongsToMany</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">Sector</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_CLASS">class</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'sector_post'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'post_id'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'sector_id'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="81">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="82"/>
+      <line no="83">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">postWithMostInteractions</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="84">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="85">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Post</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">withCount</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="86">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">orderBy</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'interactions_count'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'desc'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="87">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">first</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="88">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="89">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="90"/>
+    </source>
+  </file>
+</phpunit>

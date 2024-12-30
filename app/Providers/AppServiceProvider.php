@@ -50,21 +50,21 @@ class AppServiceProvider extends ServiceProvider
 
         Response::macro('notFoundId',
         function ($message=null) {
-            Log::warning(Route::currentRouteAction()." ID not found");
+            // Log::warning(Route::currentRouteAction()." ID not found");
             return response()->json([
                 'status' => false,
-                'message' => $message?:"Unknown ID",
+                'message' => $message ?? 'ID not found',
             ], 404);
         });
 
         Response::macro('notFound',
-            function ($message) {
-                Log::warning(Route::currentRouteAction()." failed, Not found");
-                return response()->json([
-                    'success' => false,
-                    'message' => $message,
-                ], 404);
-            });
+        function ($message=null) {
+            // Log::warning(Route::currentRouteAction()." failed, Not found");
+            return response()->json([
+                'status' => false,
+                'message' => $message ?? 'Resource not found',
+            ], 404);
+        });
     }
 
 }

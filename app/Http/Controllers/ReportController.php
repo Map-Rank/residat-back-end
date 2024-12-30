@@ -62,15 +62,6 @@ class ReportController extends Controller
         return view('reports.migration', compact('zones'));
     }
 
-    public function create(){
-        $types = ["DROUGHT", "FLOOD", "WATER_STRESS"];
-        $metricTypes = MetricType::all();
-
-        $zones = Zone::query()->where('level_id', 4)->get();
-
-        return view('reports.create', compact('types', 'zones', 'metricTypes'));
-    }
-
     public function createHealth(){
 
         // Récupérer l'utilisateur connecté

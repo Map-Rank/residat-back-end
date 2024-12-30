@@ -35,21 +35,17 @@ class CustomVerificationNotificationTest extends TestCase
 
     public function test_email_contains_verification_url_and_otp_code()
     {
-        // Crée un utilisateur de test
         $user = User::factory()->create([
             'email_verified_at' => null,
         ]);
 
-        // Mock des notifications
         Notification::fake();
 
-        // Envoie la notification
-        $user->notify(new CustomVerificationNotification());
+        $user->notify(new \App\Notifications\CustomVerificationNotification());
 
-        // Vérifie que l'e-mail contient l'URL de vérification et le code OTP
         Notification::assertSentTo(
-            [$user], 
-            CustomVerificationNotification::class,
+            [$user],
+            \App\Notifications\CustomVerificationNotification::class,
             function ($notification, $channels) use ($user) {
                 $mailData = $notification->toMail($user)->viewData;
 
@@ -63,7 +59,7 @@ class CustomVerificationNotificationTest extends TestCase
                 );
 
                 return $mailData['verificationUrl'] === $expectedUrl &&
-                       $mailData['data']['id'] === $user->id;
+                    $mailData['data']['id'] === $user->id;
             }
         );
     }

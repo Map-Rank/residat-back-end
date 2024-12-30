@@ -2,17 +2,14 @@
 
 namespace Tests\Feature;
 
-use Mockery;
-use Tests\TestCase;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\Zone;
-use App\Models\Notification;
-use App\Service\UtilService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class NotificationControllerTest extends TestCase
 {
@@ -23,28 +20,28 @@ class NotificationControllerTest extends TestCase
     {
         // Crée un utilisateur admin
         $user = User::factory()->admin()->create();
-        
+
         // Crée une zone et assigne-la à l'utilisateur
         $zone = Zone::factory()->create();
         $user->zone_id = $zone->id;
         $user->save();
-        
+
         // Crée des notifications pour ce user et sa zone
         $notifications = Notification::factory()->count(5)->create([
             'user_id' => $user->id,
             'zone_id' => $zone->id,
         ]);
-        
+
         // Agit en tant que cet utilisateur
         $this->actingAs($user, 'sanctum');
-        
+
         // Fait la requête pour obtenir les notifications
         $response = $this->getJson('/api/notifications?page=0&size=10');
 
         // Vérifie le statut de la réponse et le message JSON attendu
         $response->assertStatus(200)
-                ->assertJsonFragment(['message'=>'Notifications charged successfully']);
-        
+            ->assertJsonFragment(['message' => 'Notifications charged successfully']);
+
         // Vérifie que les notifications sont retournées
         $response->assertJsonCount(5, 'data'); // Assure que 5 notifications sont présentes dans la réponse
     }
@@ -54,10 +51,10 @@ class NotificationControllerTest extends TestCase
     {
         // Désactive le middleware pour ce test spécifique
         $this->withoutMiddleware();
-        
+
         $response = $this->getJson('/api/notifications?page=0&size=10');
 
-        $response->assertStatus(403)->assertJsonFragment(['message'=>'User not authenticated']);
+        $response->assertStatus(403)->assertJsonFragment(['message' => 'User not authenticated']);
     }
 
     /** @test */
@@ -67,7 +64,7 @@ class NotificationControllerTest extends TestCase
         $user = User::first();
 
         // Si aucun utilisateur n'existe, créez-en un
-        if (!$user) {
+        if (! $user) {
             $user = User::factory()->council()->create();
         }
 
@@ -112,13 +109,59 @@ class NotificationControllerTest extends TestCase
             'content_en' => 'This is a test notification content EN',
             'content_fr' => 'This is a test notification content FR',
             'user_id' => $user->id,
-            'image' => Storage::url('notifications/' . $imageName),
+            'image' => Storage::url('notifications/'.$imageName),
         ]);
 
         // Vérifier que le fichier a été stocké
-        Storage::disk('public')->assertExists('notifications/' . $imageName);
+        Storage::disk('public')->assertExists('notifications/'.$imageName);
     }
 
+    /** @test */
+    public function it_returns_notifications_for_user_zone_and_descendants()
+    {
+        User::query()->delete();
+        
+        $user = User::first();
+
+        if (!$user) {
+            $user = User::factory()->council()->create([
+                'email'=>"test@example"
+            ]);
+        }
+
+        // Agit en tant que cet utilisateur
+        $this->actingAs($user, 'sanctum');
+
+        $zone = Zone::factory()->create();
+        $childZone = Zone::factory()->create(['parent_id' => $zone->id]);
+        $user->zone_id = $zone->id;
+        $user->save();
+
+        // Crée des notifications pour la zone et ses descendants
+        $notifications = Notification::factory()->count(3)->create(['zone_id' => $zone->id]);
+        $childNotifications = Notification::factory()->count(2)->create(['zone_id' => $childZone->id]);
+
+        $this->actingAs($user, 'sanctum');
+
+        // Fait une requête pour les notifications
+        $response = $this->getJson('/api/notifications?page=0&size=10');
+
+        $response->assertStatus(200)
+            ->assertJsonFragment(['message' => 'Notifications charged successfully'])
+            ->assertJsonCount(5, 'data');
+    }
+
+    /** @test */
+    public function it_returns_error_for_unauthenticated_user()
+    {
+        Auth::logout();
+
+        $this->withoutMiddleware();
+
+        $response = $this->getJson('/api/notifications');
+
+        $response->assertStatus(403)->assertJsonFragment(['message' => 'User not authenticated']);
+    }
 
     // /** @test */
     // public function it_cannot_create_notification_without_authentication()

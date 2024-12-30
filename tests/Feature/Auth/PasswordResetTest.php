@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -13,12 +14,6 @@ class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
-    // public function test_reset_password_link_screen_can_be_rendered(): void
-    // {
-    //     $response = $this->get('/forgot-password');
-
-    //     $response->assertStatus(200);
-    // }
 
     public function test_reset_password_link_can_be_requested(): void
     {
@@ -90,5 +85,77 @@ class PasswordResetTest extends TestCase
 
             return true;
         });
+    }
+
+    public function test_old_password_is_incorrect()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::factory()->create([
+            'email' => 'user@example.com',
+            'password' => Hash::make('oldpassword')
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->putJson('/api/password/update', [
+            'old_password' => 'wrongpassword', // Ancien mot de passe incorrect
+            'password' => 'newpassword',
+            'password_confirmation' => 'newpassword',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['old_password']);
+        $response->assertJsonFragment([
+            'old_password' => ['L\'ancien mot de passe est incorrect.']
+        ]);
+    }
+
+    public function test_passwords_do_not_match()
+    {
+        $this->withExceptionHandling();
+        
+        $user = User::factory()->create([
+            'email' => 'user@example.com',
+            'password' => Hash::make('oldpassword')
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->putJson('/api/password/update', [
+            'old_password' => 'oldpassword', // Ancien mot de passe correct
+            'password' => 'newpassword',
+            'password_confirmation' => 'differentpassword', // Les mots de passe ne correspondent pas
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['password']);
+        $response->assertJsonFragment([
+            'password' => ['The password field confirmation does not match.']
+        ]);
+    }
+
+    public function test_password_update_successful()
+    {
+        $user = User::factory()->create([
+            'email' => 'user@example.com',
+            'password' => Hash::make('oldpassword')
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->putJson('/api/password/update', [
+            'old_password' => 'oldpassword', // Ancien mot de passe correct
+            'password' => 'newpassword',
+            'password_confirmation' => 'newpassword', // Les mots de passe correspondent
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'message' => 'Le mot de passe a été mis à jour avec succès.'
+        ]);
+
+        // Vérifier que le mot de passe a bien été mis à jour dans la base de données
+        $this->assertTrue(Hash::check('newpassword', $user->fresh()->password));
     }
 }

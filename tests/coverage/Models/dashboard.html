@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for C:\laragon\www\residat-back-end\app\Models</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css?v=10.1.14" rel="stylesheet" type="text/css">
+  <link href="../_css/nv.d3.min.css?v=10.1.14" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css?v=10.1.14" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">C:\laragon\www\residat-back-end\app</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Models</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Organization.php.html#15">App\Models\Organization</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Package.php.html#9">App\Models\Package</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Payment.php.html#9">App\Models\Payment</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ReportItem.php.html#10">App\Models\ReportItem</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SectorPost.php.html#11">App\Models\SectorPost</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SubMetricType.php.html#10">App\Models\SubMetricType</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserSubscription.php.html#24">App\Models\UserSubscription</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vector.php.html#11">App\Models\Vector</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="VectorKey.php.html#10">App\Models\VectorKey</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="WeatherPrediction.php.html#9">App\Models\WeatherPrediction</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#15">App\Models\Zone</a></td><td class="text-right">40%</td></tr>
+       <tr><td><a href="User.php.html#40">App\Models\User</a></td><td class="text-right">61%</td></tr>
+       <tr><td><a href="Interaction.php.html#23">App\Models\Interaction</a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Report.php.html#12">App\Models\Report</a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Sector.php.html#11">App\Models\Sector</a></td><td class="text-right">80%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Interaction.php.html#39"><abbr title="App\Models\Interaction::post">post</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Organization.php.html#21"><abbr title="App\Models\Organization::users">users</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Package.php.html#29"><abbr title="App\Models\Package::subscriptions">subscriptions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Payment.php.html#30"><abbr title="App\Models\Payment::subscription">subscription</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Report.php.html#26"><abbr title="App\Models\Report::items">items</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ReportItem.php.html#16"><abbr title="App\Models\ReportItem::subMetricType">subMetricType</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="ReportItem.php.html#20"><abbr title="App\Models\ReportItem::report">report</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Sector.php.html#21"><abbr title="App\Models\Sector::events">events</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SectorPost.php.html#15"><abbr title="App\Models\SectorPost::post">post</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SectorPost.php.html#19"><abbr title="App\Models\SectorPost::sector">sector</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="SubMetricType.php.html#16"><abbr title="App\Models\SubMetricType::metricType">metricType</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#99"><abbr title="App\Models\User::posts">posts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#110"><abbr title="App\Models\User::likes">likes</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#115"><abbr title="App\Models\User::comments">comments</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#146"><abbr title="App\Models\User::subscriptions">subscriptions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#151"><abbr title="App\Models\User::activeSubscription">activeSubscription</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="User.php.html#207"><abbr title="App\Models\User::currentSubscription">currentSubscription</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserSubscription.php.html#30"><abbr title="App\Models\UserSubscription::user">user</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="UserSubscription.php.html#35"><abbr title="App\Models\UserSubscription::subscription">subscription</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vector.php.html#17"><abbr title="App\Models\Vector::zone">zone</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vector.php.html#21"><abbr title="App\Models\Vector::report">report</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vector.php.html#25"><abbr title="App\Models\Vector::keys">keys</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Vector.php.html#29"><abbr title="App\Models\Vector::vectorKeys">vectorKeys</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="VectorKey.php.html#16"><abbr title="App\Models\VectorKey::vector">vector</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="WeatherPrediction.php.html#14"><abbr title="App\Models\WeatherPrediction::zone">zone</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#35"><abbr title="App\Models\Zone::users">users</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#40"><abbr title="App\Models\Zone::posts">posts</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#45"><abbr title="App\Models\Zone::medias">medias</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#54"><abbr title="App\Models\Zone::events">events</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#59"><abbr title="App\Models\Zone::notifications">notifications</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Zone.php.html#64"><abbr title="App\Models\Zone::compagnies">compagnies</abbr></a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 10.1.14</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.12</a> and <a href="https://phpunit.de/">PHPUnit 10.5.24</a> at Fri Dec 27 10:24:11 UTC 2024.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/jquery.min.js?v=10.1.14" type="text/javascript"></script>
+  <script src="../_js/d3.min.js?v=10.1.14" type="text/javascript"></script>
+  <script src="../_js/nv.d3.min.js?v=10.1.14" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([10,0,0,0,0,1,0,2,1,1,0,12], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([31,0,0,0,0,0,0,0,0,0,0,54], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Company.php.html#9\">App\\Models\\Company<\/a>"],[100,3,"<a href=\"Disaster.php.html#10\">App\\Models\\Disaster<\/a>"],[100,3,"<a href=\"Event.php.html#13\">App\\Models\\Event<\/a>"],[100,1,"<a href=\"Feedback.php.html#9\">App\\Models\\Feedback<\/a>"],[66.66666666666666,3,"<a href=\"Interaction.php.html#23\">App\\Models\\Interaction<\/a>"],[100,1,"<a href=\"Level.php.html#16\">App\\Models\\Level<\/a>"],[100,1,"<a href=\"Media.php.html#18\">App\\Models\\Media<\/a>"],[100,0,"<a href=\"MetricType.php.html#9\">App\\Models\\MetricType<\/a>"],[100,2,"<a href=\"Notification.php.html#11\">App\\Models\\Notification<\/a>"],[0,1,"<a href=\"Organization.php.html#15\">App\\Models\\Organization<\/a>"],[0,1,"<a href=\"Package.php.html#9\">App\\Models\\Package<\/a>"],[0,1,"<a href=\"Payment.php.html#9\">App\\Models\\Payment<\/a>"],[100,12,"<a href=\"Post.php.html#24\">App\\Models\\Post<\/a>"],[75,4,"<a href=\"Report.php.html#12\">App\\Models\\Report<\/a>"],[0,2,"<a href=\"ReportItem.php.html#10\">App\\Models\\ReportItem<\/a>"],[80,3,"<a href=\"Sector.php.html#11\">App\\Models\\Sector<\/a>"],[0,2,"<a href=\"SectorPost.php.html#11\">App\\Models\\SectorPost<\/a>"],[0,1,"<a href=\"SubMetricType.php.html#10\">App\\Models\\SubMetricType<\/a>"],[100,4,"<a href=\"Subscription.php.html#19\">App\\Models\\Subscription<\/a>"],[100,0,"<a href=\"Topic.php.html#15\">App\\Models\\Topic<\/a>"],[100,1,"<a href=\"TypeInteraction.php.html#17\">App\\Models\\TypeInteraction<\/a>"],[61.76470588235294,20,"<a href=\"User.php.html#40\">App\\Models\\User<\/a>"],[0,2,"<a href=\"UserSubscription.php.html#24\">App\\Models\\UserSubscription<\/a>"],[0,4,"<a href=\"Vector.php.html#11\">App\\Models\\Vector<\/a>"],[0,1,"<a href=\"VectorKey.php.html#10\">App\\Models\\VectorKey<\/a>"],[0,1,"<a href=\"WeatherPrediction.php.html#9\">App\\Models\\WeatherPrediction<\/a>"],[40,10,"<a href=\"Zone.php.html#15\">App\\Models\\Zone<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[100,1,"<a href=\"Company.php.html#23\">App\\Models\\Company::zone<\/a>"],[100,1,"<a href=\"Disaster.php.html#18\">App\\Models\\Disaster::zone<\/a>"],[100,1,"<a href=\"Disaster.php.html#22\">App\\Models\\Disaster::getStartPeriodAttribute<\/a>"],[100,1,"<a href=\"Disaster.php.html#27\">App\\Models\\Disaster::getEndPeriodAttribute<\/a>"],[100,1,"<a href=\"Event.php.html#20\">App\\Models\\Event::user<\/a>"],[100,1,"<a href=\"Event.php.html#25\">App\\Models\\Event::sector<\/a>"],[100,1,"<a href=\"Event.php.html#30\">App\\Models\\Event::zone<\/a>"],[100,1,"<a href=\"Feedback.php.html#23\">App\\Models\\Feedback::user<\/a>"],[100,1,"<a href=\"Interaction.php.html#29\">App\\Models\\Interaction::typeInteraction<\/a>"],[100,1,"<a href=\"Interaction.php.html#34\">App\\Models\\Interaction::user<\/a>"],[0,1,"<a href=\"Interaction.php.html#39\">App\\Models\\Interaction::post<\/a>"],[100,1,"<a href=\"Level.php.html#22\">App\\Models\\Level::zones<\/a>"],[100,1,"<a href=\"Media.php.html#24\">App\\Models\\Media::post<\/a>"],[100,1,"<a href=\"Notification.php.html#34\">App\\Models\\Notification::zone<\/a>"],[100,1,"<a href=\"Notification.php.html#42\">App\\Models\\Notification::user<\/a>"],[0,1,"<a href=\"Organization.php.html#21\">App\\Models\\Organization::users<\/a>"],[0,1,"<a href=\"Package.php.html#29\">App\\Models\\Package::subscriptions<\/a>"],[0,1,"<a href=\"Payment.php.html#30\">App\\Models\\Payment::subscription<\/a>"],[100,1,"<a href=\"Post.php.html#30\">App\\Models\\Post::zone<\/a>"],[100,1,"<a href=\"Post.php.html#35\">App\\Models\\Post::topic<\/a>"],[100,1,"<a href=\"Post.php.html#40\">App\\Models\\Post::users<\/a>"],[100,1,"<a href=\"Post.php.html#44\">App\\Models\\Post::creator<\/a>"],[100,1,"<a href=\"Post.php.html#49\">App\\Models\\Post::likes<\/a>"],[100,1,"<a href=\"Post.php.html#54\">App\\Models\\Post::comments<\/a>"],[100,1,"<a href=\"Post.php.html#59\">App\\Models\\Post::postComments<\/a>"],[100,1,"<a href=\"Post.php.html#64\">App\\Models\\Post::shares<\/a>"],[100,1,"<a href=\"Post.php.html#69\">App\\Models\\Post::interactions<\/a>"],[100,1,"<a href=\"Post.php.html#74\">App\\Models\\Post::medias<\/a>"],[100,1,"<a href=\"Post.php.html#79\">App\\Models\\Post::sectors<\/a>"],[100,1,"<a href=\"Post.php.html#83\">App\\Models\\Post::postWithMostInteractions<\/a>"],[100,1,"<a href=\"Report.php.html#18\">App\\Models\\Report::zone<\/a>"],[100,1,"<a href=\"Report.php.html#22\">App\\Models\\Report::creator<\/a>"],[0,1,"<a href=\"Report.php.html#26\">App\\Models\\Report::items<\/a>"],[100,1,"<a href=\"Report.php.html#30\">App\\Models\\Report::vector<\/a>"],[0,1,"<a href=\"ReportItem.php.html#16\">App\\Models\\ReportItem::subMetricType<\/a>"],[0,1,"<a href=\"ReportItem.php.html#20\">App\\Models\\ReportItem::report<\/a>"],[100,1,"<a href=\"Sector.php.html#17\">App\\Models\\Sector::posts<\/a>"],[0,1,"<a href=\"Sector.php.html#21\">App\\Models\\Sector::events<\/a>"],[100,1,"<a href=\"Sector.php.html#26\">App\\Models\\Sector::sectorsWithMostPosts<\/a>"],[0,1,"<a href=\"SectorPost.php.html#15\">App\\Models\\SectorPost::post<\/a>"],[0,1,"<a href=\"SectorPost.php.html#19\">App\\Models\\SectorPost::sector<\/a>"],[0,1,"<a href=\"SubMetricType.php.html#16\">App\\Models\\SubMetricType::metricType<\/a>"],[100,1,"<a href=\"Subscription.php.html#38\">App\\Models\\Subscription::user<\/a>"],[100,1,"<a href=\"Subscription.php.html#44\">App\\Models\\Subscription::package<\/a>"],[100,1,"<a href=\"Subscription.php.html#50\">App\\Models\\Subscription::zone<\/a>"],[100,1,"<a href=\"Subscription.php.html#56\">App\\Models\\Subscription::payments<\/a>"],[100,1,"<a href=\"TypeInteraction.php.html#23\">App\\Models\\TypeInteraction::interactions<\/a>"],[100,1,"<a href=\"User.php.html#94\">App\\Models\\User::zone<\/a>"],[0,1,"<a href=\"User.php.html#99\">App\\Models\\User::posts<\/a>"],[100,1,"<a href=\"User.php.html#105\">App\\Models\\User::myPosts<\/a>"],[0,1,"<a href=\"User.php.html#110\">App\\Models\\User::likes<\/a>"],[0,1,"<a href=\"User.php.html#115\">App\\Models\\User::comments<\/a>"],[100,1,"<a href=\"User.php.html#120\">App\\Models\\User::interactions<\/a>"],[100,1,"<a href=\"User.php.html#126\">App\\Models\\User::likeInteractions<\/a>"],[100,1,"<a href=\"User.php.html#133\">App\\Models\\User::commentInteractions<\/a>"],[100,1,"<a href=\"User.php.html#139\">App\\Models\\User::shareInteractions<\/a>"],[0,1,"<a href=\"User.php.html#146\">App\\Models\\User::subscriptions<\/a>"],[0,1,"<a href=\"User.php.html#151\">App\\Models\\User::activeSubscription<\/a>"],[100,1,"<a href=\"User.php.html#157\">App\\Models\\User::sendEmailVerificationNotification<\/a>"],[100,1,"<a href=\"User.php.html#162\">App\\Models\\User::events<\/a>"],[100,1,"<a href=\"User.php.html#167\">App\\Models\\User::followers<\/a>"],[100,1,"<a href=\"User.php.html#172\">App\\Models\\User::following<\/a>"],[100,1,"<a href=\"User.php.html#177\">App\\Models\\User::notifications<\/a>"],[100,1,"<a href=\"User.php.html#182\">App\\Models\\User::feedbacks<\/a>"],[100,1,"<a href=\"User.php.html#193\">App\\Models\\User::sendPasswordResetNotification<\/a>"],[100,1,"<a href=\"User.php.html#198\">App\\Models\\User::postCount<\/a>"],[0,1,"<a href=\"User.php.html#207\">App\\Models\\User::currentSubscription<\/a>"],[0,1,"<a href=\"UserSubscription.php.html#30\">App\\Models\\UserSubscription::user<\/a>"],[0,1,"<a href=\"UserSubscription.php.html#35\">App\\Models\\UserSubscription::subscription<\/a>"],[0,1,"<a href=\"Vector.php.html#17\">App\\Models\\Vector::zone<\/a>"],[0,1,"<a href=\"Vector.php.html#21\">App\\Models\\Vector::report<\/a>"],[0,1,"<a href=\"Vector.php.html#25\">App\\Models\\Vector::keys<\/a>"],[0,1,"<a href=\"Vector.php.html#29\">App\\Models\\Vector::vectorKeys<\/a>"],[0,1,"<a href=\"VectorKey.php.html#16\">App\\Models\\VectorKey::vector<\/a>"],[0,1,"<a href=\"WeatherPrediction.php.html#14\">App\\Models\\WeatherPrediction::zone<\/a>"],[100,1,"<a href=\"Zone.php.html#21\">App\\Models\\Zone::parent<\/a>"],[100,1,"<a href=\"Zone.php.html#26\">App\\Models\\Zone::children<\/a>"],[100,1,"<a href=\"Zone.php.html#30\">App\\Models\\Zone::level<\/a>"],[0,1,"<a href=\"Zone.php.html#35\">App\\Models\\Zone::users<\/a>"],[0,1,"<a href=\"Zone.php.html#40\">App\\Models\\Zone::posts<\/a>"],[0,1,"<a href=\"Zone.php.html#45\">App\\Models\\Zone::medias<\/a>"],[100,1,"<a href=\"Zone.php.html#50\">App\\Models\\Zone::vector<\/a>"],[0,1,"<a href=\"Zone.php.html#54\">App\\Models\\Zone::events<\/a>"],[0,1,"<a href=\"Zone.php.html#59\">App\\Models\\Zone::notifications<\/a>"],[0,1,"<a href=\"Zone.php.html#64\">App\\Models\\Zone::compagnies<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

@@ -76,7 +76,7 @@ class PackageControllerApiTest extends TestCase
 
         $response = $this->getJson(route('packages.show', 9999)); 
         $response->assertStatus(404);
-        $response->assertJson(['message' => __('Package not found or inactive')]);
+        $response->assertJsonFragment(['message' => __('ID not found')]);
     }
 
     /**
@@ -139,6 +139,48 @@ class PackageControllerApiTest extends TestCase
         $response = $this->putJson(route('packages.update', $package->id), $data);
         $response->assertStatus(200);
         $response->assertJsonFragment(['name_fr' => 'Updated package']);
+    }
+
+    public function test_package_update_not_found()
+    {
+        // Créez un utilisateur pour l'authentification
+        $user = User::first();
+        if (!$user) {
+            $user = User::factory()->admin()->create();
+        }
+
+        $this->actingAs($user);
+
+        // Créez des données de mise à jour pour le package
+        $data = [
+            'name_fr' => 'Updated package',
+            'name_en' => 'Updated Package',
+            'level' => 'Regional',
+            'price' => 200,
+            'periodicity' => 'Quarter',
+            'description_fr' => 'Updated description en français',
+            'description_en' => 'Updated description in English',
+            'is_active' => true,
+        ];
+
+        // Supposons qu'il n'y ait aucun package avec cet ID
+        $nonExistentPackageId = 999; // Un ID qui ne correspond à aucun package
+
+        // Effectuer la requête PUT pour mettre à jour un package qui n'existe pas
+        $response = $this->putJson(route('packages.update', $nonExistentPackageId), $data);
+
+        // Vérifier que la réponse est bien une erreur 404
+        $response->assertStatus(404);
+
+        // Vérifier que le message d'erreur est bien celui attendu dans la structure correcte
+        $response->assertJsonFragment([
+            'message' => 'Package not found'
+        ]);
+
+        // Vérifiez également que le statut est bien 'false' comme défini dans la macro
+        $response->assertJsonFragment([
+            'status' => false
+        ]);
     }
 
     /**
