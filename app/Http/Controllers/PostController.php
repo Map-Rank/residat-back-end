@@ -100,9 +100,9 @@ class PostController extends Controller
             }
 
             // Supprimer les relations associées
-            $post->likes()->delete();
-            $post->comments()->delete();
-            $post->shares()->delete();
+            $post->likes()->detach();
+            $post->comments()->detach();
+            $post->shares()->detach();
             $post->sectors()->detach();
             $post->users()->detach();
 

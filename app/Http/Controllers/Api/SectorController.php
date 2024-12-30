@@ -23,11 +23,11 @@ class SectorController extends Controller
      */
     public function index(Request $request) : JsonResponse {
         $validator = Validator::make($request->all(), [
-            'name' => ['sometimes', 'string'],
+            'name' => ['sometimes', 'string', 'regex:/^[^\d]*$/'],
         ]);
 
         if ($validator->fails()) {
-            return response()->error($validator->failed(), __('Bad parameters'), 400);
+            return response()->errors($validator->failed(), __('Bad parameters'), 400);
         }
 
         $validated = $validator->validated();

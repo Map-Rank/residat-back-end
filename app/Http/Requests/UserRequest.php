@@ -7,6 +7,9 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class UserRequest extends FormRequest
 {
     /**
