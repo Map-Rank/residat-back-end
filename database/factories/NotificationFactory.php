@@ -31,7 +31,7 @@ class NotificationFactory extends Factory
             'zone_id' => function () {
                 return $this->getRandomSubdivisionId();
             },
-            'user_id' => User::factory(),
+            'user_id' => User::first(),
             'content_en' => $this->faker->paragraph(),
             'content_fr' => $this->faker->paragraph(),
             'image' => 'image.jpg', 

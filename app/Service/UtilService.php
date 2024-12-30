@@ -313,4 +313,98 @@ class UtilService
             echo 'Error sending multicast message: '.$e->getMessage();
         }
     }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public static function groupDailyWeatherData($hourlyData) {
+        // Extract the arrays from the input
+        $times = $hourlyData["time"] ?? [];
+        $temperaturesMax = $hourlyData["temperature_2m_max"] ?? [];
+        $temperaturesMin = $hourlyData["temperature_2m_min"] ?? [];
+        $precipitationSums = $hourlyData["precipitation_sum"] ?? [];
+        $winSpeedMaxs = $hourlyData["wind_speed_10m_max"] ?? [];
+        
+        $mergedData = [];
+        $count = min(count($times), count($temperaturesMax), count($temperaturesMin), count($precipitationSums), count($winSpeedMaxs));
+        
+        // Merge the arrays into the desired structure
+        for ($i = 0; $i < $count; $i++) {
+            $mergedData[] = [
+                "time" => $times[$i],
+                "temperature_2m_max" => $temperaturesMax[$i],
+                "temperature_2m_min" => $temperaturesMin[$i],
+                "precipitation_sum" => $precipitationSums[$i],
+                "wind_speed_10m_max" => $winSpeedMaxs[$i]
+            ];
+        }
+
+        return $mergedData;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public static function mergeDailyAndHourly($hourlyData, $dailyData) {
+        
+        $mergedData = [];
+        $count = min(count($hourlyData), count($dailyData));
+        
+        // Merge the arrays into the desired structure
+        for ($i = 0; $i < $count; $i++) {
+            $mergedData[] = [
+                "date" => $hourlyData[$i]['date'],
+                "temperature_2m_max" => $dailyData[$i]['temperature_2m_max'],
+                "temperature_2m_min" => $dailyData[$i]['temperature_2m_min'],
+                "precipitation_sum" => $dailyData[$i]['precipitation_sum'],
+                "wind_speed_10m_max" => $dailyData[$i]['wind_speed_10m_max'],
+                "average_humidity" => $hourlyData[$i]["average_humidity"],
+                "average_soil_moisture" => $hourlyData[$i]["average_soil_moisture"]
+            ];
+        }
+
+        return $mergedData;
+    }
+
+    // Get the fetched hourly data and yeild that in the an average daily data
+    /**
+     * @codeCoverageIgnore
+     */
+    public static function groupAndAverageDailyData($hourlyData) {
+        // Extract the arrays from the input
+        $times = $hourlyData["time"] ?? [];
+        $humidities = $hourlyData["relative_humidity_2m"] ?? [];
+        $soilMoistures = $hourlyData["soil_moisture_0_to_7cm"] ?? [];
+        
+        $dailyData = [];
+
+        // Iterate through the time array
+        foreach ($times as $index => $timestamp) {
+            $date = substr($timestamp, 0, 10); // Extract the date part (YYYY-MM-DD)
+            
+            if (!isset($dailyData[$date])) {
+                $dailyData[$date] = [
+                    "humidity_sum" => 0,
+                    "moisture_sum" => 0,
+                    "count" => 0
+                ];
+            }
+
+            $dailyData[$date]["humidity_sum"] += $humidities[$index] ?? 0;
+            $dailyData[$date]["moisture_sum"] += $soilMoistures[$index] ?? 0;
+            $dailyData[$date]["count"]++;
+        }
+
+        // Calculate averages for each day
+        $averagedData = [];
+        foreach ($dailyData as $date => $data) {
+            $averagedData[] = [
+                "date" => $date,
+                "average_humidity" => $data["humidity_sum"] / $data["count"],
+                "average_soil_moisture" => $data["moisture_sum"] / $data["count"]
+            ];
+        }
+
+        return $averagedData;
+    }
 }

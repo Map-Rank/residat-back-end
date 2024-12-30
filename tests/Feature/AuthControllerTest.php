@@ -7,9 +7,13 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Zone;
 use App\Mail\WelcomeEmail;
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
@@ -19,6 +23,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class AuthControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        RateLimiter::clear($this->throttleKey('test@example.com'));
+    }
+
+    private function throttleKey($email): string
+    {
+        return strtolower($email) . '|' . request()->ip();
+    }
 
 
     public function testLogin()
@@ -37,6 +52,7 @@ class AuthControllerTest extends TestCase
 
         // we test the status after try to connect user we may have a status 200
         $response->assertStatus(200);
+        
 
         /**
          * now we check if the current user is already authenticated
@@ -57,33 +73,6 @@ class AuthControllerTest extends TestCase
             "status",
         ]);
     }
-
-    /**
-     * @test
-     */
-    // public function invalid_login_credentials()
-    // {
-    //     /**
-    //      * Create a user
-    //      */
-    //     User::factory()->create($this->dataLogin());
-
-    //     /**
-    //      * we send lose data
-    //      */
-    //     $payload = ['email' => 'fauxemail@email.com', 'password' => 'password'];
-
-    //     /**
-    //      * Now we try to connect the user with the the lose data
-    //      */
-    //     $response = $this->postJson('api/login', $payload);
-
-    //     /**
-    //      * we test the status after try to connect user we may have a status 422
-    //      */
-    //     $response->assertStatus(422);
-
-    // }
 
     public function testRegister()
     {
@@ -210,5 +199,203 @@ class AuthControllerTest extends TestCase
             'active' => 1,
             'verified' => 1,
         ];
+    }
+
+    public function test_user_can_login_with_email()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now()
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'token'
+                ],
+                'message',
+                'status'
+            ]);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    // Test de login avec numéro de téléphone
+    public function test_user_can_login_with_phone()
+    {
+        $user = User::factory()->create([
+            'phone' => '1234567890',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now()
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => '1234567890', // On utilise le champ email pour le téléphone
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertAuthenticatedAs($user);
+    }
+
+    // // Test de validation des champs requis
+    public function test_login_validation_rules()
+    {
+        $this->withExceptionHandling();
+
+        $response = $this->postJson('/api/login', []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['email', 'password']);
+
+        // Test avec fcm_token optionnel
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password')
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'fcm_token' => 'valid-token'
+        ]);
+
+        $response->assertStatus(200);
+    }
+
+    // Test de limitation de taux (rate limiting)
+    public function test_rate_limiting()
+    {
+        $this->withExceptionHandling();
+
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password')
+        ]);
+    
+        // Tenter de se connecter 5 fois avec des identifiants incorrects
+        for ($i = 0; $i < 5; $i++) {
+            $this->postJson('/api/login', [
+                'email' => 'test@example.com',
+                'password' => 'wrong_password',
+            ])->assertStatus(422)
+              ->assertJsonValidationErrors(['email']);
+        }
+    
+        // Faire une 6e tentative qui devrait activer le rate limiting
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrong_password',
+        ]);
+
+        // Récupérer le nombre de secondes restantes pour la tentative suivante
+        $secondsRemaining = RateLimiter::availableIn($this->throttleKey('test@example.com'));
+    
+        // Vérifiez le statut et le message de rate limiting
+        $response->assertStatus(422) 
+                 ->assertJsonFragment([
+                    'email' => ["Too many login attempts. Please try again in $secondsRemaining seconds."]
+                 ]);
+    }
+
+    // Test pour un utilisateur COUNCIL non vérifié
+    public function test_unverified_council_user_login()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+            'type' => 'COUNCIL',
+            'email_verified_at' => null
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'token',
+                    'verified'
+                ],
+                'message'
+            ])
+            ->assertJsonPath('data.verified', false);
+    }
+
+    // Test de mise à jour du FCM token
+    public function test_fcm_token_update()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now()
+        ]);
+
+        $fcmToken = 'new-fcm-token';
+        
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password',
+            'fcm_token' => $fcmToken
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertEquals($fcmToken, $user->fresh()->fcm_token);
+    }
+
+    // Test des informations de l'utilisateur dans la réponse
+    public function test_login_response_includes_user_data()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now()
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'password'
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'id',
+                    'email',
+                    'token'
+                ],
+                'message',
+                'status'
+            ]);
+    }
+
+    // Test des credentials invalides
+    public function test_invalid_credentials()
+    {
+        $this->withExceptionHandling();
+
+        User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('password')
+        ]);
+
+        $response = $this->postJson('/api/login', [
+            'email' => 'test@example.com',
+            'password' => 'wrong_password'
+        ]);
+
+        $response->assertStatus(422)
+        ->assertJsonValidationErrors(['email'])
+        ->assertJsonFragment([
+            'email' => ['These credentials do not match our records.'],
+        ]);
     }
 }

@@ -29,7 +29,7 @@ class PackageController extends Controller
         $package = Package::where('is_active', true)->find($id);
 
         if (!$package) {
-            return response()->errors([], __('Package not found or inactive'), 404);
+            return response()->notFoundId("ID not found");
         }
 
         return response()->success(new PackageResource($package), __('Package retrieved successfully'), 200);
@@ -49,8 +49,15 @@ class PackageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PackageRequest $request, Package $package)
+    public function update(PackageRequest $request, $packageId)
     {
+        // Vérifiez si le package existe
+        $package = Package::find($packageId);
+
+        if (!$package) {
+            return response()->notFound('Package not found');
+        }
+
         $validatedData = $request->validated();
         $package->update($validatedData);
 

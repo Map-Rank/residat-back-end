@@ -51,7 +51,7 @@ class WeatherFetchJob implements ShouldQueue
         ];
 
         // Construction de l'URL de l'API avec les paramètres
-        $url = "https://api.open-meteo.com/v1/forecast";
+        $url = "https://api.open-meteo.com/v1/archive";
         $queryParams = [
             'latitude' => $zone->latitude,
             'longitude' => $zone->longitude,
@@ -125,5 +125,70 @@ class WeatherFetchJob implements ShouldQueue
         }
 
 
+    }
+
+
+    function groupDailyWeatherData($hourlyData) {
+        // Extract the arrays from the input
+        $times = $hourlyData["time"] ?? [];
+        $temperaturesMax = $hourlyData["temperature_2m_max"] ?? [];
+        $temperaturesMin = $hourlyData["temperature_2m_min"] ?? [];
+        $precipitationSums = $hourlyData["precipitation_sum"] ?? [];
+        $winSpeedMaxs = $hourlyData["wind_speed_10m_max"] ?? [];
+        
+        $mergedData = [];
+        $count = min(count($times), count($humidities), count($soilMoistures));
+        
+        // Merge the arrays into the desired structure
+        for ($i = 0; $i < $count; $i++) {
+            $mergedData[] = [
+                "time" => $times[$i],
+                "temperature_2m_max" => $temperaturesMax[$i],
+                "temperature_2m_min" => $temperaturesMin[$i],
+                "precipitation_sum" => $precipitationSums[$i],
+                "wind_speed_10m_max" => $winSpeedMaxs[$i]
+            ];
+        }
+
+        return $mergedData;
+    }
+
+    // Get the fetched hourly data and yeild that in the an average daily data
+    function groupAndAverageDailyData($hourlyData) {
+        // Extract the arrays from the input
+        $times = $hourlyData["time"] ?? [];
+        $humidities = $hourlyData["relative_humidity_2m"] ?? [];
+        $soilMoistures = $hourlyData["soil_moisture_0_to_7cm"] ?? [];
+        
+        $dailyData = [];
+
+        // Iterate through the time array
+        foreach ($times as $index => $timestamp) {
+            $date = substr($timestamp, 0, 10); // Extract the date part (YYYY-MM-DD)
+            
+            if (!isset($dailyData[$date])) {
+                $dailyData[$date] = [
+                    "humidity_sum" => 0,
+                    "moisture_sum" => 0,
+                    "count" => 0
+                ];
+            }
+
+            $dailyData[$date]["humidity_sum"] += $humidities[$index] ?? 0;
+            $dailyData[$date]["moisture_sum"] += $soilMoistures[$index] ?? 0;
+            $dailyData[$date]["count"]++;
+        }
+
+        // Calculate averages for each day
+        $averagedData = [];
+        foreach ($dailyData as $date => $data) {
+            $averagedData[] = [
+                "date" => $date,
+                "average_humidity" => $data["humidity_sum"] / $data["count"],
+                "average_soil_moisture" => $data["moisture_sum"] / $data["count"]
+            ];
+        }
+
+        return $averagedData;
     }
 }
