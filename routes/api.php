@@ -5,6 +5,7 @@ use App\Models\Media;
 use App\Service\UtilService;
 use Illuminate\Http\Request;
 use App\Jobs\WeatherFetchJob;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PostController;
@@ -133,3 +134,121 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::post('packages', [PackageController::class, 'store'])->name('packages.store');
     Route::put('packages/{package}', [PackageController::class, 'update'])->name('packages.update');
     Route::delete('packages/{package}', [PackageController::class, 'destroy'])->name('packages.destroy');
+
+    Route::get('weather-test', function(Request $request){
+        ini_set('max_execution_time', 300); // 5 minutes
+        // $daily = [
+        //     'temperature_2m_max','temperature_2m_min','precipitation_sum','wind_speed_10m_max'
+        // ];
+
+        // $hourly = [
+        //     'relative_humidity_2m','soil_moisture_0_to_7cm'
+        // ];
+
+        // // Construction de l'URL de l'API avec les paramètres
+        // $url = "https://api.open-meteo.com/v1/archive";
+        // $queryParams = [
+        //     'latitude' => 10.3430104,
+        //     'longitude' => 15.2498056,
+        //     'start_date' => '2000-01-01', 
+        //     'end_date' => '2001-01-01',
+        //     'hourly' => implode(',', $hourly),
+        //     'daily' => implode(',', $daily),
+        //     'timezone' => 'Europe%2FBerlin'
+        // ];
+
+        // // Exécution de la requête GET
+        // $response = Http::timeout(600)->get("https://archive-api.open-meteo.com/v1/archive?latitude=10.3430104&longitude=15.2498056&start_date=2000-01-01&end_date=2001-01-01&hourly=relative_humidity_2m,soil_moisture_0_to_7cm&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=Europe%2FBerlin");
+
+        // // Vérification du succès de la requête
+        // if ($response->successful()) {
+        //     $object = ($response->json());
+        //     return $object;
+        // }else{
+        //     return $response;
+        // }
+
+        $url = "https://archive-api.open-meteo.com/v1/archive";
+        $queryParams = http_build_query([
+            'latitude' => "10.3430104",
+            'longitude' => "15.2498056",
+            'start_date' => '2000-01-01',
+            'end_date' => '2000-01-31',
+            'hourly' => 'relative_humidity_2m,soil_moisture_0_to_7cm',
+            'daily' => 'temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
+            // 'timezone' => 'Europe%2FBerlin',
+        ]);
+
+        // Initialize cURL
+        $curl = curl_init("$url?$queryParams");
+
+        // Set cURL options
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true, // Return the response as a string
+            CURLOPT_TIMEOUT => 600,         // Set a timeout
+            CURLOPT_HTTPHEADER => [
+                'Content-Type: application/json', // Set content type
+            ],
+        ]);
+
+        // Execute the cURL request
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+        // Check for errors
+        if (curl_errno($curl)) {
+            $error = curl_error($curl);
+            curl_close($curl);
+            return [
+                'success' => false,
+                'error' => $error,
+            ];
+        }
+
+        // Close cURL session
+        curl_close($curl);
+
+        // Parse and return the response
+        if ($httpCode === 200) {
+            $responseData = json_decode($response, true);
+            $dailyGroupedData = UtilService::groupDailyWeatherData($responseData['daily']);
+            $hourlyGroupedData = UtilService::groupAndAverageDailyData($responseData['hourly']);
+            $finalMerged = UtilService::mergeDailyAndHourly($hourlyGroupedData, $dailyGroupedData);
+
+            $filePath = storage_path('app/public/weather/weather_'.time().'.csv');
+            // $prediction = WeatherPrediction::create([
+            //     'zone_id' => $zone->id,
+            //     'date' => now(),
+            //     'path' => $filePath,
+            //     'created_at' => now(),
+            // ]);
+            $fileHeader = ['Date', 'temperature_max', 'temperature_min', 'precipitation', 'wind_speed_max',
+                'humidity_mean', 'soil_moisture'];
+
+            file_put_contents($filePath, implode(',', $fileHeader) . PHP_EOL);
+
+            // $filePath = $prediction->path;
+
+            $file = fopen($filePath, 'a');
+
+            foreach($finalMerged as $row){
+                fputcsv($file, $row);
+            }
+
+            // foreach ($errors as $row) {
+            
+            // }
+            fclose($file);
+            // $data = $responseData->data;
+            return [
+                'success' => true,
+                'final' => $finalMerged,
+                'file' => $filePath
+            ];
+        } else {
+            return [
+                'success' => false,
+                'error' => "HTTP Error: $httpCode",
+            ];
+        }
+    });
