@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Resources\PackageResource;
+use App\Http\Resources\PaymentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubscriptionResource extends JsonResource
@@ -28,6 +29,7 @@ class SubscriptionResource extends JsonResource
             'duration' => $this->calculateDuration(),
             'is_active' => $this->isActive(),
             'days_remaining' => $this->calculateDaysRemaining(),
+            'payments' => PaymentResource::collection($this->payments),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

@@ -23,23 +23,82 @@ class SubscriptionControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_lists_subscriptions_for_authenticated_user()
+    public function it_lists_subscriptions_for_authenticated_user_with_payments()
     {
-        $user = User::first();
+        // Crée un utilisateur ou utilise un existant
+        $user = User::first() ?: User::factory()->create();
 
-        // Si aucun utilisateur n'existe, créez-en un
-        if (! $user) {
-            $user = User::factory()->create();
-        }
+        // Crée des abonnements pour l'utilisateur
+        $subscriptions = Subscription::factory()
+            ->count(3)
+            ->for($user)
+            ->create(['status' => 'active']);
 
-        $subscriptions = Subscription::factory()->count(3)->for($user)->create(['status' => 'active']);
+        // Ajoute des paiements pour chaque abonnement
+        $subscriptions->each(function ($subscription, $index) {
+            $subscription->payments()->createMany([
+                [
+                    'amount' => 100.00,
+                    'currency' => 'XAF',
+                    'transaction_id' => 'TXN12345-' . $index . '-1', // Transaction ID unique
+                    'payment_method' => 'mobile_money',
+                    'status' => 'completed',
+                    'payment_date' => now(),
+                    'payment_details' => 'Test payment 1',
+                ],
+                [
+                    'amount' => 200.00,
+                    'currency' => 'XAF',
+                    'transaction_id' => 'TXN12345-' . $index . '-2', // Transaction ID unique
+                    'payment_method' => 'cash',
+                    'status' => 'completed',
+                    'payment_date' => now(),
+                    'payment_details' => 'Test payment 2',
+                ],
+            ]);
+        });
 
+        // Agir en tant qu'utilisateur authentifié
         $this->actingAs($user);
 
+        // Faire une requête GET à l'endpoint
         $response = $this->getJson(route('subscriptions.index'));
 
+        // Vérifier la réponse
         $response->assertStatus(200)
-            ->assertJsonCount(3, 'data');
+            ->assertJsonCount(3, 'data') // Vérifie le nombre d'abonnements
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'user_id',
+                        'package',
+                        'zone',
+                        'start_date',
+                        'end_date',
+                        'status',
+                        'notes',
+                        'payments' => [
+                            '*' => [
+                                'id',
+                                'amount',
+                                'currency',
+                                'transaction_id',
+                                'payment_method',
+                                'status',
+                                'payment_date',
+                                'payment_details',
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+
+        // Vérifie que les données des paiements sont correctes
+        $responseData = $response->json('data');
+        foreach ($responseData as $subscriptionData) {
+            $this->assertCount(2, $subscriptionData['payments']); // Chaque abonnement a 2 paiements
+        }
     }
 
     /** @test */

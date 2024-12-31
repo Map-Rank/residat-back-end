@@ -20,7 +20,7 @@ class SubscriptionController extends Controller
      */
     public function index()
     {
-        $subscriptions = Subscription::with(['package', 'zone'])
+        $subscriptions = Subscription::with(['package', 'zone','payments'])
             ->where('user_id', auth()->id())
             ->orderByDesc('created_at')
             ->paginate(10);

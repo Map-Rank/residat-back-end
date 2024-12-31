@@ -3,7 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\SubscriptionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class PaymentResource extends JsonResource
@@ -23,10 +22,10 @@ class PaymentResource extends JsonResource
             'transaction_id' => $this->transaction_id,
             'payment_method' => $this->payment_method,
             'status' => $this->status,
-            'payment_date' => $this->payment_date,
-            'payment_details' => $this->payment_details,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at
+            'payment_date' => $this->payment_date->format('Y-m-d H:i:s'),
+            'payment_details' => $this->when($this->payment_details, $this->payment_details),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }

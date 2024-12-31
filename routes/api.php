@@ -49,7 +49,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::resource('post', PostController::class);
     Route::resource('events', EventController::class);
-    Route::resource('reports', ReportController::class);
+    Route::get('reports', [ReportController::class, 'index'])->name('list.reports');
     Route::resource('notifications', NotificationController::class);
     // Route::get('post', [PostController::class, 'index']);
     // Route::post('post', [PostController::class, 'store']);
