@@ -93,7 +93,7 @@ class AuthController extends Controller
 
         // return response()->success($userData, __('User registered. Please check your email'), 201);
         return response()->success([
-            'data' => $userData,
+            $userData,
             'type' => $user->type,
         ], __('User registered. Please check your email'), 201);
     }
@@ -151,7 +151,7 @@ class AuthController extends Controller
         $userData['token'] = $token->plainTextToken;
 
         return response()->success([
-            'data' => $userData,
+            $userData,
             'type' => $user->type,
         ], __('You are logged in'), 200);
     }
