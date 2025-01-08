@@ -76,16 +76,26 @@ class WeatherController extends Controller
 
     public function processData(Request $request)
     {
-        // Chemin du fichier à traiter
-        $filePath = storage_path('app/data.csv');
+        // Chemin du fichier CSV à traiter
+        $inputPath = public_path('storage/weather_data.csv');
 
-        // Exécuter le script Python
-        $command = escapeshellcmd("python3 " . base_path('scripts/data_processing.py') . " " . $filePath);
+        // Chemin pour enregistrer le fichier nettoyé
+        $outputPath = storage_path('app/cleaned_weather_data.csv');
+
+        // Commande pour exécuter le script Python
+        $pythonScript = base_path('scripts/clean_dataset.py');
+        $command = escapeshellcmd("python3 $pythonScript $inputPath $outputPath");
+
+        // Exécuter le script et capturer la sortie
         $output = shell_exec($command);
 
-        // Convertir la sortie JSON en tableau PHP
-        $data = json_decode($output, true);
+        // Vérifier si le fichier nettoyé existe
+        if (!file_exists($outputPath)) {
+            return response()->json(['error' => 'Le traitement des données a échoué.'], 500);
+        }
 
-        return response()->json($data);
+        // Charger le fichier nettoyé pour le retourner dans la réponse
+        $cleanedData = array_map('str_getcsv', file($outputPath));
+        return response()->json(['message' => 'Données traitées avec succès.', 'data' => $cleanedData]);
     }
 }

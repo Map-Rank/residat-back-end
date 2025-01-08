@@ -129,14 +129,11 @@ class AuthController extends Controller
         $user = Auth::user();
 
         // Vérification du type d'utilisateur
-        if ($user->type === 'COUNCIL') {
-            // Vérifier si l'email n'est pas vérifié
-            if (!$user->email_verified_at) {
-                return response()->success([
-                    'token' => $token->plainTextToken,
-                    'verified' => false
-                ], __('Please verify your email'), 200);
-            }
+        if ($user->type === 'COUNCIL' && !$user->email_verified_at) {
+            return response()->success([
+                'token' => $token->plainTextToken,
+                'verified' => false
+            ], __('Please verify your email'), 200);
         }
 
         $user = User::with('zone')->where('id', Auth::user()->id)->first();

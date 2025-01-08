@@ -68,3 +68,18 @@ def clean_dataset(file_path, save_path):
     print(f"Cleaned dataset saved to {save_path}.")
 
     return data
+
+if __name__ == "__main__":
+    import sys
+
+    # Check if correct number of arguments are passed
+    if len(sys.argv) != 3:
+        print("Usage: python clean_dataset.py <input_path> <output_path>")
+        sys.exit(1)
+
+    # Input and output file paths
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+
+    # Call the clean_dataset function
+    clean_dataset(input_path, output_path)
