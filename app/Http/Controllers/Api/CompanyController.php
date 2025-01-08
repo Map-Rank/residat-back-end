@@ -85,7 +85,12 @@ class CompanyController extends Controller
         }
 
         if (!$userData['email_verified_at']) {
-            return response()->success(['token' => $token->plainTextToken, "verified" => false, 'type' => 'COUNCIL', 'company' => new CompanyResource($company)], __('Please verify you mail') , 200);
+            $userData['token'] = $token->plainTextToken;
+            $userData['verified'] = false;
+            $userData['type'] = 'COUNCIL';
+            $userData['company'] = new CompanyResource($company);
+
+            return response()->success($userData, __('Please verify you mail') , 200);
         }
 
         // return new CompanyResource($company);

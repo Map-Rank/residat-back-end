@@ -91,11 +91,7 @@ class AuthController extends Controller
         //     return response()->success(['token' => $token->plainTextToken, "isActive" => false], __('Please wait for activation') , 200);
         // }
 
-        // return response()->success($userData, __('User registered. Please check your email'), 201);
-        return response()->success([
-            $userData,
-            'type' => $user->type,
-        ], __('User registered. Please check your email'), 201);
+        return response()->success($userData, __('User registered. Please check your email'), 201);
     }
 
     /**
@@ -147,13 +143,10 @@ class AuthController extends Controller
             $user->update(['fcm_token' => $request->fcm_token]);
         }
 
-        $userData  = UserResource::make($user)->toArray($request);
-        $userData['token'] = $token->plainTextToken;
+        $user = UserResource::make($user)->toArray($request);
+        $user['token'] = $token->plainTextToken;
 
-        return response()->success([
-            $userData,
-            'type' => $user->type,
-        ], __('You are logged in'), 200);
+        return response()->success($user, __('You are logged in'), 200);
     }
 
     /**
