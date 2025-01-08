@@ -146,7 +146,7 @@ class AuthController extends Controller
         $user = UserResource::make($user)->toArray($request);
         $user['token'] = $token->plainTextToken;
 
-        return response()->success([$user, 'type' => $user->type,], __('You are logged in'), 200);
+        return response()->success([$user, 'type' => $user->type], __('You are logged in'), 200);
     }
 
     /**
