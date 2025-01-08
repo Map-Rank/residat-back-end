@@ -129,7 +129,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         // Vérification du type d'utilisateur
-        if ($user->type === 'COUNCIL' && !$user->email_verified_at) {
+        if ($user->type === 'COUNCIL' && !$user->verified) {
             return response()->success([
                 'token' => $token->plainTextToken,
                 'verified' => false
