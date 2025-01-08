@@ -132,7 +132,8 @@ class AuthController extends Controller
         if ($user->type === 'COUNCIL' && !$user->verified) {
             return response()->success([
                 'token' => $token->plainTextToken,
-                'verified' => false
+                'verified' => false,
+                'type' => $user->type,
             ], __('Please verify your email'), 200);
         }
 
