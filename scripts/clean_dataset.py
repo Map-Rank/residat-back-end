@@ -54,28 +54,4 @@ def clean_dataset(file_path, save_path):
     print(df.info())
     print(df.head())
 
-    # Step 4: Handle outliers (using IQR method for numeric columns)
-    for col in numeric_cols:
-        Q1 = data[col].quantile(0.25)
-        Q3 = data[col].quantile(0.75)
-        IQR = Q3 - Q1
-        lower_bound = Q1 - 1.5 * IQR
-        upper_bound = Q3 + 1.5 * IQR
-        data[col] = data[col].apply(lambda x: x if lower_bound <= x <= upper_bound else data[col].median())
-
-    print("Outliers handled.")
-
-    # Step 5: Encode categorical variables
-    data = pd.get_dummies(data, columns=categorical_cols, drop_first=True)
-    print("Categorical variables encoded.")
-
-    # Step 6: Normalize numeric columns
-    scaler = MinMaxScaler()
-    data[numeric_cols] = scaler.fit_transform(data[numeric_cols])
-    print("Numeric columns normalized.")
-
-    # Save the cleaned dataset
-    data.to_csv(save_path, index=False)
-    print(f"Cleaned dataset saved to {save_path}.")
-
-    return data
+    return df
