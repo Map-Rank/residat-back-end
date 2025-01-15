@@ -3,45 +3,56 @@ from sklearn.preprocessing import MinMaxScaler
 
 def clean_dataset(file_path, save_path):
     """
-    Cleans the dataset in a CSV file and saves the cleaned dataset.
+    Cleans the weather dataset by handling missing values, 
+    ensuring consistent data types, and selecting relevant features.
 
     Args:
-        file_path (str): Path to the input CSV file.
-        save_path (str): Path to save the cleaned CSV file.
+        file_path (str): Path to the dataset file.
 
     Returns:
-        pd.DataFrame: The cleaned dataset.
+        pd.DataFrame: A cleaned DataFrame.
     """
     # Load the dataset
-    data = pd.read_csv(file_path)
-    print("Initial dataset loaded.")
+    df = pd.read_csv(file_path)
 
-    # Step 1: Handle missing values
-    # Fill numeric columns with mean
-    numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
-    data[numeric_cols] = data[numeric_cols].fillna(data[numeric_cols].mean())
+    # Display initial summary of the data
+    print("Initial Data Summary:")
+    print(df.info())
+    print(df.describe())
 
-    # Fill categorical columns with mode
-    categorical_cols = data.select_dtypes(include=['object']).columns
-    for col in categorical_cols:
-        data[col] = data[col].fillna(data[col].mode()[0])
+    # Handle missing values
+    print("\nHandling Missing Values...")
+    missing_threshold = 0.2  # Drop columns with >20% missing data
+    df = df.dropna(axis=1, thresh=int((1 - missing_threshold) * len(df)))
 
-    print("Missing values handled.")
+    # Fill remaining missing values (forward fill)
+    df.fillna(method='ffill', inplace=True)
+    df.fillna(method='bfill', inplace=True)
 
-    # Step 2: Remove duplicates
-    data.drop_duplicates(inplace=True)
-    print("Duplicates removed.")
+    # Ensure consistent data types
+    print("\nEnsuring Data Type Consistency...")
+    if 'time' in df.columns:
+        df['time'] = pd.to_datetime(df['time'])
+    
+    # Convert specific columns to numeric (example: humidity, soil moisture)
+    numeric_columns = ['relative_humidity_2m', 'soil_moisture_0_to_7cm']
+    for col in numeric_columns:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
 
-    # Step 3: Standardize formats
-    # Standardize dates
-    if 'date' in data.columns:
-        data['date'] = pd.to_datetime(data['date'], errors='coerce')
+    # Drop duplicates
+    print("\nDropping Duplicates...")
+    df.drop_duplicates(inplace=True)
 
-    # Standardize text columns
-    for col in categorical_cols:
-        data[col] = data[col].str.strip().str.lower()
+    # Select relevant columns
+    print("\nSelecting Relevant Features...")
+    relevant_columns = ['time', 'relative_humidity_2m', 'soil_moisture_0_to_7cm']
+    df = df[relevant_columns]
 
-    print("Formats standardized.")
+    # Display cleaned summary
+    print("\nCleaned Data Summary:")
+    print(df.info())
+    print(df.head())
 
     # Step 4: Handle outliers (using IQR method for numeric columns)
     for col in numeric_cols:
@@ -68,18 +79,3 @@ def clean_dataset(file_path, save_path):
     print(f"Cleaned dataset saved to {save_path}.")
 
     return data
-
-if __name__ == "__main__":
-    import sys
-
-    # Check if correct number of arguments are passed
-    if len(sys.argv) != 3:
-        print("Usage: python clean_dataset.py <input_path> <output_path>")
-        sys.exit(1)
-
-    # Input and output file paths
-    input_path = sys.argv[1]
-    output_path = sys.argv[2]
-
-    # Call the clean_dataset function
-    clean_dataset(input_path, output_path)
