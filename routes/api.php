@@ -255,3 +255,59 @@ Route::middleware(['auth:sanctum',])->group(function () {
             ];
         }
     });
+
+    Route::get('exec', function(Request $request){
+
+        $inputFilePath = base_path('public/csv/weather_data.csv');
+        $outputFilePath = base_path('public/csv/clean_weather_data.csv');
+
+        // Path to the Python script
+        $pythonScriptPath = base_path('scripts/clean_dataset.py'); // Adjust this path to the location of your Python script
+
+        // Ensure the input file exists
+        if (!file_exists($inputFilePath)) {
+            return [
+                'success' => false,
+                'message' => 'Input file not found.',
+            ];
+        }
+
+        if (!file_exists($pythonScriptPath)) {
+            return [
+                'success' => false,
+                'message' => 'Python file not found.',
+            ];
+        }
+
+        // Construct the shell command
+        $command = escapeshellcmd("python $pythonScriptPath $inputFilePath $outputFilePath");
+
+        // Execute the Python script
+        $output = [];
+        $returnVar = 0;
+        exec($command. " 2>&1", $output, $returnVar);
+
+        // Check for errors during script execution
+        if ($returnVar !== 0) {
+            return [
+                'success' => false,
+                'message' => 'Python script execution failed.',
+                'output' => $output,
+            ];
+        }
+
+        // Verify that the cleaned file was created
+        if (!file_exists($outputFilePath)) {
+            return [
+                'success' => false,
+                'message' => 'Cleaned file not created.',
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Weather data cleaned successfully.',
+            'output_file' => $outputFilePath,
+        ];
+        // shell_exec('python scripts/clean_dataset.py public/csv/weather_data.csv public/csv/cleaned_weather_data.csv');
+    });

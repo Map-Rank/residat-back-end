@@ -1,57 +1,83 @@
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
 
-def clean_dataset(file_path, save_path):
+def clean_weather_data(file_path, save_path):
     """
-    Cleans the weather dataset by handling missing values, 
-    ensuring consistent data types, and selecting relevant features.
+    Cleans the weather dataset by handling missing values, ensuring consistent data types,
+    and selecting relevant features for AI model training.
 
     Args:
         file_path (str): Path to the dataset file.
+        save_path (str): Path to save the cleaned dataset.
 
     Returns:
         pd.DataFrame: A cleaned DataFrame.
     """
     # Load the dataset
+    print('reading file')
     df = pd.read_csv(file_path)
 
-    # Display initial summary of the data
     print("Initial Data Summary:")
     print(df.info())
     print(df.describe())
 
-    # Handle missing values
-    print("\nHandling Missing Values...")
-    missing_threshold = 0.2  # Drop columns with >20% missing data
-    df = df.dropna(axis=1, thresh=int((1 - missing_threshold) * len(df)))
+    # Standardize column names
+    df.columns = df.columns.str.strip().str.lower()
 
-    # Fill remaining missing values (forward fill)
-    df.fillna(method='ffill', inplace=True)
-    df.fillna(method='bfill', inplace=True)
+    # Ensure essential columns are present
+    required_columns = ['date', 'temperature_max', 'temperature_min', 'precipitation',
+                        'wind_speed_max', 'humidity_mean', 'soil_moisture']
+    missing_columns = [col for col in required_columns if col not in df.columns]
+    if missing_columns:
+        raise ValueError(f"Missing required columns: {missing_columns}")
 
-    # Ensure consistent data types
-    print("\nEnsuring Data Type Consistency...")
-    if 'time' in df.columns:
-        df['time'] = pd.to_datetime(df['time'])
-    
-    # Convert specific columns to numeric (example: humidity, soil moisture)
-    numeric_columns = ['relative_humidity_2m', 'soil_moisture_0_to_7cm']
+    # Convert 'date' to datetime
+    print("\nConverting 'date' column to datetime...")
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+    # Remove rows with invalid dates
+    df = df.dropna(subset=['date'])
+
+    # Handle missing values for numeric columns
+    print("\nHandling missing values...")
+    numeric_columns = ['temperature_max', 'temperature_min', 'precipitation',
+                       'wind_speed_max', 'humidity_mean', 'soil_moisture']
+
+    # Fill missing values with forward-fill and backward-fill
+    df[numeric_columns] = df[numeric_columns].fillna(method='ffill').fillna(method='bfill')
+
+    # Drop rows that still have missing values after filling
+    df = df.dropna(subset=numeric_columns)
+
+    # Ensure all numeric columns have correct data types
+    print("\nEnsuring numeric data types...")
     for col in numeric_columns:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
+        df[col] = pd.to_numeric(df[col], errors='coerce')
 
-    # Drop duplicates
-    print("\nDropping Duplicates...")
-    df.drop_duplicates(inplace=True)
+    # Remove duplicates
+    print("\nRemoving duplicates...")
+    df = df.drop_duplicates()
 
-    # Select relevant columns
-    print("\nSelecting Relevant Features...")
-    relevant_columns = ['time', 'relative_humidity_2m', 'soil_moisture_0_to_7cm']
-    df = df[relevant_columns]
+    # Sort by date
+    print("\nSorting by date...")
+    df = df.sort_values(by='date')
 
-    # Display cleaned summary
-    print("\nCleaned Data Summary:")
-    print(df.info())
-    print(df.head())
+    # Save cleaned data to a new CSV file
+    df.to_csv(save_path, index=False)
 
+    print(f"\nCleaned data saved to '{save_path}'.")
     return df
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3:
+        print("Usage: python clean_dataset.py <input_file_path> <output_file_path>")
+        sys.exit(1)
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
+    try:
+        clean_weather_data(input_file, output_file)
+        print("Data cleaning completed successfully!")
+    except Exception as e:
+        print(f"Error: {e}")
