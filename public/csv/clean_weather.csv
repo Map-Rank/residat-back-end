@@ -1,4 +1,4 @@
-date,temperature_max,temperature_min,precipitation,wind_speed_max,humidity_mean,soil_moisture
+date,temperature,temperature_min,precipitation,wind_speed_max,humidity_mean,soil_moisture
 2000-01-01,35.4,19.7,0,12.1,31.0,0.096
 2000-01-02,35.7,19.5,0,14.4,29.416666666667,0.096
 2000-01-03,34.4,20.4,0,15.1,30.25,0.096
