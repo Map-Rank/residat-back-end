@@ -138,122 +138,148 @@ Route::middleware(['auth:sanctum',])->group(function () {
     Route::put('packages/{package}', [PackageController::class, 'update'])->name('packages.update');
     Route::delete('packages/{package}', [PackageController::class, 'destroy'])->name('packages.destroy');
 
-    Route::get('weather-test', function(Request $request){
-        ini_set('max_execution_time', 300); // 5 minutes
-        // $daily = [
-        //     'temperature_2m_max','temperature_2m_min','precipitation_sum','wind_speed_10m_max'
-        // ];
-
-        // $hourly = [
-        //     'relative_humidity_2m','soil_moisture_0_to_7cm'
-        // ];
-
-        // // Construction de l'URL de l'API avec les paramètres
-        // $url = "https://api.open-meteo.com/v1/archive";
-        // $queryParams = [
-        //     'latitude' => 10.3430104,
-        //     'longitude' => 15.2498056,
-        //     'start_date' => '2000-01-01', 
-        //     'end_date' => '2001-01-01',
-        //     'hourly' => implode(',', $hourly),
-        //     'daily' => implode(',', $daily),
-        //     'timezone' => 'Europe%2FBerlin'
-        // ];
-
-        // // Exécution de la requête GET
-        // $response = Http::timeout(600)->get("https://archive-api.open-meteo.com/v1/archive?latitude=10.3430104&longitude=15.2498056&start_date=2000-01-01&end_date=2001-01-01&hourly=relative_humidity_2m,soil_moisture_0_to_7cm&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=Europe%2FBerlin");
-
-        // // Vérification du succès de la requête
-        // if ($response->successful()) {
-        //     $object = ($response->json());
-        //     return $object;
-        // }else{
-        //     return $response;
-        // }
-
-        $url = "https://archive-api.open-meteo.com/v1/archive";
-        $queryParams = http_build_query([
-            'latitude' => "10.3430104",
-            'longitude' => "15.2498056",
-            'start_date' => '2000-01-01',
-            'end_date' => '2000-01-31',
-            'hourly' => 'relative_humidity_2m,soil_moisture_0_to_7cm',
-            'daily' => 'temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
-            // 'timezone' => 'Europe%2FBerlin',
-        ]);
-
-        // Initialize cURL
-        $curl = curl_init("$url?$queryParams");
-
-        // Set cURL options
-        curl_setopt_array($curl, [
-            CURLOPT_RETURNTRANSFER => true, // Return the response as a string
-            CURLOPT_TIMEOUT => 600,         // Set a timeout
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json', // Set content type
-            ],
-        ]);
-
-        // Execute the cURL request
-        $response = curl_exec($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        // Check for errors
-        if (curl_errno($curl)) {
-            $error = curl_error($curl);
-            curl_close($curl);
-            return [
-                'success' => false,
-                'error' => $error,
-            ];
-        }
-
-        // Close cURL session
-        curl_close($curl);
-
-        // Parse and return the response
-        if ($httpCode === 200) {
-            $responseData = json_decode($response, true);
-            $dailyGroupedData = UtilService::groupDailyWeatherData($responseData['daily']);
-            $hourlyGroupedData = UtilService::groupAndAverageDailyData($responseData['hourly']);
-            $finalMerged = UtilService::mergeDailyAndHourly($hourlyGroupedData, $dailyGroupedData);
-
-            $filePath = storage_path('app/public/weather/weather_'.time().'.csv');
-            // $prediction = WeatherPrediction::create([
-            //     'zone_id' => $zone->id,
-            //     'date' => now(),
-            //     'path' => $filePath,
-            //     'created_at' => now(),
-            // ]);
-            $fileHeader = ['Date', 'temperature_max', 'temperature_min', 'precipitation', 'wind_speed_max',
-                'humidity_mean', 'soil_moisture'];
-
-            file_put_contents($filePath, implode(',', $fileHeader) . PHP_EOL);
-
-            // $filePath = $prediction->path;
-
-            $file = fopen($filePath, 'a');
-
-            foreach($finalMerged as $row){
-                fputcsv($file, $row);
+    Route::get('weather-test', function(Request $request) {
+        ini_set('max_execution_time', 600); // 10 minutes
+    
+        $allData = [];
+        $years = range(2000, 2003);
+    
+        foreach($years as $year) {
+            $start_date = $year . '-01-01';
+            $end_date = $year . '-12-31';
+    
+            $url = "https://archive-api.open-meteo.com/v1/archive";
+            $queryParams = http_build_query([
+                'latitude' => "10.3430104",
+                'longitude' => "15.2498056",
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+                'hourly' => 'relative_humidity_2m,soil_moisture_0_to_7cm',
+                'daily' => 'temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max',
+            ]);
+    
+            $curl = curl_init("$url?$queryParams");
+            curl_setopt_array($curl, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 300,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                ],
+            ]);
+    
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    
+            if (curl_errno($curl)) {
+                $error = curl_error($curl);
+                curl_close($curl);
+                return [
+                    'success' => false,
+                    'error' => "Error for year $year: $error",
+                ];
             }
-
-            // foreach ($errors as $row) {
-            
-            // }
-            fclose($file);
-            // $data = $responseData->data;
-            return [
-                'success' => true,
-                'final' => $finalMerged,
-                'file' => $filePath
-            ];
-        } else {
-            return [
-                'success' => false,
-                'error' => "HTTP Error: $httpCode",
-            ];
+    
+            curl_close($curl);
+    
+            if ($httpCode === 200) {
+                $responseData = json_decode($response, true);
+                
+                // Traitement des données quotidiennes
+                if (isset($responseData['daily']) && isset($responseData['daily']['time'])) {
+                    $dailyData = $responseData['daily'];
+                    
+                    // Traitement des données horaires pour moyennes journalières
+                    $hourlyData = $responseData['hourly'];
+                    $hourlyDates = $hourlyData['time'];
+                    $humidityData = [];
+                    $soilMoistureData = [];
+                    
+                    // Regrouper les données horaires par jour
+                    foreach ($hourlyDates as $index => $hourlyTime) {
+                        $date = substr($hourlyTime, 0, 10); // Extraire YYYY-MM-DD
+                        if (!isset($humidityData[$date])) {
+                            $humidityData[$date] = [];
+                            $soilMoistureData[$date] = [];
+                        }
+                        
+                        if (isset($hourlyData['relative_humidity_2m'][$index])) {
+                            $humidityData[$date][] = $hourlyData['relative_humidity_2m'][$index];
+                        }
+                        if (isset($hourlyData['soil_moisture_0_to_7cm'][$index])) {
+                            $soilMoistureData[$date][] = $hourlyData['soil_moisture_0_to_7cm'][$index];
+                        }
+                    }
+                    
+                    // Combiner les données quotidiennes et les moyennes horaires
+                    for ($i = 0; $i < count($dailyData['time']); $i++) {
+                        $date = $dailyData['time'][$i];
+                        
+                        // Calculer les moyennes journalières des données horaires
+                        $avgHumidity = !empty($humidityData[$date]) ? array_sum($humidityData[$date]) / count($humidityData[$date]) : null;
+                        $avgSoilMoisture = !empty($soilMoistureData[$date]) ? array_sum($soilMoistureData[$date]) / count($soilMoistureData[$date]) : null;
+                        
+                        $allData[$date] = [
+                            'temperature_2m_max' => $dailyData['temperature_2m_max'][$i] ?? null,
+                            'temperature_2m_min' => $dailyData['temperature_2m_min'][$i] ?? null,
+                            'precipitation_sum' => $dailyData['precipitation_sum'][$i] ?? null,
+                            'wind_speed_10m_max' => $dailyData['wind_speed_10m_max'][$i] ?? null,
+                            'humidity_mean' => $avgHumidity,
+                            'soil_moisture' => $avgSoilMoisture
+                        ];
+                    }
+                }
+            } else {
+                return [
+                    'success' => false,
+                    'error' => "HTTP Error for year $year: $httpCode",
+                ];
+            }
         }
+    
+        // Créer le dossier s'il n'existe pas
+        $directory = storage_path('app/public/weather');
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+    
+        // Création du fichier CSV
+        $filePath = storage_path('app/public/weather/weather_'.time().'.csv');
+        $fileHeader = ['Date', 'temperature_max', 'temperature_min', 'temperature', 'precipitation', 'wind_speed_max',
+            'humidity_mean', 'soil_moisture'];
+    
+        file_put_contents($filePath, implode(',', $fileHeader) . PHP_EOL);
+        
+        $file = fopen($filePath, 'a');
+        
+        // Trier les données par date
+        ksort($allData);
+    
+        foreach($allData as $date => $row) {
+            $temp_max = $row['temperature_2m_max'] ?? 0;
+            $temp_min = $row['temperature_2m_min'] ?? 0;
+            $avgTemperature = ($temp_max + $temp_min) / 2;
+            
+            $csvRow = [
+                $date,  // Date au format YYYY-MM-DD
+                $temp_max,
+                $temp_min,
+                $avgTemperature,
+                $row['precipitation_sum'] ?? 0,
+                $row['wind_speed_10m_max'] ?? 0,
+                $row['humidity_mean'] ?? 0,
+                $row['soil_moisture'] ?? 0
+            ];
+            
+            fputcsv($file, $csvRow);
+        }
+        
+        fclose($file);
+        
+        return [
+            'success' => true,
+            'final' => $allData,
+            'file' => $filePath
+        ];
     });
 
     Route::get('exec', function(Request $request){
