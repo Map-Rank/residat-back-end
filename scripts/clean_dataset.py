@@ -24,8 +24,7 @@ def clean_weather_data(file_path, save_path):
     df.columns = df.columns.str.strip().str.lower()
 
     # Ensure essential columns are present
-    required_columns = ['date', 'temperature_max', 'temperature_min', 'precipitation',
-                        'wind_speed_max', 'humidity_mean', 'soil_moisture']
+    required_columns = ['date', 'temperature_max', 'temperature_min', 'precipitation', 'soil_moisture']
     missing_columns = [col for col in required_columns if col not in df.columns]
     if missing_columns:
         raise ValueError(f"Missing required columns: {missing_columns}")
@@ -39,8 +38,8 @@ def clean_weather_data(file_path, save_path):
 
     # Handle missing values for numeric columns
     print("\nHandling missing values...")
-    numeric_columns = ['temperature_max', 'temperature_min', 'precipitation',
-                       'wind_speed_max', 'humidity_mean', 'soil_moisture']
+    numeric_columns = ['temperature_max', 'temperature_min', 'precipitation'
+                       , 'soil_moisture']
 
     # Fill missing values with forward-fill and backward-fill
     df[numeric_columns] = df[numeric_columns].fillna(method='ffill').fillna(method='bfill')

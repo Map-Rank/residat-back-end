@@ -16,9 +16,13 @@ def merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_p
     """
     # Step 1: Load the datasets
     geo_data = pd.read_csv(geo_data_path)
+    print("Geo data loaded successfully.")
     history_data = pd.read_csv(history_data_path)
+    print("History data loaded successfully.")
     weather_data = pd.read_csv(weather_data_path)
+    print("Weather data loaded successfully.")
     hydro_data = pd.read_csv(hydro_data_path)
+    print("Hydro data loaded successfully.")
 
     print("Datasets loaded successfully.")
 
@@ -27,11 +31,11 @@ def merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_p
     geo_data.rename(columns={ 'latitude': 'lat', 'longitude': 'lon'}, inplace=True)
     history_data.rename(columns={ 'event_date': 'date'}, inplace=True)
     hydro_data.rename(columns={ 'measurement_date': 'date'}, inplace=True)
+    weather_data.rename(columns={ 'measurement_date': 'date'}, inplace=True)
 
     print("Column names standardized.")
-
-    # Step 3: Convert date columns to datetime
-    for df in [history_data, weather_data, hydro_data]:
+    for i, df in enumerate([history_data, weather_data, hydro_data], start=1):
+        print(f"Iteration {i}: Converting 'date' column in DataFrame {i}")
         df['date'] = pd.to_datetime(df['date'])
 
     print("Date columns converted to datetime.")
