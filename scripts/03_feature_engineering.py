@@ -33,9 +33,11 @@ def feature_engineering(merged_data_path, output_path):
     print("Creating cumulative and lag features...")
     data.sort_values(by=['location', 'date'], inplace=True)
 
+    print("Data sorted")
     if 'precipitation' in data.columns:
         data['cumulative_precipitation'] = data.groupby('location')['precipitation'].cumsum()
 
+    print("Precipitation data started")
     if 'groundwater_level' in data.columns:
         data['lag_groundwater_level_1d'] = data.groupby('location')['groundwater_level'].shift(1)  # 1-day lag
         data['lag_groundwater_level_7d'] = data.groupby('location')['groundwater_level'].shift(7)  # 7-day lag

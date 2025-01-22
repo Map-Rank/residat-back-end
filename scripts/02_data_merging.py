@@ -31,7 +31,6 @@ def merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_p
     geo_data.rename(columns={ 'latitude': 'lat', 'longitude': 'lon'}, inplace=True)
     history_data.rename(columns={ 'event_date': 'date'}, inplace=True)
     hydro_data.rename(columns={ 'measurement_date': 'date'}, inplace=True)
-    weather_data.rename(columns={ 'measurement_date': 'date'}, inplace=True)
 
     print("Column names standardized.")
     for i, df in enumerate([history_data, weather_data, hydro_data], start=1):
