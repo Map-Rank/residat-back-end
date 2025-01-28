@@ -120,6 +120,8 @@ Route::get('/weather-forecast', [V2WeatherController::class, 'getForecast']);
 Route::get('/dashboard-weather-forecast', [DashboardController::class, 'getLocationForecast']);
 Route::get('/predictions', [PredictionController::class, 'getPredictions']);
 
+Route::get('forecast', [PredictionController::class, 'predictionStore']);
+
 
 Route::middleware(['auth:sanctum',])->group(function () {
     //subscriptions with auth

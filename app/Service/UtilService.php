@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use App\Models\Zone;
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Exception\MessagingException;
@@ -406,5 +408,84 @@ class UtilService
         }
 
         return $averagedData;
+    }
+
+
+    public static function getLocationForecast($longitude, $latitude)
+    {
+        $res = [];
+        try {
+
+            $yesterday = Carbon::now()->subDay()->format('Y-m-d');
+            $threeDaysLater = Carbon::now()->addDays(3)->format('Y-m-d');
+
+            $response = Http::get('https://api.open-meteo.com/v1/forecast', [
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'daily' => 'temperature_2m_max,temperature_2m_min,precipitation_sum',
+                'timezone' => 'Africa/Douala',
+                'start_date' => $yesterday,
+                'end_date' => $threeDaysLater
+            ]);
+
+            if (!$response->successful()) {
+                Log::error('API Error', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+                
+                $res['success'] = false;
+                $res['message'] = 'Échec de récupération des données météo';
+                return $res;
+            }
+
+            $data = $response->json();
+
+            if (!UtilService::validateResponseData($data)) {
+                throw new \Exception('Structure de données invalide dans la réponse');
+            }
+
+            $res['data'] = UtilService::processForecastData($data['daily']);
+            $res['success'] = true;
+            $res['timestamp'] =  Carbon::now()->toDateTimeString();
+
+            return $res;
+
+        } catch (\Exception $e) {
+            Log::error("Exception dans getLocationForecast: " . $e->getMessage());
+            
+            $res['success'] = false;
+            $res['message'] =  'Erreur lors de la récupération des données: ' . $e->getMessage();
+
+            return $res;
+        }
+    }
+
+    public static function validateResponseData(array $data): bool
+    {
+        return isset($data['daily']) &&
+               isset($data['daily']['time']) &&
+               isset($data['daily']['temperature_2m_max']) &&
+               isset($data['daily']['temperature_2m_min']) &&
+               isset($data['daily']['precipitation_sum']);
+    }
+
+    public static function processForecastData(array $dailyData): array
+    {
+        $forecast = [];
+
+        for ($i = 0; $i < count($dailyData['time']); $i++) {
+            $forecast[] = [
+                'date' => $dailyData['time'][$i],
+                'temperature' => [
+                    'max' => round($dailyData['temperature_2m_max'][$i], 2),
+                    'min' => round($dailyData['temperature_2m_min'][$i], 2),
+                    'average' => round(($dailyData['temperature_2m_max'][$i] + $dailyData['temperature_2m_min'][$i]) / 2, 2)
+                ],
+                'precipitation' => round($dailyData['precipitation_sum'][$i], 2)
+            ];
+        }
+
+        return $forecast;
     }
 }

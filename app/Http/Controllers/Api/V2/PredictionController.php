@@ -7,6 +7,7 @@ use App\Models\Prediction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Service\UtilService;
 
 class PredictionController extends Controller
 {
@@ -86,4 +87,91 @@ class PredictionController extends Controller
         if ($risk <= 0.6) return 'medium';
         return 'high';
     }
+
+    public function predictionStore(Request $request){
+         // Validation des paramètres
+         $request->validate([
+            'zone_id' => 'required|exists:zones,id',
+            'date' => 'required|date_format:Y-m-d',
+        ]);
+
+        // $validated = $request->validated();
+
+        $zone = Zone::query()->where('id', $request->zone_id)->first();
+
+        // if($zone == null){
+        //     // Response bad zone parameter
+        // }
+
+        // $latitude = 9.1125;
+        // $longitude = 15.2306;
+
+        $distToRiver = $zone->dist_to_river;
+        $soil_type = $zone->soil_type;
+        $longitude = $zone->longitude;
+        $latitude = $zone->latitude;
+        $hist_precipation = $zone->hist_precipitation; 
+        $hist_temperature = $zone->hist_temperature; 
+        $hist_std_rain = $zone->hist_std_rain;
+        $hist_std_temp = $zone->hist_std_temp;
+        $max_possible_sunshine_hrs = $zone->max_possible_sunshine_hrs;
+        
+        // $distToRiver = 1;
+        // $soil_type = 'LOAMY';
+        // $hist_precipation = 15; 
+        // $hist_temperature = 30; 
+        // $hist_std_rain = 50;
+        // $hist_std_temp = 5;
+        // $max_possible_sunshine_hrs = 7;
+
+        $forcast = UtilService::getLocationForecast($longitude, $latitude);
+        $risks = [];
+
+        // return $forcast;
+        if($forcast['success']){
+            $data = $forcast['data'];
+            $i = 0;
+
+            foreach($data as $datum){
+                $temp = ($datum['temperature']['average'] - $hist_temperature) / $hist_std_temp;
+                $precipitation = ($datum['precipitation'] - $hist_precipation) / $hist_std_rain;
+                $riverFactor = 1/$distToRiver;
+                if($soil_type == 'SANDY'){
+                    $soilIndex = 1;
+                }
+                else if($soil_type == 'LOAMY'){
+                    $soilIndex = 2;
+                }
+                else if($soil_type == 'SILKY'){
+                    $soilIndex = 2.5;
+                }
+                else if($soil_type == 'CLAY'){
+                    $soilIndex = 3;
+                }else {
+                    $soilIndex = 1;
+                }
+
+                $evaporationRate = $temp * $soilIndex;
+
+                $risk = $evaporationRate + $temp + $precipitation + $riverFactor;
+
+                $risk_percentage = ( $risk * 100 / 2.5 );
+                $risks[] = $risk_percentage;
+            }
+            $values = [];
+            $i = 1;
+            foreach($risks as $risk_percentage){
+                $key = 'day'.$i.'_risk';
+                $values[$key] = $risk_percentage;
+                $i ++;
+            }
+            $values['date'] = $zone->date;
+            $values['zone_id'] = $zone->id;
+            Prediction::create($values);
+        }else {
+            return 1;
+        }
+    }
+
+
 }
