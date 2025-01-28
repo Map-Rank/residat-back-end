@@ -22,6 +22,7 @@ use Database\Seeders\VectorKeysSeeder;
 use Database\Seeders\ReportItemsSeeder;
 use Database\Seeders\SubDivisionSeeder;
 use Database\Seeders\TypeInteractionSeeder;
+use Database\Seeders\PredictionSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -48,7 +49,9 @@ class DatabaseSeeder extends Seeder
             // ReportItemsSeeder::class,
             // VectorsSeeder::class,
             // VectorKeysSeeder::class,
-            PackageSeeder::class,
+            // PackageSeeder::class,
+            PredictionSeeder::class,
+
         ]);
     }
 }
