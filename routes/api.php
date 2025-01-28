@@ -18,13 +18,15 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\PackageController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\WeatherController;
-use App\Http\Controllers\Api\V2\WeatherController as V2WeatherController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\PasswordController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SubscriptionController;
+use App\Http\Controllers\Api\V2\DashboardController;
+use App\Http\Controllers\Api\V2\PredictionController;
 use App\Http\Controllers\Api\EmailVerificationController;
 use App\Http\Controllers\Api\DisasterController as ApiDisasterController;
+use App\Http\Controllers\Api\V2\WeatherController as V2WeatherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +117,9 @@ Route::get('weather-test', function(){
 });
 
 Route::get('/weather-forecast', [V2WeatherController::class, 'getForecast']);
+Route::get('/dashboard-weather-forecast', [DashboardController::class, 'getLocationForecast']);
+Route::get('/predictions', [PredictionController::class, 'getPredictions']);
+
 
 Route::middleware(['auth:sanctum',])->group(function () {
     //subscriptions with auth
