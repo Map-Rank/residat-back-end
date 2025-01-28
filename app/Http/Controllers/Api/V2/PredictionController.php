@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Api\V2;
 
 use Carbon\Carbon;
+use App\Models\Zone;
 use App\Models\Prediction;
+use App\Service\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Service\UtilService;
 
 class PredictionController extends Controller
 {
     public function getPredictions(Request $request)
     {
+
+
         try {
             // Validation des paramètres
             $request->validate([
@@ -28,10 +31,7 @@ class PredictionController extends Controller
                 ->first();
 
             if (!$predictions) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Aucune prédiction trouvée pour cette zone et cette date'
-                ], 404);
+                return response()->success([],  __('Aucune prédiction trouvée pour cette zone et cette date'), 200);
             }
 
             // Formater la réponse
@@ -64,15 +64,11 @@ class PredictionController extends Controller
                 ]
             ];
 
-            return response()->json($response);
+            return response()->success($response,  __('Prediction charged successfully'), 200);
 
         } catch (\Exception $e) {
             Log::error("Exception dans getPredictions: " . $e->getMessage());
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Erreur lors de la récupération des prédictions: ' . $e->getMessage()
-            ], 500);
+            return response()->error([],  __('Oups error'), 200);
         }
     }
 
