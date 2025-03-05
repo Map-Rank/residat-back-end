@@ -139,6 +139,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('disasters', DisasterController::class);
 
+    Route::get('users/search', [UserController::class, 'index'])->name('users.search');
+
 });
 Route::get('/get-token-from-session', [AuthenticatedSessionController::class, 'getTokenFromSession'])->name('token');
 

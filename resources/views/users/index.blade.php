@@ -10,11 +10,27 @@
             <div class="row mb-3">
                 <div class="col-md-12 d-flex justify-content-between align-items-center">
                     <h1 class="my-0">List of users</h1>
-                    <a type="button" class="btn btn-info text-white" href="{{route('users.create')}}"><span class="cil-contrast"></span> Create User</a>
+                    <div class="d-flex gap-2">
+                        <a type="button" class="btn btn-info text-white" href="{{route('users.create')}}">
+                            <span class="cil-contrast"></span> Create User
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-12 d-flex justify-content-between align-items-center mt-3">
+                    <h1 class="my-0"></h1>
+                    <div class="d-flex gap-2">
+                        <form action="{{ route('users.search') }}" method="GET" class="d-flex gap-2">
+                            <input type="text" name="search" class="form-control" placeholder="Search by name or email" value="{{ request('search') }}">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                        <a type="button" class="btn btn-danger text-white" href="{{route('users.index')}}">
+                            <span class="cil-contrast"></span> Reset
+                        </a>
+                    </div>
                 </div>
             </div>
-            {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }}
-            <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
+            {{-- {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }} --}}
+            <table class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
                 <thead class="fw-semibold text-nowrap">
                     <tr class="align-middle">
                         <th class="bg-body-secondary text-center">
@@ -76,6 +92,28 @@
                     @endforeach
                 </tbody>
             </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- Lien vers la page précédente -->
+                    @if ($users->onFirstPage())
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $users->previousPageUrl() }}">Previous</a></li>
+                    @endif
+            
+                    <!-- Liens vers chaque page -->
+                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $users->currentPage() ? 'active' : '' }}"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                    @endforeach
+            
+                    <!-- Lien vers la page suivante -->
+                    @if ($users->hasMorePages())
+                        <li class="page-item"><a class="page-link" href="{{ $users->nextPageUrl() }}">Next</a></li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    @endif
+                </ul>
+            </nav>
 
         </div>
     </div>
