@@ -13,7 +13,7 @@
                     <a type="button" class="btn btn-info text-white" href="{{route('users.create')}}"><span class="cil-contrast"></span> Create User</a>
                 </div>
             </div>
-            {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }}
+            {{-- {{ $users->appends(request()->query())->render("pagination::bootstrap-5") }} --}}
             <table id="example" class="table table-striped table-bordered table-sm dt-responsive nowrap w-100" >
                 <thead class="fw-semibold text-nowrap">
                     <tr class="align-middle">
@@ -78,7 +78,31 @@
                 </tbody>
             </table>
 
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <!-- Lien vers la page précédente -->
+                    @if ($users->onFirstPage())
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    @else
+                        <li class="page-item"><a class="page-link" href="{{ $users->previousPageUrl() }}">Previous</a></li>
+                    @endif
+            
+                    <!-- Liens vers chaque page -->
+                    @foreach ($users->getUrlRange(1, $users->lastPage()) as $page => $url)
+                        <li class="page-item {{ $page == $users->currentPage() ? 'active' : '' }}"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                    @endforeach
+            
+                    <!-- Lien vers la page suivante -->
+                    @if ($users->hasMorePages())
+                        <li class="page-item"><a class="page-link" href="{{ $users->nextPageUrl() }}">Next</a></li>
+                    @else
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    @endif
+                </ul>
+            </nav>
+
         </div>
+        
     </div>
     <!-- Modal add user -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

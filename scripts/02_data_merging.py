@@ -16,32 +16,34 @@ def merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_p
     """
     # Step 1: Load the datasets
     geo_data = pd.read_csv(geo_data_path)
+    print("Geo data loaded successfully.")
     history_data = pd.read_csv(history_data_path)
+    print("History data loaded successfully.")
     weather_data = pd.read_csv(weather_data_path)
+    print("Weather data loaded successfully.")
     hydro_data = pd.read_csv(hydro_data_path)
+    print("Hydro data loaded successfully.")
 
     print("Datasets loaded successfully.")
 
     # Step 2: Ensure common keys are consistent
     # Example: Standardize column names
-    geo_data.rename(columns={'region_id': 'region', 'latitude': 'lat', 'longitude': 'lon'}, inplace=True)
-    history_data.rename(columns={'region_id': 'region', 'event_date': 'date'}, inplace=True)
-    weather_data.rename(columns={'location_id': 'region', 'observation_date': 'date'}, inplace=True)
-    hydro_data.rename(columns={'station_region': 'region', 'measurement_date': 'date'}, inplace=True)
+    geo_data.rename(columns={ 'latitude': 'lat', 'longitude': 'lon'}, inplace=True)
+    history_data.rename(columns={ 'event_date': 'date'}, inplace=True)
+    hydro_data.rename(columns={ 'measurement_date': 'date'}, inplace=True)
 
     print("Column names standardized.")
-
-    # Step 3: Convert date columns to datetime
-    for df in [history_data, weather_data, hydro_data]:
+    for i, df in enumerate([history_data, weather_data, hydro_data], start=1):
+        print(f"Iteration {i}: Converting 'date' column in DataFrame {i}")
         df['date'] = pd.to_datetime(df['date'])
 
     print("Date columns converted to datetime.")
 
     # Step 4: Merge datasets
     # Merging datasets on region and date keys
-    merged_data = pd.merge(geo_data, history_data, on='region', how='left')
-    merged_data = pd.merge(merged_data, weather_data, on=['region', 'date'], how='left')
-    merged_data = pd.merge(merged_data, hydro_data, on=['region', 'date'], how='left')
+    merged_data = pd.merge(geo_data, history_data, on='location', how='left')
+    merged_data = pd.merge(merged_data, weather_data, on=[ 'date'], how='left')
+    merged_data = pd.merge(merged_data, hydro_data, on=[ 'date'], how='left')
 
     print("Datasets merged successfully.")
 
@@ -77,3 +79,21 @@ def merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_p
     # print(merged_data.head())
 
     return merged_data
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 6:
+        print("Usage: python datamerging.py <input_file_path> <output_file_path>")
+        sys.exit(1)
+
+    geo_data_path = sys.argv[1]
+    history_data_path = sys.argv[2]
+    weather_data_path = sys.argv[3]
+    hydro_data_path = sys.argv[4]
+    output_path = sys.argv[5]
+
+    try:
+        merge_data(geo_data_path, history_data_path, weather_data_path, hydro_data_path, output_path)
+        print("Data cleaning completed successfully!")
+    except Exception as e:
+        print(f"Error: {e}")

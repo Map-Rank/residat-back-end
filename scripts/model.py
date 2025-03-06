@@ -21,10 +21,10 @@ def train_time_series_model(data_path, target_column, model_save_path):
     print("Dataset loaded successfully.")
 
     # Ensure date is sorted for time series
-    data.sort_values(by=['region', 'date'], inplace=True)
+    data.sort_values(by=['location', 'date'], inplace=True)
 
     # Define features and target
-    features = [col for col in data.columns if col not in ['date', target_column, 'region']]
+    features = [col for col in data.columns if col not in ['date', target_column, 'location']]
     X = data[features].values
     y = data[target_column].values
 
@@ -87,3 +87,18 @@ def train_time_series_model(data_path, target_column, model_save_path):
 # model_save_path = "water_risk_model.h5"
 
 # model, scaler_y = train_time_series_model(data_path, target_column, model_save_path)
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 4:
+        print("Usage: python model.py <input_file_path> <output_file_path>")
+        sys.exit(1)
+
+    engineer_path = sys.argv[1]
+    target_column = sys.argv[2]
+    output_path = sys.argv[3]
+
+    try:
+        train_time_series_model(engineer_path, target_column, output_path)
+        print("Model generated completed successfully!")
+    except Exception as e:
+        print(f"Error: {e}")

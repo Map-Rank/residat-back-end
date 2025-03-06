@@ -21,15 +21,26 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with(['zone', 'postCount'])->paginate(100); // 100 utilisateurs par page, ajustez selon vos besoins
+        $search = $request->input('search');
+        
+        $users = User::with(['zone', 'postCount'])
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('first_name', 'LIKE', "%{$search}%")
+                        ->orWhere('last_name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                });
+            })
+            ->paginate(10);
+        
         return view('users.index', ['users' => $users]);
     }
 
     public function getUserCouncil()
     {
-        $users = User::where('type', 'COUNCIL')->whereNull('email_verified_at')->paginate(100);
+        $users = User::where('type', 'COUNCIL')->whereNull('email_verified_at')->paginate(10);
 
         return view('users.council', ['users' => $users]);
     }
