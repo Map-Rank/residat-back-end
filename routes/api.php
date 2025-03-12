@@ -289,6 +289,95 @@ Route::middleware(['auth:sanctum',])->group(function () {
         ];
     });
 
+    
+    Route::post('predict', function(Request $request) {
+        ini_set('max_execution_time', 600); // 10 minutes
+    
+        $allData = [];
+        $dates = range(2000, 2003);
+    
+        $risks = [];
+
+        foreach($dates as $date) {
+            
+            $url = "https://residat-flood-drought-model-514c88923a4c.herokuapp.com/predict";
+
+            $rawJSON = json_encode(["year" => $date]); // Replace with actual data
+
+            $curl = curl_init($url);
+            curl_setopt_array($curl, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 300,
+                CURLOPT_POST => true, // Set request method to POST
+                CURLOPT_POSTFIELDS => $rawJSON, // Send raw JSON data
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'Content-Length: ' . strlen($rawJSON),
+                ],
+            ]);
+            
+            $response = curl_exec($curl);
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            
+            if (curl_errno($curl)) {
+                $error = curl_error($curl);
+                curl_close($curl);
+                return [
+                    'success' => false,
+                    'error' => "Error for year $year: $error",
+                ];
+            }
+            
+            curl_close($curl);
+    
+            if ($httpCode === 200) {
+                $responseData = json_decode($response, true);
+                
+                // Traitement des données quotidiennes
+                $risk = [];
+                $risk['droughtRisk'] = $responseData['drought_risk'];
+                $risk['flood_risk'] = $responseData['flood_risk'];
+                
+                $risks[] = json_encode($risk);
+            } else {
+                return [
+                    'success' => false,
+                    'error' => "HTTP Error for year $year: $httpCode",
+                ];
+            }
+        }
+
+        if(count($risks) > 0){
+            $prediction = new Prediction();
+            $prediction->zone_id = $request->input('zone_id');
+            $prediction->date = $request->input('date');
+            $prediction->d1_risk = $risks[0];
+            $prediction->d2_risk = $risks[1];
+            $prediction->d3_risk = $risks[2];
+            $prediction->d4_risk = $risks[3];
+            $prediction->d5_risk = $risks[4];
+    
+            if($prediction->save()){
+                return ['success' => true, 'prediction' => $prediction];
+            }
+            else {
+                return [
+                    'success' => false,
+                    'message' => 'Prediction not saved'
+                ];
+            }
+        }
+        else {
+            return [
+                'success' => false,
+                'message' => 'Risk calculation error'
+            ];
+        }
+    
+       
+
+    });
+
     Route::get('exec', function(Request $request){
 
         $inputFilePath = base_path('public/csv/weather_data.csv');

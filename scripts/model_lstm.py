@@ -179,71 +179,6 @@ def train_model(X_train_temp, X_train_stat, y_train_flood, y_train_drought,
     print("Flood weights:", flood_weights)
     print("Drought weights:", drought_weights)
 
-    # history = model.fit(
-    #     [X_train_temp, X_train_stat],
-    #     [y_train_flood, y_train_drought],
-    #     validation_data=([X_test_temp, X_test_stat], 
-    #                     [y_test_flood, y_test_drought]),
-    #     epochs=100,
-    #     batch_size=64,
-    #     class_weight={'flood': flood_weights, 'drought': drought_weights},
-    #     callbacks=[EarlyStopping(patience=10, restore_best_weights=True,
-    #                            monitor='val_flood_prc', mode='max')]
-    # )
-
-    # Compile model with custom loss
-    # model.compile(
-    #     optimizer=Adam(learning_rate=0.001),
-    #     loss= weighted_loss(flood_weights, drought_weights),
-    #     metrics={
-    #         'flood': ['accuracy', AUC(name='prc', curve='PR')],
-    #         'drought': ['accuracy', AUC(name='prc', curve='PR')]
-    #     }
-    # )
-
-    # history = model.fit(
-    #     [X_train_temp, X_train_stat],
-    #     [y_train_flood, y_train_drought],
-    #     validation_data=([X_test_temp, X_test_stat], 
-    #                     [y_test_flood, y_test_drought]),
-    #     epochs=100,
-    #     batch_size=64,
-    #     class_weight={
-    #         'flood': flood_weights,  # Class weights for flood output
-    #         'drought': drought_weights  # Class weights for drought output
-    #     },
-    #     callbacks=[EarlyStopping(patience=10, monitor='val_flood_prc', mode='max')]
-    # )
-    # Train model without class_weight parameter
-    # history = model.fit(
-    #     [X_train_temp, X_train_stat],
-    #     np.column_stack([y_train_flood, y_train_drought]),  # Combine targets
-    #     validation_data=([X_test_temp, X_test_stat], 
-    #                     np.column_stack([y_test_flood, y_test_drought])),
-    #     epochs=100,
-    #     batch_size=64,
-    #     callbacks=[EarlyStopping(patience=10, monitor='val_flood_prc', mode='max')]
-    # )
-
-    # Compile model with custom loss
-    # model.compile(
-    #     optimizer=Adam(learning_rate=0.001),
-    #     loss=weighted_loss(flood_weights, drought_weights),
-    #     metrics={
-    #         'flood': ['accuracy', AUC(name='prc', curve='PR')],
-    #         'drought': ['accuracy', AUC(name='prc', curve='PR')]
-    #     }
-    # )
-
-    # model.compile(
-    #     optimizer=Adam(learning_rate=0.0001),
-    #     loss={'flood': 'binary_crossentropy', 
-    #         'drought': 'binary_crossentropy'},
-    #     metrics={
-    #         'flood': ['accuracy', AUC(name='prc', curve='PR')],
-    #         'drought': ['accuracy', AUC(name='prc', curve='PR')]
-    #     }
-    # )
     print("\nCompile done")
     flood_pred, drought_pred = model([X_train_temp[:1], X_train_stat[:1]])
     print("Flood prediction:", flood_pred.numpy())
@@ -275,14 +210,7 @@ def train_model(X_train_temp, X_train_stat, y_train_flood, y_train_drought,
         batch_size=64,
         callbacks=[EarlyStopping(patience=10, monitor='val_flood_prc', mode='max')]
     )
-    # history = model.fit(
-    #     [X_train_temp, X_train_stat],
-    #     y_train_targets,  # Pass targets as a list
-    #     validation_data=([X_test_temp, X_test_stat], y_test_targets),
-    #     epochs=100,
-    #     batch_size=64,
-    #     callbacks=[EarlyStopping(patience=10, monitor='val_flood_prc', mode='max')]
-    # )
+    
 
     print("\n History gen")
 
@@ -348,6 +276,8 @@ if __name__ == "__main__":
     
     # Save model and artifacts
     model.save('flood_drought_model.h5')
+    model.save("flood_drought_model_tf/1", save_format="tf") 
+    model.save("flood_drought_model") 
     joblib.dump({
         'temporal_features': X_train_temp.shape[1:],
         'static_features': X_train_stat.shape[1:]
@@ -381,4 +311,60 @@ def predict_new_data(location_data, model_path='flood_drought_model.h5'):
     return {
         'flood_risk_7d': float(flood_prob[0][0]),
         'drought_risk_30d': float(drought_prob[0][0])
+    }
+
+# 8. Date prediction example
+def predict_for_date(target_date, forecast_data, static_features):
+    """
+    Predict flood/drought risk for a specific date
+    using climate forecasts.
+    
+    Args:
+        target_date (str): Date in 'YYYY-MM-DD' format
+        forecast_data (pd.DataFrame): Climate forecasts with columns:
+            - date
+            - precipitation
+            - temperature
+            - humidity
+            - soil_moisture
+            - vegetation_index
+        static_features (dict): Elevation, slope, soil type
+    
+    Returns:
+        dict: Prediction results with confidence
+    """
+    # Create 30-day window ending day before target date
+    end_date = pd.to_datetime(target_date) - pd.Timedelta(days=1)
+    start_date = end_date - pd.Timedelta(days=29)
+    
+    # Get forecasted sequence
+    sequence = forecast_data[
+        (forecast_data['date'] >= start_date) &
+        (forecast_data['date'] <= end_date)
+    ].sort_values('date')
+    
+    # Prepare input format
+    input_data = {
+        'temporal': sequence[['precip', 'temp', 'humid', 'soil_m', 'vegetation']].values.astype('float32'),
+        'static': np.array([
+            static_features['elevation'],
+            static_features['slope'],
+            *static_features['soil_type']
+        ], dtype='float32')
+    }
+    
+    # Make prediction
+    flood_prob, drought_prob = model.predict([
+        np.expand_dims(input_data['temporal'], axis=0),
+        np.expand_dims(input_data['static'], axis=0)
+    ])
+    
+    return {
+        'target_date': target_date,
+        'flood_risk': float(flood_prob[0][0]),
+        'drought_risk': float(drought_prob[0][0]),
+        'validity_window': {
+            'flood': f"{(end_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')} to {end_date + pd.Timedelta(days=7)}",
+            'drought': f"{(end_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')} to {end_date + pd.Timedelta(days=30)}"
+        }
     }
