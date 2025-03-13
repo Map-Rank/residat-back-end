@@ -68,7 +68,7 @@ class PredictionController extends Controller
 
         } catch (\Exception $e) {
             Log::error("Exception dans getPredictions: " . $e->getMessage());
-            return response()->error([],  __('Oups error'), 200);
+            return response()->errors([],  __('Oups error'), 200);
         }
     }
 
