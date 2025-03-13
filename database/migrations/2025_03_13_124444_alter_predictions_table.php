@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::table('predictions', function (Blueprint $table) {
             $table->json('d1_risk')->change();
             $table->json('d2_risk')->nullable()->change();
-            $table->json('d3_risk')->nullable();
-            $table->json('d4_risk')->nullable();
-            $table->json('d5_risk')->nullable();
+            $table->json('d3_risk')->nullable()->change();
+            $table->json('d4_risk')->nullable()->change();
+            $table->json('d5_risk')->nullable()->change();
         });
     }
 
