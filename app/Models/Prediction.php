@@ -23,11 +23,11 @@ class Prediction extends Model
 
     protected $casts = [
         'date' => 'date',
-        'd1_risk' => 'double',
-        'd2_risk' => 'double',
-        'd3_risk' => 'double',
-        'd4_risk' => 'double',
-        'd5_risk' => 'double'
+        'd1_risk' => 'array',
+        'd2_risk' => 'array',
+        'd3_risk' => 'array',
+        'd4_risk' => 'array',
+        'd5_risk' => 'array'
     ];
 
     /**
