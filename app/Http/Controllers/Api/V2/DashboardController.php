@@ -191,6 +191,8 @@ class DashboardController extends Controller
         
                 $weatherResponse = $this->getLocationForecast($request);
                 $weatherData = json_decode($weatherResponse->getContent(), true);
+
+                dd($weatherData);
                 
 
                 // Vérifier si la récupération des données météo a réussi
