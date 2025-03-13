@@ -45,6 +45,8 @@ class DashboardController extends Controller
             // Requête à l'API météo
             $response = Http::get('https://archive-api.open-meteo.com/v1/archive', $queryParams);
 
+            dd($response);
+
             // Vérification de la réussite de la requête
             if (!$response->successful()) {
                 Log::error('API Error', [
@@ -189,7 +191,7 @@ class DashboardController extends Controller
         
                 $weatherResponse = $this->getLocationForecast($request);
                 $weatherData = json_decode($weatherResponse->getContent(), true);
-                dd($weatherData);
+                
 
                 // Vérifier si la récupération des données météo a réussi
                 if (!$weatherData['success']) {
