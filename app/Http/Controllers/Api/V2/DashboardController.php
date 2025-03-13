@@ -192,18 +192,18 @@ class DashboardController extends Controller
                 $weatherResponse = $this->getLocationForecast($request);
                 
                 $weatherData = json_decode($weatherResponse->getContent(), true);
-                dd($weatherData['success']);
+                // dd($weatherData['success']);
 
                 
                 
 
                 // Vérifier si la récupération des données météo a réussi
-                if (!$weatherData['success']) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Échec de récupération des données météo'
-                    ], 500);
-                }
+                // if (!$weatherData['success']) {
+                //     return response()->json([
+                //         'success' => false,
+                //         'message' => 'Échec de récupération des données météo'
+                //     ], 500);
+                // }
 
                 // Préparer les données dans le format exact attendu par l'API
                 $predictionPayload = [
