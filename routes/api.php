@@ -379,7 +379,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     // });
 
-    Route::post('/predict', [DashboardController::class, 'predict']);
+    Route::get('/predict', [DashboardController::class, 'predict']);
 
     Route::get('exec', function(Request $request){
 
