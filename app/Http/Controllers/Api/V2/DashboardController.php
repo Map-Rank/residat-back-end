@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use App\Models\Prediction;
 
 class DashboardController extends Controller
 {
@@ -76,7 +77,7 @@ class DashboardController extends Controller
 
             return response()->json([
                 'success' => true,
-                'timestamp' => Carbon::now()->toDateTimeString(),
+                'timestamp' => $request->input('start_date'),
                 'location' => [
                     'latitude' => $request->latitude,
                     'longitude' => $request->longitude
@@ -161,7 +162,7 @@ class DashboardController extends Controller
         }
 
         return [
-            'target_date' => Carbon::now()->toDateString(),
+            'target_date' => $startDate,
             'forecast_data' => $formattedData,
             'static_features' => [
                 'elevation' => $data['elevation'] ?? 245.6,
@@ -175,60 +176,104 @@ class DashboardController extends Controller
     {
         try {
             // Récupérer les données météo
-            $weatherResponse = $this->getLocationForecast($request);
-            $weatherData = json_decode($weatherResponse->getContent(), true);
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            
+            $results = [];
+           
+            for($i = 0; $i < 5; $i++){
+                
+                $request->merge(['start_date' => Carbon::parse($startDate)->addDay($i)->format('Y-m-d')]);
+                $request->merge(['end_date' =>  Carbon::parse($endDate)->addDay($i)->format('Y-m-d')]);
+            
+        
+                $weatherResponse = $this->getLocationForecast($request);
+                $weatherData = json_decode($weatherResponse->getContent(), true);
 
-            // Vérifier si la récupération des données météo a réussi
-            if (!$weatherData['success']) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Échec de récupération des données météo'
-                ], 500);
-            }
+                // Vérifier si la récupération des données météo a réussi
+                if (!$weatherData['success']) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Échec de récupération des données météo'
+                    ], 500);
+                }
 
-            // Préparer les données dans le format exact attendu par l'API
-            $predictionPayload = [
-                'target_date' => $weatherData['forecast']['target_date'],
-                'forecast_data' => $weatherData['forecast']['forecast_data'],
-                'static_features' => $weatherData['forecast']['static_features']
-            ];
+                // Préparer les données dans le format exact attendu par l'API
+                $predictionPayload = [
+                    'target_date' => $weatherData['forecast']['target_date'],
+                    'forecast_data' => $weatherData['forecast']['forecast_data'],
+                    'static_features' => $weatherData['forecast']['static_features']
+                ];
 
-            // Log des données avant envoi pour debug
-            Log::info('Données envoyées à l\'API de prédiction', [
-                'payload' => $predictionPayload
-            ]);
-
-            // Faire la requête à l'API de prédiction
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json'
-            ])->post('https://residat-flood-drought-model-514c88923a4c.herokuapp.com/predict', $predictionPayload);
-
-            // Log de la réponse pour debug
-            Log::info('Réponse de l\'API', [
-                'status' => $response->status(),
-                'body' => $response->body()
-            ]);
-
-            // Vérifier si la requête a réussi
-            if (!$response->successful()) {
-                Log::error('Prediction API Error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                    'sent_data' => $predictionPayload
+                // Log des données avant envoi pour debug
+                Log::info('Données envoyées à l\'API de prédiction', [
+                    'payload' => $predictionPayload
                 ]);
 
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Échec de la prédiction',
-                    'error' => $response->body()
-                ], 500);
+                // Faire la requête à l'API de prédiction
+                $response = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json'
+                ])->post('https://residat-flood-drought-model-514c88923a4c.herokuapp.com/predict', $predictionPayload);
+
+                // Log de la réponse pour debug
+                Log::info('Réponse de l\'API', [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
+
+                // Vérifier si la requête a réussi
+                if (!$response->successful()) {
+                    Log::error('Prediction API Error', [
+                        'status' => $response->status(),
+                        'body' => $response->body(),
+                        'sent_data' => $predictionPayload
+                    ]);
+
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Échec de la prédiction',
+                        'error' => $response->body()
+                    ], 500);
+                }
+
+                $droughtRisk = $response->json()["drought_risk"];
+                $floodRisk = $response->json()["flood_risk"];
+
+                // Convert risk to percentages (capped at 100%)
+                $floodRiskPercent = min(($floodRisk / 1e-8) * 100, 100);
+                $droughtRiskPercent = min(($droughtRisk / 1e-8) * 100, 100);
+
+                // Calculate Water Level Index (WLI)
+                $waterLevelIndex = 50 + ($floodRiskPercent - $droughtRiskPercent);
+                $waterLevelIndex = max(0, min($waterLevelIndex, 100));
+
+                $res = [];
+                $res['waterLevelIndex'] = $waterLevelIndex;
+                $res['droughtRiskPercent'] = $droughtRiskPercent;
+                $res['floodRiskPercent'] = $floodRiskPercent;
+                $res['date'] = $response->json()['target_date'];
+
+                $results[] = $res;
             }
 
-            // Retourner la réponse de l'API de prédiction
+            $predictionArray = [];
+            $predictionArray['zone_id'] = $request->input('zone_id');
+            $predictionArray['date'] = startDate;
+            $predictionArray['d1_risk'] = $results[0];
+            $predictionArray['d2_risk'] = $results[1];
+            $predictionArray['d3_risk'] = $results[2];
+            $predictionArray['d4_risk'] = $results[3];
+            $predictionArray['d5_risk'] = $results[4];
+
+            $prediction = Prediction::create($predictionArray);
+                        // Retourner la réponse de l'API de prédiction
             return response()->json([
                 'success' => true,
-                'prediction' => $response->json()
+                'prediction' => $response->json(),
+                'res' => $results,
+                'model' => $predictionArray,
+                'predict' => $prediction
             ]);
 
         } catch (\Exception $e) {
