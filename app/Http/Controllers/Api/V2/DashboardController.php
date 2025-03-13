@@ -149,14 +149,14 @@ class DashboardController extends Controller
             $avgSoilMoisture = $dailySoilMoisture ? round(array_sum($dailySoilMoisture) / count($dailySoilMoisture), 2) : null;
             $avgTemperature = $dailyTemperature ? round(array_sum($dailyTemperature) / count($dailyTemperature), 2) : null;
 
-            // Formatage des données
+            // Formatage des données avec la nouvelle structure
             $formattedData[] = [
                 'date' => $date,
-                'temp' => $avgTemperature,
-                'humidity' => $avgHumidity,
-                'soil_moisture' => $avgSoilMoisture,
-                'precip' => $data['daily']['rain_sum'][$index] ?? null, // On garde la somme des précipitations pour ce jour
-                'vegetation' => null
+                'precip' => round($data['daily']['rain_sum'][$index] ?? 0, 2),
+                'temp' => $avgTemperature ?? 0,
+                'humid' => $avgHumidity ?? 0,
+                'soil_m' => $avgSoilMoisture ?? 0,
+                'vegetation' => round(rand(50, 70) / 100, 2) // Valeur aléatoire entre 0.50 et 0.70 pour l'exemple
             ];
         }
 
@@ -164,10 +164,82 @@ class DashboardController extends Controller
             'target_date' => Carbon::now()->toDateString(),
             'forecast_data' => $formattedData,
             'static_features' => [
-                'elevation' => $data['elevation'] ?? null,
-                'slope' => null, // Si tu as ces infos ailleurs
-                'soil_type' => [], // Ajoute si disponible
+                'elevation' => $data['elevation'] ?? 245.6,
+                'slope' => 3.8, // Valeur fixe pour l'exemple
+                'soil_type' => [0, 0, 1] // Format simplifié comme demandé
             ],
         ];
+    }
+
+    public function predict(Request $request)
+    {
+        try {
+            // Récupérer les données météo
+            $weatherResponse = $this->getLocationForecast($request);
+            $weatherData = json_decode($weatherResponse->getContent(), true);
+
+            // Vérifier si la récupération des données météo a réussi
+            if (!$weatherData['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Échec de récupération des données météo'
+                ], 500);
+            }
+
+            // Préparer les données dans le format exact attendu par l'API
+            $predictionPayload = [
+                'target_date' => $weatherData['forecast']['target_date'],
+                'forecast_data' => $weatherData['forecast']['forecast_data'],
+                'static_features' => $weatherData['forecast']['static_features']
+            ];
+
+            // Log des données avant envoi pour debug
+            Log::info('Données envoyées à l\'API de prédiction', [
+                'payload' => $predictionPayload
+            ]);
+
+            // Faire la requête à l'API de prédiction
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json'
+            ])->post('https://residat-flood-drought-model-514c88923a4c.herokuapp.com/predict', $predictionPayload);
+
+            // Log de la réponse pour debug
+            Log::info('Réponse de l\'API', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+
+            // Vérifier si la requête a réussi
+            if (!$response->successful()) {
+                Log::error('Prediction API Error', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'sent_data' => $predictionPayload
+                ]);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Échec de la prédiction',
+                    'error' => $response->body()
+                ], 500);
+            }
+
+            // Retourner la réponse de l'API de prédiction
+            return response()->json([
+                'success' => true,
+                'prediction' => $response->json()
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error("Exception dans predict: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la prédiction: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
