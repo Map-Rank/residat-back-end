@@ -9,6 +9,7 @@ use App\Service\UtilService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PredictionResource;
 
 class PredictionController extends Controller
 {
@@ -35,36 +36,36 @@ class PredictionController extends Controller
             }
 
             // Formater la réponse
-            $response = [
-                'success' => true,
-                'timestamp' => Carbon::now()->toDateTimeString(),
-                'zone' => $predictions->zone->name,
-                'date' => $predictions->date->format('Y-m-d'),
-                'predictions' => [
-                    'day_1' => [
-                        'risk' => $predictions->d1_risk,
-                        'level' => $this->getRiskLevel($predictions->d1_risk)
-                    ],
-                    'day_2' => [
-                        'risk' => $predictions->d2_risk,
-                        'level' => $this->getRiskLevel($predictions->d2_risk)
-                    ],
-                    'day_3' => [
-                        'risk' => $predictions->d3_risk,
-                        'level' => $this->getRiskLevel($predictions->d3_risk)
-                    ],
-                    'day_4' => [
-                        'risk' => $predictions->d4_risk,
-                        'level' => $this->getRiskLevel($predictions->d4_risk)
-                    ],
-                    'day_5' => [
-                        'risk' => $predictions->d5_risk,
-                        'level' => $this->getRiskLevel($predictions->d5_risk)
-                    ]
-                ]
-            ];
+            // $response = [
+            //     'success' => true,
+            //     'timestamp' => Carbon::now()->toDateTimeString(),
+            //     'zone' => $predictions->zone->name,
+            //     'date' => $predictions->date->format('Y-m-d'),
+            //     'predictions' => [
+            //         'day_1' => [
+            //             'risk' => $predictions->d1_risk,
+            //             'level' => $this->getRiskLevel($predictions->d1_risk)
+            //         ],
+            //         'day_2' => [
+            //             'risk' => $predictions->d2_risk,
+            //             'level' => $this->getRiskLevel($predictions->d2_risk)
+            //         ],
+            //         'day_3' => [
+            //             'risk' => $predictions->d3_risk,
+            //             'level' => $this->getRiskLevel($predictions->d3_risk)
+            //         ],
+            //         'day_4' => [
+            //             'risk' => $predictions->d4_risk,
+            //             'level' => $this->getRiskLevel($predictions->d4_risk)
+            //         ],
+            //         'day_5' => [
+            //             'risk' => $predictions->d5_risk,
+            //             'level' => $this->getRiskLevel($predictions->d5_risk)
+            //         ]
+            //     ]
+            // ];
 
-            return response()->success($response,  __('Prediction charged successfully'), 200);
+            return response()->success(new PredictionResource($predictions),  __('Prediction charged successfully'), 200);
 
         } catch (\Exception $e) {
             Log::error("Exception dans getPredictions: " . $e->getMessage());
