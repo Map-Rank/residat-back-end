@@ -244,8 +244,34 @@ class DashboardController extends Controller
                 ($predictionData[0]["reservoir_7d"] + $predictionData[0]["reservoir_7d_change"]),
                 $predictionData[0]["reservoir_7d"], 
                 $predictionData[0]["reservoir_14d"]);
+            $result = [];
+            foreach ($dayEstimates as $day => $estimates) {
+                $transformed = [
+                    "date" => date('Y-m-d', strtotime( $request->start_date . " +$day days")),
+                    "waterLevelIndex" => $estimates['weighted']['level'],
+                    "linearValue" => $estimates['linear']['level'],
+                    "floodRiskPercent" => $waterLevelData['floodRiskPercent'],
+                    "droughtRiskPercent" => $waterLevelData['droughtRiskPercent'],
+                    "change" => [
+                        "weighted" => $estimates['weighted']['change'],
+                        "linear" => $estimates['linear']['change']
+                    ]
+                ];
+                $result[$day] = $transformed;
+            }
+            
 
-            return $estimates;
+            $prediction = [
+                'zone_id' => $request->input('zone_id'),
+                'date' => $request->input('start_date'),
+                'd1_risk' => $result[0],
+                'd2_risk' => $result[1],
+                'd3_risk' => $result[2],
+                'd4_risk' => $result[3],
+                'd5_risk' => $result[4],
+            ];
+
+            return $prediction;
             // Création de l'entrée de prédiction dans la base de données
             $predictionArray = [
                 'zone_id' => $request->input('zone_id'),
