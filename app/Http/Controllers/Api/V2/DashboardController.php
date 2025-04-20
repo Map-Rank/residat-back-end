@@ -250,8 +250,8 @@ class DashboardController extends Controller
                     "date" => date('Y-m-d', strtotime( $request->start_date . " +$day days")),
                     "waterLevelIndex" => $estimates['weighted']['level'],
                     "linearValue" => $estimates['linear']['level'],
-                    "floodRiskPercent" => $waterLevelData['floodRiskPercent'],
-                    "droughtRiskPercent" => $waterLevelData['droughtRiskPercent'],
+                    "floodRiskPercent" => "null",
+                    "droughtRiskPercent" => "null",
                     "change" => [
                         "weighted" => $estimates['weighted']['change'],
                         "linear" => $estimates['linear']['change']
