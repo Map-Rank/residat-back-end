@@ -263,7 +263,7 @@ class DashboardController extends Controller
 
             $predictionArray = [
                 'zone_id' => $request->input('zone_id'),
-                'date' => $request->input('start_date'),
+                'date' => $predictionData[1]["date"],
                 'd1_risk' => $result[1],
                 'd2_risk' => $result[2],
                 'd3_risk' => $result[3],
