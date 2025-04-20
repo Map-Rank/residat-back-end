@@ -259,8 +259,19 @@ class DashboardController extends Controller
                 ];
                 $result[$day] = $transformed;
             }
+            
 
-            return $result;
+            $prediction = [
+                'zone_id' => $request->input('zone_id'),
+                'date' => $request->input('start_date'),
+                'd1_risk' => $result[0],
+                'd2_risk' => $result[1],
+                'd3_risk' => $result[2],
+                'd4_risk' => $result[3],
+                'd5_risk' => $result[4],
+            ];
+
+            return $prediction;
             // Création de l'entrée de prédiction dans la base de données
             $predictionArray = [
                 'zone_id' => $request->input('zone_id'),
