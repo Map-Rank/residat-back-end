@@ -218,6 +218,7 @@ class DashboardController extends Controller
                 'geo' => $weatherData['geo_data'],
                 'hydro' => $weatherData['hydro_data']
             ];
+            return $predictionPayload;
 
             // Requête à l'API de prédiction
             $response = Http::withHeaders([
