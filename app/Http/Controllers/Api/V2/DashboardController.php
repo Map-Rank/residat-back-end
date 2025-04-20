@@ -241,13 +241,13 @@ class DashboardController extends Controller
             $predictionData = $responseData['predictions'];
 
             $dayEstimates = $this->estimateReservoirTrends(
-                ($predictionData[0]["reservoir_7d"] + $predictionData[0]["reservoir_7d_change"]),
-                $predictionData[0]["reservoir_7d"], 
-                $predictionData[0]["reservoir_14d"]);
+                ($predictionData[1]["reservoir_7d"] + $predictionData[1]["reservoir_7d_change"]),
+                $predictionData[1]["reservoir_7d"], 
+                $predictionData[1]["reservoir_14d"]);
             $result = [];
             foreach ($dayEstimates as $day => $estimates) {
                 $transformed = [
-                    "date" => date('Y-m-d', strtotime( $request->start_date . " +$day days")),
+                    "date" => date('Y-m-d', strtotime( $predictionData[1]["date"] . " +$day days")),
                     "waterLevelIndex" => $estimates['weighted']['level'],
                     "linearValue" => $estimates['linear']['level'],
                     "floodRiskPercent" => "null",
