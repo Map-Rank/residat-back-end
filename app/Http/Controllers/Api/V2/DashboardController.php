@@ -261,7 +261,7 @@ class DashboardController extends Controller
             }
             
 
-            $prediction = [
+            $predictionArray = [
                 'zone_id' => $request->input('zone_id'),
                 'date' => $request->input('start_date'),
                 'd1_risk' => $result[1],
@@ -271,13 +271,13 @@ class DashboardController extends Controller
                 'd5_risk' => $result[5],
             ];
 
-            return $prediction;
+            // return $prediction;
             // Création de l'entrée de prédiction dans la base de données
-            $predictionArray = [
-                'zone_id' => $request->input('zone_id'),
-                'date' => $request->input('start_date'),
-                'prediction_data' => $responseData
-            ];
+            // $predictionArray = [
+            //     'zone_id' => $request->input('zone_id'),
+            //     'date' => $request->input('start_date'),
+            //     'prediction_data' => $responseData
+            // ];
 
             $prediction = Prediction::create($predictionArray);
 
