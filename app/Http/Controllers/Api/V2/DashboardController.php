@@ -218,8 +218,7 @@ class DashboardController extends Controller
                 'geo' => $weatherData['geo_data'],
                 'hydro' => $weatherData['hydro_data']
             ];
-            return $predictionPayload;
-
+            
             // Requête à l'API de prédiction
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -239,7 +238,14 @@ class DashboardController extends Controller
             }
 
             $responseData = $response->json();
+            $predictionData = $responseData->predictions;
 
+            $estimates = $this->estimateReservoirTrends(
+                ($predictionData[0]->reservoir_7d + $predictionData[0]->reservoir_7d_change),
+                $predictionData[0]->reservoir_7d, 
+                $predictionData[0]->reservoir_14d);
+
+            return $estimates;
             // Création de l'entrée de prédiction dans la base de données
             $predictionArray = [
                 'zone_id' => $request->input('zone_id'),
@@ -266,4 +272,52 @@ class DashboardController extends Controller
             ], 500);
         }
     }
+
+
+    /**
+     * Estimates 1-day to 5-day reservoir levels and changes based on 7-day and 14-day predictions.
+     * 
+     * @param float $currentLevel      Current reservoir level (%).
+     * @param float $reservoir7d       7-day predicted reservoir level (%).
+     * @param float $reservoir14d      14-day predicted reservoir level (%).
+     * @return array                   Array containing 1-5 day estimates (levels + changes).
+     */
+    function estimateReservoirTrends(float $currentLevel, float $reservoir7d, float $reservoir14d): array {
+        // Validate inputs
+        if ($currentLevel <= 0 || $reservoir7d <= 0 || $reservoir14d <= 0) {
+            throw new InvalidArgumentException("All reservoir levels must be positive values.");
+        }
+
+        // Calculate daily change rates
+        $dailyChange7d = ($reservoir7d - $currentLevel) / 7;
+        $dailyChange14d = ($reservoir14d - $currentLevel) / 14;
+
+        // Weighted average (favors 7-day trend more heavily)
+        $weightedDailyChange = (0.7 * $dailyChange7d) + (0.3 * $dailyChange14d);
+
+        $estimates = [];
+        for ($days = 1; $days <= 5; $days++) {
+            // Linear estimation (simple interpolation)
+            $levelLinear = $currentLevel + ($dailyChange7d * $days);
+            $changeLinear = ($levelLinear - $currentLevel) / $currentLevel;
+
+            // Weighted estimation (more stable)
+            $levelWeighted = $currentLevel + ($weightedDailyChange * $days);
+            $changeWeighted = ($levelWeighted - $currentLevel) / $currentLevel;
+
+            $estimates[$days] = [
+                'linear' => [
+                    'level' => round($levelLinear, 2),
+                    'change' => round($changeLinear, 4)
+                ],
+                'weighted' => [
+                    'level' => round($levelWeighted, 2),
+                    'change' => round($changeWeighted, 4)
+                ]
+            ];
+        }
+
+        return $estimates;
+    }
+
 }
