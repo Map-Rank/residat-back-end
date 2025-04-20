@@ -241,9 +241,9 @@ class DashboardController extends Controller
             $predictionData = $responseData['predictions'];
 
             $estimates = $this->estimateReservoirTrends(
-                ($predictionData[0]->reservoir_7d + $predictionData[0]->reservoir_7d_change),
-                $predictionData[0]->reservoir_7d, 
-                $predictionData[0]->reservoir_14d);
+                ($predictionData[0]["reservoir_7d"] + $predictionData[0]["reservoir_7d_change"]),
+                $predictionData[0]["reservoir_7d"], 
+                $predictionData[0]["reservoir_14d"]);
 
             return $estimates;
             // Création de l'entrée de prédiction dans la base de données
