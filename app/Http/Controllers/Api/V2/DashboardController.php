@@ -240,7 +240,7 @@ class DashboardController extends Controller
             $responseData = $response->json();
             $predictionData = $responseData['predictions'];
 
-            $estimates = $this->estimateReservoirTrends(
+            $dayEstimates = $this->estimateReservoirTrends(
                 ($predictionData[0]["reservoir_7d"] + $predictionData[0]["reservoir_7d_change"]),
                 $predictionData[0]["reservoir_7d"], 
                 $predictionData[0]["reservoir_14d"]);
